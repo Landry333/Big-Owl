@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "813194146572",
+    "firebase_url": "https://bigowlapp-ca8da.firebaseio.com",
+    "project_id": "bigowlapp-ca8da",
+    "storage_bucket": "bigowlapp-ca8da.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813194146572:android:517f159b2eca0b6480cf29",
+        "android_client_info": {
+          "package_name": "com.example.bigowlapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "813194146572-2pjrt9rca5nnm30n7b7uc5iqjdgl6p0k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBh8r5kOTPz5LrjoqZBdJcPi1iOT1JLwHA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "813194146572-2pjrt9rca5nnm30n7b7uc5iqjdgl6p0k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
