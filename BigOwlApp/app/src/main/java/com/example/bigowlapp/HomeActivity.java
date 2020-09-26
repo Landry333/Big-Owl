@@ -21,15 +21,27 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        btnLogOut = findViewById(R.id.Logout);
+        initialize();
+    }
 
-        btnLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent i = new Intent(HomeActivity.this, MainActivity.class);
-                startActivity(i);
-            }
-        });
+    protected void initialize()
+    {
+        try
+        {
+            btnLogOut = findViewById(R.id.Logout);
+
+            btnLogOut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FirebaseAuth.getInstance().signOut();
+                    Intent i = new Intent(HomeActivity.this, MainActivity.class);
+                    startActivity(i);
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 }
