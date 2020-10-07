@@ -24,10 +24,8 @@ public class HomeActivity extends AppCompatActivity {
         initialize();
     }
 
-    protected void initialize()
-    {
-        try
-        {
+    protected void initialize() {
+        try {
             btnLogOut = findViewById(R.id.Logout);
 
             btnLogOut.setOnClickListener(new View.OnClickListener() {
@@ -38,9 +36,7 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
 
         }
     }
