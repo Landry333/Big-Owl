@@ -4,6 +4,7 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 
 // Exclude public (unwanted) properties to be stored in DB
 @IgnoreExtraProperties
+@Deprecated
 public class User {
 
     private String firstName;
