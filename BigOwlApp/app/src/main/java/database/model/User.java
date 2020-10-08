@@ -1,3 +1,4 @@
+// Deprecated due to FirebaseUser
 package database.model;
 
 import com.google.firebase.firestore.IgnoreExtraProperties;
