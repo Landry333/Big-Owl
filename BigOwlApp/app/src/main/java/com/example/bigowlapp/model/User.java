@@ -1,12 +1,12 @@
-// Deprecated due to FirebaseUser
-package model;
+package com.example.bigowlapp.model;
 
+import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
-// Exclude public (unwanted) properties to be stored in DB
+// Exclude uneeded data from documents
 @IgnoreExtraProperties
 public class User {
-
+    @DocumentId
     private String uId;
     private String firstName;
     private String lastName;
@@ -17,7 +17,8 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, String phoneNumber, String email, String profileImage) {
+    public User(String uId, String firstName, String lastName, String phoneNumber, String email, String profileImage) {
+        this.uId = uId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;

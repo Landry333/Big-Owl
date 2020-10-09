@@ -1,4 +1,4 @@
-package database;
+package com.example.bigowlapp.database;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 

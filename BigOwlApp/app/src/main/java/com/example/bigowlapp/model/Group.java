@@ -1,15 +1,17 @@
-package model;
+package com.example.bigowlapp.model;
 
 
 import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.DocumentId;
 
 import java.util.List;
 
-// Exclude public (unwanted) properties to be stored in DB
+// Exclude uneeded data from documents
 @IgnoreExtraProperties
 public class Group {
 
-    private String id;
+    @DocumentId
+    private String uId;
     private String name;
     private String monitorUserId;
     private List<String> supervisedUserId;
@@ -18,19 +20,19 @@ public class Group {
 
     }
 
-    public Group(String id, String name, String monitorUserId, List<String> supervisedUserId) {
-        this.id = id;
+    public Group(String uId, String name, String monitorUserId, List<String> supervisedUserId) {
+        this.uId = uId;
         this.name = name;
         this.monitorUserId = monitorUserId;
         this.supervisedUserId = supervisedUserId;
     }
 
-    public String getId() {
-        return id;
+    public String getuId() {
+        return uId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setuId(String uId) {
+        this.uId = uId;
     }
 
     public String getName() {

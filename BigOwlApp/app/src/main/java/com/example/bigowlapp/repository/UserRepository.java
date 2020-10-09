@@ -1,4 +1,4 @@
-package repository;
+package com.example.bigowlapp.repository;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -8,8 +8,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import database.Firestore;
-import model.User;
+import com.example.bigowlapp.database.Firestore;
+import com.example.bigowlapp.model.User;
 
 public class UserRepository {
 
