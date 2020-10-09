@@ -1,4 +1,4 @@
-package database.model;
+package model;
 
 public class Schedule {
     // TODO: Create schedule model

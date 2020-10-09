@@ -1,4 +1,4 @@
-package database.model;
+package model;
 
 
 import com.google.firebase.firestore.IgnoreExtraProperties;

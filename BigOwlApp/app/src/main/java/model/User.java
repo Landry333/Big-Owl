@@ -1,13 +1,13 @@
 // Deprecated due to FirebaseUser
-package database.model;
+package model;
 
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 // Exclude public (unwanted) properties to be stored in DB
 @IgnoreExtraProperties
-@Deprecated
 public class User {
 
+    private String uId;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -23,6 +23,14 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.profileImage = profileImage;
+    }
+
+    public String getuId() {
+        return uId;
+    }
+
+    public void setuId(String uId) {
+        this.uId = uId;
     }
 
     public String getFirstName() {
