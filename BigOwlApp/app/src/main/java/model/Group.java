@@ -3,6 +3,8 @@ package model;
 
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+import java.util.List;
+
 // Exclude public (unwanted) properties to be stored in DB
 @IgnoreExtraProperties
 public class Group {
@@ -10,7 +12,18 @@ public class Group {
     private String id;
     private String name;
     private String monitorUserId;
-    private String[] supervisedUserId;
+    private List<String> supervisedUserId;
+
+    public Group() {
+
+    }
+
+    public Group(String id, String name, String monitorUserId, List<String> supervisedUserId) {
+        this.id = id;
+        this.name = name;
+        this.monitorUserId = monitorUserId;
+        this.supervisedUserId = supervisedUserId;
+    }
 
     public String getId() {
         return id;
@@ -36,11 +49,12 @@ public class Group {
         this.monitorUserId = monitorUserId;
     }
 
-    public String[] getSupervisedUserId() {
+    public List<String> getSupervisedUserId() {
         return supervisedUserId;
     }
 
-    public void setSupervisedUserId(String[] supervisedUserId) {
+    public void setSupervisedUserId(List<String> supervisedUserId) {
         this.supervisedUserId = supervisedUserId;
     }
+
 }
