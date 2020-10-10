@@ -1,5 +1,7 @@
 package com.example.bigowlapp.repository;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
@@ -10,6 +12,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import com.example.bigowlapp.database.Firestore;
 import com.example.bigowlapp.model.User;
+
+import static android.content.ContentValues.TAG;
 
 public class UserRepository {
 
@@ -24,16 +28,18 @@ public class UserRepository {
         MutableLiveData<User> userData = new MutableLiveData<>();
         mFirebaseFirestore.collection("users")
                 .whereEqualTo("phoneNumber", phoneNumber)
+                .limit(1)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
+                            Log.d("USERREPO", "Pekora2 = :3");
                             User u = task.getResult().getDocuments().get(0).toObject(User.class);
                             MutableLiveData<User> userData = new MutableLiveData<>();
                             userData.setValue(u);
-                        }else{
-                            // TODO: Log the error
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
