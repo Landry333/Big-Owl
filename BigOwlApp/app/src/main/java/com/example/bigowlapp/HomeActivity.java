@@ -20,8 +20,6 @@ import java.security.PrivateKey;
 
 public class HomeActivity extends AppCompatActivity {
     Button btnLogOut;
-    FirebaseAuth m_FirebaseAuth;
-    private FirebaseAuth.AuthStateListener m_AuthStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,44 +31,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        UserRepository r = new UserRepository();
-        MutableLiveData<User> userData = r.getUserByPhoneNumber("+16505554567");
-
-        Log.d("FIREBASE", "Pekora = :3");
-
-        // Create the observer which updates the UI.
-        final Observer<User> userObserver = new Observer<User>() {
-            @Override
-            public void onChanged(@Nullable final User user) {
-                Log.d("FIREBASE", "Pekora2 = :3");
-                if (user != null) {
-                    Log.d("FIREBASE", "user phone = " + user.getPhoneNumber());
-                    Log.d("FIREBASE", "user email = " + user.getEmail());
-                    Log.d("FIREBASE", "user id = " + user.getuId());
-                    Log.d("FIREBASE", "user imageUrl = " + user.getProfileImage());
-                } else {
-                    Log.d("FIREBASE", "ooooooofffffff");
-                }
-            }
-        };
-
-        //userData.observeForever(userObserver);
-        //Log.d("FIREBASE", "userdata PEKO = " + userData.getValue());
-        userData.observeForever(new Observer<User>() {
-            @Override
-            public void onChanged(@Nullable final User user) {
-                Log.d("FIREBASE", "Pekora2 = :3");
-                if (user != null) {
-                    Log.d("FIREBASE", "user phone = " + user.getPhoneNumber());
-                    Log.d("FIREBASE", "user email = " + user.getEmail());
-                    Log.d("FIREBASE", "user id = " + user.getuId());
-                    Log.d("FIREBASE", "user imageUrl = " + user.getProfileImage());
-                } else {
-                    Log.d("FIREBASE", "ooooooofffffff");
-                }
-            }
-    });
     }
 
     protected void initialize() {
