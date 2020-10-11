@@ -50,8 +50,9 @@ public class WelcomeFragment extends Fragment {
         // TODO: Use the ViewModel
 
         userRepository = new UserRepository();
-        userLiveData = userRepository.getUserByPhoneNumber("+16505554567");
-        userLiveData.observe(this, user -> textView.setText(user.getUId()));
+        //userLiveData = userRepository.getUserByPhoneNumber("+16505554567");
+        userLiveData = userRepository.getUserById("test");
+        userLiveData.observe(this, user -> textView.setText(user.getPhoneNumber()));
 
     }
 

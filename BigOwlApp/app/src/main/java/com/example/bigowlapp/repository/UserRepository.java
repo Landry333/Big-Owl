@@ -2,14 +2,17 @@ package com.example.bigowlapp.repository;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.database.Firestore;
 import com.example.bigowlapp.model.User;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class UserRepository {
+public class UserRepository extends Repository {
 
     private FirebaseFirestore mFirebaseFirestore;
     private CollectionReference usersRef;
@@ -25,8 +28,13 @@ public class UserRepository {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        User user = task.getResult().toObject(User.class);
-                        userData.setValue(user);
+                        DocumentSnapshot userDoc = task.getResult();
+                        if(userDoc != null && userDoc.exists()){
+                            User user = userDoc.toObject(User.class);
+                            userData.setValue(user);
+                        }else {
+                            userData.setValue(null);
+                        }
                     } else {
                         Log.e(getClassName(), "Error getting documents: ", task.getException());
                     }
@@ -42,8 +50,13 @@ public class UserRepository {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        User user = task.getResult().getDocuments().get(0).toObject(User.class);
-                        userData.setValue(user);
+                        QuerySnapshot userDocs = task.getResult();
+                        if(userDocs != null && !userDocs.isEmpty()){
+                            User user = userDocs.getDocuments().get(0).toObject(User.class);
+                            userData.setValue(user);
+                        }else {
+                            userData.setValue(null);
+                        }
                     } else {
                         Log.e(getClassName(), "Error getting documents: ", task.getException());
                     }
@@ -51,7 +64,4 @@ public class UserRepository {
         return userData;
     }
 
-    private String getClassName() {
-        return this.getClass().toString();
-    }
 }
