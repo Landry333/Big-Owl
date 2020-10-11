@@ -2,7 +2,6 @@ package com.example.bigowlapp.repository;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.database.Firestore;
@@ -22,9 +21,9 @@ public class UserRepository extends Repository {
         usersRef = mFirebaseFirestore.collection("users");
     }
 
-    public MutableLiveData<User> getUserById(String id) {
+    public MutableLiveData<User> getUserByUId(String UId) {
         MutableLiveData<User> userData = new MutableLiveData<>();
-        usersRef.document(id)
+        usersRef.document(UId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -41,7 +40,6 @@ public class UserRepository extends Repository {
                 });
         return userData;
     }
-
 
     public MutableLiveData<User> getUserByPhoneNumber(String phoneNumber) {
         MutableLiveData<User> userData = new MutableLiveData<>();

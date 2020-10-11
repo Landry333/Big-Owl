@@ -23,7 +23,6 @@ public class WelcomeFragment extends Fragment {
     private TextView textView;
 
     private UserRepository userRepository;
-    LiveData<User> userLiveData;
 
     public static WelcomeFragment newInstance() {
         return new WelcomeFragment();
@@ -49,10 +48,9 @@ public class WelcomeFragment extends Fragment {
         mViewModel = ViewModelProviders.of(this).get(WelcomeViewModel.class);
         // TODO: Use the ViewModel
 
-        userRepository = new UserRepository();
-        //userLiveData = userRepository.getUserByPhoneNumber("+16505554567");
-        userLiveData = userRepository.getUserById("test");
-        userLiveData.observe(this, user -> textView.setText(user.getPhoneNumber()));
+        mViewModel.setUserByPhoneNumber("+16505554567");
+        //userLiveData = userRepository.getUserByUId("test");
+        mViewModel.getUserData().observe(this, user -> textView.setText(user.getEmail()));
 
     }
 
