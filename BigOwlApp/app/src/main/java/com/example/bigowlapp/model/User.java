@@ -6,6 +6,7 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 // Exclude uneeded data from documents
 @IgnoreExtraProperties
 public class User {
+
     @DocumentId
     private String uId;
     private String firstName;

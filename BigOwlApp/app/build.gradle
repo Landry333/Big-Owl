@@ -39,6 +39,9 @@ dependencies {
     // Declare dependency for Firebase Authentication
     implementation 'com.google.firebase:firebase-auth'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.navigation:navigation-fragment:2.3.0'
+    implementation 'androidx.navigation:navigation-ui:2.3.0'
     // Declare testing dependencies
     testImplementation 'junit:junit:4.12'
     // Declare Junit
