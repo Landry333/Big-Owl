@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.security.PrivateKey;
 
 public class HomeActivity extends AppCompatActivity {
-    Button btnLogOut;
+    Button btnLogOut, btnViewProfile;
     FirebaseAuth m_FirebaseAuth;
     private FirebaseAuth.AuthStateListener m_AuthStateListener;
 
@@ -35,6 +35,15 @@ public class HomeActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     FirebaseAuth.getInstance().signOut();
                     Intent i = new Intent(HomeActivity.this, MainActivity.class);
+                    startActivity(i);
+                }
+            });
+
+            btnViewProfile = findViewById(R.id.ViewProfile);
+            btnViewProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(HomeActivity.this, ProfileActivity.class);
                     startActivity(i);
                 }
             });
