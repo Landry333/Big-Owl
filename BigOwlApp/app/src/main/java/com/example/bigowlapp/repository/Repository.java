@@ -120,7 +120,7 @@ public abstract class Repository<T> {
     public MutableLiveData<List<T>> getListOfDocumentByAttribute(String attribute, String attrValue,
                                                                  Class<T> tClass) {
         MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
-        collectionReference.whereArrayContains(attribute, attrValue)
+        collectionReference.whereEqualTo(attribute, attrValue)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
