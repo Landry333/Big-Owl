@@ -11,11 +11,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserRepository extends Repository {
+public class UserRepository extends Repository<User> {
 
     private FirebaseFirestore mFirebaseFirestore;
     private CollectionReference usersRef;
@@ -26,7 +27,51 @@ public class UserRepository extends Repository {
         usersRef = mFirebaseFirestore.collection("users");
     }
 
-    // Fetch the user from Firestore UId of the user
+    //===========================================================================================
+    // Adding Document
+    //===========================================================================================
+
+    @Override
+    public MutableLiveData<User> addDocument(String docUId, User documentData) {
+        MutableLiveData<User> userData = new MutableLiveData<>();
+        userData.setValue(documentData);
+        usersRef.document(docUId)
+                .set(documentData)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(getClassName(), "Document added successfully.");
+                    } else {
+                        Log.e(getClassName(), "Error updating document: ", task.getException());
+                    }
+                });
+        return userData;
+    }
+
+    //===========================================================================================
+    // Updating Document
+    //===========================================================================================
+
+    @Override
+    public MutableLiveData<User> updateDocument(String docUId, User documentData) {
+        MutableLiveData<User> userData = new MutableLiveData<>();
+        userData.setValue(documentData);
+        usersRef.document(docUId)
+                .set(documentData, SetOptions.merge())
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(getClassName(), "Document added successfully.");
+                    } else {
+                        Log.e(getClassName(), "Error updating document: ", task.getException());
+                    }
+                });
+        return userData;
+    }
+
+    //===========================================================================================
+    // Fetching Document
+    //===========================================================================================
+
+    // Fetch the user from Firestore using the UId of the user
     public MutableLiveData<User> getUserByUId(String UId) {
         MutableLiveData<User> userData = new MutableLiveData<>();
         usersRef.document(UId)
@@ -91,7 +136,7 @@ public class UserRepository extends Repository {
         return userData;
     }
 
-    // Fetch the user from Firestore using the phoneNumber variable
+    // Fetch all users from the database
     @Override
     public MutableLiveData<List<User>> getAllDocumentsFromCollection() {
         MutableLiveData<List<User>> listUsersData = new MutableLiveData<>();

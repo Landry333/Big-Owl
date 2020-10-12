@@ -12,25 +12,70 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupRepository extends Repository {
+public class GroupRepository extends Repository<Group> {
 
     private FirebaseFirestore mFirebaseFirestore;
-    private CollectionReference groupRef;
+    private CollectionReference groupsRef;
 
     // TODO: Dependency Injection Implementation for Firestore
     public GroupRepository() {
         mFirebaseFirestore = Firestore.getDatabase();
-        groupRef = mFirebaseFirestore.collection("groups");
+        groupsRef = mFirebaseFirestore.collection("groups");
     }
 
-    // Fetch the group from Firestore UId of the group
+    //===========================================================================================
+    // Adding Document
+    //===========================================================================================
+
+    @Override
+    public MutableLiveData<Group> addDocument(String docUId, Group documentData) {
+        MutableLiveData<Group> groupData = new MutableLiveData<>();
+        groupData.setValue(documentData);
+        groupsRef.document(docUId)
+                .set(documentData)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(getClassName(), "Document added successfully.");
+                    } else {
+                        Log.e(getClassName(), "Error adding document: ", task.getException());
+                    }
+                });
+        return groupData;
+    }
+
+    //===========================================================================================
+    // Updating Document
+    //===========================================================================================
+
+    @Override
+    public MutableLiveData<Group> updateDocument(String docUId, Group documentData) {
+        MutableLiveData<Group> groupData = new MutableLiveData<>();
+        groupData.setValue(documentData);
+        groupsRef.document(docUId)
+                .set(documentData, SetOptions.merge())
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(getClassName(), "Document added successfully.");
+                    } else {
+                        Log.e(getClassName(), "Error updating document: ", task.getException());
+                    }
+                });
+        return groupData;
+    }
+
+    //===========================================================================================
+    // Fetching Document
+    //===========================================================================================
+
+    // Fetch the group from Firestore using the UId of the group
     public MutableLiveData<Group> getGroupByUId(String UId) {
         MutableLiveData<Group> groupData = new MutableLiveData<>();
-        groupRef.document(UId)
+        groupsRef.document(UId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -42,7 +87,8 @@ public class GroupRepository extends Repository {
                             groupData.setValue(null);
                         }
                     } else {
-                        Log.e(getClassName(), "Error getting documents: ", task.getException());
+                        Log.e(getClassName(), "Error getting documents: " +
+                                task.getException());
                     }
                 });
         return groupData;
@@ -51,7 +97,7 @@ public class GroupRepository extends Repository {
     // Fetch the group from Firestore using the name variable
     public MutableLiveData<User> getGroupByName(String name) {
         MutableLiveData<User> groupData = new MutableLiveData<>();
-        groupRef.whereEqualTo("name", name)
+        groupsRef.whereEqualTo("name", name)
                 .limit(1)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -64,7 +110,8 @@ public class GroupRepository extends Repository {
                             groupData.setValue(null);
                         }
                     } else {
-                        Log.e(getClassName(), "Error getting documents: ", task.getException());
+                        Log.e(getClassName(), "Error getting documents: " +
+                                task.getException());
                     }
                 });
         return groupData;
@@ -73,7 +120,7 @@ public class GroupRepository extends Repository {
     // Fetch the group from Firestore using the monitoringUserId variable
     public MutableLiveData<Group> getGroupByMonitoringUserId(String monitoringUserId) {
         MutableLiveData<Group> groupData = new MutableLiveData<>();
-        groupRef.whereEqualTo("monitoringUserId", monitoringUserId)
+        groupsRef.whereEqualTo("monitoringUserId", monitoringUserId)
                 .limit(1)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -86,7 +133,8 @@ public class GroupRepository extends Repository {
                             groupData.setValue(null);
                         }
                     } else {
-                        Log.e(getClassName(), "Error getting documents: ", task.getException());
+                        Log.e(getClassName(), "Error getting documents: " +
+                                task.getException());
                     }
                 });
         return groupData;
@@ -95,7 +143,7 @@ public class GroupRepository extends Repository {
     // Fetch the group from Firestore using the supervisedUserId variable
     public MutableLiveData<List<Group>> getListOfGroupsBySupervisedUserId(String supervisedUserId) {
         MutableLiveData<List<Group>> listOfGroupData = new MutableLiveData<>();
-        groupRef.whereArrayContains("supervisedUserId", supervisedUserId)
+        groupsRef.whereArrayContains("supervisedUserId", supervisedUserId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -111,16 +159,18 @@ public class GroupRepository extends Repository {
                             listOfGroupData.setValue(null);
                         }
                     } else {
-                        Log.e(getClassName(), "Error getting documents: ", task.getException());
+                        Log.e(getClassName(), "Error getting documents: " +
+                                task.getException());
                     }
                 });
         return listOfGroupData;
     }
 
+    // Fetch all groups from the database
     @Override
     public MutableLiveData<List<Group>> getAllDocumentsFromCollection() {
         MutableLiveData<List<Group>> listOfGroupData = new MutableLiveData<>();
-        groupRef.get()
+        groupsRef.get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         QuerySnapshot groupDocs = task.getResult();
@@ -135,7 +185,8 @@ public class GroupRepository extends Repository {
                             listOfGroupData.setValue(null);
                         }
                     } else {
-                        Log.e(getClassName(), "Error getting documents: ", task.getException());
+                        Log.e(getClassName(), "Error getting documents: " +
+                                task.getException());
                     }
                 });
         return listOfGroupData;
