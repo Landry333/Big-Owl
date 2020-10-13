@@ -14,6 +14,7 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class Repository<T> {
 
@@ -46,6 +47,29 @@ public abstract class Repository<T> {
     }
 
     //===========================================================================================
+    // Remove Document
+    //===========================================================================================
+
+    public boolean removeDocument(String docUId) {
+        // We are using AtomicBoolean because the lambda function is asynchronous.
+        // Thus we need an atomic variable, so we can set the boolean value in the lambda function.
+        AtomicBoolean isSuccessful = new AtomicBoolean();
+        collectionReference.document(docUId)
+                .delete()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(getClassName(), "Document removed successfully.");
+                        isSuccessful.set(true);
+                    } else {
+                        Log.e(getClassName(), "Error removing document: " +
+                                task.getException());
+                        isSuccessful.set(false);
+                    }
+                });
+        return isSuccessful.get();
+    }
+
+    //===========================================================================================
     // Updating Document
     //===========================================================================================
 
@@ -71,6 +95,7 @@ public abstract class Repository<T> {
 
     public MutableLiveData<T> getDocumentByUId(String UId, Class<T> tClass) {
         MutableLiveData<T> tData = new MutableLiveData<>();
+        boolean a;
         collectionReference.document(UId)
                 .get()
                 .addOnCompleteListener(task -> {
