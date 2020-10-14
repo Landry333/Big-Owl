@@ -8,13 +8,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.security.PrivateKey;
 
 public class HomeActivity extends AppCompatActivity {
-    Button btnLogOut;
-    FirebaseAuth m_FirebaseAuth;
+    private Button btnLogOut, btnMonitoringGroup, btnSupervisedGroup;
+    private FirebaseAuth m_FirebaseAuth;
     private FirebaseAuth.AuthStateListener m_AuthStateListener;
 
     @Override
@@ -35,6 +32,26 @@ public class HomeActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     FirebaseAuth.getInstance().signOut();
                     Intent i = new Intent(HomeActivity.this, MainActivity.class);
+                    startActivity(i);
+                }
+            });
+
+            btnMonitoringGroup = findViewById(R.id.btnMonitoringGroup);
+
+            btnMonitoringGroup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(HomeActivity.this, MonitoringGroupPageActivity.class);
+                    startActivity(i);
+                }
+            });
+
+            btnSupervisedGroup = findViewById(R.id.btnSupervisedGroup);
+
+            btnSupervisedGroup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(HomeActivity.this, SupervisedGroupListActivity.class);
                     startActivity(i);
                 }
             });
