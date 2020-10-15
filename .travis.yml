@@ -33,6 +33,7 @@ before_script:
 
 script:
   - ./gradlew clean assemble
+  - ./gradlew lint
 
 # NOTE: build does assemble and testing and linting
 #  - ./gradlew clean build
