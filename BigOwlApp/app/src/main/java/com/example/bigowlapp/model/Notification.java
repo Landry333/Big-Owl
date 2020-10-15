@@ -15,6 +15,15 @@ public class Notification {
     public Notification() {
     }
 
+    public Notification(String type) {
+        this.type = type;
+    }
+
+    public Notification(String uId, String type) {
+        this.uId = uId;
+        this.type = type;
+    }
+
     public Notification(String uId, String type, Timestamp time) {
         this.uId = uId;
         this.type = type;
