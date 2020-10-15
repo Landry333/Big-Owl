@@ -7,10 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.bigowlapp.Fragments.UsersFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeActivity extends AppCompatActivity {
-    private Button btnLogOut, btnMonitoringGroup, btnSupervisedGroup;
+    private Button btnLogOut, btnMonitoringGroup, btnSupervisedGroup, btnSearchUsers;
     private FirebaseAuth m_FirebaseAuth;
     private FirebaseAuth.AuthStateListener m_AuthStateListener;
 
@@ -52,6 +53,16 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(HomeActivity.this, SupervisedGroupListActivity.class);
+                    startActivity(i);
+                }
+            });
+
+            btnSearchUsers = findViewById(R.id.btnSearchUsers);
+
+            btnSearchUsers.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(HomeActivity.this, UsersFragment.class);
                     startActivity(i);
                 }
             });

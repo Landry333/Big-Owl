@@ -39,33 +39,32 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
             if (currentUser != null) {
                 Query query = db.collection("groups").whereArrayContains("supervisedUserId", currentUser.getUid());
                 query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void  onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    if (!qds.isEmpty())
-                                        qds.clear();
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        qds.add(document);
-                                    }
-                                    ArrayAdapter<QueryDocumentSnapshot> arrayAdapter = new ArrayAdapter<QueryDocumentSnapshot>(getBaseContext(), android.R.layout.simple_list_item_1, qds);
-                                    lv = findViewById(R.id.listView_supervisedGroup);
-                                    lv.setAdapter(arrayAdapter);
-
-                                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                        // argument position gives the index of item which is clicked
-                                        public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3)
-                                        {
-                                            Intent intent = new Intent(getBaseContext(), SupervisedGroupPageActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    });
-                                }
+                    @Override
+                    public void  onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if (!qds.isEmpty())
+                                qds.clear();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                qds.add(document);
                             }
-                        });
+                            ArrayAdapter<QueryDocumentSnapshot> arrayAdapter = new ArrayAdapter<QueryDocumentSnapshot>(getBaseContext(), android.R.layout.simple_list_item_1, qds);
+                            lv = findViewById(R.id.listView_supervisedGroup);
+                            lv.setAdapter(arrayAdapter);
+
+                            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                // argument position gives the index of item which is clicked
+                                public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3)
+                                {
+                                    Intent intent = new Intent(getBaseContext(), SupervisedGroupPageActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+                    }
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
-
