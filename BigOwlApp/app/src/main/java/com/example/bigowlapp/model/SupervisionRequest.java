@@ -1,11 +1,11 @@
 package com.example.bigowlapp.model;
 
+import com.example.bigowlapp.utils.Constants;
 import com.google.firebase.Timestamp;
 
-public class SupervisionRequest extends Notification {
+public class SupervisionRequest extends Notification implements Constants {
 
-    private final String TYPE = "supervisionRequest";
-    private enum Response {
+    public enum Response {
         ACCEPT,
         REJECT,
         NEUTRAL
@@ -18,28 +18,24 @@ public class SupervisionRequest extends Notification {
     private Timestamp timeSent;
     private Timestamp timeResponse;
 
-    SupervisionRequest(){
+    public SupervisionRequest() {
         super();
     }
 
-    SupervisionRequest(String uId, String type){
-        super(uId, type);
+    public SupervisionRequest(String uId) {
+        super(uId, SUPERVISION_TYOE);
     }
 
-    public SupervisionRequest(String uId, String type, Timestamp time, String senderUId,
+    public SupervisionRequest(String uId, Timestamp time, String senderUId,
                               String receiverUId, String groupUId, Response response,
                               Timestamp timeSent, Timestamp timeResponse) {
-        super(uId, type, time);
+        super(uId, SUPERVISION_TYOE, time);
         this.senderUId = senderUId;
         this.receiverUId = receiverUId;
         this.groupUId = groupUId;
         this.response = response;
         this.timeSent = timeSent;
         this.timeResponse = timeResponse;
-    }
-
-    public String getTYPE() {
-        return TYPE;
     }
 
     public String getSenderUId() {
