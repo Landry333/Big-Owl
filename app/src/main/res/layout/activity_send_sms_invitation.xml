@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SendSmsInvitationActivity">
+
+
+    <EditText
+        android:id="@+id/number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Phone Number"
+        android:inputType="phone"
+        android:layout_margin="8dp"/>
+
+    <EditText
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:hint="Type message"
+        android:text="Hi, I want you to register on BigOwl application. Please download it on Google Play store and sign up"
+        android:gravity="center_vertical"
+        android:layout_margin="8dp"/>
+
+    <Button
+        android:id="@+id/send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="send sms to invite"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <Button
+        android:id="@+id/testSendRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test Send request to supervise"
+        android:layout_gravity="center_horizontal"
+        />
+
+
+
+</LinearLayout>
