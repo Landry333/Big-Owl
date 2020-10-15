@@ -42,6 +42,8 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
                             @Override
                             public void  onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
+                                    if (!qds.isEmpty())
+                                        qds.clear();
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         qds.add(document);
                                     }
