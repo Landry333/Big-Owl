@@ -3,6 +3,7 @@ package com.example.bigowlapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -43,11 +44,13 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void DoRequest(String otherUserID){
         if (supRequestStatus.equals("none")){
             HashMap hashMap=new HashMap();
             hashMap.put("status", "pending");
             supRequestRef.child(mUser.getUid()).child(otherUserID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                @SuppressLint("SetTextI18n")
                 @Override
                 public void onComplete(@NonNull Task task) {
                     if(task.isSuccessful()){
@@ -63,6 +66,7 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
         }
         if(supRequestStatus.equals("sent_pending")||supRequestStatus.equals("sent_declined")){
             supRequestRef.child(mUser.getUid()).child(otherUserID).removeValue().addOnCompleteListener(new OnCompleteListener() {
+                @SuppressLint("SetTextI18n")
                 @Override
                 public void onComplete(@NonNull Task task) {
                     if(task.isSuccessful()){

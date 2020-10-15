@@ -14,7 +14,9 @@
         android:layout_height="wrap_content"
         android:hint="Phone Number"
         android:inputType="phone"
-        android:layout_margin="8dp"/>
+        android:layout_margin="8dp"
+        android:autofillHints=""
+        tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/message"
@@ -23,7 +25,9 @@
         android:hint="Type message"
         android:text="Hi, I want you to register on BigOwl application. Please download it on Google Play store and sign up"
         android:gravity="center_vertical"
-        android:layout_margin="8dp"/>
+        android:layout_margin="8dp"
+        android:autofillHints=""
+        tools:ignore="HardcodedText,TextFields" />
 
     <Button
         android:id="@+id/send"
@@ -31,7 +35,7 @@
         android:layout_height="wrap_content"
         android:text="send sms to invite"
         android:layout_gravity="center_horizontal"
-        />
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/testSendRequest"
@@ -39,7 +43,7 @@
         android:layout_height="wrap_content"
         android:text="test Send request to supervise"
         android:layout_gravity="center_horizontal"
-        />
+        tools:ignore="HardcodedText" />
 
 
 
