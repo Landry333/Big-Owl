@@ -7,14 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.bigowlapp.Fragments.UsersFragment;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.security.PrivateKey;
 
 public class HomeActivity extends AppCompatActivity {
-    Button btnLogOut;
-    FirebaseAuth m_FirebaseAuth;
+
+    private Button btnLogOut, btnMonitoringGroup, btnSupervisedGroup, btnSearchUsers, btnMonitoringList;
+
+    private FirebaseAuth m_FirebaseAuth;
     private FirebaseAuth.AuthStateListener m_AuthStateListener;
 
     @Override
@@ -38,6 +38,44 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
+
+            btnMonitoringGroup = findViewById(R.id.btnMonitoringGroup);
+
+            btnMonitoringGroup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent i = new Intent(HomeActivity.this, MonitoringGroupListActivity.class);
+
+                    startActivity(i);
+                }
+            });
+
+            btnSupervisedGroup = findViewById(R.id.btnSupervisedGroup);
+
+            btnSupervisedGroup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(HomeActivity.this, SupervisedGroupListActivity.class);
+                    startActivity(i);
+                }
+            });
+
+
+            /*
+            btnSearchUsers = findViewById(R.id.btnSearchUsers);
+
+            btnSearchUsers.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent i = new Intent(HomeActivity.this, MonitoringGroupListActivity.class);
+                    startActivity(i);
+                }
+            });
+            */
+
+
         }
         catch (Exception ex)
         {
