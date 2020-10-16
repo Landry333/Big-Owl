@@ -61,20 +61,16 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
-
-            /*
             btnSearchUsers = findViewById(R.id.btnSearchUsers);
 
             btnSearchUsers.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    Intent i = new Intent(HomeActivity.this, MonitoringGroupListActivity.class);
+                    Intent i = new Intent(HomeActivity.this, SearchContactsToSupervise.class);
                     startActivity(i);
                 }
             });
-            */
-
 
         }
         catch (Exception ex)

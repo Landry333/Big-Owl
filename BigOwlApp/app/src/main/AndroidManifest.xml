@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bigowlapp">
 
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,6 +14,7 @@
         <activity android:name=".SupervisedGroupListActivity" />
         <activity android:name=".MonitoringGroupPageActivity" />
         <activity android:name=".MonitoringGroupListActivity" />
+        <activity android:name=".SearchContactsToSupervise" />
         <activity android:name=".Fragments.UsersFragment"/>
         <activity android:name=".HomeActivity" />
         <activity android:name=".LoginActivity" />
