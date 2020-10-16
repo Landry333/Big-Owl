@@ -19,7 +19,10 @@ import com.google.firebase.auth.FirebaseUser;
 import java.security.PrivateKey;
 
 public class HomeActivity extends AppCompatActivity {
-    Button btnLogOut;
+  
+    Button btnLogOut, SendSmsInvitation;
+    FirebaseAuth m_FirebaseAuth;
+    private FirebaseAuth.AuthStateListener m_AuthStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +48,21 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
-        } catch (Exception ex) {
 
+
+            SendSmsInvitation = findViewById(R.id.SendSmsInvitation);
+
+            SendSmsInvitation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(HomeActivity.this, SendSmsInvitationActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
+        catch (Exception ex)
+        {
         }
     }
 }
