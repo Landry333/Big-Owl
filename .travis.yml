@@ -33,9 +33,9 @@ before_script:
 
 script:
   - ./gradlew clean assemble
-  - ./gradlew connectedCheck
   - ./gradlew test
   - ./gradlew lint
+  - ./gradlew jacocoTestReport
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
