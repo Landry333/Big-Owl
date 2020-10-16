@@ -4,28 +4,34 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bigowlapp.Model.User;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SearchContactsToSupervise extends AppCompatActivity {
    // private TextView listContacts;
     private ListView listContactsView;
-    private List<String> list;
-
+    private List<String> list, listShow;
     private Button loadContacts;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static ArrayList<QueryDocumentSnapshot> qds = new ArrayList<QueryDocumentSnapshot>();
+
+    EditText search_users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +85,47 @@ public class SearchContactsToSupervise extends AppCompatActivity {
         }
         cursor.close();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, list);
+        listShow = list;
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, listShow);
         listContactsView = findViewById(R.id.listContacts);
         listContactsView.setAdapter(adapter);
 
         //listContacts.setText(builder.toString());
+
+
+        search_users = findViewById(R.id.search_users);
+        search_users.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                searchUsers(charSequence.toString().toLowerCase());
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, listShow);
+                listContactsView.setAdapter((adapter));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+    }
+
+
+    private void searchUsers(String s) {
+/*
+        if(s == null || s.equals(""))
+        {
+            mUsersShow = mUsers;
+            return;
+        }*/
+        List<String> filteredUsers = list.stream().filter(u -> {
+            boolean containInName = u.toLowerCase().contains(s);
+            boolean containInPhone = u.toLowerCase().contains(s);
+            return (containInName || containInPhone);
+        }).collect(Collectors.toList());
+
+        listShow = filteredUsers;
     }
 }

@@ -119,7 +119,7 @@ public class MonitoringGroupListActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.d("test", "welp" + mUsers.size());
+                //Log.d("test", "welp" + mUsers.size());
                 searchUsers(charSequence.toString().toLowerCase());
                 ArrayAdapter<User> arrayAdapter = new ArrayAdapter<User>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow);
                 users_listview.setAdapter((arrayAdapter));
