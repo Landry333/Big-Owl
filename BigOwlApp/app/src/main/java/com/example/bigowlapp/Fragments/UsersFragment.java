@@ -86,7 +86,7 @@ public class UsersFragment extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 Log.d("test", "welp" + mUsers.size());
-                searchUsers(charSequence.toString().toLowerCase());
+                //searchUsers(charSequence.toString().toLowerCase());
                 ArrayAdapter<User> arrayAdapter = new ArrayAdapter<User>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow);
                 users_listview.setAdapter((arrayAdapter));
             }
@@ -97,14 +97,14 @@ public class UsersFragment extends AppCompatActivity {
             }
         });
     }
-
-    private void searchUsers(String s) {
 /*
+    private void searchUsers(String s) {
+
         if(s == null || s.equals(""))
         {
             mUsersShow = mUsers;
             return;
-        }*/
+        }
         List<User> filteredUsers = mUsers.stream().filter(u -> {
             boolean containInFirstName = u.getFirstName().toLowerCase().contains(s);
             boolean containInLastName = u.getLastName().toLowerCase().contains(s);
@@ -112,5 +112,5 @@ public class UsersFragment extends AppCompatActivity {
         }).collect(Collectors.toList());
 
         mUsersShow = filteredUsers;
-    }
+    }*/
 }
