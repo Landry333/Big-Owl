@@ -33,7 +33,12 @@ before_script:
 
 script:
   - ./gradlew clean assemble
+  - ./gradlew connectedCheck
+  - ./gradlew test
   - ./gradlew lint
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 # NOTE: build does assemble and testing and linting
 #  - ./gradlew clean build
