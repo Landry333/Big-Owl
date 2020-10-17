@@ -11,7 +11,7 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.bigowlapp.Model.User;
+import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

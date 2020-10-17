@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.bigowlapp.Model.User;
+import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.R;
 
 

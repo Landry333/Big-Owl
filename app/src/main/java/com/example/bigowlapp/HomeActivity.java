@@ -83,8 +83,6 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
-
-
             SendSmsInvitation = findViewById(R.id.SendSmsInvitation);
 
             SendSmsInvitation.setOnClickListener(new View.OnClickListener() {
