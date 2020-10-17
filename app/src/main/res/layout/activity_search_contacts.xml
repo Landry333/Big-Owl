@@ -12,6 +12,7 @@
         android:text="Search for users to invite"
         android:textSize="30sp"/>
 
+    <!--
     <Button
         android:id="@+id/loadContacts"
         android:layout_width="wrap_content"
@@ -21,11 +22,12 @@
         android:layout_marginTop="30dp"
         android:text="Load Contacts"
         />
+-->
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/loadContacts"
+        android:layout_below="@+id/textView_groupName"
         android:layout_margin="5dp"
         android:hint="Search..."
         android:inputType="text"

@@ -42,13 +42,13 @@ public class SearchContactsToSupervise extends AppCompatActivity {
 
     protected void initialize() {
         //listContacts = (TextView) findViewById(R.id.listContacts);
-        loadContacts = (Button) findViewById(R.id.loadContacts);
+        /*loadContacts = (Button) findViewById(R.id.loadContacts);
         loadContacts.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) {*/
                 loadContacts();
-            }
-        });
+            //}
+        //});
 
     }
 
@@ -75,8 +75,7 @@ public class SearchContactsToSupervise extends AppCompatActivity {
                         String PhoneNumber = cursor2.getString(cursor2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         //builder.append("Contact : ").append(name).append(", Phone Number : ").append(PhoneNumber).append("\n\n");
 
-                        list.add("Contact: " + name + "\", Phone Number : \"" + PhoneNumber);
-                        Log.d("test1","test11");
+                        list.add(name + "\n" + PhoneNumber);
                     }
 
                     cursor2.close();
