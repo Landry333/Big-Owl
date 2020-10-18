@@ -9,6 +9,7 @@
     <string name="supervisor_name">supervisor_name</string>
     <string name="supervised_group">Supervised Group</string>
     <string name="title_activity_supervised_group">SupervisedGroup</string>
+    <string name="title_activity_notification">NotificationActivity</string>
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>

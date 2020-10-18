@@ -1,18 +1,14 @@
 package com.example.bigowlapp;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.view.ViewGroup;
 
 import com.example.bigowlapp.model.Notification;
 import com.example.bigowlapp.repository.NotificationRepository;
-import com.example.bigowlapp.repository.Repository;
-import com.example.bigowlapp.utils.NotificationAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
