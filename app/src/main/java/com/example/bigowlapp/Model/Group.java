@@ -13,17 +13,17 @@ public class Group {
     @DocumentId
     private String uId;
     private String name;
-    private String monitorUserId;
+    private String monitoringUserId;
     private List<String> supervisedUserId;
 
     public Group() {
 
     }
 
-    public Group(String uId, String name, String monitorUserId, List<String> supervisedUserId) {
+    public Group(String uId, String name, String monitoringUserId, List<String> supervisedUserId) {
         this.uId = uId;
         this.name = name;
-        this.monitorUserId = monitorUserId;
+        this.monitoringUserId = monitoringUserId;
         this.supervisedUserId = supervisedUserId;
     }
 
@@ -43,12 +43,12 @@ public class Group {
         this.name = name;
     }
 
-    public String getMonitorUserId() {
-        return monitorUserId;
+    public String getMonitoringUserId() {
+        return monitoringUserId;
     }
 
-    public void setMonitorUserId(String monitorUserId) {
-        this.monitorUserId = monitorUserId;
+    public void setMonitoringUserId(String monitoringUserId) {
+        this.monitoringUserId = monitoringUserId;
     }
 
     public List<String> getSupervisedUserId() {
