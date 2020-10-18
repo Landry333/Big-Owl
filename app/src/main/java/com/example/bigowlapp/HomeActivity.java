@@ -15,14 +15,10 @@ import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.UserRepository;
 import com.example.bigowlapp.Fragments.UsersFragment;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.security.PrivateKey;
 
 public class HomeActivity extends AppCompatActivity {
-
-    private Button btnLogOut, btnMonitoringGroup, btnSupervisedGroup, btnSearchUsers, btnMonitoringList, SendSmsInvitation;
-    private FirebaseAuth m_FirebaseAuth;
+    Button btnLogOut, sendSmsInvitation, btnSearchUsers, btnMonitoringGroup, btnSupervisedGroup, btnMonitoringList;
+    FirebaseAuth m_FirebaseAuth;
     private FirebaseAuth.AuthStateListener m_AuthStateListener;
 
     @Override
@@ -50,14 +46,23 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
+            sendSmsInvitation = findViewById(R.id.SendSmsInvitation);
+
+            sendSmsInvitation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(HomeActivity.this, SendSmsInvitationActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
             btnMonitoringGroup = findViewById(R.id.btnMonitoringGroup);
 
             btnMonitoringGroup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     Intent i = new Intent(HomeActivity.this, MonitoringGroupListActivity.class);
-
                     startActivity(i);
                 }
             });
@@ -83,16 +88,6 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
-            SendSmsInvitation = findViewById(R.id.SendSmsInvitation);
-
-            SendSmsInvitation.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(HomeActivity.this, SendSmsInvitationActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
         }
         catch (Exception ex)
         {
