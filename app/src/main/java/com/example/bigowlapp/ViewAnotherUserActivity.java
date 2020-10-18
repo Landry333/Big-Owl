@@ -21,9 +21,9 @@ import java.util.HashMap;
 
 public class ViewAnotherUserActivity extends AppCompatActivity {
     private Button supRequestBtn;
-    String otherUserID= getIntent().getStringExtra("userID");
-    String supRequestStatus="none";
-    DatabaseReference mUserRef,supRequestRef;
+    String otherUserID = getIntent().getStringExtra("userID");
+    String supRequestStatus = "none";
+    DatabaseReference mUserRef, supRequestRef;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
 
@@ -33,8 +33,8 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_another_user);
 
         supRequestBtn = findViewById(R.id.SupRequest);
-        supRequestRef= FirebaseDatabase.getInstance().getReference().child("SupRequests");
-        mUser= mAuth.getCurrentUser();
+        supRequestRef = FirebaseDatabase.getInstance().getReference().child("SupRequests");
+        mUser = mAuth.getCurrentUser();
         supRequestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,43 +45,41 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void DoRequest(String otherUserID){
-        if (supRequestStatus.equals("none")){
-            HashMap hashMap=new HashMap();
+    private void DoRequest(String otherUserID) {
+        if (supRequestStatus.equals("none")) {
+            HashMap hashMap = new HashMap();
             hashMap.put("status", "pending");
             supRequestRef.child(mUser.getUid()).child(otherUserID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onComplete(@NonNull Task task) {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         Toast.makeText(ViewAnotherUserActivity.this, "You have sent a request to supervise ", Toast.LENGTH_SHORT).show();
-                        supRequestStatus ="sent_pending";
+                        supRequestStatus = "sent_pending";
                         supRequestBtn.setText("Cancel this request to supervise");
-                    }
-                    else {
-                        Toast.makeText(ViewAnotherUserActivity.this, ""+task.getException().toString(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ViewAnotherUserActivity.this, "" + task.getException().toString(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         }
-        if(supRequestStatus.equals("sent_pending")||supRequestStatus.equals("sent_declined")){
+        if (supRequestStatus.equals("sent_pending") || supRequestStatus.equals("sent_declined")) {
             supRequestRef.child(mUser.getUid()).child(otherUserID).removeValue().addOnCompleteListener(new OnCompleteListener() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onComplete(@NonNull Task task) {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         Toast.makeText(ViewAnotherUserActivity.this, "You have canceled request to supervise ", Toast.LENGTH_SHORT).show();
-                        supRequestStatus="none";
+                        supRequestStatus = "none";
                         supRequestBtn.setText("Send a request to supervise user");
-                    }
-                    else {
-                        Toast.makeText(ViewAnotherUserActivity.this, ""+task.getException().toString(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ViewAnotherUserActivity.this, "" + task.getException().toString(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         }
 
-        if(supRequestStatus.equals("accepted")){
+        if (supRequestStatus.equals("accepted")) {
             supRequestBtn.setText("You are supervising this user");
         }
     }

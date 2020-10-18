@@ -10,9 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:fullBackupContent="@xml/backup_descriptor">
-        <activity android:name=".ViewAnotherUserActivity"></activity>
+        <activity android:name=".ViewAnotherUserActivity" />
         <activity android:name=".InvitationConfirmationActivity" />
         <activity android:name=".SendSmsInvitationActivity" />
+        <activity android:name=".SupervisedGroupPageActivity" />
+        <activity android:name=".SupervisedGroupListActivity" />
+        <activity android:name=".MonitoringGroupPageActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity">

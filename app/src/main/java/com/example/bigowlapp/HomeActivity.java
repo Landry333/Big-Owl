@@ -14,13 +14,9 @@ import android.widget.Button;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.security.PrivateKey;
 
 public class HomeActivity extends AppCompatActivity {
-  
-    Button btnLogOut, SendSmsInvitation;
+    Button btnLogOut, SendSmsInvitation, btnMonitoringGroup, btnSupervisedGroup;
     FirebaseAuth m_FirebaseAuth;
     private FirebaseAuth.AuthStateListener m_AuthStateListener;
 
@@ -49,7 +45,6 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
-
             SendSmsInvitation = findViewById(R.id.SendSmsInvitation);
 
             SendSmsInvitation.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +53,26 @@ public class HomeActivity extends AppCompatActivity {
                     Intent intent = new Intent(HomeActivity.this, SendSmsInvitationActivity.class);
                     startActivity(intent);
                     finish();
+                }
+            });
+
+            btnMonitoringGroup = findViewById(R.id.btnMonitoringGroup);
+
+            btnMonitoringGroup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(HomeActivity.this, MonitoringGroupPageActivity.class);
+                    startActivity(i);
+                }
+            });
+
+            btnSupervisedGroup = findViewById(R.id.btnSupervisedGroup);
+
+            btnSupervisedGroup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(HomeActivity.this, SupervisedGroupListActivity.class);
+                    startActivity(i);
                 }
             });
         }
