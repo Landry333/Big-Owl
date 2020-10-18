@@ -15,6 +15,9 @@ jobs:
       - name: Build the app/gradle
         run: ./gradlew build
 
+      - name: Run android lint
+        run: ./gradlew lint
+
       - name: Run app on an emulator
         uses: ReactiveCircus/android-emulator-runner@v2.12.0
         with:
