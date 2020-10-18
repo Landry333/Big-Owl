@@ -14,12 +14,11 @@ import android.widget.Button;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.security.PrivateKey;
 
 public class HomeActivity extends AppCompatActivity {
-    Button btnLogOut;
+    Button btnLogOut, sendSmsInvitation, btnMonitoringGroup, btnSupervisedGroup;
+    FirebaseAuth m_FirebaseAuth;
+    private FirebaseAuth.AuthStateListener m_AuthStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +44,40 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
-        } catch (Exception ex) {
 
+            sendSmsInvitation = findViewById(R.id.SendSmsInvitation);
+
+            sendSmsInvitation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(HomeActivity.this, SendSmsInvitationActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+            btnMonitoringGroup = findViewById(R.id.btnMonitoringGroup);
+
+            btnMonitoringGroup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(HomeActivity.this, MonitoringGroupPageActivity.class);
+                    startActivity(i);
+                }
+            });
+
+            btnSupervisedGroup = findViewById(R.id.btnSupervisedGroup);
+
+            btnSupervisedGroup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(HomeActivity.this, SupervisedGroupListActivity.class);
+                    startActivity(i);
+                }
+            });
+        }
+        catch (Exception ex)
+        {
         }
     }
 }
