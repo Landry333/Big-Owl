@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.bigowlapp.model.Notification;
 import com.example.bigowlapp.repository.NotificationRepository;
@@ -20,7 +21,6 @@ public class NotificationActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private NotificationRepository notificationRepository;
     private LiveData<List<Notification>> notificationListData;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +41,8 @@ public class NotificationActivity extends AppCompatActivity {
             for(Notification n : notifications){
                 type.add(n.getType());
             }
-
-            mAdapter = new NotificationAdapter(type , this);
+            mAdapter = new NotificationAdapter(notifications , this);
+            recyclerView.setAdapter(mAdapter);
         });
-
-        recyclerView.setAdapter(mAdapter);
-
     }
 }

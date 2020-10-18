@@ -5,18 +5,23 @@
       <config />
     </shared>
   </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bfe2a1ba-7f25-4a5f-af23-724359e841f3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Big-Owl.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BigOwlApp/app/src/main/res/values/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bigowlapp/HomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bigowlapp/HomeActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bigowlapp/NotificationActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bigowlapp/NotificationActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bigowlapp/utils/NotificationAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bigowlapp/NotificationAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bigowlapp/NotificationAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bigowlapp/NotificationAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bigowlapp/model/SupervisionRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bigowlapp/model/SupervisionRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bigowlapp/utils/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bigowlapp/utils/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_home.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,26 +176,54 @@
       <option name="project" value="LOCAL" />
       <updated>1602724721282</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="[#52] Merged staging into #52">
+      <created>1603049249412</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1603049249412</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="[#62] Added linting to travis CI" />
-    <option name="LAST_COMMIT_MESSAGE" value="[#62] Added linting to travis CI" />
+    <MESSAGE value="[#52] Merged staging into #52" />
+    <option name="LAST_COMMIT_MESSAGE" value="[#52] Merged staging into #52" />
   </component>
   <component name="WindowStateProjectService">
     <state x="743" y="389" width="433" height="268" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1603048790971">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="743" y="389" width="433" height="268" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1603048790971" />
-    <state x="1162" y="86" width="745" height="913" key="CommitChangelistDialog2" timestamp="1602724720908">
+    <state x="805" y="327" key="AndroidCreateXmlResourceDialog" timestamp="1603049521543">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1162" y="86" width="745" height="913" key="CommitChangelistDialog2/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1602724720908" />
+    <state x="805" y="327" key="AndroidCreateXmlResourceDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1603049521543" />
+    <state x="1162" y="86" width="745" height="913" key="CommitChangelistDialog2" timestamp="1603049249015">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1162" y="86" width="745" height="913" key="CommitChangelistDialog2/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1603049249015" />
     <state x="764" y="241" key="FileChooserDialogImpl" timestamp="1603048420277">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="764" y="241" key="FileChooserDialogImpl/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1603048420277" />
+    <state width="1877" height="289" key="GridCell.Tab.0.bottom" timestamp="1603063228800">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="289" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1603063228800" />
+    <state width="1877" height="289" key="GridCell.Tab.0.center" timestamp="1603063228800">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="289" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1603063228800" />
+    <state width="1877" height="289" key="GridCell.Tab.0.left" timestamp="1603063228799">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="289" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1603063228799" />
+    <state width="1877" height="289" key="GridCell.Tab.0.right" timestamp="1603063228800">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="289" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1603063228800" />
     <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1602724783105">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -199,6 +232,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1602724652843" />
+    <state x="616" y="240" key="run.anything.popup" timestamp="1603049589630">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1603049589630" />
     <state x="617" y="268" width="672" height="678" key="search.everywhere.popup" timestamp="1603048921028">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
