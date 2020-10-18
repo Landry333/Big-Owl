@@ -12,8 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SignUpActivity"></activity>
-        <activity android:name=".WelcomeActivity" />
+        <activity android:name=".SignUpActivity"/>
+        <activity android:name=".WelcomeActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ViewAnotherUserActivity" />
         <activity android:name=".InvitationConfirmationActivity" />
         <activity android:name=".SendSmsInvitationActivity" />
