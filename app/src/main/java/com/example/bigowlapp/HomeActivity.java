@@ -16,7 +16,7 @@ import com.example.bigowlapp.repository.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeActivity extends AppCompatActivity {
-    Button btnLogOut, SendSmsInvitation, btnMonitoringGroup, btnSupervisedGroup;
+    Button btnLogOut, sendSmsInvitation, btnMonitoringGroup, btnSupervisedGroup;
     FirebaseAuth m_FirebaseAuth;
     private FirebaseAuth.AuthStateListener m_AuthStateListener;
 
@@ -45,9 +45,9 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
-            SendSmsInvitation = findViewById(R.id.SendSmsInvitation);
+            sendSmsInvitation = findViewById(R.id.SendSmsInvitation);
 
-            SendSmsInvitation.setOnClickListener(new View.OnClickListener() {
+            sendSmsInvitation.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(HomeActivity.this, SendSmsInvitationActivity.class);
