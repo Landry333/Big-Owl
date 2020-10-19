@@ -2,6 +2,7 @@ package com.example.bigowlapp.repository;
 
 import android.util.Log;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.database.Firestore;
@@ -24,6 +25,13 @@ public abstract class Repository<T> {
     public Repository(String collectionName) {
         mFirebaseFirestore = Firestore.getDatabase();
         collectionReference = mFirebaseFirestore.collection(collectionName);
+    }
+
+    // TODO: Remove or Modify when dependency injection implemented
+    @VisibleForTesting
+    public Repository(FirebaseFirestore mFirebaseFirestore, CollectionReference collectionReference) {
+        this.mFirebaseFirestore = mFirebaseFirestore;
+        this.collectionReference = collectionReference;
     }
 
     //===========================================================================================
