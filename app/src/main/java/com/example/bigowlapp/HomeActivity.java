@@ -28,7 +28,7 @@ public class HomeActivity extends AppCompatActivity {
     Button btnLogOut, sendSmsInvitation, btnSearchUsers, btnMonitoringGroup, btnSupervisedGroup, btnMonitoringList;
     FirebaseAuth m_FirebaseAuth;
     private FirebaseAuth.AuthStateListener m_AuthStateListener;
-    private int CONTACT_PERMISSION_CODE = 1;
+    private final int CONTACT_PERMISSION_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,14 +92,12 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if(ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
-                        Toast.makeText(HomeActivity.this, "This permission is already granted", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(HomeActivity.this, "This permission is already granted", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(HomeActivity.this, SearchContactsToSupervise.class);
+                        startActivity(i);
                     } else {
                         requestContactPermission();
-
                     }
-
-                    Intent i = new Intent(HomeActivity.this, SearchContactsToSupervise.class);
-                    startActivity(i);
                 }
             });
         }
@@ -138,6 +136,8 @@ public class HomeActivity extends AppCompatActivity {
         if (requestCode == CONTACT_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(HomeActivity.this, SearchContactsToSupervise.class);
+                startActivity(i);
             } else{
                 Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
             }
