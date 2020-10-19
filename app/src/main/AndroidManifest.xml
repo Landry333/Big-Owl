@@ -13,9 +13,9 @@
         <activity android:name=".ViewAnotherUserActivity"></activity>
         <activity android:name=".InvitationConfirmationActivity" />
         <activity android:name=".SendSmsInvitationActivity" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".ActivityPage.HomeActivity" />
+        <activity android:name=".ActivityPage.LoginActivity" />
+        <activity android:name=".ActivityPage.SignUpActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

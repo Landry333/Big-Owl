@@ -1,4 +1,4 @@
-package com.example.bigowlapp;
+package com.example.bigowlapp.ActivityPage;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,13 +11,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bigowlapp.R;
+import com.example.bigowlapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
-    public EditText emailId, password;
+public class SignUpActivity extends AppCompatActivity {
+    public EditText emailId, password, phone, name;
+    private User user = new User();
     Button btnSignUp;
     TextView tvSignIn;
     FirebaseAuth m_FirebaseAuth;
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
             m_FirebaseAuth = FirebaseAuth.getInstance();
             emailId = findViewById(R.id.editTextTextEmailAddress);
             password = findViewById(R.id.editTextTextPassword);
+            phone = findViewById(R.id.editTextPhone);
+            name = findViewById(R.id.editTextTextPersonName);
             btnSignUp = findViewById(R.id.button);
             tvSignIn = findViewById(R.id.textView);
 
@@ -45,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     String email = emailId.getText().toString();
                     String pass = password.getText().toString();
+                    String userPhone = phone.getText().toString();
+                    String userName = name.getText().toString();
 
                     //Error handling
                     if(email.isEmpty())
@@ -57,30 +64,40 @@ public class MainActivity extends AppCompatActivity {
                         password.setError("Please enter your password");
                         emailId.requestFocus();
                     }
-                    else if(email.isEmpty() && pass.isEmpty())
+                    else if(userPhone.isEmpty())
                     {
-                        Toast.makeText(MainActivity.this, "Fields are empty!", Toast.LENGTH_SHORT).show();
+                        phone.setError("please enter a phone number");
+                        phone.requestFocus();
                     }
-                    else if(!(email.isEmpty() && pass.isEmpty()))
+                    else if(email.isEmpty() || pass.isEmpty() || userPhone.isEmpty())
                     {
-                        m_FirebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                        Toast.makeText(SignUpActivity.this, "Fields are empty!", Toast.LENGTH_SHORT).show();
+                    }
+                    else if(!(email.isEmpty() && pass.isEmpty() &&  userPhone.isEmpty()))
+                    {
+                        m_FirebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task)
                             {
                                 if(!task.isSuccessful())
                                 {
-                                    Toast.makeText(MainActivity.this, "SignUp Unsuccessful, please try again", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SignUpActivity.this, "SignUp Unsuccessful, please try again", Toast.LENGTH_SHORT).show();
                                 }
+                                //if successful sign up
                                 else
                                 {
-                                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                                    user.setEmail(email);
+                                    user.setPhoneNumber(userPhone);
+                                    user.setFirstName(userName);
+                                    //user.setUId();
+                                    startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
                                 }
                             }
                         });
                     }
                     else
                     {
-                        Toast.makeText(MainActivity.this, "An error has occurred", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUpActivity.this, "An error has occurred", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -88,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             tvSignIn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                    Intent i = new Intent(SignUpActivity.this, LoginActivity.class);
                     startActivity(i);
                 }
             });

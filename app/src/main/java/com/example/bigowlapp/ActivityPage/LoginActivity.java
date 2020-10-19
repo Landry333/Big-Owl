@@ -1,4 +1,4 @@
-package com.example.bigowlapp;
+package com.example.bigowlapp.ActivityPage;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bigowlapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView tvSignUp;
     FirebaseAuth m_FirebaseAuth;
     private FirebaseAuth.AuthStateListener m_AuthStateListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,8 @@ public class LoginActivity extends AppCompatActivity {
                     String email = emailId.getText().toString();
                     String pass = password.getText().toString();
 
+
+
                     if(email.isEmpty())
                     {
                         emailId.setError("Please enter a valid email");
@@ -72,11 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                     else if(pass.isEmpty())
                     {
                         password.setError("Please enter your password");
-                        emailId.requestFocus();
-                    }
-                    else if(email.isEmpty() && pass.isEmpty())
-                    {
-                        Toast.makeText(LoginActivity.this, "Fields are empty!", Toast.LENGTH_SHORT).show();
+                        password.requestFocus();
                     }
                     else if(!(email.isEmpty() && pass.isEmpty()))
                     {
@@ -86,8 +86,8 @@ public class LoginActivity extends AppCompatActivity {
                                 if(!task.isSuccessful())
                                 {
                                     Toast.makeText(LoginActivity.this, "Login error, Please login again", Toast.LENGTH_SHORT).show();
-
                                 }
+                                //if successful sign up
                                 else
                                 {
                                     Intent i = new Intent(LoginActivity.this, HomeActivity.class);
@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent i = new Intent(LoginActivity.this, SignUpActivity.class);
                     startActivity(i);
                 }
             });
