@@ -18,7 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpPageActivity extends AppCompatActivity {
     public EditText emailId, password, phone, name;
     private User user = new User();
     Button btnSignUp;
@@ -71,17 +71,17 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                     else if(email.isEmpty() || pass.isEmpty() || userPhone.isEmpty())
                     {
-                        Toast.makeText(SignUpActivity.this, "Fields are empty!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUpPageActivity.this, "Fields are empty!", Toast.LENGTH_SHORT).show();
                     }
                     else if(!(email.isEmpty() && pass.isEmpty() &&  userPhone.isEmpty()))
                     {
-                        m_FirebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+                        m_FirebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(SignUpPageActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task)
                             {
                                 if(!task.isSuccessful())
                                 {
-                                    Toast.makeText(SignUpActivity.this, "SignUp Unsuccessful, please try again", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SignUpPageActivity.this, "SignUp Unsuccessful, please try again", Toast.LENGTH_SHORT).show();
                                 }
                                 //if successful sign up
                                 else
@@ -90,14 +90,14 @@ public class SignUpActivity extends AppCompatActivity {
                                     user.setPhoneNumber(userPhone);
                                     user.setFirstName(userName);
                                     //user.setUId();
-                                    startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+                                    startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
                                 }
                             }
                         });
                     }
                     else
                     {
-                        Toast.makeText(SignUpActivity.this, "An error has occurred", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUpPageActivity.this, "An error has occurred", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -105,7 +105,7 @@ public class SignUpActivity extends AppCompatActivity {
             tvSignIn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(SignUpActivity.this, LoginActivity.class);
+                    Intent i = new Intent(SignUpPageActivity.this, LoginPageActivity.class);
                     startActivity(i);
                 }
             });

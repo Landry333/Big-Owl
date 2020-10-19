@@ -92,13 +92,13 @@ public class SendSmsInvitationActivity extends AppCompatActivity {
         }
         else if(number2.isEmpty())
         {
-            //Toast.makeText(SignUpActivity.this, "Please enter a phone number", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(SignUpPageActivity.this, "Please enter a phone number", Toast.LENGTH_SHORT).show();
             number.setError("Please enter a phone number");
             number.requestFocus();
         }
         else if(message2.isEmpty())
         {
-            //Toast.makeText(SignUpActivity.this, "Please enter a message", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(SignUpPageActivity.this, "Please enter a message", Toast.LENGTH_SHORT).show();
             message.setError("Please enter a message");
             message.requestFocus();
         }
