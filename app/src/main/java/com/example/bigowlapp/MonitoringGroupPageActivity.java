@@ -1,5 +1,7 @@
 package com.example.bigowlapp;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bigowlapp.model.Group;
@@ -103,6 +106,24 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
                                                     }
                                                 }
                                             });
+                                }
+                                else {
+                                    new AlertDialog.Builder(getBaseContext())
+                                            .setTitle("No Monitoring group found")
+                                            .setMessage("Please create a monitoring group to access this group")
+                                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int which) {
+                                                    Intent i = new Intent(getBaseContext(), HomeActivity.class);
+                                                    startActivity(i);                                                }
+                                            })
+                                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                }
+                                            })
+                                            .create().show();
                                 }
                             }
                         });

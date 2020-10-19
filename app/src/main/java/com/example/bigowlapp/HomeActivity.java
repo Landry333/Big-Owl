@@ -107,6 +107,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    //TODO refactor to another class file
     private void requestContactPermission(){
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)){
             new AlertDialog.Builder(this)
