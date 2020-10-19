@@ -32,7 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
         initialize();
     }
 
-    protected void initialize()
+   protected void initialize()
     {
         try
         {
