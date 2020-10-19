@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         initialize();
     }
 
-    protected void initialize()
+   protected void initialize()
     {
         try
         {

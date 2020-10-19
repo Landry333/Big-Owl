@@ -1,9 +1,5 @@
 package com.example.bigowlapp;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,9 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
@@ -35,12 +29,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class MonitoringGroupPageActivity extends AppCompatActivity {
+public class MonitoringGroupListActivity extends AppCompatActivity {
     private ListView users_listview;
     private TextView groupName, supervisorName;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<User> mUsers, mUsersShow;
     private List<String> mSupervisedGroup;
+
     EditText search_users;
 
     @Override
@@ -57,7 +52,7 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
         try {
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
             if (currentUser != null) {
-                Log.d("111111", "test");
+
                 db.collection("groups")
                         .whereEqualTo("monitoringUserId", currentUser.getUid())
                         .get()
@@ -71,11 +66,10 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
                                         groupName = findViewById(R.id.textView_groupName);
                                         groupName.setText(qds.getString("name"));
 
+
                                         for (String supervisedUser : g.getSupervisedUserId()) {
                                             mSupervisedGroup.add(supervisedUser);
                                         }
-                                        Log.d("22222", "test");
-
                                         //find Supervisor full name
                                         db.collection("users").document(qds.getString("monitoringUserId")).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                             @Override
@@ -88,43 +82,27 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
                                             }
                                         });
                                     }
-                                    Log.d("333333", "test");
 
-                                    if (!mSupervisedGroup.isEmpty()) {
-                                        //List of all user to compare with
-                                        db.collection("users")
-                                                .whereIn(FieldPath.documentId(), mSupervisedGroup)
-                                                .get()
-                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                        if (task.isSuccessful()) {
+                                    //List of all user to compare with
+                                    db.collection("users")
+                                            .whereIn(FieldPath.documentId(), mSupervisedGroup)
+                                            .get()
+                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if (task.isSuccessful()) {
 
-                                                            for (QueryDocumentSnapshot qds : task.getResult()) {
-                                                                User u = qds.toObject(User.class);
-                                                                mUsers.add(u);
-                                                            }
-                                                            mUsersShow = mUsers;
-                                                            ArrayAdapter<User> arrayAdapter = new ArrayAdapter<User>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow);
-                                                            users_listview = findViewById(R.id.list_view);
-                                                            users_listview.setAdapter((arrayAdapter));
+                                                        for (QueryDocumentSnapshot qds : task.getResult()) {
+                                                            User u = qds.toObject(User.class);
+                                                            mUsers.add(u);
                                                         }
+                                                        mUsersShow = mUsers;
+                                                        ArrayAdapter<User> arrayAdapter = new ArrayAdapter<User>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow);
+                                                        users_listview = findViewById(R.id.list_view);
+                                                        users_listview.setAdapter((arrayAdapter));
                                                     }
-                                                });
-                                    } else {
-                                        new AlertDialog.Builder(MonitoringGroupPageActivity.this)
-                                                .setTitle("No monitoring group found")
-                                                .setMessage("Required to be the Monitor of a group before accessing this list")
-                                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int which) {
-                                                        MonitoringGroupPageActivity.super.onBackPressed();
-                                                    }
-                                                })
-                                                .setCancelable(false)
-                                                .create()
-                                                .show();
-                                    }
+                                                }
+                                            });
                                 }
                             }
                         });

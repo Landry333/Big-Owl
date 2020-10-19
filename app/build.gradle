@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.bigowlapp"
-        minSdkVersion 16
+        minSdkVersion 24
         targetSdkVersion 30
         multiDexEnabled true
         versionCode 1
@@ -56,6 +56,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.navigation:navigation-fragment:2.3.0'
+    implementation 'androidx.navigation:navigation-ui:2.3.0'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    // Declare testing dependencies
     testImplementation 'junit:junit:4.12'
 
     // TODO: remove below line after switch the db from Realtime Database to Cloud Firestore
