@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class Repository<T> {
 
-    private FirebaseFirestore mFirebaseFirestore;
+    private final FirebaseFirestore mFirebaseFirestore;
     protected CollectionReference collectionReference;
 
     public Repository(String collectionName) {
@@ -158,12 +158,7 @@ public abstract class Repository<T> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            List<T> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                T t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
+                            listOfTData.setValue(this.extractListOfDataToModel(task.getResult(), tClass));
                         } else {
                             listOfTData.setValue(null);
                         }
@@ -182,12 +177,7 @@ public abstract class Repository<T> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            List<T> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                T t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
+                            listOfTData.setValue(this.extractListOfDataToModel(task.getResult(), tClass));
                         } else {
                             listOfTData.setValue(null);
                         }
@@ -197,6 +187,15 @@ public abstract class Repository<T> {
                     }
                 });
         return listOfTData;
+    }
+
+    List<T> extractListOfDataToModel(QuerySnapshot results, Class<? extends T> tClass) {
+        List<T> listOfT = new ArrayList<>();
+        for (QueryDocumentSnapshot doc : results) {
+            T t = doc.toObject(tClass);
+            listOfT.add(t);
+        }
+        return listOfT;
     }
 
     String getClassName() {

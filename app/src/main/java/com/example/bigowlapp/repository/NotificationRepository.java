@@ -1,9 +1,6 @@
 package com.example.bigowlapp.repository;
 
-import android.util.Log;
-
 import androidx.annotation.VisibleForTesting;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.model.Notification;
 import com.example.bigowlapp.model.SupervisionRequest;
@@ -30,26 +27,7 @@ public class NotificationRepository extends Repository<Notification> {
     }
 
     @Override
-    public MutableLiveData<List<Notification>> getAllDocumentsFromCollection(Class<? extends Notification> tClass) {
-        MutableLiveData<List<Notification>> listOfTData = new MutableLiveData<>();
-        this.collectionReference.get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot tDocs = task.getResult();
-                        if (tDocs != null && !tDocs.isEmpty()) {
-                            listOfTData.setValue(this.createNotificationListUsingType(task.getResult()));
-                        } else {
-                            listOfTData.setValue(null);
-                        }
-                    } else {
-                        Log.e(getClassName(), "Error getting documents: " +
-                                task.getException());
-                    }
-                });
-        return listOfTData;
-    }
-
-    List<Notification> createNotificationListUsingType(QuerySnapshot results) {
+    List<Notification> extractListOfDataToModel(QuerySnapshot results, Class<? extends Notification> tClass) {
         List<Notification> notificationsFromDb = new ArrayList<>();
         for (QueryDocumentSnapshot doc : results) {
             String type = doc.toObject(Notification.class).getType();
