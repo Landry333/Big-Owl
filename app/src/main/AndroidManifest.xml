@@ -24,12 +24,14 @@
         <activity android:name=".activityPage.HomePageActivity" />
         <!-- TODO The login page should load up first until we have a welcome page-->
         <activity android:name=".activityPage.LoginPageActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <activity android:name=".MainActivity">
+        <activity android:name=".WelcomeActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".activityPage.SignUpPageActivity"/>
         <activity android:name=".fragments.UsersFragment" />
 
