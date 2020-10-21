@@ -1,30 +1,28 @@
-package com.example.bigowlapp;
+package com.example.bigowlapp.ActivityPage;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.UserRepository;
-import com.example.bigowlapp.Fragments.UsersFragment;
+import com.example.bigowlapp.MonitoringGroupPageActivity;
+import com.example.bigowlapp.R;
+import com.example.bigowlapp.SearchContactsToSupervise;
+import com.example.bigowlapp.SendSmsInvitationActivity;
+import com.example.bigowlapp.SupervisedGroupListActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomePageActivity extends AppCompatActivity {
     Button btnLogOut, sendSmsInvitation, btnSearchUsers, btnMonitoringGroup, btnSupervisedGroup, btnMonitoringList;
     FirebaseAuth m_FirebaseAuth;
     private FirebaseAuth.AuthStateListener m_AuthStateListener;
@@ -50,7 +48,7 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     FirebaseAuth.getInstance().signOut();
-                    Intent i = new Intent(HomeActivity.this, MainActivity.class);
+                    Intent i = new Intent(HomePageActivity.this, LoginPageActivity.class);
                     startActivity(i);
                 }
             });
@@ -60,7 +58,7 @@ public class HomeActivity extends AppCompatActivity {
             sendSmsInvitation.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(HomeActivity.this, SendSmsInvitationActivity.class);
+                    Intent intent = new Intent(HomePageActivity.this, SendSmsInvitationActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -71,7 +69,7 @@ public class HomeActivity extends AppCompatActivity {
             btnMonitoringGroup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(HomeActivity.this, MonitoringGroupPageActivity.class);
+                    Intent i = new Intent(HomePageActivity.this, MonitoringGroupPageActivity.class);
                     startActivity(i);
                 }
             });
@@ -81,7 +79,7 @@ public class HomeActivity extends AppCompatActivity {
             btnSupervisedGroup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(HomeActivity.this, SupervisedGroupListActivity.class);
+                    Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
                     startActivity(i);
                 }
             });
@@ -91,9 +89,9 @@ public class HomeActivity extends AppCompatActivity {
             btnSearchUsers.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
-                        //Toast.makeText(HomeActivity.this, "This permission is already granted", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(HomeActivity.this, SearchContactsToSupervise.class);
+                    if(ContextCompat.checkSelfPermission(HomePageActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+                        //Toast.makeText(HomePageActivity.this, "This permission is already granted", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(HomePageActivity.this, SearchContactsToSupervise.class);
                         startActivity(i);
                     } else {
                         requestContactPermission();
@@ -116,7 +114,7 @@ public class HomeActivity extends AppCompatActivity {
                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int which) {
-                            ActivityCompat.requestPermissions(HomeActivity.this, new String[] {Manifest.permission.READ_CONTACTS},CONTACT_PERMISSION_CODE );
+                            ActivityCompat.requestPermissions(HomePageActivity.this, new String[] {Manifest.permission.READ_CONTACTS},CONTACT_PERMISSION_CODE );
                         }
                     })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -137,7 +135,7 @@ public class HomeActivity extends AppCompatActivity {
         if (requestCode == CONTACT_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(HomeActivity.this, SearchContactsToSupervise.class);
+                Intent i = new Intent(HomePageActivity.this, SearchContactsToSupervise.class);
                 startActivity(i);
             } else{
                 Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
