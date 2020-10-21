@@ -1,4 +1,4 @@
-package com.example.bigowlapp;
+package com.example.bigowlapp.activityPage;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bigowlapp.R;
 import com.example.bigowlapp.utils.Constants;
 
 public class WelcomeActivity extends AppCompatActivity implements Constants {
@@ -17,7 +18,7 @@ public class WelcomeActivity extends AppCompatActivity implements Constants {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(WelcomeActivity.this, SignUpActivity.class);
+                Intent i = new Intent(WelcomeActivity.this, SignUpPageActivity.class);
                 startActivity(i);
                 finish();
             }
