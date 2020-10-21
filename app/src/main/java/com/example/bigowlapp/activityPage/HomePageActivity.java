@@ -1,4 +1,4 @@
-package com.example.bigowlapp.ActivityPage;
+package com.example.bigowlapp.activityPage;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
