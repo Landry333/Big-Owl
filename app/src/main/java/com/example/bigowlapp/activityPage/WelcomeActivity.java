@@ -14,7 +14,7 @@ public class WelcomeActivity extends AppCompatActivity implements Constants {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.welcome_activity);
+        setContentView(R.layout.activity_welcome);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
