@@ -3,6 +3,7 @@ package com.example.bigowlapp.activityPage;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,7 +19,7 @@ public class WelcomeActivity extends AppCompatActivity implements Constants {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(WelcomeActivity.this, SignUpPageActivity.class);
+                Intent i = new Intent(WelcomeActivity.this, LoginPageActivity.class);
                 startActivity(i);
                 finish();
             }
