@@ -1,4 +1,4 @@
-package com.example.bigowlapp.Services;
+package com.example.bigowlapp.services;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

@@ -1,4 +1,4 @@
-package com.example.bigowlapp.Services;
+package com.example.bigowlapp.services;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.bigowlapp.ActivityPage.SupervisedGroupPageActivity;
+import com.example.bigowlapp.activityPage.SupervisedGroupPageActivity;
 import com.example.bigowlapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

@@ -1,4 +1,4 @@
-package com.example.bigowlapp.Services;
+package com.example.bigowlapp.services;
 
 import android.os.Bundle;
 import android.text.Editable;
