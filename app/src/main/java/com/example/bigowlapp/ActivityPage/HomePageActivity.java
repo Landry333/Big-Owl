@@ -15,11 +15,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.bigowlapp.MonitoringGroupPageActivity;
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.SearchContactsToSupervise;
-import com.example.bigowlapp.SendSmsInvitationActivity;
-import com.example.bigowlapp.SupervisedGroupListActivity;
+import com.example.bigowlapp.Services.SearchContactsToSupervise;
+import com.example.bigowlapp.Services.SendSmsInvitationActivity;
+import com.example.bigowlapp.Services.SupervisedGroupListActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class HomePageActivity extends AppCompatActivity {

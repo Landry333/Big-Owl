@@ -1,4 +1,4 @@
-package com.example.bigowlapp;
+package com.example.bigowlapp.Services;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;

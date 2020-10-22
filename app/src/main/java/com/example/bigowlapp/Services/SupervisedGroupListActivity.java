@@ -1,4 +1,4 @@
-package com.example.bigowlapp;
+package com.example.bigowlapp.Services;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.bigowlapp.ActivityPage.SupervisedGroupPageActivity;
+import com.example.bigowlapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;

@@ -13,14 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewAnotherUserActivity" />
-        <activity android:name=".InvitationConfirmationActivity" />
-        <activity android:name=".SupervisedGroupPageActivity" />
-        <activity android:name=".SupervisedGroupListActivity" />
-        <activity android:name=".MonitoringGroupPageActivity" />
-        <activity android:name=".MonitoringGroupListActivity" />
-        <activity android:name=".SearchContactsToSupervise" />
-        <activity android:name=".SendSmsInvitationActivity" />
+        <activity android:name=".Services.ViewAnotherUserActivity" />
+        <activity android:name=".Services.InvitationConfirmationActivity" />
+        <activity android:name=".ActivityPage.SupervisedGroupPageActivity" />
+        <activity android:name=".Services.SupervisedGroupListActivity" />
+        <activity android:name=".ActivityPage.MonitoringGroupPageActivity" />
+        <activity android:name=".Services.MonitoringGroupListActivity" />
+        <activity android:name=".Services.SearchContactsToSupervise" />
+        <activity android:name=".Services.SendSmsInvitationActivity" />
         <activity android:name=".ActivityPage.HomePageActivity" />
         <!-- TODO The login page should load up first until we have a welcome page-->
         <activity android:name=".ActivityPage.LoginPageActivity">

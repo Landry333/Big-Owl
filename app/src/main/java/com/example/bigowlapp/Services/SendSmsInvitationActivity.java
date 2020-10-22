@@ -1,6 +1,5 @@
-package com.example.bigowlapp;
+package com.example.bigowlapp.Services;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -13,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.bigowlapp.R;
 
 public class SendSmsInvitationActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.bigowlapp;
+package com.example.bigowlapp.Services;
 
 
 
@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.bigowlapp.ActivityPage.HomePageActivity;
+import com.example.bigowlapp.R;
 
 public class InvitationConfirmationActivity extends AppCompatActivity {
 
