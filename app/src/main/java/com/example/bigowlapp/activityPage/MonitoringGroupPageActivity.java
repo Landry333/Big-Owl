@@ -1,4 +1,4 @@
-package com.example.bigowlapp.ActivityPage;
+package com.example.bigowlapp.activityPage;
 
 import android.content.DialogInterface;
 import android.os.Bundle;

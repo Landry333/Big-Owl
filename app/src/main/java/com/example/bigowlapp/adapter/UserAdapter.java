@@ -1,4 +1,4 @@
-package com.example.bigowlapp.Adapter;
+package com.example.bigowlapp.adapter;
 import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
