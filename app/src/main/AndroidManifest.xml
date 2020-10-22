@@ -30,6 +30,14 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
+        <activity android:name=".activityPage.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activityPage.WelcomeActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".activityPage.SignUpPageActivity"/>
         <activity android:name=".fragments.UsersFragment" />
 
