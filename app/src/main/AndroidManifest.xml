@@ -23,9 +23,9 @@
         <activity android:name=".services.SendSmsInvitationActivity" />
         <activity android:name=".activityPage.HomePageActivity" />
         <activity android:name=".activityPage.LoginPageActivity"/>
-        <activity android:name=".activityPage.MainActivity"/>
+        <activity android:name=".activityPage.MainPageActivity"/>
         <!--The login page should load up first-->
-        <activity android:name=".activityPage.WelcomeActivity">
+        <activity android:name=".activityPage.WelcomePageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

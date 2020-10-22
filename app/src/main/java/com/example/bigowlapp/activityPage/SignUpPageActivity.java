@@ -17,6 +17,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignUpPageActivity extends AppCompatActivity {
     public EditText emailId, password, phone, name;
@@ -24,6 +27,7 @@ public class SignUpPageActivity extends AppCompatActivity {
     Button btnSignUp;
     TextView tvSignIn;
     FirebaseAuth m_FirebaseAuth;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +90,16 @@ public class SignUpPageActivity extends AppCompatActivity {
                                 //if successful sign up
                                 else
                                 {
+                                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                                     user.setEmail(email);
                                     user.setPhoneNumber(userPhone);
                                     user.setFirstName(userName);
-                                    //user.setUId();
-                                    startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
+                                    user.setUId(currentUser.getUid());
+
+                                    if(currentUser != null){
+                                        db.collection("users").add(user);
+                                        startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
+                                    }
                                 }
                             }
                         });
