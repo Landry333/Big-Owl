@@ -93,9 +93,8 @@ public abstract class Repository<T> {
     // Fetching a Documents
     //===========================================================================================
 
-    public MutableLiveData<T> getDocumentByUId(String UId, Class<T> tClass) {
+    public MutableLiveData<T> getDocumentByUId(String UId, Class<? extends T> tClass) {
         MutableLiveData<T> tData = new MutableLiveData<>();
-        boolean a;
         collectionReference.document(UId)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -116,7 +115,7 @@ public abstract class Repository<T> {
     }
 
     public MutableLiveData<T> getDocumentByAttribute(String attribute, String attrValue,
-                                                     Class<T> tClass) {
+                                                     Class<? extends T> tClass) {
         MutableLiveData<T> tData = new MutableLiveData<>();
         collectionReference.whereEqualTo(attribute, attrValue)
                 .limit(1)
@@ -143,7 +142,7 @@ public abstract class Repository<T> {
     //===========================================================================================
 
     public MutableLiveData<List<T>> getListOfDocumentByAttribute(String attribute, String attrValue,
-                                                                 Class<T> tClass) {
+                                                                 Class<? extends T> tClass) {
         MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
         collectionReference.whereEqualTo(attribute, attrValue)
                 .get()
@@ -168,7 +167,7 @@ public abstract class Repository<T> {
         return listOfTData;
     }
 
-    public MutableLiveData<List<T>> getAllDocumentsFromCollection(Class<T> tClass) {
+    public MutableLiveData<List<T>> getAllDocumentsFromCollection(Class<? extends T> tClass) {
         MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
         collectionReference.get()
                 .addOnCompleteListener(task -> {

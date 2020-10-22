@@ -1,4 +1,4 @@
-package com.example.bigowlapp.Fragments;
+package com.example.bigowlapp.fragments;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,7 +23,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class UsersFragment extends AppCompatActivity {
