@@ -1,6 +1,7 @@
 package com.example.bigowlapp;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -8,16 +9,24 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bigowlapp.activityPage.HomePageActivity;
 import com.example.bigowlapp.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +97,35 @@ public class SearchContactsToSupervise extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, listShow);
         listContactsView = findViewById(R.id.listContacts);
         listContactsView.setAdapter(adapter);
+
+        //Check if users already has the app
+        listContactsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            // argument position gives the index of item which is clicked
+            public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3)
+            {
+                String number = (String) listContactsView.getItemAtPosition(position);
+                //Log.d("12345", number.replaceFirst(".+?\\+","+").replaceAll("[^+0-9]",""));
+                Log.d("12345", number.replaceFirst(".+?\\+","+").replaceAll("[^+0-9]",""));
+
+                db.collection("users")
+                            .whereEqualTo("phoneNumber", number.replaceAll("[^+0-9]",""))
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        if (!task.getResult().isEmpty())
+                                            Toast.makeText(SearchContactsToSupervise.this, "User already has the app", Toast.LENGTH_SHORT).show();
+                                        else {
+                                            Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    }
+                                }
+                            });
+            }
+        });
 
         //listContacts.setText(builder.toString());
 

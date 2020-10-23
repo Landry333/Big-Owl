@@ -1,4 +1,4 @@
-package com.example.bigowlapp;
+ package com.example.bigowlapp;
 
 import android.Manifest;
 import android.content.Context;
@@ -57,7 +57,6 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
         try {
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
             if (currentUser != null) {
-                Log.d("111111", "test");
                 db.collection("groups")
                         .whereEqualTo("monitoringUserId", currentUser.getUid())
                         .get()
@@ -74,7 +73,6 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
                                         for (String supervisedUser : g.getSupervisedUserId()) {
                                             mSupervisedGroup.add(supervisedUser);
                                         }
-                                        Log.d("22222", "test");
 
                                         //find Supervisor full name
                                         db.collection("users").document(qds.getString("monitoringUserId")).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -88,7 +86,6 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
                                             }
                                         });
                                     }
-                                    Log.d("333333", "test");
 
                                     if (!mSupervisedGroup.isEmpty()) {
                                         //List of all user to compare with
