@@ -1,4 +1,4 @@
-package com.example.bigowlapp.services;
+package com.example.bigowlapp.viewModels;
 
 import android.content.ContentResolver;
 import android.database.Cursor;

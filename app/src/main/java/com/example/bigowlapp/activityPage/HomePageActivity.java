@@ -16,9 +16,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.services.SearchContactsToSupervise;
-import com.example.bigowlapp.services.SendSmsInvitationActivity;
-import com.example.bigowlapp.services.SupervisedGroupListActivity;
+import com.example.bigowlapp.viewModels.SearchContactsToSupervise;
+import com.example.bigowlapp.viewModels.SendSmsInvitationActivity;
+import com.example.bigowlapp.viewModels.SupervisedGroupListActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class HomePageActivity extends AppCompatActivity {
