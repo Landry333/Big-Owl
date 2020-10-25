@@ -6,6 +6,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+
+// TODO: Sign up / Sign in / Delete / Sign out /
 public class AuthRepository {
 
     private FirebaseAuth mfirebaseAuth;
@@ -20,7 +22,8 @@ public class AuthRepository {
         return mfirebaseAuth.getCurrentUser();
     }
 
-    //TODO: SAVE USER TO CLOUD FIRESTORE
+    // TODO: SAVE USER TO CLOUD FIRESTORE
+    // TODO: Check for Asynchronous boolean value
     public boolean signUpUser(String email, String password, String phoneNumber, String name) {
         User user = new User();
         AtomicBoolean isSuccess = new AtomicBoolean(false);
@@ -40,6 +43,10 @@ public class AuthRepository {
     }
 
     public void signInUser() {
+    }
+
+    public void signOutUser(){
+        mfirebaseAuth.signOut();
     }
 
     public String nameParcer(String firstName, String lastName) {
