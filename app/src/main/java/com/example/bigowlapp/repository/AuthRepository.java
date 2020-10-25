@@ -1,6 +1,16 @@
 package com.example.bigowlapp.repository;
 
+import android.content.Intent;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.example.bigowlapp.activityPage.HomePageActivity;
+import com.example.bigowlapp.activityPage.LoginPageActivity;
 import com.example.bigowlapp.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -42,10 +52,21 @@ public class AuthRepository {
         return isSuccess.get();
     }
 
-    public void signInUser() {
+    public Task<AuthResult> signInUser(String email, String password) {
+        mfirebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if(task.isSuccessful())
+            {
+                Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
+                startActivity(i);
+            }
+            else
+            {
+                Toast.makeText(LoginPageActivity.this, "Login error, Please login again", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    public void signOutUser(){
+    public void signOutUser() {
         mfirebaseAuth.signOut();
     }
 
