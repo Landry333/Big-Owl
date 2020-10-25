@@ -1,10 +1,4 @@
-package com.example.bigowlapp.activityPage;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+package com.example.bigowlapp.activity;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -15,17 +9,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.viewModels.SearchContactsToSupervise;
-import com.example.bigowlapp.viewModels.SendSmsInvitationActivity;
-import com.example.bigowlapp.viewModels.SupervisedGroupListActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class HomePageActivity extends AppCompatActivity {
+    private final int CONTACT_PERMISSION_CODE = 1;
     Button btnLogOut, sendSmsInvitation, btnSearchUsers, btnMonitoringGroup, btnSupervisedGroup, btnMonitoringList;
     FirebaseAuth m_FirebaseAuth;
     private FirebaseAuth.AuthStateListener m_AuthStateListener;
-    private final int CONTACT_PERMISSION_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +85,7 @@ public class HomePageActivity extends AppCompatActivity {
             btnSearchUsers.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(ContextCompat.checkSelfPermission(HomePageActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+                    if (ContextCompat.checkSelfPermission(HomePageActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                         //Toast.makeText(HomePageActivity.this, "This permission is already granted", Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(HomePageActivity.this, SearchContactsToSupervise.class);
                         startActivity(i);
@@ -97,23 +94,21 @@ public class HomePageActivity extends AppCompatActivity {
                     }
                 }
             });
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
 
         }
     }
 
     //TODO refactor to another class file
-    private void requestContactPermission(){
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)){
+    private void requestContactPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
             new AlertDialog.Builder(this)
                     .setTitle("Permission needed")
                     .setMessage("Permission is required to read phone Contacts")
                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int which) {
-                            ActivityCompat.requestPermissions(HomePageActivity.this, new String[] {Manifest.permission.READ_CONTACTS},CONTACT_PERMISSION_CODE );
+                            ActivityCompat.requestPermissions(HomePageActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, CONTACT_PERMISSION_CODE);
                         }
                     })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -125,18 +120,18 @@ public class HomePageActivity extends AppCompatActivity {
                     .create().show();
 
         } else {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_CONTACTS},CONTACT_PERMISSION_CODE );
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, CONTACT_PERMISSION_CODE);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == CONTACT_PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-               Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(HomePageActivity.this, SearchContactsToSupervise.class);
                 startActivity(i);
-            } else{
+            } else {
                 Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
             }
         }

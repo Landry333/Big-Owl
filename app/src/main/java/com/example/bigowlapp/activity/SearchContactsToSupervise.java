@@ -1,4 +1,4 @@
-package com.example.bigowlapp.viewModels;
+package com.example.bigowlapp.activity;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -22,14 +22,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SearchContactsToSupervise extends AppCompatActivity {
-   // private TextView listContacts;
+    private static ArrayList<QueryDocumentSnapshot> qds = new ArrayList<QueryDocumentSnapshot>();
+    EditText search_users;
+    // private TextView listContacts;
     private ListView listContactsView;
     private List<String> list, listShow;
     private Button loadContacts;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static ArrayList<QueryDocumentSnapshot> qds = new ArrayList<QueryDocumentSnapshot>();
-
-    EditText search_users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +43,8 @@ public class SearchContactsToSupervise extends AppCompatActivity {
         loadContacts.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {*/
-                loadContacts();
-            //}
+        loadContacts();
+        //}
         //});
 
     }
@@ -53,11 +52,11 @@ public class SearchContactsToSupervise extends AppCompatActivity {
     private void loadContacts() {
         //StringBuilder builder = new StringBuilder();
         ContentResolver contentResolver = getContentResolver();
-        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null,null,null,null);
+        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
         list = new ArrayList<>();
 
-        if(cursor.getCount() > 0){
+        if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));

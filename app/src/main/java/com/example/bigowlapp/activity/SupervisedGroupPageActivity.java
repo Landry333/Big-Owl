@@ -1,8 +1,8 @@
-package com.example.bigowlapp.activityPage;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.bigowlapp.activity;
 
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bigowlapp.R;
 

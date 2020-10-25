@@ -1,12 +1,12 @@
-package com.example.bigowlapp.viewModels;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.bigowlapp.activity;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bigowlapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,15 +20,15 @@ import java.util.HashMap;
 //import com.google.firebase.auth.*;
 
 public class ViewAnotherUserActivity extends AppCompatActivity {
-    private Button supRequestBtn;
     String otherUserID = getIntent().getStringExtra("userID");
     String supRequestStatus = "none";
-    String supBtn1="Send a request to supervise user";
-    String supBtn2= "You are supervising this user";
-    String supBtn3="Cancel this request to supervise";
+    String supBtn1 = "Send a request to supervise user";
+    String supBtn2 = "You are supervising this user";
+    String supBtn3 = "Cancel this request to supervise";
     DatabaseReference mUserRef, supRequestRef;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
+    private Button supRequestBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

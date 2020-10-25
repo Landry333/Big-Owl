@@ -13,25 +13,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".viewModels.ViewAnotherUserActivity" />
-        <activity android:name=".viewModels.InvitationConfirmationActivity" />
-        <activity android:name=".activityPage.SupervisedGroupPageActivity" />
-        <activity android:name=".viewModels.SupervisedGroupListActivity" />
-        <activity android:name=".activityPage.MonitoringGroupPageActivity" />
-        <activity android:name=".viewModels.MonitoringGroupListActivity" />
-        <activity android:name=".viewModels.SearchContactsToSupervise" />
-        <activity android:name=".viewModels.SendSmsInvitationActivity" />
-        <activity android:name=".activityPage.HomePageActivity" />
-        <activity android:name=".activityPage.LoginPageActivity"/>
-        <activity android:name=".activityPage.MainPageActivity"/>
-        <!--The login page should load up first-->
-        <activity android:name=".activityPage.WelcomePageActivity">
+        <activity android:name=".activity.ViewAnotherUserActivity" />
+        <activity android:name=".activity.InvitationConfirmationActivity" />
+        <activity android:name=".activity.SupervisedGroupPageActivity" />
+        <activity android:name=".activity.SupervisedGroupListActivity" />
+        <activity android:name=".activity.MonitoringGroupPageActivity" />
+        <activity android:name=".activity.MonitoringGroupListActivity" />
+        <activity android:name=".activity.SearchContactsToSupervise" />
+        <activity android:name=".activity.SendSmsInvitationActivity" />
+        <activity android:name=".activity.HomePageActivity" />
+        <activity android:name=".activity.LoginPageActivity"/>
+        <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.WelcomePageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activityPage.SignUpPageActivity"/>
+        <activity android:name=".activity.SignUpPageActivity"/>
         <activity android:name=".fragments.UsersFragment" />
 
     </application>
