@@ -1,26 +1,13 @@
 package com.example.bigowlapp.repository;
 
-import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-
-import com.example.bigowlapp.activityPage.HomePageActivity;
-import com.example.bigowlapp.activityPage.LoginPageActivity;
 import com.example.bigowlapp.model.User;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
-
-// TODO: Sign up / Sign in / Delete / Sign out /
+// TODO: Instead of a boolean use a string return value
 public class AuthRepository {
 
     private FirebaseAuth mfirebaseAuth;
@@ -52,8 +39,6 @@ public class AuthRepository {
             }
         });
         return taskBoolean;
-
-
     }
 
     public Task<Boolean> signInUser(String email, String password) {
@@ -62,24 +47,25 @@ public class AuthRepository {
             if (task.isSuccessful()) {
                 return Tasks.forResult(true);
             } else {
-                return Tasks.forResult(false);
+                throw task.getException();
             }
         });
         return taskBoolean;
     }
 
-    // TODO: Preferably better to use boolean return type
-    public void deleteUser() {
-        if (this.getCurrentUser() != null) {
-            this.getCurrentUser()
-                    .delete()
-                    .addOnCompleteListener(task -> {
-                        Log.d(this.getClassName(), "User has been deleted");
-
-                    });
-        }
+    // TODO: When deleting a user, other entries in the database should be deleted
+    public Task<Boolean> deleteUser() {
+        // Try-catch present because getCurrentUser() could be null if the user is not logged in
+        Task<Void> taskVoidDeletion = this.getCurrentUser().delete();
+        Task<Boolean> taskBoolean = taskVoidDeletion.continueWithTask(task -> {
+            if (task.isSuccessful()) {
+                return Tasks.forResult(true);
+            } else {
+                throw task.getException();
+            }
+        });
+        return taskBoolean;
     }
-
 
     public void signOutUser() {
         mfirebaseAuth.signOut();
