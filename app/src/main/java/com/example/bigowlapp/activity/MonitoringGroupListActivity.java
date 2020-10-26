@@ -1,9 +1,8 @@
-package com.example.bigowlapp;
+package com.example.bigowlapp.activity;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,13 +30,12 @@ import java.util.stream.Collectors;
 
 
 public class MonitoringGroupListActivity extends AppCompatActivity {
+    EditText search_users;
     private ListView users_listview;
     private TextView groupName, supervisorName;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<User> mUsers, mUsersShow;
     private List<String> mSupervisedGroup;
-
-    EditText search_users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
