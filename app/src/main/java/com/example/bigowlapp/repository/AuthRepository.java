@@ -22,17 +22,20 @@ public class AuthRepository {
         return mfirebaseAuth.getCurrentUser();
     }
 
-    // TODO: SAVE USER TO CLOUD FIRESTORE
+    // TODO: Handle exceptions concerning the failure of the "user" database collection
     public Task<Boolean> signUpUser(String email, String password, String phoneNumber, String name) {
         User user = new User();
         Task<AuthResult> taskAuthResult = mfirebaseAuth.createUserWithEmailAndPassword(email, password);
         Task<Boolean> taskBoolean = taskAuthResult.continueWithTask(task -> {
             if (task.isSuccessful()) {
-                user.setUId(this.getCurrentUser().getUid());
+                UserRepository userRepository = new UserRepository();
+                String uId = this.getCurrentUser().getUid();
+                user.setUId(uId);
                 user.setEmail(email);
                 user.setPhoneNumber(phoneNumber);
                 user.setFirstName(nameExtractor(name)[0]);
                 user.setLastName(nameExtractor(name)[1]);
+                userRepository.addDocument(uId, user);
                 return Tasks.forResult(true);
             } else {
                 throw task.getException();
