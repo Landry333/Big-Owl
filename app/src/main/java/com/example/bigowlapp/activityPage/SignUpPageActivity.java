@@ -94,6 +94,13 @@ public class SignUpPageActivity extends AppCompatActivity {
                                 }
                             }
                         });
+                        // TODO: Replace current signup implementation with new one
+                        
+                        //        authRepository.signUpUser(email, pass)
+                        //                .addOnSuccessListener(aBoolean -> {
+                        //                })
+                        //                .addOnFailureListener(aBoolean -> {
+                        //                });
                     }
                     else
                     {

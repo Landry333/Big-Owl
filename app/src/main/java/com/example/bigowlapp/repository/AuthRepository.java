@@ -9,8 +9,10 @@ import androidx.annotation.NonNull;
 import com.example.bigowlapp.activityPage.HomePageActivity;
 import com.example.bigowlapp.activityPage.LoginPageActivity;
 import com.example.bigowlapp.model.User;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,23 +36,23 @@ public class AuthRepository {
     }
 
     // TODO: SAVE USER TO CLOUD FIRESTORE
-    // TODO: Check for Asynchronous boolean value
-    public boolean signUpUser(String email, String password, String phoneNumber, String name) {
+    public Task<Boolean> signUpUser(String email, String password, String phoneNumber, String name) {
         User user = new User();
-        AtomicBoolean isSuccess = new AtomicBoolean(false);
-        mfirebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+        Task<AuthResult> taskAuthResult = mfirebaseAuth.createUserWithEmailAndPassword(email, password);
+        Task<Boolean> taskBoolean = taskAuthResult.continueWithTask(task -> {
             if (task.isSuccessful()) {
                 user.setUId(this.getCurrentUser().getUid());
                 user.setEmail(email);
                 user.setPhoneNumber(phoneNumber);
                 user.setFirstName(nameExtractor(name)[0]);
                 user.setLastName(nameExtractor(name)[1]);
-                isSuccess.set(true);
+                return Tasks.forResult(true);
             } else {
-                isSuccess.set(false);
+                return Tasks.forResult(false);
             }
         });
-        return isSuccess.get();
+
+        return taskBoolean;
     }
 
     public Task<AuthResult> signInUser(String email, String password) {
