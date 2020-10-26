@@ -99,7 +99,7 @@ public class SignUpPageActivity extends AppCompatActivity {
                         //        authRepository.signUpUser(email, pass)
                         //                .addOnSuccessListener(aBoolean -> {
                         //                })
-                        //                .addOnFailureListener(aBoolean -> {
+                        //                .addOnFailureListener(e -> {
                         //                });
                     }
                     else

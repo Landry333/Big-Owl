@@ -48,10 +48,12 @@ public class AuthRepository {
                 user.setLastName(nameExtractor(name)[1]);
                 return Tasks.forResult(true);
             } else {
-                return Tasks.forResult(false);
+                throw task.getException();
             }
         });
         return taskBoolean;
+
+
     }
 
     public Task<Boolean> signInUser(String email, String password) {
