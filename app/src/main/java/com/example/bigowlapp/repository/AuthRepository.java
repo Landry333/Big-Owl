@@ -51,19 +51,19 @@ public class AuthRepository {
                 return Tasks.forResult(false);
             }
         });
-
         return taskBoolean;
     }
 
-    public Task<AuthResult> signInUser(String email, String password) {
-        mfirebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+    public Task<Boolean> signInUser(String email, String password) {
+        Task<AuthResult> taskAuthResult = mfirebaseAuth.signInWithEmailAndPassword(email, password);
+        Task<Boolean> taskBoolean = taskAuthResult.continueWithTask(task -> {
             if (task.isSuccessful()) {
-                Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
-                startActivity(i);
+                return Tasks.forResult(true);
             } else {
-                Toast.makeText(LoginPageActivity.this, "Login error, Please login again", Toast.LENGTH_SHORT).show();
+                return Tasks.forResult(false);
             }
         });
+        return taskBoolean;
     }
 
     // TODO: Preferably better to use boolean return type
