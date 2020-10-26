@@ -1,6 +1,7 @@
 package com.example.bigowlapp.repository;
 
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -54,17 +55,27 @@ public class AuthRepository {
 
     public Task<AuthResult> signInUser(String email, String password) {
         mfirebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-            if(task.isSuccessful())
-            {
+            if (task.isSuccessful()) {
                 Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
                 startActivity(i);
-            }
-            else
-            {
+            } else {
                 Toast.makeText(LoginPageActivity.this, "Login error, Please login again", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+    // TODO: Preferably better to use boolean return type
+    public void deleteUser() {
+        if (this.getCurrentUser() != null) {
+            this.getCurrentUser()
+                    .delete()
+                    .addOnCompleteListener(task -> {
+                        Log.d(this.getClassName(), "User has been deleted");
+
+                    });
+        }
+    }
+
 
     public void signOutUser() {
         mfirebaseAuth.signOut();
@@ -76,5 +87,9 @@ public class AuthRepository {
 
     public String[] nameExtractor(String name) {
         return name.split(" ", 2);
+    }
+
+    String getClassName() {
+        return this.getClass().toString();
     }
 }
