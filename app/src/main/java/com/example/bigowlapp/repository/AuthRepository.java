@@ -23,7 +23,8 @@ public class AuthRepository {
     }
 
     // TODO: Handle exceptions concerning the failure of the "user" database collection
-    public Task<Boolean> signUpUser(String email, String password, String phoneNumber, String name) {
+    public Task<Boolean> signUpUser(String email, String password, String phoneNumber,
+                                    String firstName, String lastName) {
         User user = new User();
         Task<AuthResult> taskAuthResult = mfirebaseAuth.createUserWithEmailAndPassword(email, password);
         Task<Boolean> taskBoolean = taskAuthResult.continueWithTask(task -> {
@@ -33,8 +34,8 @@ public class AuthRepository {
                 user.setUId(uId);
                 user.setEmail(email);
                 user.setPhoneNumber(phoneNumber);
-                user.setFirstName(nameExtractor(name)[0]);
-                user.setLastName(nameExtractor(name)[1]);
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
                 userRepository.addDocument(uId, user);
                 return Tasks.forResult(true);
             } else {
@@ -74,15 +75,7 @@ public class AuthRepository {
         mfirebaseAuth.signOut();
     }
 
-    public String nameParcer(String firstName, String lastName) {
-        return firstName + " " + lastName;
-    }
-
-    public String[] nameExtractor(String name) {
-        return name.split(" ", 2);
-    }
-
-    String getClassName() {
+    private String getClassName() {
         return this.getClass().toString();
     }
 }
