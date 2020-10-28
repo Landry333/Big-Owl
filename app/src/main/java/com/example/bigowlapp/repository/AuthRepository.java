@@ -11,7 +11,6 @@ import com.google.firebase.auth.FirebaseUser;
 public class AuthRepository {
 
     private FirebaseAuth mfirebaseAuth;
-    private UserRepository userRepository;
 
     // TODO: Dependency Injection Implementation for Firestore
     public AuthRepository() {
@@ -69,6 +68,10 @@ public class AuthRepository {
             }
         });
         return taskBoolean;
+    }
+    
+    public void addAuthStateListener(FirebaseAuth.AuthStateListener authStateListener){
+        mfirebaseAuth.addAuthStateListener(authStateListener);
     }
 
     public void signOutUser() {

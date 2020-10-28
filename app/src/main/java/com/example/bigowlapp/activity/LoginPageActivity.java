@@ -2,13 +2,13 @@ package com.example.bigowlapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -21,7 +21,7 @@ public class LoginPageActivity extends AppCompatActivity {
     public EditText emailId, password;
     Button btnSignIn;
     TextView tvSignUp;
-    private FirebaseAuth.AuthStateListener m_AuthStateListener;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
     private LogInViewModel logInViewModel;
 
 
@@ -39,18 +39,15 @@ public class LoginPageActivity extends AppCompatActivity {
             password = findViewById(R.id.editTextTextPassword);
             btnSignIn = findViewById(R.id.button);
             tvSignUp = findViewById(R.id.textView);
-
-            m_AuthStateListener = new FirebaseAuth.AuthStateListener() {
-                @Override
-                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                    FirebaseUser m_FirebaseUser = m_FirebaseAuth.getCurrentUser();
-                    if (m_FirebaseUser != null) {
-                        Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
-                        startActivity(i);
-                    } else {
-                        Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_SHORT).show();
-                    }
+            
+            mAuthStateListener = firebaseAuth -> {
+                FirebaseUser m_FirebaseUser = logInViewModel.getCurrentUser();
+                if (m_FirebaseUser != null) {
+                    Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_SHORT).show();
                 }
             };
 
@@ -99,9 +96,9 @@ public class LoginPageActivity extends AppCompatActivity {
     protected void onStart() {
         try {
             super.onStart();
-            m_FirebaseAuth.addAuthStateListener(m_AuthStateListener);
-        } catch (Exception ex) {
-
+            logInViewModel.addAuthStateListenerToDatabase(mAuthStateListener);
+        } catch (Exception e) {
+            Log.e("Error: ", e.getMessage());
         }
     }
 }
