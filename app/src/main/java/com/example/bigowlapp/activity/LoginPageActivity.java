@@ -70,7 +70,7 @@ public class LoginPageActivity extends AppCompatActivity {
                     } else if (!(email.isEmpty() && pass.isEmpty())) {
                         logInViewModel.logInUser(email, pass)
                                 .addOnSuccessListener(isSuccessful -> {
-                                    Toast.makeText(LoginPageActivity.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginPageActivity.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
                                     Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
                                     startActivity(i);
                                 })
