@@ -10,11 +10,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.example.bigowlapp.viewModel.LogInViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -22,20 +21,20 @@ public class LoginPageActivity extends AppCompatActivity {
     public EditText emailId, password;
     Button btnSignIn;
     TextView tvSignUp;
-    FirebaseAuth m_FirebaseAuth;
     private FirebaseAuth.AuthStateListener m_AuthStateListener;
+    private LogInViewModel logInViewModel;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        logInViewModel = new ViewModelProvider(this).get(LogInViewModel.class);
         initialize();
     }
 
     protected void initialize() {
         try {
-            m_FirebaseAuth = FirebaseAuth.getInstance();
             emailId = findViewById(R.id.editTextTextEmailAddress);
             password = findViewById(R.id.editTextTextPassword);
             btnSignIn = findViewById(R.id.button);
@@ -54,6 +53,7 @@ public class LoginPageActivity extends AppCompatActivity {
                     }
                 }
             };
+
             btnSignIn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -68,19 +68,15 @@ public class LoginPageActivity extends AppCompatActivity {
                         password.setError("Please enter your password");
                         password.requestFocus();
                     } else if (!(email.isEmpty() && pass.isEmpty())) {
-                        m_FirebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(LoginPageActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (!task.isSuccessful()) {
-                                    Toast.makeText(LoginPageActivity.this, "Login error, Please login again", Toast.LENGTH_SHORT).show();
-                                }
-                                //if successful sign up
-                                else {
+                        logInViewModel.logInUser(email, pass)
+                                .addOnSuccessListener(isSuccessful -> {
+                                    Toast.makeText(LoginPageActivity.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
                                     Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
                                     startActivity(i);
-                                }
-                            }
-                        });
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(LoginPageActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
                     } else {
                         Toast.makeText(LoginPageActivity.this, "An error has occurred", Toast.LENGTH_SHORT).show();
                     }
@@ -88,7 +84,6 @@ public class LoginPageActivity extends AppCompatActivity {
             });
 
             tvSignUp.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(LoginPageActivity.this, SignUpPageActivity.class);

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.bigowlapp.repository.AuthRepository;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LogInViewModel extends ViewModel {
 
@@ -16,5 +17,9 @@ public class LogInViewModel extends ViewModel {
 
     public Task<Boolean> logInUser(String email, String password) {
         return authRepository.signInUser(email, password);
+    }
+
+    public FirebaseUser getCurrentUser(){
+        return authRepository.getCurrentUser();
     }
 }
