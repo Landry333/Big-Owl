@@ -22,7 +22,6 @@ android {
 
         unitTests {
             includeAndroidResources = true
-            unitTests.includeAndroidResources = true
         }
     }
 
