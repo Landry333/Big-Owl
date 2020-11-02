@@ -58,7 +58,6 @@ public class AuthRepository {
 
     // TODO: When deleting a user, other entries in the database should be deleted
     public Task<Boolean> deleteUser() {
-        // Try-catch present because getCurrentUser() could be null if the user is not logged in
         Task<Void> taskVoidDeletion = this.getCurrentUser().delete();
         Task<Boolean> taskBoolean = taskVoidDeletion.continueWithTask(task -> {
             if (task.isSuccessful()) {
