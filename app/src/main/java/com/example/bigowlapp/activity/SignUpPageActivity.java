@@ -85,6 +85,13 @@ public class SignUpPageActivity extends AppCompatActivity {
                                         db.collection("users").add(user);
                                         startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
                                     }
+                                    // TODO: Replace current signup implementation with new one
+
+                                    //        authRepository.signUpUser(email, pass)
+                                    //                .addOnSuccessListener(aBoolean -> {
+                                    //                })
+                                    //                .addOnFailureListener(e -> {
+                                    //                });
                                 }
                             }
                         });
