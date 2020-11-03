@@ -39,7 +39,11 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
                 listOfGroupsLiveData = supervisedGroupListViewModel.setListOfDocumentByArrayContains();
 
                 listOfGroupsLiveData.observe(this, groups -> {
-                    ArrayAdapter<Group> arrayAdapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, groups);
+                    ArrayList<String> arrayGroupName = new ArrayList<>();
+                    for (Group group : groups) {
+                        arrayGroupName.add(group.getName());
+                    }
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, arrayGroupName);
                     lv = findViewById(R.id.listView_supervisedGroup);
                     lv.setAdapter(arrayAdapter);
                     // argument position gives the index of item which is clicked
