@@ -18,7 +18,6 @@
         <activity android:name=".activity.SupervisedGroupPageActivity" />
         <activity android:name=".activity.SupervisedGroupListActivity" />
         <activity android:name=".activity.MonitoringGroupPageActivity" />
-        <activity android:name=".activity.MonitoringGroupListActivity" />
         <activity android:name=".activity.SearchContactsToSupervise" />
         <activity android:name=".activity.SendSmsInvitationActivity" />
         <activity android:name=".activity.HomePageActivity" />
