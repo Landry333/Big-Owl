@@ -30,7 +30,7 @@ public class MonitoringGroupPageViewModel extends ViewModel {
     public LiveData<Group> getGroup() {
         if (selectedGroup == null) {
             selectedGroup = new MutableLiveData<>();
-            getAllUsersInGroup(selectedGroup.getValue().getuId());
+            loadGroup();
         }
         return selectedGroup;
     }
@@ -38,7 +38,7 @@ public class MonitoringGroupPageViewModel extends ViewModel {
     public LiveData<List<User>> getUsers() {
         if (usersInGroup == null) {
             usersInGroup = new MutableLiveData<>();
-            getAllUsersInGroup(selectedGroup.getValue().getuId());
+            loadAllUsersInGroup(selectedGroup.getValue());
         }
         return usersInGroup;
     }
@@ -48,8 +48,8 @@ public class MonitoringGroupPageViewModel extends ViewModel {
         selectedGroup = groupRepository.getDocumentByAttribute("monitoringUserId", userId, Group.class);
     }
 
-    public void getAllUsersInGroup(String groupId) {
-
+    private void loadAllUsersInGroup(Group group) {
+        usersInGroup = userRepository.getDocumentsByUId(group.getSupervisedUserId(), User.class);
     }
 
 }
