@@ -35,10 +35,10 @@ public class MonitoringGroupPageViewModel extends ViewModel {
         return selectedGroup;
     }
 
-    public LiveData<List<User>> getUsers() {
+    public LiveData<List<User>> getUsersFromGroup(Group group) {
         if (usersInGroup == null) {
             usersInGroup = new MutableLiveData<>();
-            loadAllUsersInGroup(selectedGroup.getValue());
+            loadAllUsersInGroup(group);
         }
         return usersInGroup;
     }

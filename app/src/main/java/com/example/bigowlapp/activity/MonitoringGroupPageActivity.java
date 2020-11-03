@@ -4,28 +4,19 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldPath;
+import com.example.bigowlapp.viewModel.MonitoringGroupPageViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,14 +27,24 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
     EditText search_users;
     private ListView users_listview;
     private TextView groupName, supervisorName;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<User> mUsers, mUsersShow;
     private List<String> mSupervisedGroup;
+
+    private MonitoringGroupPageViewModel mGroupPageViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitoring_group_list);
+
+        groupName = findViewById(R.id.textView_groupName);
+        supervisorName = findViewById(R.id.textView_supervisorName);
+        users_listview = findViewById(R.id.list_view);
+        search_users = findViewById(R.id.search_users);
+
+        mGroupPageViewModel = new ViewModelProvider(this).get(MonitoringGroupPageViewModel.class);
+
         initialize();
     }
 
@@ -51,86 +52,38 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
         mUsers = new ArrayList<>();
         mSupervisedGroup = new ArrayList<>();
 
-        try {
-            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-            if (currentUser != null) {
-                Log.d("111111", "test");
-                db.collection("groups")
-                        .whereEqualTo("monitoringUserId", currentUser.getUid())
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot qds : task.getResult()) {
-
-                                        Group g = qds.toObject(Group.class);
-                                        groupName = findViewById(R.id.textView_groupName);
-                                        groupName.setText(qds.getString("name"));
-
-                                        for (String supervisedUser : g.getSupervisedUserId()) {
-                                            mSupervisedGroup.add(supervisedUser);
-                                        }
-                                        Log.d("22222", "test");
-
-                                        //find Supervisor full name
-                                        db.collection("users").document(qds.getString("monitoringUserId")).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    User u = task.getResult().toObject(User.class);
-                                                    supervisorName = findViewById(R.id.textView_supervisorName);
-                                                    supervisorName.setText(u.toString());
-                                                }
-                                            }
-                                        });
-                                    }
-                                    Log.d("333333", "test");
-
-                                    if (!mSupervisedGroup.isEmpty()) {
-                                        //List of all user to compare with
-                                        db.collection("users")
-                                                .whereIn(FieldPath.documentId(), mSupervisedGroup)
-                                                .get()
-                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                        if (task.isSuccessful()) {
-
-                                                            for (QueryDocumentSnapshot qds : task.getResult()) {
-                                                                User u = qds.toObject(User.class);
-                                                                mUsers.add(u);
-                                                            }
-                                                            mUsersShow = mUsers;
-                                                            ArrayAdapter<User> arrayAdapter = new ArrayAdapter<User>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow);
-                                                            users_listview = findViewById(R.id.list_view);
-                                                            users_listview.setAdapter((arrayAdapter));
-                                                        }
-                                                    }
-                                                });
-                                    } else {
-                                        new AlertDialog.Builder(MonitoringGroupPageActivity.this)
-                                                .setTitle("No monitoring group found")
-                                                .setMessage("Required to be the Monitor of a group before accessing this list")
-                                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int which) {
-                                                        MonitoringGroupPageActivity.super.onBackPressed();
-                                                    }
-                                                })
-                                                .setCancelable(false)
-                                                .create()
-                                                .show();
-                                    }
-                                }
-                            }
-                        });
+        mGroupPageViewModel.getGroup().observe(this, group -> {
+            if (group == null) {
+                this.noGroupAlert().show();
+                return;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        search_users = findViewById(R.id.search_users);
+            groupName.setText(group.getName());
+
+            // TODO: deal with supervisor name
+            //find Supervisor full name
+//            db.collection("users").document(qds.getString("monitoringUserId")).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    if (task.isSuccessful()) {
+//                        User u = task.getResult().toObject(User.class);
+//                        supervisorName.setText(u.toString());
+//                    }
+//                }
+//            });
+
+            mGroupPageViewModel.getUsersFromGroup(group).observe(this, users -> {
+                mUsers = users;
+                mUsersShow = mUsers;
+                ArrayAdapter<User> arrayAdapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow);
+                users_listview.setAdapter((arrayAdapter));
+            });
+        });
+
+        setupSearchBar();
+    }
+
+    private void setupSearchBar() {
         search_users.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -138,10 +91,9 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //Log.d("test", "welp" + mUsers.size());
                 searchUsers(charSequence.toString().toLowerCase());
-                ArrayAdapter<User> arrayAdapter = new ArrayAdapter<User>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow);
-                users_listview.setAdapter((arrayAdapter));
+                ArrayAdapter<User> arrayAdapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow);
+                users_listview.setAdapter(arrayAdapter);
             }
 
             @Override
@@ -164,5 +116,14 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
         }).collect(Collectors.toList());
 
         mUsersShow = filteredUsers;
+    }
+
+    private AlertDialog noGroupAlert() {
+        return new AlertDialog.Builder(MonitoringGroupPageActivity.this)
+                .setTitle("No monitoring group found")
+                .setMessage("Required to be the Monitor of a group before accessing this list")
+                .setPositiveButton("Ok", (dialogInterface, which) -> MonitoringGroupPageActivity.super.onBackPressed())
+                .setCancelable(false)
+                .create();
     }
 }
