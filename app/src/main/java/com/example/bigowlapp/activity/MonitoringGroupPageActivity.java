@@ -25,10 +25,9 @@ import java.util.stream.Collectors;
 public class MonitoringGroupPageActivity extends AppCompatActivity {
     EditText search_users;
     private ListView users_listview;
-    private TextView groupName, supervisorName;
+    private TextView groupName;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<User> mUsers, mUsersShow;
-    private List<String> mSupervisedGroup;
 
     private MonitoringGroupPageViewModel mGroupPageViewModel;
 
@@ -38,7 +37,6 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_monitoring_group_list);
 
         groupName = findViewById(R.id.textView_groupName);
-        supervisorName = findViewById(R.id.textView_supervisorName);
         users_listview = findViewById(R.id.list_view);
         search_users = findViewById(R.id.search_users);
 
@@ -49,7 +47,6 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
 
     protected void initialize() {
         mUsers = new ArrayList<>();
-        mSupervisedGroup = new ArrayList<>();
 
         mGroupPageViewModel.getGroup().observe(this, group -> {
             // TODO: better error or allow view page when accessing group with no users
