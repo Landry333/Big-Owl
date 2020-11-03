@@ -1,6 +1,5 @@
 package com.example.bigowlapp.activity;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -53,7 +52,8 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
         mSupervisedGroup = new ArrayList<>();
 
         mGroupPageViewModel.getGroup().observe(this, group -> {
-            if (group == null) {
+            // TODO: better error or allow view page when accessing group with no users
+            if (group == null || group.getSupervisedUserId() == null || group.getSupervisedUserId().isEmpty()) {
                 this.noGroupAlert().show();
                 return;
             }
