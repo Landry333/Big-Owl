@@ -30,6 +30,22 @@ public abstract class Repository<T> {
     // Adding Document
     //===========================================================================================
 
+    public MutableLiveData<T> addDocument(T documentData) {
+        MutableLiveData<T> tData = new MutableLiveData<>();
+        tData.setValue(documentData);
+        collectionReference
+                .add(documentData)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(getClassName(), "Document added successfully.");
+                    } else {
+                        Log.e(getClassName(), "Error adding document: " +
+                                task.getException());
+                    }
+                });
+        return tData;
+    }
+
     public MutableLiveData<T> addDocument(String docUId, T documentData) {
         MutableLiveData<T> tData = new MutableLiveData<>();
         tData.setValue(documentData);
@@ -161,6 +177,34 @@ public abstract class Repository<T> {
                             listOfTData.setValue(null);
                         }
                     } else {
+                        Log.e(getClassName(), "Error getting documents: " +
+                                task.getException());
+                    }
+                });
+        return listOfTData;
+    }
+
+    public MutableLiveData<List<T>> getListOfDocumentByArrayContains(String attribute, String attrValue,
+                                                                 Class<? extends T> tClass) {
+        MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
+        collectionReference.whereArrayContains(attribute, attrValue)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                     QuerySnapshot tDocs = task.getResult();
+                        if (tDocs != null && !tDocs.isEmpty()) {
+                            List<T> listOfT = new ArrayList<>();
+                            for (QueryDocumentSnapshot doc : task.getResult()) {
+                                T t = doc.toObject(tClass);
+                                listOfT.add(t);
+                            }
+                            listOfTData.setValue(listOfT);
+                        } else {
+                            listOfTData.setValue(null);
+                        }
+
+                    }
+                    else{
                         Log.e(getClassName(), "Error getting documents: " +
                                 task.getException());
                     }
