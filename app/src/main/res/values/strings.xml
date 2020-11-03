@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">BigOwlApp</string>
+    <string name="log_out">Log Out</string>
+    <string name="this_is_the_home_page">This is the home page</string>
+    <string name="monitoring_group">Monitoring Group</string>
+    <string name="group">Group:</string>
+    <string name="group_name">group_name</string>
+    <string name="supervised_by">Supervised by</string>
+    <string name="supervisor_name">supervisor_name</string>
+    <string name="supervised_group">Supervised Group</string>
+    <string name="title_activity_supervised_group">SupervisedGroup</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="list_of_supervised_group">List of supervised group</string>
+    <string name="search_users">Phone Contacts</string>
+    <string name="search_users2">Search an user to supervise</string>
+</resources>
