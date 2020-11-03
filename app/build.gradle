@@ -58,6 +58,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.0'
     implementation 'androidx.navigation:navigation-ui:2.3.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'androidx.wear:wear:1.0.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Declare local unit testing dependencies
     testImplementation 'junit:junit:4.12'
@@ -76,7 +78,7 @@ dependencies {
 
     // TODO: remove below line after switch the db from Realtime Database to Cloud Firestore
     implementation 'com.google.firebase:firebase-database'
-    
-    }
+
+}
 
 apply plugin: 'com.google.gms.google-services'

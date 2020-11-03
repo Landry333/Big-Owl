@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class HomePageActivity extends AppCompatActivity {
     private final int CONTACT_PERMISSION_CODE = 1;
-    Button btnLogOut, sendSmsInvitation, btnSearchUsers, btnMonitoringGroup, btnSupervisedGroup, btnMonitoringList;
+    Button btnLogOut, btnViewProfile, sendSmsInvitation, btnSearchUsers, btnMonitoringGroup, btnSupervisedGroup, btnMonitoringList;
     FirebaseAuth m_FirebaseAuth;
     private FirebaseAuth.AuthStateListener m_AuthStateListener;
 
@@ -46,6 +46,31 @@ public class HomePageActivity extends AppCompatActivity {
                     FirebaseAuth.getInstance().signOut();
                     Intent i = new Intent(HomePageActivity.this, LoginPageActivity.class);
                     startActivity(i);
+                }
+            });
+
+            btnViewProfile = findViewById(R.id.ViewProfile);
+
+            btnViewProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(HomePageActivity.this, UserProfileActivity.class);
+                    startActivity(i);
+                }
+            });
+
+            btnSearchUsers = findViewById(R.id.btnPhoneContacts);
+
+            btnSearchUsers.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (ContextCompat.checkSelfPermission(HomePageActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                        //Toast.makeText(HomePageActivity.this, "This permission is already granted", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(HomePageActivity.this, SearchContactsToSupervise.class);
+                        startActivity(i);
+                    } else {
+                        requestContactPermission();
+                    }
                 }
             });
 
@@ -77,21 +102,6 @@ public class HomePageActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
                     startActivity(i);
-                }
-            });
-
-            btnSearchUsers = findViewById(R.id.btnPhoneContacts);
-
-            btnSearchUsers.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ContextCompat.checkSelfPermission(HomePageActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                        //Toast.makeText(HomePageActivity.this, "This permission is already granted", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(HomePageActivity.this, SearchContactsToSupervise.class);
-                        startActivity(i);
-                    } else {
-                        requestContactPermission();
-                    }
                 }
             });
         } catch (Exception ex) {
