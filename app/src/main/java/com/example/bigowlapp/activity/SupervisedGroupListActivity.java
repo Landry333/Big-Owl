@@ -28,6 +28,7 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supervised_group_list);
+        supervisedGroupListViewModel = new SupervisedGroupListViewModel();
         initialize();
     }
 
@@ -35,7 +36,6 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
         try {
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
             if (currentUser != null) {
-                supervisedGroupListViewModel = new SupervisedGroupListViewModel();
                 listOfGroupsLiveData = supervisedGroupListViewModel.setListOfDocumentByArrayContains();
 
                 listOfGroupsLiveData.observe(this, groups -> {
