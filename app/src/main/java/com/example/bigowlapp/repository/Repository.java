@@ -50,6 +50,7 @@ public abstract class Repository<T> {
     // Remove Document
     //===========================================================================================
 
+    // TODO: Check for Asynchronous boolean value
     public boolean removeDocument(String docUId) {
         // We are using AtomicBoolean because the lambda function is asynchronous.
         // Thus we need an atomic variable, so we can set the boolean value in the lambda function.
