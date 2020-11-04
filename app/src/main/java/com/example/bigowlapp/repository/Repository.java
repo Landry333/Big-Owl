@@ -5,6 +5,8 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.database.Firestore;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -66,24 +68,20 @@ public abstract class Repository<T> {
     // Remove Document
     //===========================================================================================
 
-    // TODO: Check for Asynchronous boolean value
-    public boolean removeDocument(String docUId) {
-        // We are using AtomicBoolean because the lambda function is asynchronous.
-        // Thus we need an atomic variable, so we can set the boolean value in the lambda function.
-        AtomicBoolean isSuccessful = new AtomicBoolean();
-        collectionReference.document(docUId)
+    public Task<Boolean> removeDocument(String docUId) {
+        Task<Boolean> taskBoolean = collectionReference.document(docUId)
                 .delete()
-                .addOnCompleteListener(task -> {
+                .continueWithTask(task -> {
                     if (task.isSuccessful()) {
                         Log.d(getClassName(), "Document removed successfully.");
-                        isSuccessful.set(true);
+                        return Tasks.forResult(true);
                     } else {
                         Log.e(getClassName(), "Error removing document: " +
                                 task.getException());
-                        isSuccessful.set(false);
+                        throw task.getException();
                     }
                 });
-        return isSuccessful.get();
+        return taskBoolean;
     }
 
     //===========================================================================================
