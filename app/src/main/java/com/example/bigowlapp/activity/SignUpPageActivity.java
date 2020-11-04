@@ -8,37 +8,33 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.bigowlapp.viewModel.SignUpViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignUpPageActivity extends AppCompatActivity {
     public EditText emailId, password, phone, name;
     Button btnSignUp;
     TextView tvSignIn;
-    FirebaseAuth m_FirebaseAuth;
     private User user = new User();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private SignUpViewModel signUpViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
         initialize();
     }
 
     protected void initialize() {
         try {
             //Authentication with firebase
-            m_FirebaseAuth = FirebaseAuth.getInstance();
             emailId = findViewById(R.id.editTextTextEmailAddress);
             password = findViewById(R.id.editTextTextPassword);
             phone = findViewById(R.id.editTextPhone);
@@ -67,34 +63,14 @@ public class SignUpPageActivity extends AppCompatActivity {
                     } else if (email.isEmpty() || pass.isEmpty() || userPhone.isEmpty()) {
                         Toast.makeText(SignUpPageActivity.this, "Fields are empty!", Toast.LENGTH_SHORT).show();
                     } else if (!(email.isEmpty() && pass.isEmpty() && userPhone.isEmpty())) {
-                        m_FirebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(SignUpPageActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (!task.isSuccessful()) {
-                                    Toast.makeText(SignUpPageActivity.this, "SignUp Unsuccessful, please try again", Toast.LENGTH_SHORT).show();
-                                }
-                                //if successful sign up
-                                else {
-                                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                                    user.setEmail(email);
-                                    user.setPhoneNumber(userPhone);
-                                    user.setFirstName(userName);
-                                    user.setUId(currentUser.getUid());
-
-                                    if (currentUser != null) {
-                                        db.collection("users").add(user);
-                                        startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
-                                    }
-                                    // TODO: Replace current signup implementation with new one
-
-                                    //        authRepository.signUpUser(email, pass)
-                                    //                .addOnSuccessListener(aBoolean -> {
-                                    //                })
-                                    //                .addOnFailureListener(e -> {
-                                    //                });
-                                }
-                            }
-                        });
+                        signUpViewModel.createUser(email, pass, userPhone, userName)
+                                .addOnSuccessListener(isSuccessful -> {
+                                    Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(SignUpPageActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
                     } else {
                         Toast.makeText(SignUpPageActivity.this, "An error has occurred", Toast.LENGTH_SHORT).show();
                     }
