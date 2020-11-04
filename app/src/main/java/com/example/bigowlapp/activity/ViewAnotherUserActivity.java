@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.repository.ViewUserRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,10 +26,11 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
     String supBtn1 = "Send a request to supervise user";
     String supBtn2 = "You are supervising this user";
     String supBtn3 = "Cancel this request to supervise";
-    DatabaseReference mUserRef, supRequestRef;
-    FirebaseAuth mAuth;
-    FirebaseUser mUser;
+//    DatabaseReference mUserRef, supRequestRef;
+//    FirebaseAuth mAuth;
+//    FirebaseUser mUser;
     private Button supRequestBtn;
+    ViewUserRepository viewUserRepository = new ViewUserRepository();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +38,9 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_another_user);
 
         supRequestBtn = findViewById(R.id.SupRequest);
-        supRequestRef = FirebaseDatabase.getInstance().getReference().child("SupRequests");
-        mUser = mAuth.getCurrentUser();
+
+//        supRequestRef = FirebaseDatabase.getInstance().getReference().child("SupRequests");
+//        mUser = mAuth.getCurrentUser();
         supRequestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +54,8 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
         if (supRequestStatus.equals("none")) {
             HashMap hashMap = new HashMap();
             hashMap.put("status", "pending");
-            supRequestRef.child(mUser.getUid()).child(otherUserID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+
+            viewUserRepository.getSupRequestRef().child( viewUserRepository.getMfirebaseUser().getUid()).child(otherUserID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
 
                 @Override
                 public void onComplete(@NonNull Task task) {
@@ -66,7 +70,7 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
             });
         }
         if (supRequestStatus.equals("sent_pending") || supRequestStatus.equals("sent_declined")) {
-            supRequestRef.child(mUser.getUid()).child(otherUserID).removeValue().addOnCompleteListener(new OnCompleteListener() {
+            viewUserRepository.getSupRequestRef().child(viewUserRepository.getMfirebaseUser().getUid()).child(otherUserID).removeValue().addOnCompleteListener(new OnCompleteListener() {
 
                 @Override
                 public void onComplete(@NonNull Task task) {
