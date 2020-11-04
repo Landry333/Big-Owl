@@ -1,12 +1,15 @@
 package com.example.bigowlapp.activity;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,13 +19,20 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.bigowlapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 public class HomePageActivity extends AppCompatActivity {
     private final int CONTACT_PERMISSION_CODE = 1;
-    Button btnLogOut, btnViewProfile, sendSmsInvitation, btnSearchUsers, btnMonitoringGroup, btnSupervisedGroup, btnMonitoringList;
-    FirebaseAuth m_FirebaseAuth;
-    private FirebaseAuth.AuthStateListener m_AuthStateListener;
+    Button btnLogOut, sendSmsInvitation, btnSearchUsers, btnMonitoringGroup, btnSupervisedGroup;
+    ScrollView scrollView;
+    ImageView imgUserAvatar;
+    TextView textEmail, textFirstName, textLastName, textPhone;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,75 +47,82 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     protected void initialize() {
+        scrollView = findViewById(R.id.scrollView);
+        scrollView.setVisibility(View.GONE);
         try {
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                String currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                DocumentReference docRef = db.collection("users").document(currentUserUid);
+                docRef.get().addOnCompleteListener((OnCompleteListener<DocumentSnapshot>) task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document != null) {
+                            imgUserAvatar = findViewById(R.id.imageView_userAvatar);
+                            textEmail = findViewById(R.id.textView_email);
+                            textFirstName = findViewById(R.id.textView_firstName);
+                            textLastName = findViewById(R.id.textView_lastName);
+                            textPhone = findViewById(R.id.textView_phoneNumber);
+
+                            if (URLUtil.isValidUrl((String) document.getString("profileImage")))
+                                Picasso.get().load((String) document.getString("profileImage")).into(imgUserAvatar);
+                            else imgUserAvatar.setImageResource(R.drawable.logo_square);
+
+                            textEmail.setText((String) document.getString("email"));
+                            textFirstName.setText((String) document.getString("firstName"));
+                            textLastName.setText((String) document.getString("lastName"));
+                            textPhone.setText((String) document.getString("phoneNumber"));
+                        }
+                    }
+                    scrollView.setVisibility(View.VISIBLE);
+                });
+            }
+
             btnLogOut = findViewById(R.id.Logout);
 
-            btnLogOut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FirebaseAuth.getInstance().signOut();
-                    Intent i = new Intent(HomePageActivity.this, LoginPageActivity.class);
-                    startActivity(i);
-                }
-            });
-
-            btnViewProfile = findViewById(R.id.ViewProfile);
-
-            btnViewProfile.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(HomePageActivity.this, UserProfileActivity.class);
-                    startActivity(i);
-                }
+            btnLogOut.setOnClickListener(v -> {
+                FirebaseAuth.getInstance().signOut();
+                Intent i = new Intent(HomePageActivity.this, LoginPageActivity.class);
+                startActivity(i);
             });
 
             btnSearchUsers = findViewById(R.id.btnPhoneContacts);
 
-            btnSearchUsers.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ContextCompat.checkSelfPermission(HomePageActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                        //Toast.makeText(HomePageActivity.this, "This permission is already granted", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(HomePageActivity.this, SearchContactsToSupervise.class);
-                        startActivity(i);
-                    } else {
-                        requestContactPermission();
-                    }
+            btnSearchUsers.setOnClickListener(v -> {
+                if (ContextCompat.checkSelfPermission(HomePageActivity.this,
+                        Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                    //Toast.makeText(HomePageActivity.this, "This permission is already granted", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(HomePageActivity.this, SearchContactsToSupervise.class);
+                    startActivity(i);
+                } else {
+                    requestContactPermission();
                 }
             });
 
             sendSmsInvitation = findViewById(R.id.SendSmsInvitation);
 
-            sendSmsInvitation.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(HomePageActivity.this, SendSmsInvitationActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+            sendSmsInvitation.setOnClickListener(v -> {
+                Intent intent = new Intent(HomePageActivity.this, SendSmsInvitationActivity.class);
+                startActivity(intent);
+                finish();
             });
 
             btnMonitoringGroup = findViewById(R.id.btnMonitoringGroup);
 
-            btnMonitoringGroup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(HomePageActivity.this, MonitoringGroupPageActivity.class);
-                    startActivity(i);
-                }
+            btnMonitoringGroup.setOnClickListener(v -> {
+                Intent i = new Intent(HomePageActivity.this, MonitoringGroupPageActivity.class);
+                startActivity(i);
             });
 
             btnSupervisedGroup = findViewById(R.id.btnSupervisedGroup);
 
-            btnSupervisedGroup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
-                    startActivity(i);
-                }
+            btnSupervisedGroup.setOnClickListener(v -> {
+                Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
+                startActivity(i);
             });
-        } catch (Exception ex) {
 
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -115,18 +132,12 @@ public class HomePageActivity extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setTitle("Permission needed")
                     .setMessage("Permission is required to read phone Contacts")
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int which) {
-                            ActivityCompat.requestPermissions(HomePageActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, CONTACT_PERMISSION_CODE);
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
+                    .setPositiveButton("Ok",
+                            (dialogInterface, which) -> ActivityCompat.requestPermissions(
+                                    HomePageActivity.this,
+                                    new String[]{Manifest.permission.READ_CONTACTS},
+                                    CONTACT_PERMISSION_CODE))
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                     .create().show();
 
         } else {
