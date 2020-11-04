@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.Button;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -41,12 +44,9 @@ public class HomePageActivity extends AppCompatActivity {
         initialize();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
     protected void initialize() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         scrollView = findViewById(R.id.scrollView);
         scrollView.setVisibility(View.GONE);
         try {
@@ -124,6 +124,33 @@ public class HomePageActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_page_overflow, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.home) {
+            finish();
+            startActivity(getIntent());
+        } else if (item.getItemId() == R.id.refresh) {
+            finish();
+            startActivity(getIntent());
+        } else if (item.getItemId() == R.id.edit_profile) {
+            Intent i = new Intent(HomePageActivity.this, EditProfileActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     //TODO refactor to another class file

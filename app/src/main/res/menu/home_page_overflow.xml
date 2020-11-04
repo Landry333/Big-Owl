@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.HomePageActivity">
+    <item
+        android:id="@+id/home"
+        android:orderInCategory="1"
+        android:title="@string/home"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/refresh"
+        android:orderInCategory="1"
+        android:title="@string/refresh"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/edit_profile"
+        android:orderInCategory="1"
+        android:title="@string/edit_profile"
+        app:showAsAction="never" />
+</menu>
