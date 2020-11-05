@@ -13,7 +13,7 @@
         android:textSize="30sp"/>
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/page_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/supervised_by"
@@ -27,7 +27,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:layout_below="@+id/textView_groupName"
-        android:layout_toRightOf="@+id/textView1"
+        android:layout_toRightOf="@+id/page_title"
         android:text="@string/supervisor_name"
         android:textSize="18sp" />
 

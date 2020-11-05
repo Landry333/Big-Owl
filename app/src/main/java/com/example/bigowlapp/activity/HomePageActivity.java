@@ -52,11 +52,11 @@ public class HomePageActivity extends AppCompatActivity {
                         FirebaseAuth.getInstance().getCurrentUser().getUid(),
                         User.class);
 
-                imgUserAvatar = findViewById(R.id.userAvatar);
-                textEmail = findViewById(R.id.userEmail);
-                textFirstName = findViewById(R.id.userFirstName);
-                textLastName = findViewById(R.id.userLastName);
-                textPhone = findViewById(R.id.userPhoneNumber);
+                imgUserAvatar = findViewById(R.id.user_avatar);
+                textEmail = findViewById(R.id.user_email);
+                textFirstName = findViewById(R.id.user_first_name);
+                textLastName = findViewById(R.id.user_last_name);
+                textPhone = findViewById(R.id.user_phone_number);
 
                 userData.observe(this, user -> {
                     textEmail.setText(user.getEmail());
@@ -75,7 +75,7 @@ public class HomePageActivity extends AppCompatActivity {
                 scrollView.setVisibility(View.VISIBLE);
             }
 
-            btnLogOut = findViewById(R.id.Logout);
+            btnLogOut = findViewById(R.id.btn_logout);
 
             btnLogOut.setOnClickListener(v -> {
                 FirebaseAuth.getInstance().signOut();
@@ -83,7 +83,7 @@ public class HomePageActivity extends AppCompatActivity {
                 startActivity(i);
             });
 
-            btnSearchUsers = findViewById(R.id.btnPhoneContacts);
+            btnSearchUsers = findViewById(R.id.btn_phone_contacts);
 
             btnSearchUsers.setOnClickListener(v -> {
                 if (ContextCompat.checkSelfPermission(HomePageActivity.this,
@@ -95,7 +95,7 @@ public class HomePageActivity extends AppCompatActivity {
                 }
             });
 
-            sendSmsInvitation = findViewById(R.id.SendSmsInvitation);
+            sendSmsInvitation = findViewById(R.id.send_sms_invitation);
 
             sendSmsInvitation.setOnClickListener(v -> {
                 Intent intent = new Intent(HomePageActivity.this, SendSmsInvitationActivity.class);
@@ -103,14 +103,14 @@ public class HomePageActivity extends AppCompatActivity {
                 finish();
             });
 
-            btnMonitoringGroup = findViewById(R.id.btnMonitoringGroup);
+            btnMonitoringGroup = findViewById(R.id.btn_monitoring_group);
 
             btnMonitoringGroup.setOnClickListener(v -> {
                 Intent i = new Intent(HomePageActivity.this, MonitoringGroupPageActivity.class);
                 startActivity(i);
             });
 
-            btnSupervisedGroup = findViewById(R.id.btnSupervisedGroup);
+            btnSupervisedGroup = findViewById(R.id.btn_supervised_group);
 
             btnSupervisedGroup.setOnClickListener(v -> {
                 Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
@@ -136,13 +136,13 @@ public class HomePageActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.overflowHome) {
+        if (item.getItemId() == R.id.overflow_home) {
             finish();
             startActivity(getIntent());
-        } else if (item.getItemId() == R.id.overflowRefresh) {
+        } else if (item.getItemId() == R.id.overflow_refresh) {
             finish();
             startActivity(getIntent());
-        } else if (item.getItemId() == R.id.overflowEditProfile) {
+        } else if (item.getItemId() == R.id.overflow_edit_profile) {
             Intent i = new Intent(HomePageActivity.this, EditProfileActivity.class);
             startActivity(i);
             return true;

@@ -26,12 +26,12 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void initialize() {
         editProfileViewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
 
-        editButtonCancel = findViewById(R.id.editButtonCancel);
-        editButtonConfirm = findViewById(R.id.editButtonConfirm);
-        editUserFirstName = findViewById(R.id.editUserFirstName);
-        editUserLastName = findViewById(R.id.editUserLastName);
-        editPhoneNumber = findViewById(R.id.editPhoneNumber);
-        editImageURL = findViewById(R.id.editImageURL);
+        editButtonCancel = findViewById(R.id.edit_button_cancel);
+        editButtonConfirm = findViewById(R.id.edit_button_confirm);
+        editUserFirstName = findViewById(R.id.edit_user_first_name);
+        editUserLastName = findViewById(R.id.edit_user_last_name);
+        editPhoneNumber = findViewById(R.id.edit_phone_number);
+        editImageURL = findViewById(R.id.edit_image_url);
 
         editProfileViewModel.getCurrentUserProfile().observe(this, user -> {
             editUserFirstName.setText(user.getFirstName());

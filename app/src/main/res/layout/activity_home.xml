@@ -12,18 +12,18 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/userAvatar"
+            android:id="@+id/user_avatar"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:contentDescription="@string/user_avatar"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+            app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
             tools:srcCompat="@tools:sample/avatars[0]" />
 
         <TableLayout
-            android:id="@+id/tableLayout"
+            android:id="@+id/table_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="24dp"
@@ -43,7 +43,7 @@
                     android:gravity="center">
 
                     <Button
-                        android:id="@+id/btnPhoneContacts"
+                        android:id="@+id/btn_phone_contacts"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/search_users" />
@@ -57,7 +57,7 @@
                     android:gravity="center">
 
                     <Button
-                        android:id="@+id/SendSmsInvitation"
+                        android:id="@+id/send_sms_invitation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Send Sms Invitation"
@@ -79,7 +79,7 @@
                     android:gravity="center">
 
                     <Button
-                        android:id="@+id/btnMonitoringGroup"
+                        android:id="@+id/btn_monitoring_group"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/monitoring_group" />
@@ -92,7 +92,7 @@
                     android:gravity="center">
 
                     <Button
-                        android:id="@+id/btnSupervisedGroup"
+                        android:id="@+id/btn_supervised_group"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/supervised_group" />
@@ -107,7 +107,7 @@
                 android:gravity="center">
 
                 <Button
-                    android:id="@+id/Logout"
+                    android:id="@+id/btn_logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Log Out"
@@ -117,20 +117,20 @@
         </TableLayout>
 
         <TableLayout
-            android:id="@+id/profileTable"
+            android:id="@+id/profile_table"
             android:layout_width="wrap_content"
             android:layout_height="100dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="24dp"
-            app:layout_constraintStart_toEndOf="@+id/userAvatar"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+            app:layout_constraintStart_toEndOf="@+id/user_avatar"
+            app:layout_constraintTop_toBottomOf="@+id/app_bar_layout">
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/userFirstName"
+                    android:id="@+id/user_first_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/user_first_name"
@@ -142,7 +142,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/userLastName"
+                    android:id="@+id/user_last_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/user_last_name"
@@ -155,7 +155,7 @@
                 android:layout_marginTop="8dp">
 
                 <TextView
-                    android:id="@+id/userPhoneNumber"
+                    android:id="@+id/user_phone_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/user_phone_number"
@@ -171,10 +171,10 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/userAvatar">
+            app:layout_constraintTop_toBottomOf="@+id/user_avatar">
 
             <TextView
-                android:id="@+id/userEmail"
+                android:id="@+id/user_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/user_email"
@@ -182,7 +182,7 @@
         </TableRow>
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
+            android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
