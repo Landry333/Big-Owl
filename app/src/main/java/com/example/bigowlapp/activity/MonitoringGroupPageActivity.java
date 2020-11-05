@@ -13,18 +13,17 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.MonitoringGroupPageViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 
 public class MonitoringGroupPageActivity extends AppCompatActivity {
@@ -32,6 +31,7 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
     private ListView usersListView;
     private TextView groupName;
     private List<User> mUsers, mUsersShow;
+    private User contextMenuSelectedUser;
 
     private MonitoringGroupPageViewModel mGroupPageViewModel;
 
@@ -64,8 +64,7 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
             mGroupPageViewModel.getUsersFromGroup(group).observe(this, users -> {
                 mUsers = users;
                 mUsersShow = mUsers;
-                ArrayAdapter<User> arrayAdapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow);
-                usersListView.setAdapter((arrayAdapter));
+                resetUsersListViewAdapter();
                 registerForContextMenu(usersListView);
             });
         });
@@ -82,8 +81,7 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 searchUsers(charSequence.toString().toLowerCase());
-                ArrayAdapter<User> arrayAdapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow);
-                usersListView.setAdapter(arrayAdapter);
+                resetUsersListViewAdapter();
             }
 
             @Override
@@ -95,28 +93,28 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                AdapterView.AdapterContextMenuInfo info =
-                        (AdapterView.AdapterContextMenuInfo) menuInfo;
-                String country = ((TextView) info.targetView).getText().toString();
-                menu.setHeaderTitle(country);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        contextMenuSelectedUser = mUsersShow.get((int) info.id);
 
-                String[] actions = getResources().getStringArray(R.array.context_menu);
-                for (int i = 0; i < actions.length; i++) {
-                    menu.add(Menu.NONE, i, i, actions[i]);
-                }
+        String[] actions = getResources().getStringArray(R.array.context_menu);
+        for (int i = 0; i < actions.length; i++) {
+            menu.add(Menu.NONE, i, i, actions[i]);
+        }
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         int menuItemIndex = item.getItemId();
-        String [] menuItems = getResources().getStringArray(R.array.context_menu);
+        String[] menuItems = getResources().getStringArray(R.array.context_menu);
         String menuItemName = menuItems[menuItemIndex];
 
         switch (menuItemName) {
-
-            case "Remove":
+            case "View Profile":
                 break;
-
+            case "Remove": {
+                mGroupPageViewModel.removeUserFromGroup(contextMenuSelectedUser, mUsers);
+                resetUsersListViewAdapter();
+            }
         }
 
         return true;
@@ -137,5 +135,9 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
                 .setPositiveButton("Ok", (dialogInterface, which) -> MonitoringGroupPageActivity.super.onBackPressed())
                 .setCancelable(false)
                 .create();
+    }
+
+    private void resetUsersListViewAdapter() {
+        usersListView.setAdapter(new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow));
     }
 }

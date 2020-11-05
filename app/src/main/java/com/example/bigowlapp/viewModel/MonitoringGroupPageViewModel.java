@@ -1,9 +1,5 @@
 package com.example.bigowlapp.viewModel;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
@@ -11,6 +7,11 @@ import com.example.bigowlapp.repository.GroupRepository;
 import com.example.bigowlapp.repository.UserRepository;
 
 import java.util.List;
+import java.util.Objects;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 public class MonitoringGroupPageViewModel extends ViewModel {
 
@@ -52,4 +53,12 @@ public class MonitoringGroupPageViewModel extends ViewModel {
         usersInGroup = userRepository.getDocumentsByUId(group.getSupervisedUserId(), User.class);
     }
 
+    public void removeUserFromGroup(User userToBeRemoved, List<User> userList) {
+        Group groupWithRemovedUser = getGroup().getValue();
+        Objects.requireNonNull(groupWithRemovedUser).getSupervisedUserId().remove(userToBeRemoved.getUId());
+        userList.remove(userToBeRemoved);
+
+        groupRepository.updateDocument(groupWithRemovedUser.getuId(), groupWithRemovedUser);
+
+    }
 }
