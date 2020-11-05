@@ -42,7 +42,7 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_monitoring_group_list);
+        setContentView(R.layout.activity_monitoring_group_page);
         initialize();
         registerForContextMenu(users_list_view);
     }
@@ -62,7 +62,7 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
                                 for (QueryDocumentSnapshot qds : Objects.requireNonNull(task.getResult())) {
 
                                     Group g = qds.toObject(Group.class);
-                                    groupName = findViewById(R.id.textView_groupName);
+                                    groupName = findViewById(R.id.group_name);
                                     groupName.setText(qds.getString("name"));
 
                                     mSupervisedGroup.addAll(g.getSupervisedUserId());
@@ -73,7 +73,7 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
                                             .get().addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
                                             User u = Objects.requireNonNull(task1.getResult()).toObject(User.class);
-                                            supervisorName = findViewById(R.id.textView_supervisorName);
+                                            supervisorName = findViewById(R.id.supervisor_name);
                                             supervisorName.setText(Objects.requireNonNull(u).toString());
                                         }
                                     });
@@ -92,7 +92,7 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
                                                         mUsers.add(u);
                                                     }
                                                     mUsersShow = mUsers;
-                                                    users_list_view = findViewById(R.id.user_list_view);
+                                                    users_list_view = findViewById(R.id.users_list_view);
                                                     ArrayAdapter<User> arrayAdapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow);
                                                     users_list_view.setAdapter((arrayAdapter));
                                                 }

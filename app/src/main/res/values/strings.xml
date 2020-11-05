@@ -18,4 +18,5 @@
     <string name="list_of_supervised_group">List of supervised group</string>
     <string name="search_users">Phone Contacts</string>
     <string name="search_users2">Search an user to supervise</string>
+    <string name="hint_search">Search...</string>
 </resources>
