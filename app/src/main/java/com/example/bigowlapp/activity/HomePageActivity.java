@@ -7,12 +7,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.bigowlapp.R;
+import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.repository.UserRepository;
+import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -20,14 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import com.example.bigowlapp.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Picasso;
+import androidx.lifecycle.LiveData;
 
 public class HomePageActivity extends AppCompatActivity {
     private final int CONTACT_PERMISSION_CODE = 1;
@@ -35,7 +33,6 @@ public class HomePageActivity extends AppCompatActivity {
     ScrollView scrollView;
     ImageView imgUserAvatar;
     TextView textEmail, textFirstName, textLastName, textPhone;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,36 +42,37 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     protected void initialize() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         scrollView = findViewById(R.id.scrollView);
         scrollView.setVisibility(View.GONE);
         try {
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                String currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                DocumentReference docRef = db.collection("users").document(currentUserUid);
-                docRef.get().addOnCompleteListener((OnCompleteListener<DocumentSnapshot>) task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document != null) {
-                            imgUserAvatar = findViewById(R.id.imageView_userAvatar);
-                            textEmail = findViewById(R.id.textView_email);
-                            textFirstName = findViewById(R.id.textView_firstName);
-                            textLastName = findViewById(R.id.textView_lastName);
-                            textPhone = findViewById(R.id.textView_phoneNumber);
+                LiveData<User> userData = new UserRepository().getDocumentByUId(
+                        FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                        User.class);
 
-                            if (URLUtil.isValidUrl((String) document.getString("profileImage")))
-                                Picasso.get().load((String) document.getString("profileImage")).into(imgUserAvatar);
-                            else imgUserAvatar.setImageResource(R.drawable.logo_square);
+                imgUserAvatar = findViewById(R.id.imageView_userAvatar);
+                textEmail = findViewById(R.id.textView_email);
+                textFirstName = findViewById(R.id.textView_firstName);
+                textLastName = findViewById(R.id.textView_lastName);
+                textPhone = findViewById(R.id.textView_phoneNumber);
 
-                            textEmail.setText((String) document.getString("email"));
-                            textFirstName.setText((String) document.getString("firstName"));
-                            textLastName.setText((String) document.getString("lastName"));
-                            textPhone.setText((String) document.getString("phoneNumber"));
-                        }
-                    }
-                    scrollView.setVisibility(View.VISIBLE);
+                userData.observe(this, user -> {
+                    textEmail.setText(user.getEmail());
+                    textFirstName.setText(user.getFirstName());
+                    textLastName.setText(user.getLastName());
+                    textPhone.setText(user.getPhoneNumber());
+
+                    Picasso.get()
+                            .load(user.getProfileImage() == null || user.getProfileImage().isEmpty() ?
+                                    null : user.getProfileImage())
+                            .placeholder(R.drawable.logo_square)
+                            .error(R.drawable.logo_square)
+                            .into(imgUserAvatar);
                 });
+
+                scrollView.setVisibility(View.VISIBLE);
             }
 
             btnLogOut = findViewById(R.id.Logout);
