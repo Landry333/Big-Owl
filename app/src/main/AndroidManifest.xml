@@ -24,7 +24,7 @@
         <activity android:name=".activity.HomePageActivity" />
         <activity android:name=".activity.LoginPageActivity"/>
         <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".NotificationActivity" />
+        <activity android:name=".activity.NotificationActivity" />
         <activity android:name=".activity.WelcomePageActivity" android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

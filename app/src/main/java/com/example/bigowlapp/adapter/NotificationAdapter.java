@@ -1,7 +1,6 @@
-package com.example.bigowlapp;
+package com.example.bigowlapp.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +9,9 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Notification;
-import com.example.bigowlapp.model.SupervisionRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {

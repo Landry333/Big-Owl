@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class HomePageActivity extends AppCompatActivity {
     private final int CONTACT_PERMISSION_CODE = 1;
-    Button btnLogOut, sendSmsInvitation, btnSearchUsers, btnMonitoringGroup, btnSupervisedGroup, btnMonitoringList;
+    Button btnLogOut, sendSmsInvitation, btnSearchUsers, btnMonitoringGroup, btnSupervisedGroup, btnMonitoringList, btnNotifications;
     FirebaseAuth m_FirebaseAuth;
     private FirebaseAuth.AuthStateListener m_AuthStateListener;
 
@@ -94,6 +94,17 @@ public class HomePageActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            btnNotifications = findViewById(R.id.btnNotifications);
+
+            btnNotifications.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(HomePageActivity.this, NotificationActivity.class);
+                    startActivity(i);
+                }
+            });
+
         } catch (Exception ex) {
 
         }

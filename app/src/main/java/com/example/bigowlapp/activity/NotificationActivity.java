@@ -1,4 +1,4 @@
-package com.example.bigowlapp;
+package com.example.bigowlapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -6,8 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 
+import com.example.bigowlapp.adapter.NotificationAdapter;
+import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Notification;
 import com.example.bigowlapp.repository.NotificationRepository;
 
