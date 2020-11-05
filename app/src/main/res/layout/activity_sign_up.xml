@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activityPage.SignUpPageActivity">
+    tools:context=".activity.SignUpPageActivity">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -36,7 +36,7 @@
         android:layout_height="53dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="Name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/editTextTextEmailAddress"
         app:layout_constraintHorizontal_bias="0.0"
@@ -64,7 +64,7 @@
         android:layout_height="53dp"
         android:ems="10"
         android:inputType="phone"
-        android:text="Phone"
+        android:hint="Phone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"

@@ -1,7 +1,4 @@
-package com.example.bigowlapp.activityPage;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.bigowlapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bigowlapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,77 +33,61 @@ public class LoginPageActivity extends AppCompatActivity {
         initialize();
     }
 
-    protected void initialize()
-    {
-        try
-        {
+    protected void initialize() {
+        try {
             m_FirebaseAuth = FirebaseAuth.getInstance();
             emailId = findViewById(R.id.editTextTextEmailAddress);
             password = findViewById(R.id.editTextTextPassword);
             btnSignIn = findViewById(R.id.button);
             tvSignUp = findViewById(R.id.textView);
 
-            m_AuthStateListener = new FirebaseAuth.AuthStateListener()
-            {
+            m_AuthStateListener = new FirebaseAuth.AuthStateListener() {
                 @Override
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                     FirebaseUser m_FirebaseUser = m_FirebaseAuth.getCurrentUser();
-                    if(m_FirebaseUser != null)
-                    {
+                    if (m_FirebaseUser != null) {
                         Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
                         startActivity(i);
-                    }
-                    else
-                    {
+                    } else {
                         Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_SHORT).show();
                     }
                 }
             };
-            btnSignIn.setOnClickListener(new View.OnClickListener(){
+            btnSignIn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String email = emailId.getText().toString();
                     String pass = password.getText().toString();
 
 
-
-                    if(email.isEmpty())
-                    {
+                    if (email.isEmpty()) {
                         emailId.setError("Please enter a valid email");
                         emailId.requestFocus();
-                    }
-                    else if(pass.isEmpty())
-                    {
+                    } else if (pass.isEmpty()) {
                         password.setError("Please enter your password");
                         password.requestFocus();
-                    }
-                    else if(!(email.isEmpty() && pass.isEmpty()))
-                    {
+                    } else if (!(email.isEmpty() && pass.isEmpty())) {
                         m_FirebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(LoginPageActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(!task.isSuccessful())
-                                {
+                                if (!task.isSuccessful()) {
                                     Toast.makeText(LoginPageActivity.this, "Login error, Please login again", Toast.LENGTH_SHORT).show();
                                 }
                                 //if successful sign up
-                                else
-                                {
+                                else {
                                     Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
                                     startActivity(i);
                                 }
                             }
                         });
-                    }
-                    else
-                    {
+                    } else {
                         Toast.makeText(LoginPageActivity.this, "An error has occurred", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
 
-            tvSignUp.setOnClickListener(new View.OnClickListener(){
+            tvSignUp.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
@@ -111,22 +95,17 @@ public class LoginPageActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
 
         }
     }
 
     @Override
     protected void onStart() {
-        try
-        {
+        try {
             super.onStart();
             m_FirebaseAuth.addAuthStateListener(m_AuthStateListener);
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
 
         }
     }

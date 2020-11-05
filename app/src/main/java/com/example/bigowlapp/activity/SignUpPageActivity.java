@@ -1,7 +1,4 @@
-package com.example.bigowlapp.activityPage;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.bigowlapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,19 +8,25 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignUpPageActivity extends AppCompatActivity {
     public EditText emailId, password, phone, name;
-    private User user = new User();
     Button btnSignUp;
     TextView tvSignIn;
     FirebaseAuth m_FirebaseAuth;
+    private User user = new User();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +35,8 @@ public class SignUpPageActivity extends AppCompatActivity {
         initialize();
     }
 
-   protected void initialize()
-    {
-        try
-        {
+    protected void initialize() {
+        try {
             //Authentication with firebase
             m_FirebaseAuth = FirebaseAuth.getInstance();
             emailId = findViewById(R.id.editTextTextEmailAddress);
@@ -54,49 +55,47 @@ public class SignUpPageActivity extends AppCompatActivity {
                     String userName = name.getText().toString();
 
                     //Error handling
-                    if(email.isEmpty())
-                    {
+                    if (email.isEmpty()) {
                         emailId.setError("Please enter a valid email");
                         emailId.requestFocus();
-                    }
-                    else if(pass.isEmpty())
-                    {
+                    } else if (pass.isEmpty()) {
                         password.setError("Please enter your password");
                         emailId.requestFocus();
-                    }
-                    else if(userPhone.isEmpty())
-                    {
+                    } else if (userPhone.isEmpty()) {
                         phone.setError("please enter a phone number");
                         phone.requestFocus();
-                    }
-                    else if(email.isEmpty() || pass.isEmpty() || userPhone.isEmpty())
-                    {
+                    } else if (email.isEmpty() || pass.isEmpty() || userPhone.isEmpty()) {
                         Toast.makeText(SignUpPageActivity.this, "Fields are empty!", Toast.LENGTH_SHORT).show();
-                    }
-                    else if(!(email.isEmpty() && pass.isEmpty() &&  userPhone.isEmpty()))
-                    {
+                    } else if (!(email.isEmpty() && pass.isEmpty() && userPhone.isEmpty())) {
                         m_FirebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(SignUpPageActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
-                            public void onComplete(@NonNull Task<AuthResult> task)
-                            {
-                                if(!task.isSuccessful())
-                                {
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (!task.isSuccessful()) {
                                     Toast.makeText(SignUpPageActivity.this, "SignUp Unsuccessful, please try again", Toast.LENGTH_SHORT).show();
                                 }
                                 //if successful sign up
-                                else
-                                {
+                                else {
+                                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                                     user.setEmail(email);
                                     user.setPhoneNumber(userPhone);
                                     user.setFirstName(userName);
-                                    //user.setUId();
-                                    startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
+                                    user.setUId(currentUser.getUid());
+
+                                    if (currentUser != null) {
+                                        db.collection("users").add(user);
+                                        startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
+                                    }
+                                    // TODO: Replace current signup implementation with new one
+
+                                    //        authRepository.signUpUser(email, pass)
+                                    //                .addOnSuccessListener(aBoolean -> {
+                                    //                })
+                                    //                .addOnFailureListener(e -> {
+                                    //                });
                                 }
                             }
                         });
-                    }
-                    else
-                    {
+                    } else {
                         Toast.makeText(SignUpPageActivity.this, "An error has occurred", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -109,9 +108,7 @@ public class SignUpPageActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
 
         }
     }

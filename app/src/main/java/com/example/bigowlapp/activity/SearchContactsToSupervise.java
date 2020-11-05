@@ -1,4 +1,4 @@
-package com.example.bigowlapp;
+package com.example.bigowlapp.activity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -19,26 +19,24 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.bigowlapp.activityPage.HomePageActivity;
-import com.example.bigowlapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import com.example.bigowlapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SearchContactsToSupervise extends AppCompatActivity {
-   // private TextView listContacts;
     private ListView listContactsView;
     private List<String> list, listShow;
     private Button loadContacts;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static ArrayList<QueryDocumentSnapshot> qds = new ArrayList<QueryDocumentSnapshot>();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static final ArrayList<QueryDocumentSnapshot> qds = new ArrayList<QueryDocumentSnapshot>();
 
     EditText search_users;
 
@@ -50,25 +48,16 @@ public class SearchContactsToSupervise extends AppCompatActivity {
     }
 
     protected void initialize() {
-        //listContacts = (TextView) findViewById(R.id.listContacts);
-        /*loadContacts = (Button) findViewById(R.id.loadContacts);
-        loadContacts.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {*/
-                loadContacts();
-            //}
-        //});
-
+        loadContacts();
     }
 
     private void loadContacts() {
-        //StringBuilder builder = new StringBuilder();
         ContentResolver contentResolver = getContentResolver();
-        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null,null,null,null);
+        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
         list = new ArrayList<>();
 
-        if(cursor.getCount() > 0){
+        if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
@@ -82,7 +71,6 @@ public class SearchContactsToSupervise extends AppCompatActivity {
 
                     while (cursor2.moveToNext()) {
                         String PhoneNumber = cursor2.getString(cursor2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        //builder.append("Contact : ").append(name).append(", Phone Number : ").append(PhoneNumber).append("\n\n");
 
                         list.add(name + "\n" + PhoneNumber);
                     }
@@ -101,34 +89,28 @@ public class SearchContactsToSupervise extends AppCompatActivity {
         //Check if users already has the app
         listContactsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             // argument position gives the index of item which is clicked
-            public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3)
-            {
+            public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
                 String number = (String) listContactsView.getItemAtPosition(position);
-                //Log.d("12345", number.replaceFirst(".+?\\+","+").replaceAll("[^+0-9]",""));
-                Log.d("12345", number.replaceFirst(".+?\\+","+").replaceAll("[^+0-9]",""));
 
                 db.collection("users")
-                            .whereEqualTo("phoneNumber", number.replaceAll("[^+0-9]",""))
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        if (!task.getResult().isEmpty())
-                                            Toast.makeText(SearchContactsToSupervise.this, "User already has the app", Toast.LENGTH_SHORT).show();
-                                        else {
-                                            Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
-                                            startActivity(intent);
-                                        }
+                        .whereEqualTo("phoneNumber", number.replaceAll("[^+0-9]", ""))
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    if (!task.getResult().isEmpty())
+                                        Toast.makeText(SearchContactsToSupervise.this, "User already has the app", Toast.LENGTH_SHORT).show();
+                                    else {
+                                        Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
+                                        startActivity(intent);
                                     }
                                 }
-                            });
+                            }
+                        });
             }
         });
-
-        //listContacts.setText(builder.toString());
-
 
         search_users = findViewById(R.id.search_users);
         search_users.addTextChangedListener(new TextWatcher() {
@@ -151,12 +133,6 @@ public class SearchContactsToSupervise extends AppCompatActivity {
 
 
     private void searchUsers(String s) {
-/*
-        if(s == null || s.equals(""))
-        {
-            mUsersShow = mUsers;
-            return;
-        }*/
         List<String> filteredUsers = list.stream().filter(u -> {
             boolean containInName = u.toLowerCase().contains(s);
             boolean containInPhone = u.toLowerCase().contains(s);

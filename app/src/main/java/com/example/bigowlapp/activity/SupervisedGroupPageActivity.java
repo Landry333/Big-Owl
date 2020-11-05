@@ -1,8 +1,10 @@
-package com.example.bigowlapp;
+package com.example.bigowlapp.activity;
+
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
+import com.example.bigowlapp.R;
 
 public class SupervisedGroupPageActivity extends AppCompatActivity {
 

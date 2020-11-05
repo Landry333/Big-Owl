@@ -11,8 +11,8 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,12 +26,10 @@ import java.util.List;
 
 
 public class UsersFragment extends AppCompatActivity {
+    EditText search_users;
     private ListView users_listview;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<User> mUsers, mUsersShow;
-
-
-    EditText search_users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
