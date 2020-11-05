@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MonitoringGroupPageActivity">
+    tools:context=".activity.MonitoringGroupPageActivity">
 
     <TextView
         android:id="@+id/textView_groupName"
@@ -34,5 +34,15 @@
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/textView1"
         app:layout_constraintTop_toBottomOf="@+id/textView_groupName" />
+
+    <ListView
+        android:id="@+id/listView_monitoringGroup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pageTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

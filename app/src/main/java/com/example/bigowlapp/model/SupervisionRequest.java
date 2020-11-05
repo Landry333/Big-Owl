@@ -5,19 +5,12 @@ import com.google.firebase.Timestamp;
 
 public class SupervisionRequest extends Notification implements Constants {
 
-    public enum Response {
-        ACCEPT,
-        REJECT,
-        NEUTRAL
-    }
-
     private String senderUId;
     private String receiverUId;
     private String groupUId;
     private Response response;
     private Timestamp timeSent;
     private Timestamp timeResponse;
-
     public SupervisionRequest() {
         super();
     }
@@ -84,5 +77,11 @@ public class SupervisionRequest extends Notification implements Constants {
 
     public void setTimeResponse(Timestamp timeResponse) {
         this.timeResponse = timeResponse;
+    }
+
+    public enum Response {
+        ACCEPT,
+        REJECT,
+        NEUTRAL
     }
 }
