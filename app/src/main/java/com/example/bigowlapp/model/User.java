@@ -1,6 +1,7 @@
 package com.example.bigowlapp.model;
 
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 // Exclude uneeded data from documents
@@ -27,6 +28,7 @@ public class User {
         this.profileImage = profileImage;
     }
 
+    @Exclude
     public String getUId() {
         return uId;
     }
