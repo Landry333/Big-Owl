@@ -12,8 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 public class EditProfileActivity extends AppCompatActivity {
-    Button edit_buttonCancel, edit_buttonConfirm;
-    EditText edit_userFirstName, edit_userLastName, edit_phoneNumber, edit_imageURL;
+    Button editButtonCancel, editButtonConfirm;
+    EditText editUserFirstName, editUserLastName, editPhoneNumber, editImageURL;
     private EditProfileViewModel editProfileViewModel;
 
     @Override
@@ -26,43 +26,37 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void initialize() {
         editProfileViewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
 
-        edit_buttonCancel = findViewById(R.id.edit_buttonCancel);
-        edit_buttonConfirm = findViewById(R.id.edit_buttonConfirm);
-        edit_userFirstName = findViewById(R.id.edit_userFirstName);
-        edit_userLastName = findViewById(R.id.edit_userLastName);
-        edit_phoneNumber = findViewById(R.id.edit_phoneNumber);
-        edit_imageURL = findViewById(R.id.edit_imageURL);
+        editButtonCancel = findViewById(R.id.editButtonCancel);
+        editButtonConfirm = findViewById(R.id.editButtonConfirm);
+        editUserFirstName = findViewById(R.id.editUserFirstName);
+        editUserLastName = findViewById(R.id.editUserLastName);
+        editPhoneNumber = findViewById(R.id.editPhoneNumber);
+        editImageURL = findViewById(R.id.editImageURL);
 
         editProfileViewModel.getCurrentUserProfile().observe(this, user -> {
-            edit_userFirstName.setText(user.getFirstName());
-            edit_userLastName.setText(user.getLastName());
-            edit_phoneNumber.setText(user.getPhoneNumber());
-            edit_imageURL.setText(user.getProfileImage());
+            editUserFirstName.setText(user.getFirstName());
+            editUserLastName.setText(user.getLastName());
+            editPhoneNumber.setText(user.getPhoneNumber());
+            editImageURL.setText(user.getProfileImage());
         });
 
-        edit_buttonConfirm.setOnClickListener(v -> {
-            if (edit_userFirstName.getText().toString().isEmpty()) {
-                edit_userFirstName.setError("Please enter a valid first name.");
-                edit_userFirstName.requestFocus();
-            } else if (edit_userLastName.getText().toString().isEmpty()) {
-                edit_userLastName.setError("Please enter a valid last name.");
-                edit_userLastName.requestFocus();
-            } else if (edit_phoneNumber.getText().toString().isEmpty()) {
-                edit_phoneNumber.setError("Please enter a valid phone number.");
-                edit_phoneNumber.requestFocus();
+        editButtonConfirm.setOnClickListener(v -> {
+            if (editUserFirstName.getText().toString().isEmpty()) {
+                editUserFirstName.setError("Please enter a valid first name.");
+                editUserFirstName.requestFocus();
+            } else if (editUserLastName.getText().toString().isEmpty()) {
+                editUserLastName.setError("Please enter a valid last name.");
+                editUserLastName.requestFocus();
+            } else if (editPhoneNumber.getText().toString().isEmpty()) {
+                editPhoneNumber.setError("Please enter a valid phone number.");
+                editPhoneNumber.requestFocus();
             }
-            /* allow user to not have profile image for now
-            else if (edit_imageURL.getText().toString().isEmpty() || URLUtil.isValidUrl(edit_imageURL.getText().toString())) {
-                edit_imageURL.setError("Please enter a valid image URL.");
-                edit_imageURL.requestFocus();
-            }
-            */
             else {
                 editProfileViewModel.editUserProfile(
-                        edit_userFirstName.getText().toString(),
-                        edit_userLastName.getText().toString(),
-                        edit_phoneNumber.getText().toString(),
-                        edit_imageURL.getText().toString()
+                        editUserFirstName.getText().toString(),
+                        editUserLastName.getText().toString(),
+                        editPhoneNumber.getText().toString(),
+                        editImageURL.getText().toString()
                 );
 
                 startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
@@ -70,7 +64,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        edit_buttonCancel.setOnClickListener(v -> {
+        editButtonCancel.setOnClickListener(v -> {
             startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
             finish();
         });

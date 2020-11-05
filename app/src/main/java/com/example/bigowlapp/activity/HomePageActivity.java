@@ -52,11 +52,11 @@ public class HomePageActivity extends AppCompatActivity {
                         FirebaseAuth.getInstance().getCurrentUser().getUid(),
                         User.class);
 
-                imgUserAvatar = findViewById(R.id.imageView_userAvatar);
-                textEmail = findViewById(R.id.textView_email);
-                textFirstName = findViewById(R.id.textView_firstName);
-                textLastName = findViewById(R.id.textView_lastName);
-                textPhone = findViewById(R.id.textView_phoneNumber);
+                imgUserAvatar = findViewById(R.id.userAvatar);
+                textEmail = findViewById(R.id.userEmail);
+                textFirstName = findViewById(R.id.userFirstName);
+                textLastName = findViewById(R.id.userLastName);
+                textPhone = findViewById(R.id.userPhoneNumber);
 
                 userData.observe(this, user -> {
                     textEmail.setText(user.getEmail());
@@ -88,7 +88,6 @@ public class HomePageActivity extends AppCompatActivity {
             btnSearchUsers.setOnClickListener(v -> {
                 if (ContextCompat.checkSelfPermission(HomePageActivity.this,
                         Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                    //Toast.makeText(HomePageActivity.this, "This permission is already granted", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(HomePageActivity.this, SearchContactsToSupervise.class);
                     startActivity(i);
                 } else {
@@ -137,13 +136,13 @@ public class HomePageActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.home) {
+        if (item.getItemId() == R.id.overflowHome) {
             finish();
             startActivity(getIntent());
-        } else if (item.getItemId() == R.id.refresh) {
+        } else if (item.getItemId() == R.id.overflowRefresh) {
             finish();
             startActivity(getIntent());
-        } else if (item.getItemId() == R.id.edit_profile) {
+        } else if (item.getItemId() == R.id.overflowEditProfile) {
             Intent i = new Intent(HomePageActivity.this, EditProfileActivity.class);
             startActivity(i);
             return true;

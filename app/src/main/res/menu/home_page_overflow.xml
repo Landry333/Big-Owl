@@ -3,17 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activity.HomePageActivity">
     <item
-        android:id="@+id/home"
+        android:id="@+id/overflowHome"
         android:orderInCategory="1"
         android:title="@string/home"
         app:showAsAction="never" />
     <item
-        android:id="@+id/refresh"
+        android:id="@+id/overflowRefresh"
         android:orderInCategory="1"
         android:title="@string/refresh"
         app:showAsAction="never" />
     <item
-        android:id="@+id/edit_profile"
+        android:id="@+id/overflowEditProfile"
         android:orderInCategory="1"
         android:title="@string/edit_profile"
         app:showAsAction="never" />

@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/edit_buttonCancel"
+        android:id="@+id/editButtonCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -14,10 +14,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_imageURL" />
+        app:layout_constraintTop_toBottomOf="@+id/editImageURL" />
 
     <Button
-        android:id="@+id/edit_buttonConfirm"
+        android:id="@+id/editButtonConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -25,10 +25,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_imageURL" />
+        app:layout_constraintTop_toBottomOf="@+id/editImageURL" />
 
     <EditText
-        android:id="@+id/edit_userFirstName"
+        android:id="@+id/editUserFirstName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
     <EditText
-        android:id="@+id/edit_userLastName"
+        android:id="@+id/editUserLastName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -53,10 +53,10 @@
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_userFirstName" />
+        app:layout_constraintTop_toBottomOf="@+id/editUserFirstName" />
 
     <EditText
-        android:id="@+id/edit_phoneNumber"
+        android:id="@+id/editPhoneNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -67,10 +67,10 @@
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_userLastName" />
+        app:layout_constraintTop_toBottomOf="@+id/editUserLastName" />
 
     <EditText
-        android:id="@+id/edit_imageURL"
+        android:id="@+id/editImageURL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -80,18 +80,18 @@
         android:hint="@string/image_url"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_phoneNumber"
+        app:layout_constraintTop_toBottomOf="@+id/editPhoneNumber"
         tools:ignore="TextFields" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/edit_profile"
         android:textSize="36sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
