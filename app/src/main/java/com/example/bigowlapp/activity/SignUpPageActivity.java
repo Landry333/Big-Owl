@@ -16,6 +16,9 @@ import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.SignUpViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class SignUpPageActivity extends AppCompatActivity {
     public EditText emailId, password, phone, name;
     Button btnSignUp;

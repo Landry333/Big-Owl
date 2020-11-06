@@ -15,12 +15,11 @@ public class SignUpViewModel extends ViewModel {
 
 
     @ViewModelInject
-    public SignUpViewModel(GroupRepository groupRepository) {
-        this.authRepository = new AuthRepository();
+    public SignUpViewModel(AuthRepository authRepository, GroupRepository groupRepository) {
+        this.authRepository = authRepository;
         this.groupRepository = groupRepository;
     }
-
-    // TODO: Create a default group upon user creation
+    
     public Task<Boolean> createUser(String email, String password, String phoneNumber, String name) {
         return authRepository.signUpUser(email, password, phoneNumber, nameExtractor(name)[0],
                 nameExtractor(name)[1])

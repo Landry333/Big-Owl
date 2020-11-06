@@ -1,5 +1,6 @@
 package com.example.bigowlapp.viewModel;
 
+import androidx.hilt.lifecycle.ViewModelInject;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bigowlapp.repository.AuthRepository;
@@ -11,9 +12,9 @@ public class LogInViewModel extends ViewModel {
 
     private AuthRepository authRepository;
 
-    // TODO: Dependency Injection
-    public LogInViewModel() {
-        authRepository = new AuthRepository();
+    @ViewModelInject
+    public LogInViewModel(AuthRepository authRepository) {
+        this.authRepository = authRepository;
     }
 
     public Task<Boolean> logInUser(String email, String password) {

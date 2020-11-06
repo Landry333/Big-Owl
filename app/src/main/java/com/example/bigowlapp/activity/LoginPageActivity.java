@@ -17,6 +17,9 @@ import com.example.bigowlapp.viewModel.LogInViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class LoginPageActivity extends AppCompatActivity {
     public EditText emailId, password;
     Button btnSignIn;

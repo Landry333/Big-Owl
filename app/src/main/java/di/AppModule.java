@@ -1,5 +1,6 @@
 package di;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import javax.inject.Singleton;
@@ -17,6 +18,12 @@ public class AppModule {
     @Provides
     public static FirebaseFirestore provideDatabase() {
         return FirebaseFirestore.getInstance();
+    }
+
+    @Singleton
+    @Provides
+    public static FirebaseAuth provideAuthDatabase() {
+        return FirebaseAuth.getInstance();
     }
 
 }

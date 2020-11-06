@@ -17,8 +17,8 @@ public class SupervisedGroupListViewModel extends ViewModel {
     private MutableLiveData<List<Group>> groupLiveData;
 
     @ViewModelInject
-    public SupervisedGroupListViewModel(GroupRepository groupRepository) {
-        authRepository = new AuthRepository();
+    public SupervisedGroupListViewModel(AuthRepository authRepository, GroupRepository groupRepository) {
+        this.authRepository = authRepository;
         this.groupRepository = groupRepository;
     }
 

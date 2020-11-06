@@ -7,14 +7,18 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import javax.inject.Inject;
+
 // TODO: Instead of a boolean use a string return value
 public class AuthRepository {
 
     private FirebaseAuth mfirebaseAuth;
+    private UserRepository userRepository;
 
-    // TODO: Dependency Injection Implementation for Firestore
-    public AuthRepository() {
-        mfirebaseAuth = FirebaseAuth.getInstance();
+    @Inject
+    public AuthRepository(FirebaseAuth mfirebaseAuth, UserRepository userRepository) {
+        this.userRepository = userRepository;
+        this.mfirebaseAuth = mfirebaseAuth;
     }
 
     public FirebaseUser getCurrentUser() {
@@ -28,14 +32,13 @@ public class AuthRepository {
         Task<AuthResult> taskAuthResult = mfirebaseAuth.createUserWithEmailAndPassword(email, password);
         Task<Boolean> taskBoolean = taskAuthResult.continueWithTask(task -> {
             if (task.isSuccessful()) {
-//                UserRepository userRepository = new UserRepository();
-//                String uId = this.getCurrentUser().getUid();
-//                user.setUId(uId);
-//                user.setEmail(email);
-//                user.setPhoneNumber(phoneNumber);
-//                user.setFirstName(firstName);
-//                user.setLastName(lastName);
-//                userRepository.addDocument(uId, user);
+                String uId = this.getCurrentUser().getUid();
+                user.setUId(uId);
+                user.setEmail(email);
+                user.setPhoneNumber(phoneNumber);
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
+                this.userRepository.addDocument(uId, user);
                 return Tasks.forResult(true);
             } else {
                 throw task.getException();
