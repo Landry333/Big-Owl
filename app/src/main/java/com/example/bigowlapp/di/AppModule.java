@@ -1,4 +1,4 @@
-package di;
+package com.example.bigowlapp.di;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
