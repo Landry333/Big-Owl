@@ -1,5 +1,6 @@
 package com.example.bigowlapp.viewModel;
 
+import androidx.hilt.lifecycle.ViewModelInject;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bigowlapp.model.Group;
@@ -12,10 +13,11 @@ public class SignUpViewModel extends ViewModel {
     private AuthRepository authRepository;
     private GroupRepository groupRepository;
 
-    // TODO: Dependency Injection
-    public SignUpViewModel() {
-        authRepository = new AuthRepository();
-        groupRepository = new GroupRepository();
+
+    @ViewModelInject
+    public SignUpViewModel(GroupRepository groupRepository) {
+        this.authRepository = new AuthRepository();
+        this.groupRepository = groupRepository;
     }
 
     // TODO: Create a default group upon user creation

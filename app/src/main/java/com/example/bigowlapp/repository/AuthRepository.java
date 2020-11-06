@@ -28,14 +28,14 @@ public class AuthRepository {
         Task<AuthResult> taskAuthResult = mfirebaseAuth.createUserWithEmailAndPassword(email, password);
         Task<Boolean> taskBoolean = taskAuthResult.continueWithTask(task -> {
             if (task.isSuccessful()) {
-                UserRepository userRepository = new UserRepository();
-                String uId = this.getCurrentUser().getUid();
-                user.setUId(uId);
-                user.setEmail(email);
-                user.setPhoneNumber(phoneNumber);
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                userRepository.addDocument(uId, user);
+//                UserRepository userRepository = new UserRepository();
+//                String uId = this.getCurrentUser().getUid();
+//                user.setUId(uId);
+//                user.setEmail(email);
+//                user.setPhoneNumber(phoneNumber);
+//                user.setFirstName(firstName);
+//                user.setLastName(lastName);
+//                userRepository.addDocument(uId, user);
                 return Tasks.forResult(true);
             } else {
                 throw task.getException();

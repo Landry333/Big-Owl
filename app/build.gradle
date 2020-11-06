@@ -3,7 +3,6 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'jacoco-android'
 apply plugin: 'dagger.hilt.android.plugin'
 
-
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -79,6 +78,7 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.28-alpha"
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha01'
     annotationProcessor "com.google.dagger:hilt-android-compiler:2.28-alpha"
+    annotationProcessor 'androidx.hilt:hilt-compiler:1.0.0-alpha01'
 
     // TODO: remove below line after switch the db from Realtime Database to Cloud Firestore
     implementation 'com.google.firebase:firebase-database'

@@ -7,18 +7,20 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class SupervisedGroupListActivity extends AppCompatActivity {
     private ListView lv;
     private SupervisedGroupListViewModel supervisedGroupListViewModel;
@@ -28,7 +30,7 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supervised_group_list);
-        supervisedGroupListViewModel = new SupervisedGroupListViewModel();
+        supervisedGroupListViewModel = new ViewModelProvider(this).get(SupervisedGroupListViewModel.class);
         initialize();
     }
 

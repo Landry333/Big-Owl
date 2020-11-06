@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class MonitoringGroupPageActivity extends AppCompatActivity {
     private EditText searchUsers;
     private ListView usersListview;

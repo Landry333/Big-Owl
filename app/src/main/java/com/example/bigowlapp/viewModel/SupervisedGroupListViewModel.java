@@ -1,6 +1,8 @@
 package com.example.bigowlapp.viewModel;
 
+import androidx.hilt.lifecycle.ViewModelInject;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.repository.AuthRepository;
@@ -8,15 +10,16 @@ import com.example.bigowlapp.repository.GroupRepository;
 
 import java.util.List;
 
-public class SupervisedGroupListViewModel {
+public class SupervisedGroupListViewModel extends ViewModel {
 
     private AuthRepository authRepository;
     private GroupRepository groupRepository;
     private MutableLiveData<List<Group>> groupLiveData;
 
-    public SupervisedGroupListViewModel() {
+    @ViewModelInject
+    public SupervisedGroupListViewModel(GroupRepository groupRepository) {
         authRepository = new AuthRepository();
-        groupRepository = new GroupRepository();
+        this.groupRepository = groupRepository;
     }
 
     public MutableLiveData<List<Group>> setListOfDocumentByArrayContains() {
