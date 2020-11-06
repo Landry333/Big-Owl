@@ -19,7 +19,7 @@ import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -37,7 +37,7 @@ import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
-@RunWith(AndroidJUnit4.class)
+@RunWith(AndroidJUnit4ClassRunner.class)
 public class RemoveUserFromMonitoringGroupTest {
 
     @Rule
@@ -50,6 +50,8 @@ public class RemoveUserFromMonitoringGroupTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        rule = new ActivityScenarioRule<>(HomePageActivity.class);
 
         try {
             ViewInteraction appCompatEditText = onView(
@@ -97,6 +99,8 @@ public class RemoveUserFromMonitoringGroupTest {
             // User is logged in! continue test
         }
 
+        rule = new ActivityScenarioRule<>(MonitoringGroupPageActivity.class);
+
         ViewInteraction appCompatButton2 = onView(withId(R.id.btnMonitoringGroup))
                 .check(matches(isDisplayed()));
         appCompatButton2.perform(click());
@@ -106,6 +110,8 @@ public class RemoveUserFromMonitoringGroupTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        rule = new ActivityScenarioRule<>(MonitoringGroupPageActivity.class);
 
         DataInteraction textView = onData(anything())
                 .inAdapterView(allOf(withId(R.id.users_list_view),
