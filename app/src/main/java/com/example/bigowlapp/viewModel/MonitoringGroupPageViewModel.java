@@ -1,5 +1,6 @@
 package com.example.bigowlapp.viewModel;
 
+import androidx.hilt.lifecycle.ViewModelInject;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -21,10 +22,13 @@ public class MonitoringGroupPageViewModel extends ViewModel {
     private MutableLiveData<Group> selectedGroup;
     private MutableLiveData<List<User>> usersInGroup;
 
-    public MonitoringGroupPageViewModel() {
-        authRepository = new AuthRepository();
-        groupRepository = new GroupRepository();
-        userRepository = new UserRepository();
+    @ViewModelInject
+    public MonitoringGroupPageViewModel(AuthRepository authRepository, 
+                                        GroupRepository groupRepository,
+                                        UserRepository userRepository) {
+        this.authRepository = authRepository;
+        this.groupRepository = groupRepository;
+        this.userRepository = userRepository;
     }
 
     public LiveData<Group> getGroup() {
