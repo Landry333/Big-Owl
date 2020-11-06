@@ -27,6 +27,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -96,14 +97,8 @@ public class RemoveUserFromMonitoringGroupTest {
             // User is logged in! continue test
         }
 
-        ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.btnMonitoringGroup), withText("Monitoring Group"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
+        ViewInteraction appCompatButton2 = onView(withId(R.id.btnMonitoringGroup))
+                .check(matches(isDisplayed()));
         appCompatButton2.perform(click());
 
         try {
