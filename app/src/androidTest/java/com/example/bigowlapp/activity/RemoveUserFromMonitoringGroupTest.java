@@ -51,9 +51,9 @@ public class RemoveUserFromMonitoringGroupTest {
             e.printStackTrace();
         }
 
-        rule = new ActivityScenarioRule<>(HomePageActivity.class);
-
         try {
+            rule = new ActivityScenarioRule<>(LoginPageActivity.class);
+
             ViewInteraction appCompatEditText = onView(
                     allOf(withId(R.id.editTextTextEmailAddress),
                             childAtPosition(
@@ -99,7 +99,7 @@ public class RemoveUserFromMonitoringGroupTest {
             // User is logged in! continue test
         }
 
-        rule = new ActivityScenarioRule<>(MonitoringGroupPageActivity.class);
+        rule = new ActivityScenarioRule<>(HomePageActivity.class);
 
         ViewInteraction appCompatButton2 = onView(withId(R.id.btnMonitoringGroup))
                 .check(matches(isDisplayed()));
