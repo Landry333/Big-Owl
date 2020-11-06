@@ -132,7 +132,8 @@ public abstract class Repository<T> {
         return tData;
     }
 
-    public MutableLiveData<List<T>> getDocumentsByUId(List<String> uIdList, Class<? extends T> tClass) {
+    // TODO: bug where can only handle 10 items in the list, should allow any size list
+    public MutableLiveData<List<T>> getDocumentsByListOfUId(List<String> uIdList, Class<? extends T> tClass) {
         MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
         collectionReference.whereIn(FieldPath.documentId(), uIdList)
                 .get()
