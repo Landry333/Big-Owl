@@ -5,6 +5,7 @@ import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // Exclude uneeded data from documents
@@ -18,7 +19,7 @@ public class Group {
     private List<String> supervisedUserId;
 
     public Group() {
-
+        supervisedUserId = new ArrayList<>();
     }
 
     public Group(String uId, String name, String monitoringUserId, List<String> supervisedUserId) {
@@ -54,7 +55,7 @@ public class Group {
     }
 
     public List<String> getSupervisedUserId() {
-        return supervisedUserId;
+        return (supervisedUserId == null) ? new ArrayList<>() : supervisedUserId;
     }
 
     public void setSupervisedUserId(List<String> supervisedUserId) {

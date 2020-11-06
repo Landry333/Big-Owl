@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.bigowlapp.database.Firestore;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -18,8 +19,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class Repository<T> {
 
-    private FirebaseFirestore mFirebaseFirestore;
-    private CollectionReference collectionReference;
+    private final FirebaseFirestore mFirebaseFirestore;
+    private final CollectionReference collectionReference;
 
     public Repository(String collectionName) {
         mFirebaseFirestore = Firestore.getDatabase();
@@ -129,6 +130,32 @@ public abstract class Repository<T> {
                     }
                 });
         return tData;
+    }
+
+    // TODO: bug where can only handle 10 items in the list, should allow any size list
+    public MutableLiveData<List<T>> getDocumentsByListOfUId(List<String> uIdList, Class<? extends T> tClass) {
+        MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
+        collectionReference.whereIn(FieldPath.documentId(), uIdList)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot tDocs = task.getResult();
+                        if (tDocs != null && !tDocs.isEmpty()) {
+                            List<T> listOfT = new ArrayList<>();
+                            for (QueryDocumentSnapshot doc : task.getResult()) {
+                                T t = doc.toObject(tClass);
+                                listOfT.add(t);
+                            }
+                            listOfTData.setValue(listOfT);
+                        } else {
+                            listOfTData.setValue(null);
+                        }
+                    } else {
+                        Log.e(getClassName(), "Error getting documents: " +
+                                task.getException());
+                    }
+                });
+        return listOfTData;
     }
 
     public MutableLiveData<T> getDocumentByAttribute(String attribute, String attrValue,
