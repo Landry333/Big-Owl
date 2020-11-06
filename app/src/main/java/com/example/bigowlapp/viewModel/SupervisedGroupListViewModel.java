@@ -1,6 +1,7 @@
 package com.example.bigowlapp.viewModel;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bigowlapp.model.Group;
@@ -14,7 +15,7 @@ public class SupervisedGroupListViewModel extends ViewModel {
 
     private AuthRepository authRepository;
     private GroupRepository groupRepository;
-    private LiveData<List<Group>> groupLiveData;
+    private MutableLiveData<List<Group>> groupLiveData;
 
     public SupervisedGroupListViewModel() {
         authRepository = new AuthRepository();
