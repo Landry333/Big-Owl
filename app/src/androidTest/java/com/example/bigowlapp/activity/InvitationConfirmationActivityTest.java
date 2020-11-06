@@ -34,6 +34,7 @@ public class InvitationConfirmationActivityTest {
     @Test
     public void launchHomePageActivityOnButtonClick() {
         assertNotNull(invitationConfirmActivity.findViewById(R.id.returnHome));
+        assertNotNull(invitationConfirmActivity.findViewById(R.id.confirmationMessage));
         onView(withId(R.id.returnHome)).perform(click());
         Activity homePageActivity = getInstrumentation().waitForMonitorWithTimeout(monitor, 6000);
         assertNotNull(homePageActivity);
