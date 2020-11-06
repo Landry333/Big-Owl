@@ -14,9 +14,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import static androidx.test.espresso.Espresso.onData;
@@ -29,61 +30,66 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class RemoveUserFromMonitoringGroupTest {
 
     @Rule
-    public ActivityTestRule<WelcomePageActivity> mActivityTestRule = new ActivityTestRule<>(WelcomePageActivity.class);
+    public ActivityScenarioRule rule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
     public void welcomePageActivityTest() throws InterruptedException {
         Thread.sleep(7000);
 
-        onView(allOf(withId(R.id.btnMonitoringGroup), withText("Monitoring Group"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
+        try {
+            onView(allOf(withId(R.id.btnMonitoringGroup), withText("Monitoring Group"),
+                    childAtPosition(
+                            childAtPosition(
+                                    withId(android.R.id.content),
+                                    0),
+                            3),
+                    isDisplayed()));
 
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.editTextTextEmailAddress),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText.perform(replaceText("espressotest@gmail.com"), closeSoftKeyboard());
+            ViewInteraction appCompatEditText = onView(
+                    allOf(withId(R.id.editTextTextEmailAddress),
+                            childAtPosition(
+                                    childAtPosition(
+                                            withId(android.R.id.content),
+                                            0),
+                                    0),
+                            isDisplayed()));
+            appCompatEditText.perform(replaceText("espressotest@gmail.com"), closeSoftKeyboard());
 
-        Thread.sleep(3000);
+            Thread.sleep(3000);
 
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.editTextTextPassword),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("espressotest"), closeSoftKeyboard());
+            ViewInteraction appCompatEditText2 = onView(
+                    allOf(withId(R.id.editTextTextPassword),
+                            childAtPosition(
+                                    childAtPosition(
+                                            withId(android.R.id.content),
+                                            0),
+                                    2),
+                            isDisplayed()));
+            appCompatEditText2.perform(replaceText("espressotest"), closeSoftKeyboard());
 
-        Thread.sleep(3000);
+            Thread.sleep(3000);
 
-        ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.button), withText("Sign In"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        appCompatButton.perform(click());
+            ViewInteraction appCompatButton = onView(
+                    allOf(withId(R.id.button), withText("Sign In"),
+                            childAtPosition(
+                                    childAtPosition(
+                                            withId(android.R.id.content),
+                                            0),
+                                    1),
+                            isDisplayed()));
+            appCompatButton.perform(click());
 
-        Thread.sleep(5000);
+            Thread.sleep(5000);
+        } catch (NoMatchingViewException e) {
+            // User is logged in! continue test
+        }
 
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.btnMonitoringGroup), withText("Monitoring Group"),
@@ -97,7 +103,7 @@ public class RemoveUserFromMonitoringGroupTest {
 
         Thread.sleep(5000);
 
-        onData(withId(R.id.users_list_view))
+        onData(anything())
                 .inAdapterView(withId(R.id.users_list_view)).atPosition(2)
                 .perform(longClick());
 
@@ -112,6 +118,8 @@ public class RemoveUserFromMonitoringGroupTest {
                                 0),
                         isDisplayed()));
         textView2.perform(click());
+
+        Thread.sleep(3000);
     }
 
     private static Matcher<View> childAtPosition(
