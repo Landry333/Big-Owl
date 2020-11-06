@@ -1,11 +1,14 @@
 package com.example.bigowlapp.repository;
 
 import com.example.bigowlapp.model.User;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import javax.inject.Inject;
 
 public class UserRepository extends Repository<User> {
 
-    // TODO: Dependency Injection Implementation for Firestore
-    public UserRepository() {
-        super("users");
+    @Inject
+    public UserRepository(FirebaseFirestore mFirebaseFirestore) {
+        super("users", mFirebaseFirestore);
     }
 }
