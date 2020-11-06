@@ -1,8 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'jacoco-android'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 
 
@@ -79,9 +77,8 @@ dependencies {
 
     // Hilt for dependency injection
     implementation "com.google.dagger:hilt-android:2.28-alpha"
-    kapt "com.google.dagger:hilt-android-compiler:2.28-alpha"
-
-
+    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha01'
+    annotationProcessor "com.google.dagger:hilt-android-compiler:2.28-alpha"
 
     // TODO: remove below line after switch the db from Realtime Database to Cloud Firestore
     implementation 'com.google.firebase:firebase-database'
