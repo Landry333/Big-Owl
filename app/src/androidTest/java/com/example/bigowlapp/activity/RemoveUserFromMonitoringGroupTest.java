@@ -14,6 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -27,10 +28,12 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -41,17 +44,13 @@ public class RemoveUserFromMonitoringGroupTest {
 
     @Test
     public void welcomePageActivityTest() throws InterruptedException {
-        Thread.sleep(7000);
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         try {
-            onView(allOf(withId(R.id.btnMonitoringGroup), withText("Monitoring Group"),
-                    childAtPosition(
-                            childAtPosition(
-                                    withId(android.R.id.content),
-                                    0),
-                            3),
-                    isDisplayed()));
-
             ViewInteraction appCompatEditText = onView(
                     allOf(withId(R.id.editTextTextEmailAddress),
                             childAtPosition(
@@ -61,8 +60,6 @@ public class RemoveUserFromMonitoringGroupTest {
                                     0),
                             isDisplayed()));
             appCompatEditText.perform(replaceText("espressotest@gmail.com"), closeSoftKeyboard());
-
-            Thread.sleep(3000);
 
             ViewInteraction appCompatEditText2 = onView(
                     allOf(withId(R.id.editTextTextPassword),
@@ -74,7 +71,11 @@ public class RemoveUserFromMonitoringGroupTest {
                             isDisplayed()));
             appCompatEditText2.perform(replaceText("espressotest"), closeSoftKeyboard());
 
-            Thread.sleep(3000);
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             ViewInteraction appCompatButton = onView(
                     allOf(withId(R.id.button), withText("Sign In"),
@@ -86,7 +87,11 @@ public class RemoveUserFromMonitoringGroupTest {
                             isDisplayed()));
             appCompatButton.perform(click());
 
-            Thread.sleep(5000);
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } catch (NoMatchingViewException e) {
             // User is logged in! continue test
         }
@@ -101,25 +106,41 @@ public class RemoveUserFromMonitoringGroupTest {
                         isDisplayed()));
         appCompatButton2.perform(click());
 
-        Thread.sleep(5000);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        onData(anything())
-                .inAdapterView(withId(R.id.users_list_view)).atPosition(2)
-                .perform(longClick());
+        DataInteraction textView = onData(anything())
+                .inAdapterView(allOf(withId(R.id.users_list_view),
+                        childAtPosition(
+                                withClassName(is("android.widget.LinearLayout")),
+                                4)))
+                .atPosition(3);
+        textView.perform(longClick());
 
-        Thread.sleep(5000);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         ViewInteraction textView2 = onView(
                 allOf(withId(android.R.id.title), withText("Remove"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(android.R.id.content),
+                                        withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
                                         0),
                                 0),
                         isDisplayed()));
         textView2.perform(click());
 
-        Thread.sleep(3000);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static Matcher<View> childAtPosition(
