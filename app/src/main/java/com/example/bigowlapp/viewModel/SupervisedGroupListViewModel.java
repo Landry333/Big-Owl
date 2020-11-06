@@ -1,6 +1,6 @@
 package com.example.bigowlapp.viewModel;
 
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bigowlapp.model.Group;
@@ -21,7 +21,7 @@ public class SupervisedGroupListViewModel extends ViewModel {
         groupRepository = new GroupRepository();
     }
 
-    public MutableLiveData<List<Group>> getSupervisedGroupList() {
+    public LiveData<List<Group>> getSupervisedGroupList() {
         if (groupLiveData == null) {
             loadListOfDocumentByArrayContains();
         }
