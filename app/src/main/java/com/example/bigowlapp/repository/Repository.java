@@ -30,6 +30,22 @@ public abstract class Repository<T> {
     // Adding Document
     //===========================================================================================
 
+    public MutableLiveData<T> addDocument(T documentData) {
+        MutableLiveData<T> tData = new MutableLiveData<>();
+        tData.setValue(documentData);
+        collectionReference
+                .add(documentData)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(getClassName(), "Document added successfully.");
+                    } else {
+                        Log.e(getClassName(), "Error adding document: " +
+                                task.getException());
+                    }
+                });
+        return tData;
+    }
+
     public MutableLiveData<T> addDocument(String docUId, T documentData) {
         MutableLiveData<T> tData = new MutableLiveData<>();
         tData.setValue(documentData);
