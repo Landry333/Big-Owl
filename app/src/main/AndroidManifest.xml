@@ -17,11 +17,13 @@
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.MonitoringGroupPageActivity" />
         <activity android:name=".activity.SearchContactsToSupervise" />
+        <activity android:name=".activity.SearchContactsByPhone" />
         <activity android:name=".activity.SendSmsInvitationActivity" />
         <activity android:name=".activity.SignUpPageActivity" />
         <activity android:name=".activity.SupervisedGroupListActivity" />
         <activity android:name=".activity.SupervisedGroupPageActivity" />
         <activity android:name=".activity.ViewAnotherUserActivity" />
+        <activity android:name=".activity.AddUsers" />
         <activity android:name=".fragments.UsersFragment" />
         <activity
             android:name=".activity.WelcomePageActivity"
