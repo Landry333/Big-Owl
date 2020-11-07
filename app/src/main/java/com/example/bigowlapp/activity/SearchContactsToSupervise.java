@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,13 +18,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bigowlapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import com.example.bigowlapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,10 +98,11 @@ public class SearchContactsToSupervise extends AppCompatActivity {
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
                                     if (!task.getResult().isEmpty())
-                                        Toast.makeText(SearchContactsToSupervise.this, "User has the app", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SearchContactsToSupervise.this, "This user has the app already. Please choose another user", Toast.LENGTH_SHORT).show();
                                     else {
                                         Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
+                                        intent.putExtra("number1", number);
                                         startActivity(intent);
                                     }
                                 }

@@ -1,12 +1,7 @@
 package com.example.bigowlapp.activity;
 
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,6 +30,8 @@ public class SearchContactsByPhone extends AppCompatActivity {
     private Button btnSearch;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final ArrayList<QueryDocumentSnapshot> qds = new ArrayList<QueryDocumentSnapshot>();
+    private EditText inputNumber;
+    private String number2;
 
     EditText number;
 
@@ -42,6 +39,7 @@ public class SearchContactsByPhone extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_byphone);
+        inputNumber = (EditText) findViewById(R.id.search_users);
         initialize();
     }
 
@@ -64,6 +62,8 @@ public class SearchContactsByPhone extends AppCompatActivity {
                 listContactsView = findViewById(R.id.listContacts);
                 listContactsView.setAdapter(adapter);*/
 
+                number2 = inputNumber.getText().toString();
+
                 db.collection("users")
                         .whereEqualTo("phoneNumber", number.getText().toString())
                         .get()
@@ -78,11 +78,11 @@ public class SearchContactsByPhone extends AppCompatActivity {
                                         ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, listShow);
                                         listContactsView = findViewById(R.id.listContacts);
                                         listContactsView.setAdapter(adapter);
-                                        Toast.makeText(SearchContactsByPhone.this, "User found!", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else {
+                                        Toast.makeText(SearchContactsByPhone.this, "User found in the app system! This user has the app already. Please choose another user ", Toast.LENGTH_SHORT).show();
+                                    } else {
                                         Toast.makeText(SearchContactsByPhone.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(SearchContactsByPhone.this, SendSmsInvitationActivity.class);
+                                        intent.putExtra("number1", number2);
                                         startActivity(intent);
                                     }
                                 }
@@ -114,6 +114,7 @@ public class SearchContactsByPhone extends AppCompatActivity {
                                     else {
                                         Toast.makeText(SearchContactsByPhone.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(SearchContactsByPhone.this, SendSmsInvitationActivity.class);
+                                        intent.putExtra("number1", number2);
                                         startActivity(intent);
                                     }
                                 }

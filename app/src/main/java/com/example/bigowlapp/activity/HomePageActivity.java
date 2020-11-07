@@ -1,8 +1,6 @@
 package com.example.bigowlapp.activity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,7 +9,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
@@ -19,16 +20,8 @@ import com.example.bigowlapp.repository.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LiveData;
-
 public class HomePageActivity extends AppCompatActivity {
-    Button btnLogOut, sendSmsInvitation, btnAddUsers, btnMonitoringGroup, btnSupervisedGroup;
+    Button btnLogOut, btnAddUsers, btnMonitoringGroup, btnSupervisedGroup;
     ScrollView scrollView;
     ImageView imgUserAvatar;
     TextView textEmail, textFirstName, textLastName, textPhone;
@@ -90,14 +83,6 @@ public class HomePageActivity extends AppCompatActivity {
                     Intent i = new Intent(HomePageActivity.this, AddUsers.class);
                     startActivity(i);
                 }
-            });
-
-            sendSmsInvitation = findViewById(R.id.send_sms_invitation);
-
-            sendSmsInvitation.setOnClickListener(v -> {
-                Intent intent = new Intent(HomePageActivity.this, SendSmsInvitationActivity.class);
-                startActivity(intent);
-                finish();
             });
 
             btnMonitoringGroup = findViewById(R.id.btn_monitoring_group);
