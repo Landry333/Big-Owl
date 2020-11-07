@@ -1,28 +1,37 @@
 package com.example.bigowlapp.activity;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.bigowlapp.R;
+import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.repository.UserRepository;
+import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import com.example.bigowlapp.R;
-import com.google.firebase.auth.FirebaseAuth;
+import androidx.lifecycle.LiveData;
 
 public class HomePageActivity extends AppCompatActivity {
-    private final int CONTACT_PERMISSION_CODE = 1;
     Button btnLogOut, sendSmsInvitation, btnAddUsers, btnMonitoringGroup, btnSupervisedGroup;
-    FirebaseAuth m_FirebaseAuth;
-    private FirebaseAuth.AuthStateListener m_AuthStateListener;
+    ScrollView scrollView;
+    ImageView imgUserAvatar;
+    TextView textEmail, textFirstName, textLastName, textPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,53 +40,46 @@ public class HomePageActivity extends AppCompatActivity {
         initialize();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
     protected void initialize() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        scrollView = findViewById(R.id.scrollView);
+        scrollView.setVisibility(View.GONE);
         try {
-            btnLogOut = findViewById(R.id.Logout);
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                LiveData<User> userData = new UserRepository().getDocumentByUId(
+                        FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                        User.class);
 
-            btnLogOut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FirebaseAuth.getInstance().signOut();
-                    Intent i = new Intent(HomePageActivity.this, LoginPageActivity.class);
-                    startActivity(i);
-                }
-            });
+                imgUserAvatar = findViewById(R.id.user_avatar);
+                textEmail = findViewById(R.id.user_email);
+                textFirstName = findViewById(R.id.user_first_name);
+                textLastName = findViewById(R.id.user_last_name);
+                textPhone = findViewById(R.id.user_phone_number);
 
-            sendSmsInvitation = findViewById(R.id.SendSmsInvitation);
+                userData.observe(this, user -> {
+                    textEmail.setText(user.getEmail());
+                    textFirstName.setText(user.getFirstName());
+                    textLastName.setText(user.getLastName());
+                    textPhone.setText(user.getPhoneNumber());
 
-            sendSmsInvitation.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(HomePageActivity.this, SendSmsInvitationActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
+                    Picasso.get()
+                            .load(user.getProfileImage() == null || user.getProfileImage().isEmpty() ?
+                                    null : user.getProfileImage())
+                            .placeholder(R.drawable.logo_square)
+                            .error(R.drawable.logo_square)
+                            .into(imgUserAvatar);
+                });
 
-            btnMonitoringGroup = findViewById(R.id.btnMonitoringGroup);
+                scrollView.setVisibility(View.VISIBLE);
+            }
 
-            btnMonitoringGroup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(HomePageActivity.this, MonitoringGroupPageActivity.class);
-                    startActivity(i);
-                }
-            });
+            btnLogOut = findViewById(R.id.btn_logout);
 
-            btnSupervisedGroup = findViewById(R.id.btnSupervisedGroup);
-
-            btnSupervisedGroup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
-                    startActivity(i);
-                }
+            btnLogOut.setOnClickListener(v -> {
+                FirebaseAuth.getInstance().signOut();
+                Intent i = new Intent(HomePageActivity.this, LoginPageActivity.class);
+                startActivity(i);
             });
 
             btnAddUsers = findViewById(R.id.btnAddUsers);
@@ -89,8 +91,59 @@ public class HomePageActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
-        } catch (Exception ex) {
 
+            sendSmsInvitation = findViewById(R.id.send_sms_invitation);
+
+            sendSmsInvitation.setOnClickListener(v -> {
+                Intent intent = new Intent(HomePageActivity.this, SendSmsInvitationActivity.class);
+                startActivity(intent);
+                finish();
+            });
+
+            btnMonitoringGroup = findViewById(R.id.btn_monitoring_group);
+
+            btnMonitoringGroup.setOnClickListener(v -> {
+                Intent i = new Intent(HomePageActivity.this, MonitoringGroupPageActivity.class);
+                startActivity(i);
+            });
+
+            btnSupervisedGroup = findViewById(R.id.btn_supervised_group);
+
+            btnSupervisedGroup.setOnClickListener(v -> {
+                Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
+                startActivity(i);
+            });
+
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_page_overflow, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.overflow_home) {
+            finish();
+            startActivity(getIntent());
+        } else if (item.getItemId() == R.id.overflow_refresh) {
+            finish();
+            startActivity(getIntent());
+        } else if (item.getItemId() == R.id.overflow_edit_profile) {
+            Intent i = new Intent(HomePageActivity.this, EditProfileActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

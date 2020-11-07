@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/page_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/supervised_by"
@@ -32,7 +32,7 @@
         android:layout_marginLeft="4dp"
         android:text="@string/supervisor_name"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/textView1"
+        app:layout_constraintStart_toEndOf="@+id/page_title"
         app:layout_constraintTop_toBottomOf="@+id/textView_groupName" />
 
     <ListView
