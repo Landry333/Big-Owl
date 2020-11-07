@@ -31,7 +31,10 @@ public class SendSmsInvitationActivity extends AppCompatActivity {
         noteTv = (TextView) findViewById(R.id.note);
 
         String contactDetails = getIntent().getStringExtra("number1");
-        String trimContactNumber = contactDetails.replaceAll("\\D+", "");
+        String trimContactNumber = "000";
+        if (contactDetails != null) {
+            trimContactNumber = contactDetails.replaceAll("\\D+", "");
+        }
         String contactNumber;
         if(trimContactNumber.length()>=10){
             contactNumber = trimContactNumber.substring(trimContactNumber.length() - 10);
