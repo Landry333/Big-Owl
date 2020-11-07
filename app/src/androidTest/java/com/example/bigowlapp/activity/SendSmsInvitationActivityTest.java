@@ -26,7 +26,7 @@ public class SendSmsInvitationActivityTest {
     public ActivityTestRule<SendSmsInvitationActivity> sendSmsActivityTestRule = new ActivityTestRule<SendSmsInvitationActivity>(SendSmsInvitationActivity.class);
     private SendSmsInvitationActivity sendSmsActivity = null;
     Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(InvitationConfirmationActivity.class.getName(), null, false);
-    private String dialNumber = "8008";
+    //private String dialNumber = "8008";
 
     @Before
     public void setUp() throws Exception {
@@ -39,8 +39,9 @@ public class SendSmsInvitationActivityTest {
         assertNotNull(sendSmsActivity.findViewById(R.id.number));
         assertNotNull(sendSmsActivity.findViewById(R.id.note));
         assertNotNull(sendSmsActivity.findViewById(R.id.message));
-        //onView(withId(R.id.number)).perform(typeText(dialNumber));
-        onView(withId(R.id.number)).perform(click()).perform(typeText(dialNumber));
+        onView(withId(R.id.number)).perform(typeText("8008"));
+        //onView(withId(R.id.number)).perform(click()).perform(typeText(dialNumber));
+        //onView(withId(R.id.number)).perform(click(), replaceText("Engineer"));
         onView(withId(R.id.send)).perform(click());
         Activity invitationConfirmationActivity = getInstrumentation().waitForMonitorWithTimeout(monitor, 6000);
         assertNotNull(invitationConfirmationActivity);
