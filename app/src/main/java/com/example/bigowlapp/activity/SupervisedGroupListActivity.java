@@ -1,6 +1,7 @@
 package com.example.bigowlapp.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,63 +11,50 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.bigowlapp.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 public class SupervisedGroupListActivity extends AppCompatActivity {
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private List<GroupNameSupervisor> groupNameSupervisorsList;
-    private List<QueryDocumentSnapshot> qds = new ArrayList<QueryDocumentSnapshot>();
-    private List<String> fullNameList = new ArrayList<String>();
+    private ListView lv;
+    private SupervisedGroupListViewModel supervisedGroupListViewModel;
+    private LiveData<List<Group>> listOfGroupsLiveData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supervised_group_list);
+        supervisedGroupListViewModel = new ViewModelProvider(this).get(SupervisedGroupListViewModel.class);
         initialize();
     }
 
     protected void initialize() {
         try {
-            groupNameSupervisorsList = new ArrayList<>();
-            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            FirebaseUser currentUser = supervisedGroupListViewModel.getCurrentUser();
             if (currentUser != null) {
-                Query query = db.collection("groups").whereArrayContains("supervisedUserId", currentUser.getUid());
+                listOfGroupsLiveData = supervisedGroupListViewModel.getSupervisedGroupList();
 
-                query.get().addOnCompleteListener((OnCompleteListener<QuerySnapshot>) task -> {
-                    if (task.isSuccessful()) {
-                        ArrayList<GroupNameSupervisor> arrayOfUsers = new ArrayList<GroupNameSupervisor>();
-                        GroupNameSupervisorAdapter adapter = new GroupNameSupervisorAdapter(getBaseContext(), arrayOfUsers);
-                        GroupNameSupervisor groupNameSupervisor = new GroupNameSupervisor();
-
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            qds.add(document);
-                            groupNameSupervisor.groupName = document.getString("name");
-                            DocumentReference docRef = db.collection("users").document(document.getString("monitoringUserId"));
-                            docRef.get().addOnCompleteListener(task1 -> {
-                                DocumentSnapshot document1 = task1.getResult();
-                                document1.getString("firstName");
-                                document1.getString("lastName");
-                                fullNameList.add(document1.getString("firstName") + " " + document1.getString("lastName"));
-                            });
-                        }
-                        adapter.add(groupNameSupervisor);
-                        ListView listView = (ListView) findViewById(R.id.listView_supervisedGroup);
-                        listView.setAdapter(adapter);
+                listOfGroupsLiveData.observe(this, groups -> {
+                    ArrayList<String> arrayGroupName = new ArrayList<>();
+                    for (Group group : groups) {
+                        arrayGroupName.add(group.getName());
                     }
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, arrayGroupName);
+                    lv = findViewById(R.id.listView_supervisedGroup);
+                    lv.setAdapter(arrayAdapter);
+                    // argument position gives the index of item which is clicked
+                    lv.setOnItemClickListener((arg0, v, position, arg3) -> {
+                        Intent intent = new Intent(getBaseContext(), SupervisedGroupPageActivity.class);
+                        startActivity(intent);
+                    });
                 });
             }
         } catch (
