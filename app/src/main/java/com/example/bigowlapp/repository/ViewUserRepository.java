@@ -17,7 +17,13 @@ public class ViewUserRepository {
 
     public ViewUserRepository(){
         supRequestRef = FirebaseDatabase.getInstance().getReference().child("SupRequests");
-        mfirebaseUser = mfirebaseAuth.getCurrentUser();
+        if(mfirebaseAuth.getCurrentUser() != null){
+            mfirebaseUser = mfirebaseAuth.getCurrentUser();
+        }
+        else{
+            //@TODO: return a error message, make an issue
+            mfirebaseUser = null;
+        }
     }
 
     public FirebaseAuth getMfirebaseAuth() {

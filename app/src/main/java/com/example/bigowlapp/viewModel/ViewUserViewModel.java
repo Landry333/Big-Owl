@@ -1,4 +1,4 @@
-package com.example.bigowlapp.viewModels;
+package com.example.bigowlapp.viewModel;
 
 import com.example.bigowlapp.repository.ViewUserRepository;
 import com.google.firebase.auth.FirebaseAuth;
