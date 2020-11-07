@@ -19,6 +19,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertNotNull;
 
+
+
 public class SendSmsInvitationActivityTest {
     @Rule
     public ActivityTestRule<SendSmsInvitationActivity> sendSmsActivityTestRule = new ActivityTestRule<SendSmsInvitationActivity>(SendSmsInvitationActivity.class);
@@ -37,7 +39,8 @@ public class SendSmsInvitationActivityTest {
         assertNotNull(sendSmsActivity.findViewById(R.id.number));
         assertNotNull(sendSmsActivity.findViewById(R.id.note));
         assertNotNull(sendSmsActivity.findViewById(R.id.message));
-        onView(withId(R.id.number)).perform(typeText(dialNumber));
+        //onView(withId(R.id.number)).perform(typeText(dialNumber));
+        onView(withId(R.id.number)).perform(click()).perform(typeText(dialNumber));
         onView(withId(R.id.send)).perform(click());
         Activity invitationConfirmationActivity = getInstrumentation().waitForMonitorWithTimeout(monitor, 6000);
         assertNotNull(invitationConfirmationActivity);
