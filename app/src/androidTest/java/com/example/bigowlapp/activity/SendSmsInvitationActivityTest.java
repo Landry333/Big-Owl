@@ -14,7 +14,8 @@ import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertNotNull;
@@ -38,9 +39,10 @@ public class SendSmsInvitationActivityTest {
         assertNotNull(sendSmsActivity.findViewById(R.id.number));
         assertNotNull(sendSmsActivity.findViewById(R.id.note));
         assertNotNull(sendSmsActivity.findViewById(R.id.message));
-        //onView(withId(R.id.number)).perform(typeText("8008"));
+        onView(withId(R.id.number)).perform(typeText("8008"), closeSoftKeyboard());
         //onView(withId(R.id.number)).perform(click()).perform(typeText(dialNumber));
-        onView(withId(R.id.number)).perform(click(), replaceText("800519"));
+        //onView(withId(R.id.number)).perform(click(), replaceText("800519"));
+        //onView(withId(R.id.number)).setText("800519");
         onView(withId(R.id.send)).perform(click());
         Activity invitationConfirmationActivity = getInstrumentation().waitForMonitorWithTimeout(monitor, 6000);
         assertNotNull(invitationConfirmationActivity);
