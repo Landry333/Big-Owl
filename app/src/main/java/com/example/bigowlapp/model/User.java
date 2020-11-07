@@ -28,7 +28,6 @@ public class User {
         this.profileImage = profileImage;
     }
 
-    @Exclude
     public String getUId() {
         return uId;
     }

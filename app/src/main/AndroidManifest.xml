@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bigowlapp">
 
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
-
     <application
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
@@ -13,26 +10,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ViewAnotherUserActivity" />
-        <activity android:name=".activity.InvitationConfirmationActivity" />
-        <activity android:name=".activity.SupervisedGroupPageActivity" />
-        <activity android:name=".activity.SupervisedGroupListActivity" />
-        <activity android:name=".activity.MonitoringGroupPageActivity" />
-        <activity android:name=".activity.MonitoringGroupListActivity" />
-        <activity android:name=".activity.SearchContactsToSupervise" />
-        <activity android:name=".activity.SendSmsInvitationActivity" />
+        <activity android:name=".activity.EditProfileActivity" />
         <activity android:name=".activity.HomePageActivity" />
-        <activity android:name=".activity.LoginPageActivity"/>
-        <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".activity.WelcomePageActivity" android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".activity.InvitationConfirmationActivity" />
+        <activity android:name=".activity.LoginPageActivity" />
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.MonitoringGroupListActivity" />
+        <activity android:name=".activity.MonitoringGroupPageActivity" />
+        <activity android:name=".activity.SearchContactsToSupervise" />
+        <activity android:name=".activity.SearchContactsByPhone" />
+        <activity android:name=".activity.SendSmsInvitationActivity" />
+        <activity android:name=".activity.SignUpPageActivity" />
+        <activity android:name=".activity.SupervisedGroupListActivity" />
+        <activity android:name=".activity.SupervisedGroupPageActivity" />
+        <activity android:name=".activity.ViewAnotherUserActivity" />
+        <activity android:name=".activity.AddUsers" />
+        <activity android:name=".fragments.UsersFragment" />
+        <activity
+            android:name=".activity.WelcomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SignUpPageActivity"/>
-        <activity android:name=".fragments.UsersFragment" />
 
     </application>
+
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
 </manifest>

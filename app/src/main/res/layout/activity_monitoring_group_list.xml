@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.UsersFragment">
+    tools:context=".activity.MonitoringGroupPageActivity">
 
     <TextView
         android:id="@+id/textView_groupName"
@@ -13,7 +13,7 @@
         android:textSize="30sp"/>
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/page_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/supervised_by"
@@ -24,22 +24,21 @@
         android:id="@+id/textView_supervisorName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
         android:layout_below="@+id/textView_groupName"
-        android:layout_toRightOf="@+id/textView1"
+        android:layout_marginStart="-51dp"
+        android:layout_toEndOf="@+id/textView_groupName"
         android:text="@string/supervisor_name"
         android:textSize="18sp" />
-
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_supervisorName"
+        android:layout_below="@+id/page_title"
         android:layout_margin="5dp"
-        android:hint="Search..."
+        android:hint="@string/search_hint"
         android:inputType="text"
-        android:id="@+id/search_users"/>
+        android:id="@+id/search_users"
+        android:autofillHints="personName" />
 
     <ListView
         android:id="@+id/list_view"
