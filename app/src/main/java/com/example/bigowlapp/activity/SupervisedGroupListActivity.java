@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -40,15 +41,18 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
             LiveData<List<Group>> listOfGroupsLiveData = supervisedGroupListViewModel.getSupervisedGroupList();
 
             listOfGroupsLiveData.observe(this, supervisedGroups -> {
-                ArrayList<Group> groupsArrayList = new ArrayList<>(supervisedGroups);
-                SupervisedGroupAdaptor adapter = new SupervisedGroupAdaptor(getBaseContext(), groupsArrayList);
+                if (supervisedGroups != null) {
+                    ArrayList<Group> groupsArrayList = new ArrayList<>(supervisedGroups);
+                    SupervisedGroupAdaptor adapter = new SupervisedGroupAdaptor(getBaseContext(), groupsArrayList);
 
-                this.supervisedGroups = findViewById(R.id.supervised_groups);
-                this.supervisedGroups.setAdapter(adapter);
-                this.supervisedGroups.setOnItemClickListener((arg0, v, position, arg3) -> {
-                    Intent intent = new Intent(getBaseContext(), SupervisedGroupPageActivity.class);
-                    startActivity(intent);
-                });
+                    this.supervisedGroups = findViewById(R.id.supervised_groups);
+                    this.supervisedGroups.setAdapter(adapter);
+                    this.supervisedGroups.setOnItemClickListener((arg0, v, position, arg3) -> {
+                        Intent intent = new Intent(getBaseContext(), SupervisedGroupPageActivity.class);
+                        startActivity(intent);
+                    });
+                } else
+                    this.noGroupAlert().show();
             });
         } catch (
                 Exception e) {
@@ -85,6 +89,15 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
             // Return the completed view to render on screen
             return convertView;
         }
+    }
+
+    private AlertDialog noGroupAlert() {
+        return new AlertDialog.Builder(SupervisedGroupListActivity.this)
+                .setTitle("No supervised group found!")
+                .setMessage("Required to be a supervised user of any group")
+                .setPositiveButton("Ok", (dialogInterface, which) -> SupervisedGroupListActivity.super.onBackPressed())
+                .setCancelable(false)
+                .create();
     }
 }
 
