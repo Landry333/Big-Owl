@@ -132,7 +132,8 @@ public abstract class Repository<T> {
         return tData;
     }
 
-    public MutableLiveData<List<T>> getDocumentsByUId(List<String> uIdList, Class<? extends T> tClass) {
+    // TODO: bug where can only handle 10 items in the list, should allow any size list
+    public MutableLiveData<List<T>> getDocumentsByListOfUId(List<String> uIdList, Class<? extends T> tClass) {
         MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
         collectionReference.whereIn(FieldPath.documentId(), uIdList)
                 .get()
@@ -203,6 +204,34 @@ public abstract class Repository<T> {
                             listOfTData.setValue(null);
                         }
                     } else {
+                        Log.e(getClassName(), "Error getting documents: " +
+                                task.getException());
+                    }
+                });
+        return listOfTData;
+    }
+
+    public MutableLiveData<List<T>> getListOfDocumentByArrayContains(String attribute, String attrValue,
+                                                                 Class<? extends T> tClass) {
+        MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
+        collectionReference.whereArrayContains(attribute, attrValue)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                     QuerySnapshot tDocs = task.getResult();
+                        if (tDocs != null && !tDocs.isEmpty()) {
+                            List<T> listOfT = new ArrayList<>();
+                            for (QueryDocumentSnapshot doc : task.getResult()) {
+                                T t = doc.toObject(tClass);
+                                listOfT.add(t);
+                            }
+                            listOfTData.setValue(listOfT);
+                        } else {
+                            listOfTData.setValue(null);
+                        }
+
+                    }
+                    else{
                         Log.e(getClassName(), "Error getting documents: " +
                                 task.getException());
                     }

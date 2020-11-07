@@ -50,7 +50,7 @@ public class MonitoringGroupPageViewModel extends ViewModel {
     }
 
     private void loadAllUsersInGroup(Group group) {
-        usersInGroup = userRepository.getDocumentsByUId(group.getSupervisedUserId(), User.class);
+        usersInGroup = userRepository.getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
     }
 
     public void removeUserFromGroup(User userToBeRemoved, List<User> userList) {
