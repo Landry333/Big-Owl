@@ -29,8 +29,10 @@
     <string name="previous">Previous</string>
     <string name="refresh">Refresh</string>
     <string name="search_hint">Search…</string>
-    <string name="search_users">Phone Contacts</string>
+    <string name="search_users">Add Users</string>
     <string name="search_users2">Search an user to supervise</string>
+    <string name="invite_contacts">Invite From Contact List</string>
+    <string name="invite_phone">Invite By Phone Number</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="sign_up">Sign Up</string>
     <string name="supervised_by">Supervised by</string>

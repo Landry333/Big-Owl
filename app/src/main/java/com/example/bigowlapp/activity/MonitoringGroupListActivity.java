@@ -33,7 +33,7 @@ public class MonitoringGroupListActivity extends AppCompatActivity {
     EditText search_users;
     private ListView users_listview;
     private TextView groupName, supervisorName;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<User> mUsers, mUsersShow;
     private List<String> mSupervisedGroup;
 

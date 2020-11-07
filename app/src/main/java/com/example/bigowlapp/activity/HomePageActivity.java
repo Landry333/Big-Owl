@@ -28,8 +28,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 
 public class HomePageActivity extends AppCompatActivity {
-    private final int CONTACT_PERMISSION_CODE = 1;
-    Button btnLogOut, sendSmsInvitation, btnSearchUsers, btnMonitoringGroup, btnSupervisedGroup;
+    Button btnLogOut, sendSmsInvitation, btnAddUsers, btnMonitoringGroup, btnSupervisedGroup;
     ScrollView scrollView;
     ImageView imgUserAvatar;
     TextView textEmail, textFirstName, textLastName, textPhone;
@@ -83,15 +82,13 @@ public class HomePageActivity extends AppCompatActivity {
                 startActivity(i);
             });
 
-            btnSearchUsers = findViewById(R.id.btn_phone_contacts);
+            btnAddUsers = findViewById(R.id.btnAddUsers);
 
-            btnSearchUsers.setOnClickListener(v -> {
-                if (ContextCompat.checkSelfPermission(HomePageActivity.this,
-                        Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                    Intent i = new Intent(HomePageActivity.this, SearchContactsToSupervise.class);
+            btnAddUsers.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(HomePageActivity.this, AddUsers.class);
                     startActivity(i);
-                } else {
-                    requestContactPermission();
                 }
             });
 
@@ -148,37 +145,5 @@ public class HomePageActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    //TODO refactor to another class file
-    private void requestContactPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Permission needed")
-                    .setMessage("Permission is required to read phone Contacts")
-                    .setPositiveButton("Ok",
-                            (dialogInterface, which) -> ActivityCompat.requestPermissions(
-                                    HomePageActivity.this,
-                                    new String[]{Manifest.permission.READ_CONTACTS},
-                                    CONTACT_PERMISSION_CODE))
-                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                    .create().show();
-
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, CONTACT_PERMISSION_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == CONTACT_PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(HomePageActivity.this, SearchContactsToSupervise.class);
-                startActivity(i);
-            } else {
-                Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 }

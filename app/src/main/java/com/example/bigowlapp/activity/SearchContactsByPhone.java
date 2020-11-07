@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,31 +18,30 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bigowlapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import com.example.bigowlapp.R;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SearchContactsToSupervise extends AppCompatActivity {
+public class SearchContactsByPhone extends AppCompatActivity {
     private ListView listContactsView;
     private List<String> list, listShow;
-    private Button loadContacts;
+    private Button btnSearch;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final ArrayList<QueryDocumentSnapshot> qds = new ArrayList<QueryDocumentSnapshot>();
 
-    EditText search_users;
+    EditText number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_contacts);
+        setContentView(R.layout.activity_search_byphone);
         initialize();
     }
 
@@ -52,34 +50,46 @@ public class SearchContactsToSupervise extends AppCompatActivity {
     }
 
     private void loadContacts() {
-        ContentResolver contentResolver = getContentResolver();
-        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-
         list = new ArrayList<>();
+        number = findViewById(R.id.search_users);
 
-        if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)));
+        btnSearch = findViewById(R.id.get_users);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                list.clear();/*
+                list.add(number.getText().toString());
+                listShow = list;
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, listShow);
+                listContactsView = findViewById(R.id.listContacts);
+                listContactsView.setAdapter(adapter);*/
 
-                if (hasPhoneNumber > 0) {
-                    Cursor cursor2 = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "= ?",
-                            new String[]{id}, null);
-
-                    while (cursor2.moveToNext()) {
-                        String PhoneNumber = cursor2.getString(cursor2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                        list.add(name + "\n" + PhoneNumber);
-                    }
-
-                    cursor2.close();
-                }
+                db.collection("users")
+                        .whereEqualTo("phoneNumber", number.getText().toString())
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    if (!task.getResult().isEmpty()) {
+                                        list.clear();
+                                        list.add(number.getText().toString());
+                                        listShow = list;
+                                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, listShow);
+                                        listContactsView = findViewById(R.id.listContacts);
+                                        listContactsView.setAdapter(adapter);
+                                        Toast.makeText(SearchContactsByPhone.this, "User found!", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else {
+                                        Toast.makeText(SearchContactsByPhone.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(SearchContactsByPhone.this, SendSmsInvitationActivity.class);
+                                        startActivity(intent);
+                                    }
+                                }
+                            }
+                        });
             }
-        }
-        cursor.close();
+        });
 
         listShow = list;
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, listShow);
@@ -100,10 +110,10 @@ public class SearchContactsToSupervise extends AppCompatActivity {
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
                                     if (!task.getResult().isEmpty())
-                                        Toast.makeText(SearchContactsToSupervise.this, "User has the app", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SearchContactsByPhone.this, "User has the app", Toast.LENGTH_SHORT).show();
                                     else {
-                                        Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
+                                        Toast.makeText(SearchContactsByPhone.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(SearchContactsByPhone.this, SendSmsInvitationActivity.class);
                                         startActivity(intent);
                                     }
                                 }
@@ -111,9 +121,9 @@ public class SearchContactsToSupervise extends AppCompatActivity {
                         });
             }
         });
-
-        search_users = findViewById(R.id.search_users);
-        search_users.addTextChangedListener(new TextWatcher() {
+/*
+        number = findViewById(R.id.search_users);
+        number.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -128,7 +138,7 @@ public class SearchContactsToSupervise extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
             }
-        });
+        });*/
     }
 
 
