@@ -9,20 +9,20 @@
         android:id="@+id/textView_groupName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/invite_contacts"
+        android:text="@string/invite_phone"
         android:textSize="30sp" />
 
-    <!--
+
     <Button
-        android:id="@+id/loadContacts"
+        android:id="@+id/get_users"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_groupName"
+        android:layout_below="@+id/search_users"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:text="Load Contacts"
+        android:text="Search User"
         />
--->
+
 
     <EditText
         android:id="@+id/search_users"
@@ -30,14 +30,15 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView_groupName"
         android:layout_margin="5dp"
-        android:hint="Search..."
-        android:inputType="text" />
+        android:hint="Enter Phone Number"
+        android:digits="0123456789+"
+        android:inputType="phone" />
 
     <ListView
         android:id="@+id/listContacts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/search_users"
+        android:layout_below="@id/get_users"
         android:layout_marginTop="5dp" />
 
 </RelativeLayout>

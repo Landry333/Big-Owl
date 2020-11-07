@@ -20,7 +20,9 @@
         <activity android:name=".activity.MonitoringGroupPageActivity" />
         <activity android:name=".activity.MonitoringGroupListActivity" />
         <activity android:name=".activity.SearchContactsToSupervise" />
+        <activity android:name=".activity.SearchContactsByPhone" />
         <activity android:name=".activity.SendSmsInvitationActivity" />
+        <activity android:name=".activity.AddUsers" />
         <activity android:name=".activity.HomePageActivity" />
         <activity android:name=".activity.LoginPageActivity"/>
         <activity android:name=".activity.MainActivity"/>
