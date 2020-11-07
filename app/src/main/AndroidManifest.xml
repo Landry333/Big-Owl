@@ -15,7 +15,6 @@
         <activity android:name=".activity.InvitationConfirmationActivity" />
         <activity android:name=".activity.LoginPageActivity" />
         <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.MonitoringGroupListActivity" />
         <activity android:name=".activity.MonitoringGroupPageActivity" />
         <activity android:name=".activity.SearchContactsToSupervise" />
         <activity android:name=".activity.SearchContactsByPhone" />
@@ -24,7 +23,7 @@
         <activity android:name=".activity.SupervisedGroupListActivity" />
         <activity android:name=".activity.SupervisedGroupPageActivity" />
         <activity android:name=".activity.ViewAnotherUserActivity" />
-        <activity android:name=".activity.AddUsers" />
+        <activity android:name=".activity.AddUsersActivity" />
         <activity android:name=".fragments.UsersFragment" />
         <activity
             android:name=".activity.WelcomePageActivity"

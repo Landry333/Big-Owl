@@ -1,8 +1,6 @@
 package com.example.bigowlapp.activity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
@@ -19,12 +16,8 @@ import com.example.bigowlapp.repository.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 
 public class HomePageActivity extends AppCompatActivity {
@@ -87,7 +80,7 @@ public class HomePageActivity extends AppCompatActivity {
             btnAddUsers.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(HomePageActivity.this, AddUsers.class);
+                    Intent i = new Intent(HomePageActivity.this, AddUsersActivity.class);
                     startActivity(i);
                 }
             });

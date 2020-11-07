@@ -57,12 +57,6 @@ public class SearchContactsByPhone extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                list.clear();/*
-                list.add(number.getText().toString());
-                listShow = list;
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, listShow);
-                listContactsView = findViewById(R.id.listContacts);
-                listContactsView.setAdapter(adapter);*/
 
                 db.collection("users")
                         .whereEqualTo("phoneNumber", number.getText().toString())
