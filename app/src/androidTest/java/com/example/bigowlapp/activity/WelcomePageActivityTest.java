@@ -27,11 +27,11 @@ public class WelcomePageActivityTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityActivityTestRule
-            = new ActivityTestRule<>(MainActivity.class);
+            = new ActivityTestRule<>(MainActivity.class, false, false);
 
     @Test
     public void executeWelcomePageAtStartTest() {
-        Espresso.onView(withId(R.id.splash_screen)).check(matches(isDisplayed()));
+        mActivityActivityTestRule.launchActivity(null);
         Espresso.onView(isRoot()).perform(waitFor(3000));
         Espresso.onView(withId(R.id.button)).check(matches(isDisplayed()));
     }
