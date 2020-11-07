@@ -1,8 +1,5 @@
 package com.example.bigowlapp.repository;
 
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -15,30 +12,21 @@ public class ViewUserRepository {
     private DatabaseReference supRequestRef;
 
 
-    public ViewUserRepository(){
+    public ViewUserRepository() {
         supRequestRef = FirebaseDatabase.getInstance().getReference().child("SupRequests");
-        if(mfirebaseAuth.getCurrentUser() != null){
+        if (mfirebaseAuth.getCurrentUser() != null) {
             mfirebaseUser = mfirebaseAuth.getCurrentUser();
-        }
-        else{
+        } else {
             //@TODO: return a error message, make an issue
             mfirebaseUser = null;
         }
     }
 
-    public FirebaseAuth getMfirebaseAuth() {
-        return mfirebaseAuth;
-    }
-
-    public DatabaseReference getmUserRef() {
-        return mUserRef;
-    }
-
-    public FirebaseUser getMfirebaseUser() {
+    public FirebaseUser getCurrentUser() {
         return mfirebaseUser;
     }
 
-    public DatabaseReference getSupRequestRef() {
+    public DatabaseReference getCurrentRequestRef() {
         return supRequestRef;
     }
 }
