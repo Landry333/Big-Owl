@@ -13,6 +13,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.MonitoringGroupPageViewModel;
@@ -20,10 +25,6 @@ import com.example.bigowlapp.viewModel.MonitoringGroupPageViewModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 
 public class MonitoringGroupPageActivity extends AppCompatActivity {
@@ -44,13 +45,27 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
         usersListView = findViewById(R.id.users_list_view);
         searchUsers = findViewById(R.id.monitoring_group_search_users);
 
-        mGroupPageViewModel = new ViewModelProvider(this).get(MonitoringGroupPageViewModel.class);
-
         initialize();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGroupPageViewModel == null) {
+            mGroupPageViewModel = new ViewModelProvider(this).get(MonitoringGroupPageViewModel.class);
+        }
+        subscribeToData();
     }
 
     protected void initialize() {
         mUsers = new ArrayList<>();
+        setupSearchBar();
+    }
+
+    private void subscribeToData() {
+        if (!mGroupPageViewModel.isCurrentUserSet()) {
+            return;
+        }
 
         mGroupPageViewModel.getGroup().observe(this, group -> {
             // TODO: better error or allow view page when accessing group with no users
@@ -69,7 +84,6 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
             });
         });
 
-        setupSearchBar();
     }
 
     private void setupSearchBar() {
@@ -139,5 +153,10 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
 
     private void resetUsersListViewAdapter() {
         usersListView.setAdapter(new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow));
+    }
+
+    @VisibleForTesting
+    public void setmGroupPageViewModel(MonitoringGroupPageViewModel mGroupPageViewModel) {
+        this.mGroupPageViewModel = mGroupPageViewModel;
     }
 }
