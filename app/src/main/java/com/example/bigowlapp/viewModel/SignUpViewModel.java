@@ -19,24 +19,15 @@ public class SignUpViewModel extends ViewModel {
     }
 
     // TODO: Create a default group upon user creation
-    public Task<Boolean> createUser(String email, String password, String phoneNumber, String name) {
-        return authRepository.signUpUser(email, password, phoneNumber, nameExtractor(name)[0],
-                nameExtractor(name)[1])
+    public Task<Boolean> createUser(String email, String password, String phoneNumber, String firstName, String lastName) {
+        return authRepository.signUpUser(email, password, phoneNumber, firstName, lastName)
                 .addOnSuccessListener(isSuccess -> {
                     Group group = new Group();
                     group.setMonitoringUserId(authRepository.getCurrentUser().getUid());
-                    group.setName(name + "'s group " + "#" + randomStringGenerator());
+                    group.setName(firstName + "'s group " + "#" + randomStringGenerator());
                     groupRepository.addDocument(group);
                 });
 
-    }
-
-    public String nameParcer(String firstName, String lastName) {
-        return firstName + " " + lastName;
-    }
-
-    public String[] nameExtractor(String name) {
-        return name.split(" ", 2);
     }
 
     public String randomStringGenerator() {
