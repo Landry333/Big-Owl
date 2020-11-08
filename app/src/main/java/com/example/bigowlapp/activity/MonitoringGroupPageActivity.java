@@ -13,11 +13,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.MonitoringGroupPageViewModel;
@@ -25,6 +20,11 @@ import com.example.bigowlapp.viewModel.MonitoringGroupPageViewModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 
 public class MonitoringGroupPageActivity extends AppCompatActivity {
@@ -83,7 +83,6 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
                 registerForContextMenu(usersListView);
             });
         });
-
     }
 
     private void setupSearchBar() {
@@ -126,7 +125,8 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
             case "View Profile":
                 break;
             case "Remove": {
-                mGroupPageViewModel.removeUserFromGroup(contextMenuSelectedUser, mUsers);
+                mGroupPageViewModel.removeUserFromGroup(contextMenuSelectedUser);
+                mUsers.remove(contextMenuSelectedUser);
                 resetUsersListViewAdapter();
             }
         }
@@ -158,5 +158,10 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
     @VisibleForTesting
     public void setmGroupPageViewModel(MonitoringGroupPageViewModel mGroupPageViewModel) {
         this.mGroupPageViewModel = mGroupPageViewModel;
+    }
+
+    @VisibleForTesting
+    public MonitoringGroupPageViewModel getmGroupPageViewModel() {
+        return this.mGroupPageViewModel;
     }
 }
