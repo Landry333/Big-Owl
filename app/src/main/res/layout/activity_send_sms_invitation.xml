@@ -7,6 +7,15 @@
     android:orientation="vertical"
     tools:context=".activity.SendSmsInvitationActivity">
 
+    <TextView
+        android:id="@+id/note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="noteText"
+        android:textSize="18sp"
+        android:padding="8dp"
+        tools:ignore="HardcodedText" />
+
 
     <EditText
         android:id="@+id/number"
@@ -34,14 +43,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="send sms to invite"
-        android:layout_gravity="center_horizontal"
-        tools:ignore="HardcodedText" />
-
-    <Button
-        android:id="@+id/testSendRequest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="test Send request to supervise"
         android:layout_gravity="center_horizontal"
         tools:ignore="HardcodedText" />
 
