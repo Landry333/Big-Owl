@@ -50,7 +50,7 @@ public class SignUpPageActivity extends AppCompatActivity {
                 userFirstName.setError("Please enter your first name");
                 userFirstName.requestFocus();
             } else if (lastName.isEmpty()) {
-                userLastName.setError("Please enter your first name");
+                userLastName.setError("Please enter your last name");
                 userLastName.requestFocus();
             } else if (email.isEmpty()) {
                 userEmail.setError("Please enter a valid email");

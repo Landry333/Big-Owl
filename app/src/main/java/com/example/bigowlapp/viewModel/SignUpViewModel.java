@@ -24,10 +24,14 @@ public class SignUpViewModel extends ViewModel {
                 .addOnSuccessListener(isSuccess -> {
                     Group group = new Group();
                     group.setMonitoringUserId(authRepository.getCurrentUser().getUid());
-                    group.setName(firstName + "'s group " + "#" + randomStringGenerator());
+                    group.setName(getFullName(firstName, lastName) + "'s group " + "#" + randomStringGenerator());
                     groupRepository.addDocument(group);
                 });
 
+    }
+
+    public String getFullName(String firstName, String lastName) {
+        return firstName + " " + lastName;
     }
 
     public String randomStringGenerator() {
