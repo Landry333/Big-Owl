@@ -17,6 +17,7 @@ import com.example.bigowlapp.activity.WelcomePageActivity;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +32,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
+@Ignore("Not to run on the CI")
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class SignInSignOutTest {
