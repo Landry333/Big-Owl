@@ -30,8 +30,8 @@ public class SearchContactsByPhone extends AppCompatActivity {
     private Button btnSearch;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final ArrayList<QueryDocumentSnapshot> qds = new ArrayList<QueryDocumentSnapshot>();
-    private EditText inputNumber;
-    private String number2;
+    private EditText contactNumber;
+    private String smsNumber;
 
     EditText number;
 
@@ -39,7 +39,7 @@ public class SearchContactsByPhone extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_byphone);
-        inputNumber = (EditText) findViewById(R.id.search_users);
+        contactNumber = (EditText) findViewById(R.id.search_users);
         initialize();
     }
 
@@ -62,7 +62,7 @@ public class SearchContactsByPhone extends AppCompatActivity {
                 listContactsView = findViewById(R.id.listContacts);
                 listContactsView.setAdapter(adapter);*/
 
-                number2 = inputNumber.getText().toString();
+                smsNumber = contactNumber.getText().toString();
 
                 db.collection("users")
                         .whereEqualTo("phoneNumber", number.getText().toString())
@@ -82,7 +82,7 @@ public class SearchContactsByPhone extends AppCompatActivity {
                                     } else {
                                         Toast.makeText(SearchContactsByPhone.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(SearchContactsByPhone.this, SendSmsInvitationActivity.class);
-                                        intent.putExtra("number1", number2);
+                                        intent.putExtra("smsNumber", smsNumber);
                                         startActivity(intent);
                                     }
                                 }
@@ -114,7 +114,7 @@ public class SearchContactsByPhone extends AppCompatActivity {
                                     else {
                                         Toast.makeText(SearchContactsByPhone.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(SearchContactsByPhone.this, SendSmsInvitationActivity.class);
-                                        intent.putExtra("number1", number2);
+                                        intent.putExtra("smsNumber", smsNumber);
                                         startActivity(intent);
                                     }
                                 }

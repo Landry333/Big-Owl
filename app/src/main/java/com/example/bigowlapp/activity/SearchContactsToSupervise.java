@@ -102,7 +102,7 @@ public class SearchContactsToSupervise extends AppCompatActivity {
                                     else {
                                         Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
-                                        intent.putExtra("number1", number);
+                                        intent.putExtra("smsNumber", number);
                                         startActivity(intent);
                                     }
                                 }

@@ -20,7 +20,7 @@ public class SendSmsInvitationActivity extends AppCompatActivity {
 
     private EditText number, message;
     private Button send;
-    private String number2, message2, noteText;
+    private String smsNumber, smsMessage, noteText;
     private TextView noteTv;
 
     @Override
@@ -30,16 +30,15 @@ public class SendSmsInvitationActivity extends AppCompatActivity {
 
         noteTv = (TextView) findViewById(R.id.note);
 
-        String contactDetails = getIntent().getStringExtra("number1");
+        String contactDetails = getIntent().getStringExtra("smsNumber");
         String trimContactNumber = "000";
         if (contactDetails != null) {
             trimContactNumber = contactDetails.replaceAll("\\D+", "");
         }
         String contactNumber;
-        if(trimContactNumber.length()>=10){
+        if (trimContactNumber.length() >= 10) {
             contactNumber = trimContactNumber.substring(trimContactNumber.length() - 10);
-        }
-        else contactNumber = trimContactNumber;
+        } else contactNumber = trimContactNumber;
 
         noteText = "Contact: " + contactDetails + " is not yet registered to the application. Send her/him this invitation text sms";
 
@@ -83,7 +82,7 @@ public class SendSmsInvitationActivity extends AppCompatActivity {
 
         try {
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(number2, null, message2, null, null);
+            smsManager.sendTextMessage(smsNumber, null, smsMessage, null, null);
             Toast.makeText(this, "Invitation sent", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,15 +91,15 @@ public class SendSmsInvitationActivity extends AppCompatActivity {
     }
 
     private void beginSendingProcess() {
-        number2 = number.getText().toString().trim();
-        message2 = message.getText().toString().trim();
+        smsNumber = number.getText().toString().trim();
+        smsMessage = message.getText().toString().trim();
 
-        if (message2.isEmpty() && number2.isEmpty()) {
+        if (smsMessage.isEmpty() && smsNumber.isEmpty()) {
             Toast.makeText(SendSmsInvitationActivity.this, "Fields are empty!", Toast.LENGTH_SHORT).show();
-        } else if (number2.isEmpty()) {
+        } else if (smsNumber.isEmpty()) {
             number.setError("Please enter a phone number");
             number.requestFocus();
-        } else if (message2.isEmpty()) {
+        } else if (smsMessage.isEmpty()) {
             message.setError("Please enter a message");
             message.requestFocus();
         } else {
