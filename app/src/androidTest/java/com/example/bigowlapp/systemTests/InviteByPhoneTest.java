@@ -39,8 +39,6 @@ import static org.hamcrest.Matchers.is;
 @Ignore("Not to run on the CI")
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-
-
 public class InviteByPhoneTest {
 
     @Rule
@@ -90,7 +88,7 @@ public class InviteByPhoneTest {
         } catch (Exception e) {
         }
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.btnAddUsers), withText("Add Users"),
+                allOf(withId(R.id.btn_add_users), withText("Add Users"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.TableRow")),

@@ -94,7 +94,7 @@ public class InviteFromContactTest {
         }
 
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.btnAddUsers), withText("Add Users"),
+                allOf(withId(R.id.btn_add_users), withText("Add Users"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.TableRow")),

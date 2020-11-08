@@ -89,7 +89,7 @@ public class SendSMSInvitationTest {
 
             SystemClock.sleep(5000);
         }catch (Exception e){}
-
+/*
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.send_sms_invitation), withText("Send Sms Invitation"),
                         childAtPosition(
@@ -137,7 +137,7 @@ public class SendSMSInvitationTest {
         appCompatButton5.perform(click());
 
         SystemClock.sleep(3000);
-
+*/
     }
 
     private static Matcher<View> childAtPosition(

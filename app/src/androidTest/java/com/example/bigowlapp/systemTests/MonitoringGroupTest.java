@@ -2,7 +2,6 @@ package com.example.bigowlapp.systemTests;
 
 
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
