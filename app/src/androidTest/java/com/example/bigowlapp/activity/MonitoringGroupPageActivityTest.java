@@ -12,7 +12,6 @@ import com.example.bigowlapp.viewModel.MonitoringGroupPageViewModel;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -53,7 +52,6 @@ public class MonitoringGroupPageActivityTest {
     @Mock
     MonitoringGroupPageViewModel mockViewModel;
 
-    AutoCloseable autoCloseable;
     MutableLiveData<Group> testGroupData;
     MutableLiveData<List<User>> testUserListData;
     MonitoringGroupPageActivity currentActivity;
@@ -63,7 +61,7 @@ public class MonitoringGroupPageActivityTest {
 
     @Before
     public void setUp() {
-        autoCloseable = MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.initMocks(this);
 
         testUserList = new ArrayList<>();
         List<String> supervisedUsersIDs = new ArrayList<>();
@@ -113,7 +111,7 @@ public class MonitoringGroupPageActivityTest {
 
         int randomIndex = (int) (Math.random() * testUserList.size());
         onData(anything())
-                .inAdapterView(withId(R.id.users_list_view))
+                .inAdapterView(withId(R.id.list_view_monitoring_users))
                 .atPosition(randomIndex)
                 .check(matches(withText(testUserList.get(randomIndex).getFullName())))
                 .perform(longClick());
@@ -130,11 +128,6 @@ public class MonitoringGroupPageActivityTest {
         assertEquals(testUserListAfterUserRemovedSize, testUserList.size());
 
         SystemClock.sleep(3000);
-    }
-
-    @After
-    public void testDone() throws Exception {
-        autoCloseable.close();
     }
 
     public static Matcher<View> withListSize(final int size) {

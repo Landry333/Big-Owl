@@ -41,8 +41,8 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitoring_group_page);
 
-        groupName = findViewById(R.id.group_name);
-        usersListView = findViewById(R.id.users_list_view);
+        groupName = findViewById(R.id.text_view_group_name);
+        usersListView = findViewById(R.id.list_view_monitoring_users);
         searchUsers = findViewById(R.id.monitoring_group_search_users);
 
         initialize();
