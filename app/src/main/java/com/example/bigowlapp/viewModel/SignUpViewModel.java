@@ -18,7 +18,6 @@ public class SignUpViewModel extends ViewModel {
         groupRepository = new GroupRepository();
     }
 
-    // TODO: Create a default group upon user creation
     public Task<Boolean> createUser(String email, String password, String phoneNumber, String firstName, String lastName) {
         return authRepository.signUpUser(email, password, phoneNumber, firstName, lastName)
                 .addOnSuccessListener(isSuccess -> {
