@@ -21,7 +21,7 @@ public class EditProfileViewModel extends ViewModel {
     }
 
     public void editUserProfile(String fName, String lName, String pNum, String imageUrl) {
-        User userWithNewProfile = getCurrentUserProfile().getValue();
+        User userWithNewProfile = getCurrentUserData().getValue();
         userWithNewProfile.setFirstName(fName);
         userWithNewProfile.setLastName(lName);
         userWithNewProfile.setPhoneNumber(pNum);
@@ -32,7 +32,7 @@ public class EditProfileViewModel extends ViewModel {
         user.setValue(userWithNewProfile);
     }
 
-    public LiveData<User> getCurrentUserProfile() {
+    public LiveData<User> getCurrentUserData() {
         if (user == null) {
             user = new MutableLiveData<>();
             loadUserCurrentProfile();
@@ -44,4 +44,7 @@ public class EditProfileViewModel extends ViewModel {
         user = userRepository.getDocumentByUId(authRepository.getCurrentUser().getUid(), User.class);
     }
 
+    public boolean isCurrentUserSet() {
+        return authRepository.getCurrentUser() != null;
+    }
 }
