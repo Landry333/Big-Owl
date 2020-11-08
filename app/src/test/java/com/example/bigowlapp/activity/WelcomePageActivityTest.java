@@ -18,7 +18,7 @@ import static org.robolectric.Shadows.shadowOf;
 @Config(sdk = Build.VERSION_CODES.N_MR1)
 public class WelcomePageActivityTest {
     @Test
-    public void WelcomePageGoesToLoginPageActivityTest() {
+    public void welcomePageGoesToLoginPageActivityTest() {
         ActivityController<WelcomePageActivity> welcomeActivityController =
                 Robolectric.buildActivity(WelcomePageActivity.class)
                         .create()

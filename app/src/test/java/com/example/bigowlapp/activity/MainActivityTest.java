@@ -17,7 +17,7 @@ import static org.robolectric.Shadows.shadowOf;
 @Config(sdk = Build.VERSION_CODES.N_MR1)
 public class MainActivityTest {
     @Test
-    public void MainActivityGoesToWelcomePageTest() {
+    public void mainActivityGoesToWelcomePageTest() {
         ActivityController<MainActivity> mainActivityController =
                 Robolectric.buildActivity(MainActivity.class)
                         .create()

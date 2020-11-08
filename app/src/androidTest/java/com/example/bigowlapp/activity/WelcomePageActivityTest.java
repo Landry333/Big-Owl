@@ -30,7 +30,7 @@ public class WelcomePageActivityTest {
             = new ActivityScenarioRule<>(WelcomePageActivity.class);
 
     @Test
-    public void executeWelcomePageAtStartTest() {
+    public void shouldStartAtWelcomePageAndGoesToLoginPage() {
         Espresso.onView(isRoot()).perform(waitFor(3000));
         Espresso.onView(withId(R.id.button)).check(matches(isDisplayed()));
     }
