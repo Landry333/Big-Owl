@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scrollView"
+    android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.HomePageActivity">
@@ -29,20 +29,41 @@
             android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tableRow1">
+            app:layout_constraintTop_toBottomOf="@+id/table_row_1">
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
                 android:gravity="center">
 
-                <Button
-                    android:id="@+id/btnAddUsers"
-                    android:layout_width="wrap_content"
+                <TableRow
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Add Users"
-                    tools:ignore="HardcodedText" />
+                    android:layout_marginEnd="4dp"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/btn_add_users"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/search_users" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/send_sms_invitation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Send Sms Invitation"
+                        tools:ignore="HardcodedText" />
+                </TableRow>
+
             </TableRow>
 
             <TableRow
@@ -144,7 +165,7 @@
         </TableLayout>
 
         <TableRow
-            android:id="@+id/tableRow1"
+            android:id="@+id/table_row_1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="24dp"
