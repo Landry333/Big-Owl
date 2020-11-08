@@ -15,7 +15,6 @@
         <activity android:name=".activity.InvitationConfirmationActivity" />
         <activity android:name=".activity.LoginPageActivity" />
         <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.MonitoringGroupListActivity" />
         <activity android:name=".activity.MonitoringGroupPageActivity" />
         <activity android:name=".activity.SearchContactsToSupervise" />
         <activity android:name=".activity.SearchContactsByPhone" />

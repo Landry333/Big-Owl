@@ -29,7 +29,6 @@ public class Group {
         this.supervisedUserId = supervisedUserId;
     }
 
-    @Exclude
     public String getuId() {
         return uId;
     }
