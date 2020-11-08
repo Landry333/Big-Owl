@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">BigOwlApp</string>
     <string name="back_button">Back Button</string>
+    <string name="by">by</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="e_mail">E-mail:</string>
