@@ -3,6 +3,7 @@ package com.example.bigowlapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,13 +16,10 @@ public class WelcomePageActivity extends AppCompatActivity implements Constants 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent i = new Intent(WelcomePageActivity.this, LoginPageActivity.class);
-                startActivity(i);
-                finish();
-            }
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Intent i = new Intent(WelcomePageActivity.this, LoginPageActivity.class);
+            startActivity(i);
+            finish();
         }, SPLASH_DURATION);
     }
 }
