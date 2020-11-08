@@ -1,5 +1,9 @@
 package com.example.bigowlapp.viewModel;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
@@ -8,10 +12,6 @@ import com.example.bigowlapp.repository.UserRepository;
 
 import java.util.List;
 import java.util.Objects;
-
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 public class MonitoringGroupPageViewModel extends ViewModel {
 
@@ -26,6 +26,10 @@ public class MonitoringGroupPageViewModel extends ViewModel {
         authRepository = new AuthRepository();
         groupRepository = new GroupRepository();
         userRepository = new UserRepository();
+    }
+
+    public boolean isCurrentUserSet() {
+        return authRepository.getCurrentUser() != null && authRepository.getCurrentUser().getUid() != null;
     }
 
     public LiveData<Group> getGroup() {

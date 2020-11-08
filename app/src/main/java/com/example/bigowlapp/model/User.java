@@ -76,9 +76,13 @@ public class User {
         this.profileImage = profileImage;
     }
 
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
     @Override
     public String toString() {
-        return firstName + " " + lastName;
+        return getFullName();
     }
 
 }
