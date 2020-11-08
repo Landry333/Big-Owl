@@ -15,9 +15,9 @@ import androidx.lifecycle.ViewModel;
 
 public class SupervisedGroupListViewModel extends ViewModel {
 
-    private AuthRepository authRepository;
-    private GroupRepository groupRepository;
-    private UserRepository userRepository;
+    private final AuthRepository authRepository;
+    private final GroupRepository groupRepository;
+    private final UserRepository userRepository;
     private MutableLiveData<List<Group>> groupLiveData;
 
     public SupervisedGroupListViewModel() {

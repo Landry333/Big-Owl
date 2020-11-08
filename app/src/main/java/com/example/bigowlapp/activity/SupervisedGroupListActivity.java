@@ -26,7 +26,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class SupervisedGroupListActivity extends AppCompatActivity {
     private ListView supervisedGroups;
-    private static SupervisedGroupListViewModel supervisedGroupListViewModel;
+    private SupervisedGroupListViewModel supervisedGroupListViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
     }
 
 
-    private static class SupervisedGroupAdaptor extends ArrayAdapter<Group> {
+    private class SupervisedGroupAdaptor extends ArrayAdapter<Group> {
         public SupervisedGroupAdaptor(@NonNull Context context, ArrayList<Group> groups) {
             super(context, 0, groups);
         }
@@ -73,19 +73,17 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
                 convertView = LayoutInflater.from(getContext())
                         .inflate(R.layout.fragment_supervised_group_list_item, parent, false);
             }
-            TextView groupName = (TextView) convertView.findViewById(R.id.groupName);
-            TextView groupSupervisor = (TextView) convertView.findViewById(R.id.groupSupervisor);
+            TextView groupName = convertView.findViewById(R.id.text_view_group_name);
+            TextView groupSupervisor = convertView.findViewById(R.id.text_view_group_supervisor);
 
             groupName.setText(group.getName());
 
             // TODO: find a better way to do below without looping query in viewModel
             supervisedGroupListViewModel.getSupervisor(
                     group.getMonitoringUserId()).observe((LifecycleOwner) parent.getContext(),
-                    supervisor -> {
-                        groupSupervisor.setText(
-                                supervisor.getFirstName()
-                                        .concat(supervisor.getLastName()));
-                    });
+                    supervisor -> groupSupervisor.setText(
+                            supervisor.getFirstName()
+                                    .concat(supervisor.getLastName())));
             // Return the completed view to render on screen
             return convertView;
         }
