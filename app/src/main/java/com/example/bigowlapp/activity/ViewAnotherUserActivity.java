@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.viewModel.ViewUserViewModel;
-import com.google.android.gms.tasks.OnCompleteListener;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -60,7 +59,7 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
                     .child(viewUserViewModel.getCurrentUser().getUid())
                     .child(otherUserID)
                     .removeValue()
-                    .addOnCompleteListener((OnCompleteListener<Void>) task -> {
+                    .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(ViewAnotherUserActivity.this,
                                     "You have canceled request to supervise ",
