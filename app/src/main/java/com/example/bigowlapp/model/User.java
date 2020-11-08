@@ -1,10 +1,10 @@
 package com.example.bigowlapp.model;
 
 import com.google.firebase.firestore.DocumentId;
-import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
-// Exclude uneeded data from documents
+import androidx.annotation.NonNull;
+
 @IgnoreExtraProperties
 public class User {
 
@@ -76,9 +76,14 @@ public class User {
         this.profileImage = profileImage;
     }
 
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+    @NonNull
     @Override
     public String toString() {
-        return firstName + " " + lastName;
+        return getFullName();
     }
 
 }

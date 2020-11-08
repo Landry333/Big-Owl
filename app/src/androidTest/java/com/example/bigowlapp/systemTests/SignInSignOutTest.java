@@ -1,4 +1,4 @@
-package com.example.bigowlapp.activity;
+package com.example.bigowlapp.systemTests;
 
 
 import android.os.SystemClock;
@@ -6,13 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.activity.WelcomePageActivity;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -21,28 +21,26 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SupervisedUsersTest {
+public class SignInSignOutTest {
 
     @Rule
     public ActivityTestRule<WelcomePageActivity> mActivityTestRule = new ActivityTestRule<>(WelcomePageActivity.class);
 
     @Test
-    public void supervisedUsersTest() {
+    public void signInSignOutTest() {
+
         SystemClock.sleep(5000);
 
         ViewInteraction appCompatEditText = onView(
@@ -53,7 +51,9 @@ public class SupervisedUsersTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("hoa_kennan2@hotmail.com"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("espressotest@gmail.com"), closeSoftKeyboard());
+
+        SystemClock.sleep(2000);
 
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.editTextTextPassword),
@@ -63,7 +63,9 @@ public class SupervisedUsersTest {
                                         0),
                                 2),
                         isDisplayed()));
-        appCompatEditText2.perform(replaceText("kennan"), closeSoftKeyboard());
+        appCompatEditText2.perform(replaceText("espressotest"), closeSoftKeyboard());
+
+        SystemClock.sleep(2000);
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.button), withText("Sign In"),
@@ -74,26 +76,20 @@ public class SupervisedUsersTest {
                                 1),
                         isDisplayed()));
         appCompatButton.perform(click());
-        SystemClock.sleep(5000);
+
+        SystemClock.sleep(7000);
 
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.btn_supervised_group), withText("Supervised Group"),
+                allOf(withId(R.id.btn_logout), withText("Log Out"),
                         childAtPosition(
                                 childAtPosition(
-                                        withClassName(is("android.widget.TableRow")),
-                                        1),
-                                0),
-                        isDisplayed()));
-        appCompatButton2.perform(click());
-        SystemClock.sleep(3000);
+                                        withId(R.id.table_layout),
+                                        2),
+                                0)));
+        appCompatButton2.perform(scrollTo(), click());
 
-        DataInteraction textView = onData(anything())
-                .inAdapterView(allOf(withId(R.id.listView_supervisedGroup),
-                        childAtPosition(
-                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
-                                1)))
-                .atPosition(1);
-        textView.perform(click());
+        SystemClock.sleep(1000);
+
     }
 
     private static Matcher<View> childAtPosition(
