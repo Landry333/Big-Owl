@@ -16,6 +16,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="hint_email">Email</string>
     <string name="hint_name">Name</string>
+    <string name="hint_search">Search...</string>
     <string name="home">Home</string>
     <string name="image_url">Image URL</string>
     <string name="last_name">Last name</string>
