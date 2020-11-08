@@ -7,8 +7,8 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
 
 import com.example.bigowlapp.R;
 
@@ -26,12 +26,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 public class WelcomePageActivityTest {
 
     @Rule
-    public ActivityTestRule<WelcomePageActivity> mActivityActivityTestRule
-            = new ActivityTestRule<>(WelcomePageActivity.class, false, false);
+    public ActivityScenarioRule<WelcomePageActivity> mActivityScenario
+            = new ActivityScenarioRule<>(WelcomePageActivity.class);
 
     @Test
     public void executeWelcomePageAtStartTest() {
-        mActivityActivityTestRule.launchActivity(null);
         Espresso.onView(isRoot()).perform(waitFor(3000));
         Espresso.onView(withId(R.id.button)).check(matches(isDisplayed()));
     }
