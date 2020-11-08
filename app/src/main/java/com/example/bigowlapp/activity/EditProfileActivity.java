@@ -8,6 +8,7 @@ import android.widget.EditText;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.viewModel.EditProfileViewModel;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -23,35 +24,34 @@ public class EditProfileActivity extends AppCompatActivity {
         initialize();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (editProfileViewModel == null) {
+            editProfileViewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
+        }
+        subscribeToData();
+    }
+
     protected void initialize() {
-        editProfileViewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
-
-        editButtonCancel = findViewById(R.id.edit_button_cancel);
         editButtonConfirm = findViewById(R.id.edit_button_confirm);
-        editUserFirstName = findViewById(R.id.edit_user_first_name);
-        editUserLastName = findViewById(R.id.edit_user_last_name);
-        editPhoneNumber = findViewById(R.id.edit_phone_number);
-        editImageURL = findViewById(R.id.edit_image_url);
-
-        editProfileViewModel.getCurrentUserProfile().observe(this, user -> {
-            editUserFirstName.setText(user.getFirstName());
-            editUserLastName.setText(user.getLastName());
-            editPhoneNumber.setText(user.getPhoneNumber());
-            editImageURL.setText(user.getProfileImage());
-        });
-
         editButtonConfirm.setOnClickListener(v -> {
+
             if (editUserFirstName.getText().toString().isEmpty()) {
                 editUserFirstName.setError("Please enter a valid first name.");
                 editUserFirstName.requestFocus();
-            } else if (editUserLastName.getText().toString().isEmpty()) {
+            }
+            if (editUserLastName.getText().toString().isEmpty()) {
                 editUserLastName.setError("Please enter a valid last name.");
                 editUserLastName.requestFocus();
-            } else if (editPhoneNumber.getText().toString().isEmpty()) {
+            }
+            if (editPhoneNumber.getText().toString().isEmpty()) {
                 editPhoneNumber.setError("Please enter a valid phone number.");
                 editPhoneNumber.requestFocus();
             }
-            else {
+            if (!editUserFirstName.getText().toString().isEmpty() &&
+                    !editUserLastName.getText().toString().isEmpty() &&
+                    !editPhoneNumber.getText().toString().isEmpty()) {
                 editProfileViewModel.editUserProfile(
                         editUserFirstName.getText().toString(),
                         editUserLastName.getText().toString(),
@@ -64,10 +64,32 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        editButtonCancel = findViewById(R.id.edit_button_cancel);
         editButtonCancel.setOnClickListener(v -> {
             startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
             finish();
         });
+    }
+
+    private void subscribeToData() {
+        if (editProfileViewModel.isCurrentUserSet()) {
+            editUserFirstName = findViewById(R.id.edit_user_first_name);
+            editUserLastName = findViewById(R.id.edit_user_last_name);
+            editPhoneNumber = findViewById(R.id.edit_user_phone_number);
+            editImageURL = findViewById(R.id.edit_user_image_url);
+
+            editProfileViewModel.getCurrentUserData().observe(this, user -> {
+                editUserFirstName.setText(user.getFirstName());
+                editUserLastName.setText(user.getLastName());
+                editPhoneNumber.setText(user.getPhoneNumber());
+                editImageURL.setText(user.getProfileImage());
+            });
+        }
+    }
+
+    @VisibleForTesting
+    public void setHomePageViewModel(EditProfileViewModel editProfileViewModel) {
+        this.editProfileViewModel = editProfileViewModel;
     }
 
 }
