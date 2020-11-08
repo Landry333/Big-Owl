@@ -26,8 +26,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 public class WelcomePageActivityTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityActivityTestRule
-            = new ActivityTestRule<>(MainActivity.class, false, false);
+    public ActivityTestRule<WelcomePageActivity> mActivityActivityTestRule
+            = new ActivityTestRule<>(WelcomePageActivity.class, false, false);
 
     @Test
     public void executeWelcomePageAtStartTest() {
