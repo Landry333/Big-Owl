@@ -26,7 +26,7 @@ jobs:
       - name: Run reviewdog analysis
         uses: dvdandroid/action-android-lint@v1.1
         with:
-          github_token: ${{ secrets.TOKEN_GITHUB }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           level: warning # info, warning, error are the possible values
           reporter: github-check # github-check, github-pr-check, github-pr-review are possible values
           lint_xml_file: app/build/reports/lint-results.xml
