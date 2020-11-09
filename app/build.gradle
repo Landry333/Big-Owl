@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'jacoco-android'
-apply plugin: 'org.sonarqube'
 
 android {
     compileSdkVersion 30
@@ -39,16 +38,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    sonarqube {
-        androidVariant 'debug'
-
-        properties {
-            property "sonar.java.binaries", "build/intermediates/javac/debug/classes"
-            property "sonar.junit.reportPaths", "build/test-results/testDebugUnitTest"
-            property "sonar.android.lint.report", "build/reports/lint-results.xml"
-        }
     }
 }
 
@@ -93,15 +82,6 @@ dependencies {
     // TODO: remove below line after switch the db from Realtime Database to Cloud Firestore
     implementation 'com.google.firebase:firebase-database'
 
-}
-
-
-sonarqube {
-    properties {
-        property "sonar.projectKey", "Landry333_Big-Owl"
-        property "sonar.organization", "landry333"
-        property "sonar.host.url", "https://sonarcloud.io"
-    }
 }
 
 apply plugin: 'com.google.gms.google-services'
