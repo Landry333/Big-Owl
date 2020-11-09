@@ -42,8 +42,10 @@ android {
     }
 
     sonarqube {
+        androidVariant 'debug'
+
         properties {
-//            property "sonar.java.binaries", "build/intermediates/classes/staging/debug,build/tmp/kotlin-classes"
+            property "sonar.java.binaries", "build/intermediates/javac/debug/classes"
             property "sonar.junit.reportPaths", "build/test-results/testDebugUnitTest"
             property "sonar.android.lint.report", "build/reports/lint-results.xml"
         }
