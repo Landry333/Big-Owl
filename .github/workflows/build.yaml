@@ -26,11 +26,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
 
-      - name: Build the app/gradle and analyze with SonarQube
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR info
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build sonarqube --info
+      - name: Build the app/gradle
+        run: ./gradlew build
 
       - name: Run android lint
         run: ./gradlew lint
@@ -44,3 +41,14 @@ jobs:
 
       - name: Codecov
         uses: codecov/codecov-action@v1.0.13
+
+      - name: Set up JDK 11 for SonarQube analysis
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Run SonarQube Analysis
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR info
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew sonarqube --info
