@@ -32,6 +32,14 @@ jobs:
       - name: Run android lint
         run: ./gradlew lint
 
+      - name: Run reviewdog analysis
+        uses: dvdandroid/action-android-lint@v1.1
+        with:
+          github_token: ${{ secrets.TOKEN_GITHUB }}
+          level: warning # info, warning, error are the possible values
+          reporter: github-check # github-check, github-pr-check, github-pr-review are possible values
+          lint_xml_file: app/build/reports/lint-results.xml
+
       - name: Run app on an emulator
         uses: ReactiveCircus/android-emulator-runner@v2.12.0
         with:
