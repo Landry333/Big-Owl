@@ -20,11 +20,11 @@ public class LogInViewModel extends ViewModel {
         return authRepository.signInUser(email, password);
     }
 
-    public void addAuthStateListenerToDatabase(FirebaseAuth.AuthStateListener authStateListener){
+    public void addAuthStateListenerToDatabase(FirebaseAuth.AuthStateListener authStateListener) {
         authRepository.addAuthStateListener(authStateListener);
     }
 
-    public FirebaseUser getCurrentUser(){
+    public FirebaseUser getCurrentUser() {
         return authRepository.getCurrentUser();
     }
 }
