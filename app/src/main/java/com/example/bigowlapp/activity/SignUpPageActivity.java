@@ -7,14 +7,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bigowlapp.R;
-import com.example.bigowlapp.viewModel.SignUpViewModel;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.bigowlapp.R;
+import com.example.bigowlapp.viewModel.SignUpViewModel;
+
 public class SignUpPageActivity extends AppCompatActivity {
-    public EditText userEmail, userPassword, userPhone, username;
+    public EditText userEmail, userPassword, userPhone, userFirstName, userLastName;
     Button btnSignUp;
     TextView tvSignIn;
     private SignUpViewModel signUpViewModel;
@@ -29,7 +29,8 @@ public class SignUpPageActivity extends AppCompatActivity {
 
     protected void initialize() {
         //Authentication with firebase
-        username = findViewById(R.id.edit_text_text_person_name);
+        userFirstName = findViewById(R.id.user_first_name);
+        userLastName = findViewById(R.id.user_last_name);
         userEmail = findViewById(R.id.edit_text_text_mail_address);
         userPassword = findViewById(R.id.edit_text_text_password);
         userPhone = findViewById(R.id.edit_text_phone);
@@ -40,12 +41,17 @@ public class SignUpPageActivity extends AppCompatActivity {
             String email = userEmail.getText().toString();
             String pass = userPassword.getText().toString();
             String userPhone = this.userPhone.getText().toString();
-            String userName = username.getText().toString();
+            String firstName = userFirstName.getText().toString();
+            String lastName = userLastName.getText().toString();
+
 
             //Error handling
-            if (userName.isEmpty()) {
-                username.setError("Please enter your name");
-                username.requestFocus();
+            if (firstName.isEmpty()) {
+                userFirstName.setError("Please enter your first name");
+                userFirstName.requestFocus();
+            } else if (lastName.isEmpty()) {
+                userLastName.setError("Please enter your last name");
+                userLastName.requestFocus();
             } else if (email.isEmpty()) {
                 userEmail.setError("Please enter a valid email");
                 userEmail.requestFocus();
@@ -56,7 +62,7 @@ public class SignUpPageActivity extends AppCompatActivity {
                 this.userPhone.setError("please enter a phone number");
                 this.userPhone.requestFocus();
             } else {
-                signUpViewModel.createUser(email, pass, userPhone, userName)
+                signUpViewModel.createUser(email, pass, userPhone, firstName, lastName)
                         .addOnSuccessListener(isSuccessful -> {
                             Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
