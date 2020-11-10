@@ -39,7 +39,7 @@ public class LoginPageActivity extends AppCompatActivity {
             password = findViewById(R.id.editTextTextPassword);
             btnSignIn = findViewById(R.id.button);
             tvSignUp = findViewById(R.id.textView);
-            
+
             mAuthStateListener = firebaseAuth -> {
                 FirebaseUser m_FirebaseUser = logInViewModel.getCurrentUser();
                 if (m_FirebaseUser != null) {

@@ -68,8 +68,8 @@ public class AuthRepository {
         });
         return taskBoolean;
     }
-    
-    public void addAuthStateListener(FirebaseAuth.AuthStateListener authStateListener){
+
+    public void addAuthStateListener(FirebaseAuth.AuthStateListener authStateListener) {
         mfirebaseAuth.addAuthStateListener(authStateListener);
     }
 
