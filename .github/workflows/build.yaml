@@ -44,6 +44,11 @@ jobs:
       - name: Codecov
         uses: codecov/codecov-action@v1.0.13
 
+      - name: Checkout full clone for SonarQube analysis
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - name: Set up JDK 11 for SonarQube analysis
         uses: actions/setup-java@v1
         with:
