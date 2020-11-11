@@ -12,14 +12,6 @@ jobs:
         with:
           java-version: 1.8
 
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
-
       - name: Build the app and generate lint
         run: ./gradlew build
 
