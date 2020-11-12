@@ -1,58 +1,32 @@
 <resources>
     <string name="app_name">BigOwlApp</string>
-    <string name="back_button">Back Button</string>
     <string name="by">by</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
-    <string name="e_mail">E-mail:</string>
     <string name="edit_profile">Edit Profile</string>
-    <string name="email">Email</string>
-    <string name="first_fragment_label">First Fragment</string>
     <string name="first_name">First Name</string>
-    <string name="group">Group:</string>
     <string name="group_name">group_name</string>
     <string name="have_account_text">Already have an account? Sign in here</string>
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="hint_email">Email</string>
-    <string name="hint_search">Search...</string>
+    <string name="hint_search">Search…</string>
     <string name="home">Home</string>
     <string name="image_url">Image URL</string>
     <string name="last_name">Last name</string>
     <string name="list_of_supervised_group">List of supervised group</string>
-    <string name="log_out">Log Out</string>
     <string name="monitoring_group">Monitoring Group</string>
-    <string name="my_profile">My Profile</string>
-    <string name="next">Next</string>
     <string name="password">Password</string>
     <string name="phone">Phone</string>
     <string name="phone_number">Phone number</string>
-    <string name="previous">Previous</string>
     <string name="refresh">Refresh</string>
-    <string name="search_hint">Search…</string>
     <string name="search_users">Add Users</string>
-    <string name="search_users2">Search an user to supervise</string>
     <string name="invite_contacts">Invite From Contact List</string>
     <string name="invite_phone">Invite By Phone Number</string>
-    <string name="second_fragment_label">Second Fragment</string>
     <string name="sign_up">Sign Up</string>
-    <string name="supervised_by">Supervised by</string>
     <string name="supervised_group">Supervised Group</string>
     <string name="supervisor_name">supervisor_name</string>
-    <string name="this_is_the_home_page">This is the home page</string>
-    <string name="title_activity_supervised_group">SupervisedGroup</string>
-    <string name="title_activity_user_profile">UserProfileActivity</string>
     <string name="user_avatar">User Avatar</string>
     <string name="user_email">user_email</string>
     <string name="user_first_name">First Name</string>
-    <string name="user_image_url">user_image_url</string>
     <string name="user_last_name">Last Name</string>
     <string name="user_phone_number">user_phone_number</string>
-    <string name="view_profile">View Profile</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
-    <string name="hello_world">Hello Square World!</string>
-    <string name="unused_resource_for_review_dog_check_test">Hopefully reviewdog calls this out. Will be removed!</string>
 </resources>
