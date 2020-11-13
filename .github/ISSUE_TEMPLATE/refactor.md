@@ -11,7 +11,7 @@ assignees: ''
 <List of issues that caused the need for refactoring>
 
 ### Description:
-<A clear and concise description of what the bug is>
+<A description about the refactor and the purpose of it>
 
 ### Refactor Type(s):
 <use https://refactoring.com/catalog/ to list the type of refactors and how they are relevant>
