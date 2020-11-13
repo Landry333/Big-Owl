@@ -20,4 +20,4 @@ assignees: ''
 
 ### Linked Issues <if epic>
 <list of issues related to this issue>
-<example: #1, #2, #3 >
+<example: #1, #2, #3>

@@ -2,7 +2,7 @@
 name: Documentation
 about: Related to documents and diagrams
 title: 'DOC-<issue#>: <description>'
-labels: 'documentation'
+labels: documentation
 assignees: ''
 
 ---
@@ -12,4 +12,4 @@ assignees: ''
 
 ### Diagram Link(s): <optional>
 <list of links/images to the relevant diagrams>
-examples: https://lucid.app/invitations/accept/fc6c7458-4a7d-4f53-b7e5-ed2b1993f3f1
+<examples: https://lucid.app/invitations/accept/fc6c7458-4a7d-4f53-b7e5-ed2b1993f3f1>

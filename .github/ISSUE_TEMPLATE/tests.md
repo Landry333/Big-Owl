@@ -2,7 +2,7 @@
 name: Testing
 about: Stories related to non-functional features
 title: 'TEST-<issue#>: <description>'
-labels: 'testing'
+labels: testing
 assignees: ''
 
 ---

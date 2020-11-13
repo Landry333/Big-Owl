@@ -2,13 +2,13 @@
 name: Bug Report
 about: Create a report about a bug
 title: 'BUG-<issue#>: <problem>'
-labels: 'bug'
+labels: bug
 assignees: ''
 
 ---
 
-### Related Issue(s):
-#48 
+### Related Issue(s): 
+<e.g. #48> 
 
 ### Relevant File(s):
 <list of links to files>
@@ -26,8 +26,8 @@ Steps to reproduce the behavior:
 ### Expected behavior
 A clear and concise description of what you expected to happen.
 
-### Screenshots:
+### Screenshots: <optional>
 If applicable, add screenshots to help explain your problem.
 
-### Additional context:
+### Additional context: <optional>
 Add any other context about the problem here.
