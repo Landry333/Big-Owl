@@ -88,10 +88,23 @@ public class SearchContactsToSupervise extends AppCompatActivity {
         listContactsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             // argument position gives the index of item which is clicked
             public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
-                String number = (String) listContactsView.getItemAtPosition(position);
+                //String number = (String) listContactsView.getItemAtPosition(position);
+                String contactDetails = (String) listContactsView.getItemAtPosition(position);
+                String contactNumber;
+                if (contactDetails.split("\\n").length < 2) {
+                    contactNumber = contactDetails
+                            .split("\\n")[0]
+                            .replaceAll("[^+0-9]", "");
+                } else {
+                    contactNumber = contactDetails
+                            .split("\\n")[1]
+                            .replaceAll("[^+0-9]", "");
+                }
+
 
                 db.collection("users")
-                        .whereEqualTo("phoneNumber", number.replaceAll("[^+0-9]", ""))
+                        //.whereEqualTo("phoneNumber", number.replaceAll("[^+0-9]", ""))
+                        .whereEqualTo("phoneNumber", contactNumber)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -102,7 +115,8 @@ public class SearchContactsToSupervise extends AppCompatActivity {
                                     else {
                                         Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
-                                        intent.putExtra("smsNumber", number);
+                                        intent.putExtra("contactDetails", contactDetails);
+                                        intent.putExtra("contactNumber", contactNumber);
                                         startActivity(intent);
                                     }
                                 }

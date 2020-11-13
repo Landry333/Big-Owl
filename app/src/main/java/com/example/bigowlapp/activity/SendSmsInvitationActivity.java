@@ -28,23 +28,16 @@ public class SendSmsInvitationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_sms_invitation);
 
-        noteTv = (TextView) findViewById(R.id.note);
+        noteTv = findViewById(R.id.note);
 
-        String contactDetails = getIntent().getStringExtra("smsNumber");
-        String trimContactNumber = "000";
-        if (contactDetails != null) {
-            trimContactNumber = contactDetails.replaceAll("\\D+", "");
-        }
-        String contactNumber;
-        if (trimContactNumber.length() >= 10) {
-            contactNumber = trimContactNumber.substring(trimContactNumber.length() - 10);
-        } else contactNumber = trimContactNumber;
+        String contactDetails = getIntent().getStringExtra("contactDetails");
+        String contactNumber = getIntent().getStringExtra("contactNumber");
 
         noteText = "Contact: " + contactDetails + " is not yet registered to the application. Send her/him this invitation text sms";
 
         noteTv.setText(noteText);
 
-        number = (EditText) findViewById(R.id.number);
+        number = findViewById(R.id.number);
         number.setText(contactNumber);
 
         message = findViewById(R.id.message);
