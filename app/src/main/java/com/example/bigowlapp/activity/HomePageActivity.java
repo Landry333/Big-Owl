@@ -58,6 +58,15 @@ public class HomePageActivity extends AppCompatActivity {
             startActivity(i);
         });
 
+        // TODO: Temporary button for SetSchedule
+        Button btnSetSchedule = findViewById(R.id.btn_set_schedule);
+
+        btnSetSchedule.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent i = new Intent(HomePageActivity.this, SetSchedule.class);
+            startActivity(i);
+        });
+
         btnAddUsers = findViewById(R.id.btn_add_users);
 
         btnAddUsers.setOnClickListener(v -> {

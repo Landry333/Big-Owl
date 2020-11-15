@@ -1,5 +1,11 @@
 package com.example.bigowlapp.repository;
 
-public class ScheduleRepository {
-    
+import com.example.bigowlapp.model.Schedule;
+
+public class ScheduleRepository extends Repository<Schedule> {
+
+    // TODO: Add dependency injection
+    public ScheduleRepository() {
+        super("schedules");
+    }
 }
