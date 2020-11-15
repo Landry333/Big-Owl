@@ -88,7 +88,6 @@ public class SearchContactsToSupervise extends AppCompatActivity {
         listContactsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             // argument position gives the index of item which is clicked
             public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
-                //String number = (String) listContactsView.getItemAtPosition(position);
                 String contactDetails = (String) listContactsView.getItemAtPosition(position);
                 String contactNumber;
                 if (contactDetails.split("\\n").length < 2) {
@@ -101,9 +100,7 @@ public class SearchContactsToSupervise extends AppCompatActivity {
                             .replaceAll("[^+0-9]", "");
                 }
 
-
                 db.collection("users")
-                        //.whereEqualTo("phoneNumber", number.replaceAll("[^+0-9]", ""))
                         .whereEqualTo("phoneNumber", contactNumber)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
