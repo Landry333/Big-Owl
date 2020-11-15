@@ -1,8 +1,6 @@
 package com.example.bigowlapp.activity;
 
-import android.os.SystemClock;
-import android.util.Log;
-
+import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
@@ -25,10 +23,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import static org.junit.Assert.assertEquals;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -56,7 +58,6 @@ public class SupervisedGroupListActivityTest {
     private FirebaseUser testFirebaseUser;
 
     private List<Group> testUserSupervisedGroupList;
-
 
     @Before
     public void setUp() throws Exception {
@@ -118,12 +119,16 @@ public class SupervisedGroupListActivityTest {
 
     @Test
     public void activityListOutUserSupervisedGroupsTest() {
-        verify(supervisedGroupListViewModel, atMostOnce()).getCurrentUserData();
-        verify(supervisedGroupListViewModel, atMostOnce()).getSupervisedGroupListData();
+        verify(supervisedGroupListViewModel, times(1)).getCurrentUserData();
+        verify(supervisedGroupListViewModel, times(1)).getSupervisedGroupListData();
 
         for (int i = 0; i < testUserSupervisedGroupList.size(); i++) {
-            assertEquals(testUserSupervisedGroupList.get(i),
-                    supervisedGroupListViewModel.getSupervisedGroupListData().getValue().get(i));
+            // check if the group names are matched and displayed
+            onView(allOf(withId(R.id.text_view_group_name), withText(testUserSupervisedGroupList.get(i).getName())))
+                    .check(matches(isDisplayed()));
+            // check if the supervisors full names are matched and displayed
+            String supervisorFullName = supervisedGroupListViewModel.getSupervisor(testUserSupervisedGroupList.get(i).getMonitoringUserId()).getValue().getFullName();
+            onView(allOf(withId(R.id.text_view_group_supervisor), withText(supervisorFullName))).check(matches(isDisplayed()));
         }
     }
 }

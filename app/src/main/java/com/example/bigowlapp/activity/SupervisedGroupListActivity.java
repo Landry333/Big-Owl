@@ -97,7 +97,7 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
                 .create();
     }
 
-    @VisibleForTesting
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setSupervisedGroupListViewModel(SupervisedGroupListViewModel supervisedGroupListViewModel) {
         this.supervisedGroupListViewModel = supervisedGroupListViewModel;
     }
