@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 public class HomePageActivity extends AppCompatActivity {
-    Button btnLogOut, btnAddUsers, btnMonitoringGroup, btnSupervisedGroup;
+    Button btnLogOut, btnAddUsers, btnMonitoringGroup, btnSupervisedGroup, btnSetSchedule;
     ScrollView scrollView;
     ImageView imgUserAvatar;
     TextView textEmail, textFirstName, textLastName, textPhone;
@@ -59,10 +59,9 @@ public class HomePageActivity extends AppCompatActivity {
         });
 
         // TODO: Temporary button for SetSchedule
-        Button btnSetSchedule = findViewById(R.id.btn_set_schedule);
+        btnSetSchedule = findViewById(R.id.btn_set_schedule);
 
         btnSetSchedule.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(HomePageActivity.this, SetSchedule.class);
             startActivity(i);
         });
