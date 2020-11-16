@@ -102,7 +102,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Start Date" />
+                android:text="@string/start_date"
+                android:labelFor="@id/edit_start_date" />
 
             <TextView
                 android:id="@+id/start_time_textview"
@@ -110,7 +111,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Start Time" />
+                android:text="@string/start_time"
+                android:labelFor="@id/edit_start_time" />
         </TableRow>
 
         <TableRow
@@ -122,7 +124,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:inputType="date" />
+                android:gravity="center"
+                android:inputType="date"
+                android:importantForAutofill="no" />
 
             <EditText
                 android:id="@+id/edit_start_time"
@@ -130,7 +134,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="time" />
+                android:inputType="time"
+                android:importantForAutofill="no" />
         </TableRow>
 
     </TableLayout>
@@ -156,7 +161,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="End Date" />
+                android:text="@string/end_date"
+                android:labelFor="@id/edit_end_date" />
 
             <TextView
                 android:id="@+id/end_time_textview"
@@ -164,7 +170,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="End Time" />
+                android:text="@string/end_time"
+                android:labelFor="@id/edit_end_time" />
         </TableRow>
 
         <TableRow
@@ -177,7 +184,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="date" />
+                android:inputType="date"
+                android:importantForAutofill="no" />
 
             <EditText
                 android:id="@+id/edit_end_time"
@@ -185,7 +193,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="time" />
+                android:inputType="time"
+                android:importantForAutofill="no" />
         </TableRow>
 
     </TableLayout>
@@ -211,7 +220,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Longitude" />
+                android:text="@string/longitude"
+                android:labelFor="@id/edit_longitude" />
 
             <TextView
                 android:id="@+id/latitude_textview"
@@ -219,7 +229,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Latitude" />
+                android:text="@string/latitude"
+                android:labelFor="@id/edit_latitude" />
         </TableRow>
 
         <TableRow
@@ -232,7 +243,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:importantForAutofill="no" />
 
             <EditText
                 android:id="@+id/edit_latitude"
@@ -240,7 +252,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:importantForAutofill="no" />
         </TableRow>
 
     </TableLayout>
@@ -250,7 +263,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Set Schedule"
+        android:text="@string/set_schedule"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/longitude_latitude" />
