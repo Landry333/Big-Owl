@@ -6,12 +6,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.bigowlapp.adapter.NotificationAdapter;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Notification;
+import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.NotificationRepository;
 
+import java.net.Authenticator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +25,7 @@ public class NotificationActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private NotificationRepository notificationRepository;
     private LiveData<List<Notification>> notificationListData;
+    private AuthRepository authRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +33,9 @@ public class NotificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notification);
         recyclerView = findViewById(R.id.recyclerview_notifications);
 
+        authRepository = new AuthRepository();
         notificationRepository = new NotificationRepository();
-        notificationListData = notificationRepository.getAllDocumentsFromCollection(Notification.class);
+        notificationListData = notificationRepository.getListOfDocumentByAttribute("receiverUId", authRepository.getCurrentUser().getUid(), Notification.class);
 
         recyclerView.setHasFixedSize(true);
 
@@ -38,9 +43,8 @@ public class NotificationActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         notificationListData.observe(this, notifications -> {
-            ArrayList<String> type = new ArrayList<>();
-            for(Notification n : notifications){
-                type.add(n.getType());
+            if(notifications == null) {
+                notifications = new ArrayList<>();
             }
             mAdapter = new NotificationAdapter(notifications , this);
             recyclerView.setAdapter(mAdapter);

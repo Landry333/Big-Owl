@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Notification;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
@@ -20,18 +22,18 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private List<Notification> mNotificationTitles;
     private Context mContext;
 
-
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem, parent, false);
-        ViewHolder holder = new ViewHolder(v);
-        return holder;
+        return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.textView.setText(mNotificationTitles.get(position).getType() + "\t" + mNotificationTitles.get(position).getTime());
+        if(!mNotificationTitles.isEmpty()) {
+            holder.nameTextView.setText(mNotificationTitles.get(position).getType());
+            holder.timeTextView.setText(mNotificationTitles.get(position).getTime().toDate().toString());
+        }
     }
 
     @Override
@@ -41,12 +43,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView textView;
+        public TextView nameTextView;
+        public TextView contentTextView;
+        public TextView timeTextView;
         public ConstraintLayout parentLayout;
 
         public ViewHolder(View v) {
             super(v);
-            textView = v.findViewById(R.id.notification_name);
+            nameTextView = v.findViewById(R.id.notification_name);
+            contentTextView = v.findViewById(R.id.notification_content);
+            timeTextView = v.findViewById(R.id.notification_time);
             parentLayout = v.findViewById(R.id.parent_layout);
         }
     }

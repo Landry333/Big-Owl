@@ -159,8 +159,10 @@ public abstract class Repository<T> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
+                            Log.d("NYAN", "we are here");
                             listOfTData.setValue(this.extractListOfDataToModel(task.getResult(), tClass));
                         } else {
+                            Log.d("BAD", "not bueno");
                             listOfTData.setValue(null);
                         }
                     } else {
