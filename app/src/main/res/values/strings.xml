@@ -55,4 +55,7 @@
     -->
     <string name="hello_world">Hello Square World!</string>
     <string name="set_schedule">Set Schedule</string>
+    <string name="select_group">Select Group</string>
+    <string name="select_user">Select User</string>
+    <string name="create_new_schedule">Create New Schedule</string>
 </resources>
