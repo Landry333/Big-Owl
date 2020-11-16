@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">BigOwlApp</string>
+    <string name="by">by</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="first_name">First Name</string>
+    <string name="group_name">group_name</string>
+    <string name="have_account_text">Already have an account? Sign in here</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_search">Search…</string>
+    <string name="home">Home</string>
+    <string name="image_url">Image URL</string>
+    <string name="last_name">Last name</string>
+    <string name="list_of_supervised_group">List of supervised group</string>
+    <string name="monitoring_group">Monitoring Group</string>
+    <string name="password">Password</string>
+    <string name="phone">Phone</string>
+    <string name="phone_number">Phone number</string>
+    <string name="refresh">Refresh</string>
+    <string name="search_users">Add Users</string>
+    <string name="invite_contacts">Invite From Contact List</string>
+    <string name="invite_phone">Invite By Phone Number</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="supervised_group">Supervised Group</string>
+    <string name="supervisor_name">supervisor_name</string>
+    <string name="user_avatar">User Avatar</string>
+    <string name="user_email">user_email</string>
+    <string name="user_first_name">First Name</string>
+    <string name="user_last_name">Last Name</string>
+    <string name="user_phone_number">user_phone_number</string>
+</resources>
