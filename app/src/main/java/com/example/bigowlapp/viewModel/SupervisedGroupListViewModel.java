@@ -5,7 +5,6 @@ import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
 import com.example.bigowlapp.repository.UserRepository;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -19,6 +18,7 @@ public class SupervisedGroupListViewModel extends ViewModel {
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
     private MutableLiveData<List<Group>> groupLiveData;
+    private MutableLiveData<User> userData;
 
     public SupervisedGroupListViewModel() {
         authRepository = new AuthRepository();
@@ -26,7 +26,7 @@ public class SupervisedGroupListViewModel extends ViewModel {
         userRepository = new UserRepository();
     }
 
-    public LiveData<List<Group>> getSupervisedGroupList() {
+    public LiveData<List<Group>> getSupervisedGroupListData() {
         if (groupLiveData == null) {
             loadListOfDocumentByArrayContains();
         }
@@ -37,13 +37,20 @@ public class SupervisedGroupListViewModel extends ViewModel {
         return userRepository.getDocumentByUId(supervisorUid, User.class);
     }
 
-    public FirebaseUser getCurrentUser() {
-        return authRepository.getCurrentUser();
-    }
-
     private void loadListOfDocumentByArrayContains() {
         groupLiveData = groupRepository.getListOfDocumentByArrayContains("supervisedUserId",
                 authRepository.getCurrentUser().getUid(), Group.class);
     }
 
+    public LiveData<User> getCurrentUserData() {
+        if (userData == null) {
+            userData = new MutableLiveData<>();
+            loadUserCurrentProfile();
+        }
+        return userData;
+    }
+
+    private void loadUserCurrentProfile() {
+        userData = userRepository.getDocumentByUId(authRepository.getCurrentUser().getUid(), User.class);
+    }
 }
