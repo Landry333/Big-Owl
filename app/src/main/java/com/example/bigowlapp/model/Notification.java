@@ -11,23 +11,16 @@ public class Notification {
     private String uId;
     private String type;
     private Timestamp time;
+    protected String receiverUId;
 
     public Notification() {
     }
 
-    public Notification(String type) {
-        this.type = type;
-    }
-
-    public Notification(String uId, String type) {
-        this.uId = uId;
-        this.type = type;
-    }
-
-    public Notification(String uId, String type, Timestamp time) {
+    public Notification(String uId, String type, Timestamp time, String receiverUId) {
         this.uId = uId;
         this.type = type;
         this.time = time;
+        this.receiverUId = receiverUId;
     }
 
     public String getuId() {
@@ -52,5 +45,13 @@ public class Notification {
 
     public void setTime(Timestamp time) {
         this.time = time;
+    }
+
+    public String getReceiverUId() {
+        return receiverUId;
+    }
+
+    public void setReceiverUId(String receiverUId) {
+        this.receiverUId = receiverUId;
     }
 }

@@ -6,25 +6,20 @@ import com.google.firebase.Timestamp;
 public class SupervisionRequest extends Notification implements Constants {
 
     private String senderUId;
-    private String receiverUId;
     private String groupUId;
     private Response response;
     private Timestamp timeSent;
     private Timestamp timeResponse;
+
     public SupervisionRequest() {
         super();
-    }
-
-    public SupervisionRequest(String uId) {
-        super(uId, SUPERVISION_TYPE);
     }
 
     public SupervisionRequest(String uId, Timestamp time, String senderUId,
                               String receiverUId, String groupUId, Response response,
                               Timestamp timeSent, Timestamp timeResponse) {
-        super(uId, SUPERVISION_TYPE, time);
+        super(uId, SUPERVISION_TYPE, time, receiverUId);
         this.senderUId = senderUId;
-        this.receiverUId = receiverUId;
         this.groupUId = groupUId;
         this.response = response;
         this.timeSent = timeSent;
@@ -37,14 +32,6 @@ public class SupervisionRequest extends Notification implements Constants {
 
     public void setSenderUId(String senderUId) {
         this.senderUId = senderUId;
-    }
-
-    public String getReceiverUId() {
-        return receiverUId;
-    }
-
-    public void setReceiverUId(String receiverUId) {
-        this.receiverUId = receiverUId;
     }
 
     public String getGroupUId() {
@@ -83,5 +70,17 @@ public class SupervisionRequest extends Notification implements Constants {
         ACCEPT,
         REJECT,
         NEUTRAL
+    }
+
+    @Override
+    public String toString() {
+        return "SupervisionRequest{" +
+                "senderUId='" + senderUId + '\'' +
+                ", receiverUId='" + receiverUId + '\'' +
+                ", groupUId='" + groupUId + '\'' +
+                ", response=" + response +
+                ", timeSent=" + timeSent +
+                ", timeResponse=" + timeResponse +
+                '}';
     }
 }
