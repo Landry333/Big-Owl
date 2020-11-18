@@ -40,13 +40,24 @@ public class SetScheduleViewModel extends ViewModel {
         return listOfGroupData;
     }
 
+    public LiveData<List<User>> getListOfUsersFromGroup(Group group) {
+        if (listOfUserData == null) {
+            listOfUserData = new MutableLiveData<>();
+            loadUsers(group);
+        }
+        return listOfUserData;
+    }
+
     public void loadListOfGroup() {
         String userId = authRepository.getCurrentUser().getUid();
         listOfGroupData = groupRepository.getListOfDocumentByAttribute("monitoringUserId", userId, Group.class);
     }
 
     public void loadUsers(Group group) {
-        String userId = authRepository.getCurrentUser().getUid();
         listOfUserData = userRepository.getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
+    }
+
+    public boolean isCurrentUserSet() {
+        return authRepository.getCurrentUser() != null;
     }
 }
