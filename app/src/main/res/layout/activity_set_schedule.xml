@@ -20,12 +20,53 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TableLayout
+        android:id="@+id/title_schedule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create_new_schedule_title">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/schedule_title_textview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:labelFor="@id/edit_title_schedule"
+                android:text="@string/title" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/edit_title_schedule"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="text" />
+        </TableRow>
+
+    </TableLayout>
+
+    <TableLayout
         android:id="@+id/selection_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/create_new_schedule_title">
+        app:layout_constraintTop_toBottomOf="@+id/title_schedule">
 
         <TableRow
             android:layout_width="match_parent"
@@ -49,8 +90,8 @@
                 android:id="@+id/select_group_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:gravity="center" />
         </TableRow>
 
         <TableRow
@@ -76,8 +117,8 @@
                 android:id="@+id/select_user_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:gravity="center" />
         </TableRow>
     </TableLayout>
 
@@ -89,6 +130,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selection_table">
 
@@ -102,8 +144,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/start_date"
-                android:labelFor="@id/edit_start_date" />
+                android:labelFor="@id/edit_start_date"
+                android:text="@string/start_date" />
 
             <TextView
                 android:id="@+id/start_time_textview"
@@ -111,31 +153,34 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/start_time"
-                android:labelFor="@id/edit_start_time" />
+                android:labelFor="@id/edit_start_time"
+                android:text="@string/start_time" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
+            <Button
                 android:id="@+id/edit_start_date"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="#FFFFFF"
                 android:gravity="center"
-                android:inputType="date"
-                android:importantForAutofill="no" />
+                android:text="@string/dd_mm_yyyy" />
 
-            <EditText
+            <Button
                 android:id="@+id/edit_start_time"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="#FFFFFF"
                 android:gravity="center"
-                android:inputType="time"
-                android:importantForAutofill="no" />
+                android:text="@string/hh_mm" />
+
         </TableRow>
 
     </TableLayout>
@@ -143,11 +188,12 @@
     <TableLayout
         android:id="@+id/end_date_time"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/start_date_time">
 
@@ -161,8 +207,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/end_date"
-                android:labelFor="@id/edit_end_date" />
+                android:labelFor="@id/edit_end_date"
+                android:text="@string/end_date" />
 
             <TextView
                 android:id="@+id/end_time_textview"
@@ -170,43 +216,46 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/end_time"
-                android:labelFor="@id/edit_end_time" />
+                android:labelFor="@id/edit_end_time"
+                android:text="@string/end_time" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
+            <Button
                 android:id="@+id/edit_end_date"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="#FFFFFF"
                 android:gravity="center"
-                android:inputType="date"
-                android:importantForAutofill="no" />
+                android:text="@string/dd_mm_yyyy"  />
 
-            <EditText
+            <Button
                 android:id="@+id/edit_end_time"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="#FFFFFF"
                 android:gravity="center"
-                android:inputType="time"
-                android:importantForAutofill="no" />
+                android:text="@string/hh_mm"  />
         </TableRow>
 
     </TableLayout>
 
     <TableLayout
-        android:id="@+id/longitude_latitude"
+        android:id="@+id/location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/end_date_time">
 
@@ -215,45 +264,29 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/longitude_textview"
+                android:id="@+id/location_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/longitude"
-                android:labelFor="@id/edit_longitude" />
+                android:labelFor="@id/edit_location"
+                android:text="@string/location" />
 
-            <TextView
-                android:id="@+id/latitude_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/latitude"
-                android:labelFor="@id/edit_latitude" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/edit_longitude"
+            <AutoCompleteTextView
+                android:id="@+id/edit_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="numberDecimal"
-                android:importantForAutofill="no" />
+                android:importantForAutofill="no"
+                android:inputType="textAutoCorrect|text|textCapSentences" />
 
-            <EditText
-                android:id="@+id/edit_latitude"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:inputType="numberDecimal"
-                android:importantForAutofill="no" />
         </TableRow>
 
     </TableLayout>
@@ -262,10 +295,10 @@
         android:id="@+id/set_schedule_confirm_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="@string/set_schedule"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/longitude_latitude" />
+        app:layout_constraintTop_toBottomOf="@+id/location" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
