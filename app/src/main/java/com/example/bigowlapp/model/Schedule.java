@@ -5,27 +5,22 @@ import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+import java.util.List;
+
 @IgnoreExtraProperties
 public class Schedule {
 
     @DocumentId
     private String uId;
-    private String userId;
+    private String title;
+    private List<String> listOfUserIds;
     private String groupId;
+    private String event;
     private Timestamp startTime;
     private Timestamp endTime;
     private GeoPoint location;
 
     public Schedule() {
-    }
-
-    public Schedule(String uId, String userId, String groupId, Timestamp startTime, Timestamp endTime, GeoPoint location) {
-        this.uId = uId;
-        this.userId = userId;
-        this.groupId = groupId;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.location = location;
     }
 
     public String getuId() {
@@ -36,12 +31,20 @@ public class Schedule {
         this.uId = uId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getTitle() {
+        return title;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<String> getListOfUserIds() {
+        return listOfUserIds;
+    }
+
+    public void setListOfUserIds(List<String> listOfUserIds) {
+        this.listOfUserIds = listOfUserIds;
     }
 
     public String getGroupId() {
@@ -50,6 +53,14 @@ public class Schedule {
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
     }
 
     public Timestamp getStartTime() {
