@@ -5,12 +5,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.fragments.DatePickerDialogFragment;
+import com.example.bigowlapp.fragments.TimePickerDialogFragment;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.SetScheduleViewModel;
@@ -19,13 +22,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SetSchedule extends AppCompatActivity {
+public class SetSchedule extends AppCompatActivity
+        implements DatePickerDialogFragment.DatePickedListener,
+        TimePickerDialogFragment.TimePickedListener {
 
     private List<Group> listOfGroups;
     private List<User> listOfUsers;
 
     private Spinner groupSpinner;
     private Spinner userSpinner;
+    private Button editStartDate;
+    private Button editStartTime;
+    private Button editEndDate;
+    private Button editEndTime;
+
 
     private String title;
 
@@ -50,6 +60,10 @@ public class SetSchedule extends AppCompatActivity {
     private void initialize() {
         groupSpinner = (Spinner) findViewById(R.id.select_group_spinner);
         userSpinner = (Spinner) findViewById(R.id.select_user_spinner);
+        editStartDate = (Button) findViewById(R.id.edit_start_date);
+        editStartTime = (Button) findViewById(R.id.edit_start_time);
+        editEndDate = (Button) findViewById(R.id.edit_end_date);
+        editEndTime = (Button) findViewById(R.id.edit_end_time);
         setUsersInSpinner();
     }
 
@@ -105,6 +119,16 @@ public class SetSchedule extends AppCompatActivity {
     }
 
     private void sendSchedule() {
+
+    }
+
+    @Override
+    public void onDatePicked(String strDate, int year, int month, int day) {
+
+    }
+
+    @Override
+    public void onTimePicked(String strTime, int hour, int minute) {
 
     }
 }
