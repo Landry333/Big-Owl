@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
@@ -36,6 +37,7 @@ public class SetSchedule extends AppCompatActivity
     private Button editEndDate;
     private Button editEndTime;
 
+    private Button activeDateTimeButton;
 
     private String title;
 
@@ -64,6 +66,7 @@ public class SetSchedule extends AppCompatActivity
         editStartTime = (Button) findViewById(R.id.edit_start_time);
         editEndDate = (Button) findViewById(R.id.edit_end_date);
         editEndTime = (Button) findViewById(R.id.edit_end_time);
+        setupDateTimeButtons();
         setUsersInSpinner();
     }
 
@@ -118,17 +121,51 @@ public class SetSchedule extends AppCompatActivity
                 });
     }
 
-    private void sendSchedule() {
+    private void setupDateTimeButtons() {
+        editStartDate.setOnClickListener(view -> {
+            showDateDialogByButtonClick(editStartDate);
+        });
+        editStartTime.setOnClickListener(view -> {
+            showTimeDialogButtonClick(editStartTime);
+        });
+        editEndDate.setOnClickListener(view -> {
+            showDateDialogByButtonClick(editEndDate);
+        });
+        editEndTime.setOnClickListener(view -> {
+            showTimeDialogButtonClick(editEndTime);
+        });
+    }
 
+    private void unregisterDateTimeButton() {
+        activeDateTimeButton = null;
+    }
+
+    private void showDateDialogByButtonClick(Button buttonDisplay) {
+        activeDateTimeButton = buttonDisplay;
+        DialogFragment newFragment = new DatePickerDialogFragment();
+        newFragment.show(getSupportFragmentManager(), "startDatePicker");
+    }
+
+    private void showTimeDialogButtonClick(Button buttonDisplay) {
+        activeDateTimeButton = buttonDisplay;
+        DialogFragment newFragment = new TimePickerDialogFragment();
+        newFragment.show(getSupportFragmentManager(), "startTimePicker");
     }
 
     @Override
     public void onDatePicked(String strDate, int year, int month, int day) {
-
+        activeDateTimeButton.setText(strDate);
+        unregisterDateTimeButton();
     }
 
     @Override
     public void onTimePicked(String strTime, int hour, int minute) {
+        activeDateTimeButton.setText(strTime);
+        unregisterDateTimeButton();
+    }
+
+    private void sendSchedule() {
 
     }
+
 }
