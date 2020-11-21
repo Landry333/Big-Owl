@@ -10,28 +10,26 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
-public class HomePageActivity extends AppCompatActivity {
+import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.ViewModelProvider;
+
+public class HomePageActivity extends BigOwlActivity {
     Button btnLogOut, btnAddUsers, btnMonitoringGroup, btnSupervisedGroup;
     ScrollView scrollView;
     ImageView imgUserAvatar;
     TextView textEmail, textFirstName, textLastName, textPhone;
+    MenuItem menuItemEditProfile;
     private HomePageViewModel homePageViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
         initialize();
     }
 
@@ -45,8 +43,6 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     protected void initialize() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         scrollView = findViewById(R.id.scroll_view);
         scrollView.setVisibility(View.GONE);
 
@@ -111,23 +107,25 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     @Override
+    public int getContentView() {
+        return R.layout.activity_home;
+    }
+
+    @Override
+    protected String getToolbarTitle() {
+        return "Homepage";
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home_page_overflow, menu);
-        return true;
+        menuItemEditProfile = menu.add(Menu.NONE, View.generateViewId(), 3, "Edit Profile");
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.overflow_home) {
-            finish();
-            startActivity(getIntent());
-        } else if (item.getItemId() == R.id.overflow_refresh) {
-            finish();
-            startActivity(getIntent());
-        } else if (item.getItemId() == R.id.overflow_edit_profile) {
-            Intent i = new Intent(HomePageActivity.this, EditProfileActivity.class);
-            startActivity(i);
-            return true;
+        if (item.getItemId() == menuItemEditProfile.getItemId()) {
+            startActivity(new Intent(HomePageActivity.this, EditProfileActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
