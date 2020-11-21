@@ -1,8 +1,11 @@
 package com.example.bigowlapp.activity;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,6 +26,8 @@ import com.example.bigowlapp.fragments.DatePickerDialogFragment;
 import com.example.bigowlapp.fragments.TimePickerDialogFragment;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.service.GeocoderAddressService;
+import com.example.bigowlapp.utils.Constants;
 import com.example.bigowlapp.viewModel.SetScheduleViewModel;
 
 import java.io.IOException;
@@ -56,6 +61,7 @@ public class SetSchedule extends AppCompatActivity
     private AddressAdapter addressArrayAdapter;
     private List<Address> addressList;
     private AutoCompleteTextView editLocation;
+    private AddressResultReciever addressListResultReceiver;
 
     private String title;
 
@@ -94,6 +100,7 @@ public class SetSchedule extends AppCompatActivity
     }
 
     private void setupEditLocation() {
+        addressListResultReceiver = new AddressResultReciever(null);
         geocoder = new Geocoder(this, Locale.getDefault());
 
         // TODO: remove test code
@@ -127,25 +134,34 @@ public class SetSchedule extends AppCompatActivity
                     return;
                 }
 
-                getAddresses(text).thenAcceptAsync(addresses -> {
-                    Log.d("BigOwl", "pizzapizza"); // TODO: remove
-                    if (addresses.isEmpty()) {
-                        Log.d("BigOwl", "no addresses"); // TODO: remove
-                        return;
-                    }
-
-                    Log.d("BigOwl", addresses.size() + " \n " + addresses.get(0).toString()); // TODO: remove
-                    addressArrayAdapter.clear();
-                    addressArrayAdapter.addAll(addresses);
-                    addressArrayAdapter.notifyDataSetChanged();
-                }).exceptionally(e -> {
-                    Log.d("BigOwl", "pizza_FAIL"); // TODO: remove
-                    Log.e("BigOwl", Log.getStackTraceString(e));
-                    return null;
-                });
+                startServiceToGetAddressList(text);
+//                getAddresses(text).thenAcceptAsync(addresses -> {
+//                    Log.d("BigOwl", "pizzapizza"); // TODO: remove
+//                    if (addresses.isEmpty()) {
+//                        Log.d("BigOwl", "no addresses"); // TODO: remove
+//                        return;
+//                    }
+//
+//                    Log.d("BigOwl", addresses.size() + " \n " + addresses.get(0).toString()); // TODO: remove
+//                    addressArrayAdapter.clear();
+//                    addressArrayAdapter.addAll(addresses);
+//                    addressArrayAdapter.notifyDataSetChanged();
+//                }).exceptionally(e -> {
+//                    Log.d("BigOwl", "pizza_FAIL"); // TODO: remove
+//                    Log.e("BigOwl", Log.getStackTraceString(e));
+//                    return null;
+//                });
             }
 
         });
+    }
+
+    private void startServiceToGetAddressList(String text) {
+        Intent intent = new Intent(this, GeocoderAddressService.class);
+        intent.setAction(GeocoderAddressService.ACTION_GET_ADDRESSES);
+        intent.putExtra(GeocoderAddressService.EXTRA_ADDRESS_LIST_RESULT, addressListResultReceiver);
+        intent.putExtra(GeocoderAddressService.EXTRA_TEXT, text);
+        startService(intent);
     }
 
     private CompletableFuture<List<Address>> getAddresses(String searchText) throws CompletionException {
@@ -254,6 +270,28 @@ public class SetSchedule extends AppCompatActivity
 
     private void sendSchedule() {
 
+    }
+
+    class AddressResultReciever extends ResultReceiver {
+        public AddressResultReciever(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            switch (resultCode) {
+                case Constants.RESULT_CODE_SUCCESS:
+                    List<Address> addressesFromGeocoderSearch = resultData.getParcelableArrayList(Constants.EXTRA_RESULT_DATA_KEY);
+                    addressArrayAdapter.clear();
+                    addressArrayAdapter.addAll(addressesFromGeocoderSearch);
+                    addressArrayAdapter.notifyDataSetChanged();
+                    break;
+                case Constants.RESULT_CODE_FAIL:
+                    String errorMessage = resultData.getString(Constants.EXTRA_RESULT_DATA_KEY);
+                    Log.d("BigOwl", errorMessage); // TODO: remove
+                    break;
+            }
+        }
     }
 
 }
