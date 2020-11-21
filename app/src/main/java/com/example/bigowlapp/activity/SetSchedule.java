@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.adapter.AddressAdapter;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.SetScheduleViewModel;
@@ -40,7 +41,7 @@ public class SetSchedule extends AppCompatActivity {
     private Spinner userSpinner;
 
     private Geocoder geocoder;
-    private ArrayAdapter<Address> addressArrayAdapter;
+    private AddressAdapter addressArrayAdapter;
     private List<Address> addressList;
     private AutoCompleteTextView editLocation;
 
@@ -86,7 +87,7 @@ public class SetSchedule extends AppCompatActivity {
         testAddressStringList.add("coowabara");
 
         addressList = new ArrayList<>();
-        addressArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, addressList);
+        addressArrayAdapter = new AddressAdapter(this, android.R.layout.simple_list_item_1, addressList);
 
         editLocation.setThreshold(0);
         editLocation.setAdapter(addressArrayAdapter);
@@ -112,6 +113,7 @@ public class SetSchedule extends AppCompatActivity {
                 getAddresses(text).thenAcceptAsync(addresses -> {
                     Log.d("BigOwl", "pizzapizza"); // TODO: remove
                     if (addresses.isEmpty()) {
+                        Log.d("BigOwl", "no addresses"); // TODO: remove
                         return;
                     }
 
@@ -119,9 +121,7 @@ public class SetSchedule extends AppCompatActivity {
                     addressArrayAdapter.clear();
                     addressArrayAdapter.addAll(addresses);
                     addressArrayAdapter.notifyDataSetChanged();
-                    editLocation.showDropDown();
                 }).exceptionally(e -> {
-
                     Log.d("BigOwl", "pizza_FAIL"); // TODO: remove
                     Log.e("BigOwl", Log.getStackTraceString(e));
                     return null;
