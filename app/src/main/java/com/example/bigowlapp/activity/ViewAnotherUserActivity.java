@@ -7,23 +7,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
+
 import com.example.bigowlapp.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.example.bigowlapp.viewModel.ViewUserViewModel;
 
 import java.util.HashMap;
 import java.util.Objects;
-import com.example.bigowlapp.model.User;
-//import com.google.firebase.auth.*;
+
 
 public class ViewAnotherUserActivity extends AppCompatActivity {
     /*String otherUserID = getIntent().getStringExtra("userID");*/
@@ -33,13 +26,10 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
     String supBtn1 = "Send a request to supervise user";
     String supBtn2 = "You are supervising this user";
     String supBtn3 = "Cancel this request to supervise";
-    DatabaseReference supRequestRef;
-    FirebaseAuth mAuth;
-    FirebaseUser mUser;
     private Button supRequestBtn;
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    String otherUserNumber = getIntent().getStringExtra("smsNumber");
-    /*String contactNumber = getIntent().getStringExtra("contactNumber");*/
+
+    private ViewUserViewModel viewUserViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,26 +37,10 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_another_user);
 
         supRequestBtn = findViewById(R.id.SupRequest);
-        supRequestRef = FirebaseDatabase.getInstance().getReference().child("SupRequests");
 
-        db.collection("users")
-                .whereEqualTo("phoneNumber", otherUserNumber)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            task.getResult();
-                            for (QueryDocumentSnapshot qds : task.getResult()) {
-                                otherUser = qds.toObject(User.class);
-                            }
 
-                        }
-                    }
-                });
+        viewUserViewModel = new ViewModelProvider(this).get(ViewUserViewModel.class);
 
-        otherUserID = otherUser.getUId();
-        mUser = mAuth.getCurrentUser();
         supRequestBtn.setOnClickListener(v -> DoRequest(otherUserID));
     }
 
@@ -74,7 +48,8 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
         if (supRequestStatus.equals("none")) {
             HashMap<String, Object> hashMap = new HashMap<>();
             hashMap.put("status", "pending");
-            supRequestRef.child(mUser.getUid()).child(otherUserID)
+
+            viewUserViewModel.getCurrentRequestRef().child(viewUserViewModel.getCurrentUser().getUid()).child(otherUserID)
                     .updateChildren(hashMap).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(ViewAnotherUserActivity.this,
@@ -90,9 +65,12 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
             });
         }
         if (supRequestStatus.equals("sent_pending") || supRequestStatus.equals("sent_declined")) {
-            supRequestRef.child(mUser.getUid()).child(otherUserID)
+            viewUserViewModel.getCurrentRequestRef()
+                    .child(viewUserViewModel.getCurrentUser().getUid())
+                    .child(otherUserID)
                     .removeValue()
-                    .addOnCompleteListener((OnCompleteListener<Void>) task -> {
+
+                    .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(ViewAnotherUserActivity.this,
                                     "You have canceled request to supervise ",
