@@ -16,7 +16,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bigowlapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SearchContactsToSupervise extends AppCompatActivity {
+public class SearchContactsToSupervise extends BigOwlActivity {
     private ListView listContactsView;
     private List<String> list, listShow;
     private Button loadContacts;
@@ -41,7 +40,6 @@ public class SearchContactsToSupervise extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_contacts);
         initialize();
     }
 
@@ -141,6 +139,15 @@ public class SearchContactsToSupervise extends AppCompatActivity {
         });
     }
 
+    @Override
+    public int getContentView() {
+        return R.layout.activity_search_contacts;
+    }
+
+    @Override
+    protected String getToolbarTitle() {
+        return "Invite From Contact list";
+    }
 
     private void searchUsers(String s) {
         List<String> filteredUsers = list.stream().filter(u -> {

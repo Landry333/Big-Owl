@@ -12,11 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.bigowlapp.R;
 
-public class SendSmsInvitationActivity extends AppCompatActivity {
+public class SendSmsInvitationActivity extends BigOwlActivity {
 
     private EditText number, message;
     private Button send;
@@ -26,7 +24,6 @@ public class SendSmsInvitationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_send_sms_invitation);
 
         noteTv = findViewById(R.id.note);
 
@@ -70,6 +67,15 @@ public class SendSmsInvitationActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public int getContentView() {
+        return R.layout.activity_send_sms_invitation;
+    }
+
+    @Override
+    protected String getToolbarTitle() {
+        return "Send SMS Invitation";
+    }
 
     private void sendInvitation() {
 

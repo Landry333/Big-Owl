@@ -38,7 +38,7 @@ public abstract class BigOwlActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.overflow_home) {
             finish();
-            startActivity(getIntent());
+            startActivity(new Intent(this, HomePageActivity.class));
         } else if (item.getItemId() == R.id.overflow_refresh) {
             finish();
             startActivity(getIntent());

@@ -10,7 +10,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bigowlapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,7 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchContactsByPhone extends AppCompatActivity {
+public class SearchContactsByPhone extends BigOwlActivity {
     private ListView listContactsView;
     private List<String> list, listShow;
     private Button btnSearch;
@@ -34,7 +33,6 @@ public class SearchContactsByPhone extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_byphone);
         initialize();
     }
 
@@ -82,6 +80,16 @@ public class SearchContactsByPhone extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.activity_search_byphone;
+    }
+
+    @Override
+    protected String getToolbarTitle() {
+        return "Invite by Phone Number";
     }
 
 }

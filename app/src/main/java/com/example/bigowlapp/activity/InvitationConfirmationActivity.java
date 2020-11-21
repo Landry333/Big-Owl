@@ -5,18 +5,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.bigowlapp.R;
 
-public class InvitationConfirmationActivity extends AppCompatActivity {
+public class InvitationConfirmationActivity extends BigOwlActivity {
 
     private Button returnToHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_invitation_confirmation);
 
         returnToHome = findViewById(R.id.returnHome);
 
@@ -28,5 +25,15 @@ public class InvitationConfirmationActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.activity_invitation_confirmation;
+    }
+
+    @Override
+    protected String getToolbarTitle() {
+        return "Invite From Contact list";
     }
 }

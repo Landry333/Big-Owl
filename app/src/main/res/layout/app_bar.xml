@@ -4,5 +4,4 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/colorPrimary"
-    app:titleTextColor="@color/white"
-    android:theme="@style/MyToolbarStyle" />
+    app:titleTextColor="@color/white"/>
