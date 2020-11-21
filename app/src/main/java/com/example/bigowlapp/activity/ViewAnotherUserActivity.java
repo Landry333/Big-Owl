@@ -41,7 +41,6 @@ public class ViewAnotherUserActivity extends BigOwlActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_another_user);
 
         supRequestBtn = findViewById(R.id.SupRequest);
         supRequestRef = FirebaseDatabase.getInstance().getReference().child("SupRequests");
