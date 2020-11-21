@@ -65,14 +65,14 @@ public class SetSchedule extends AppCompatActivity
     }
 
     private void initialize() {
-        editTitle = (EditText) findViewById(R.id.edit_title_schedule);
-        groupSpinner = (Spinner) findViewById(R.id.select_group_spinner);
-        userSpinner = (Spinner) findViewById(R.id.select_user_spinner);
-        editStartDate = (Button) findViewById(R.id.edit_start_date);
-        editStartTime = (Button) findViewById(R.id.edit_start_time);
-        editEndDate = (Button) findViewById(R.id.edit_end_date);
-        editEndTime = (Button) findViewById(R.id.edit_end_time);
-        confirmSetSchedule = (Button) findViewById(R.id.set_schedule_confirm_button);
+        editTitle = findViewById(R.id.edit_title_schedule);
+        groupSpinner = findViewById(R.id.select_group_spinner);
+        userSpinner = findViewById(R.id.select_user_spinner);
+        editStartDate = findViewById(R.id.edit_start_date);
+        editStartTime = findViewById(R.id.edit_start_time);
+        editEndDate = findViewById(R.id.edit_end_date);
+        editEndTime = findViewById(R.id.edit_end_time);
+        confirmSetSchedule = findViewById(R.id.set_schedule_confirm_button);
 
         setupConfirmSetScheduleButton();
         setupDateTimeButtons();
@@ -170,8 +170,11 @@ public class SetSchedule extends AppCompatActivity
     }
 
     private String timeFormatter(Calendar calendar) {
-        return calendar.get(Calendar.HOUR_OF_DAY) + ":" +
-                calendar.get(Calendar.MINUTE);
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        return (hourOfDay < 10 ? ("0" + hourOfDay) : hourOfDay) + ":" +
+                (minute < 10 ? ("0" + minute) : minute);
     }
 
     private void unregisterActiveDateTimeButton() {
