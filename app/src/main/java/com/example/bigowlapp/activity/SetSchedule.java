@@ -10,13 +10,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.adapter.AddressAdapter;
+import com.example.bigowlapp.fragments.DatePickerDialogFragment;
+import com.example.bigowlapp.fragments.TimePickerDialogFragment;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.SetScheduleViewModel;
@@ -29,7 +33,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.stream.Collectors;
 
-public class SetSchedule extends AppCompatActivity {
+public class SetSchedule extends AppCompatActivity
+        implements DatePickerDialogFragment.DatePickedListener,
+        TimePickerDialogFragment.TimePickedListener {
 
     private static final int MAX_LOCATION_RESULTS = 5;
     private static final int MIN_CHARS_FOR_ADDRESS_SEARCH = 3;
@@ -39,6 +45,12 @@ public class SetSchedule extends AppCompatActivity {
 
     private Spinner groupSpinner;
     private Spinner userSpinner;
+    private Button editStartDate;
+    private Button editStartTime;
+    private Button editEndDate;
+    private Button editEndTime;
+
+    private Button activeDateTimeButton;
 
     private Geocoder geocoder;
     private AddressAdapter addressArrayAdapter;
@@ -71,7 +83,12 @@ public class SetSchedule extends AppCompatActivity {
     private void initialize() {
         groupSpinner = findViewById(R.id.select_group_spinner);
         userSpinner = findViewById(R.id.select_user_spinner);
+        editStartDate = findViewById(R.id.edit_start_date);
+        editStartTime = findViewById(R.id.edit_start_time);
+        editEndDate = findViewById(R.id.edit_end_date);
+        editEndTime = findViewById(R.id.edit_end_time);
 
+        setupDateTimeButtons();
         setUsersInSpinner();
         setupEditLocation();
     }
@@ -192,7 +209,51 @@ public class SetSchedule extends AppCompatActivity {
                 });
     }
 
+    private void setupDateTimeButtons() {
+        editStartDate.setOnClickListener(view -> {
+            showDateDialogByButtonClick(editStartDate);
+        });
+        editStartTime.setOnClickListener(view -> {
+            showTimeDialogButtonClick(editStartTime);
+        });
+        editEndDate.setOnClickListener(view -> {
+            showDateDialogByButtonClick(editEndDate);
+        });
+        editEndTime.setOnClickListener(view -> {
+            showTimeDialogButtonClick(editEndTime);
+        });
+    }
+
+    private void unregisterDateTimeButton() {
+        activeDateTimeButton = null;
+    }
+
+    private void showDateDialogByButtonClick(Button buttonDisplay) {
+        activeDateTimeButton = buttonDisplay;
+        DialogFragment newFragment = new DatePickerDialogFragment();
+        newFragment.show(getSupportFragmentManager(), "startDatePicker");
+    }
+
+    private void showTimeDialogButtonClick(Button buttonDisplay) {
+        activeDateTimeButton = buttonDisplay;
+        DialogFragment newFragment = new TimePickerDialogFragment();
+        newFragment.show(getSupportFragmentManager(), "startTimePicker");
+    }
+
+    @Override
+    public void onDatePicked(String strDate, int year, int month, int day) {
+        activeDateTimeButton.setText(strDate);
+        unregisterDateTimeButton();
+    }
+
+    @Override
+    public void onTimePicked(String strTime, int hour, int minute) {
+        activeDateTimeButton.setText(strTime);
+        unregisterDateTimeButton();
+    }
+
     private void sendSchedule() {
 
     }
+
 }
