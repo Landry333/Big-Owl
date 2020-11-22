@@ -21,7 +21,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.adapter.AddressAdapter;
+import com.example.bigowlapp.adapter.AddressArrayAdapter;
 import com.example.bigowlapp.fragments.DatePickerDialogFragment;
 import com.example.bigowlapp.fragments.TimePickerDialogFragment;
 import com.example.bigowlapp.model.Group;
@@ -58,7 +58,7 @@ public class SetSchedule extends AppCompatActivity
     private Button activeDateTimeButton;
 
     private Geocoder geocoder;
-    private AddressAdapter addressArrayAdapter;
+    private AddressArrayAdapter addressArrayAdapter;
     private List<Address> addressList;
     private AutoCompleteTextView editLocation;
     private AddressResultReciever addressListResultReceiver;
@@ -111,7 +111,7 @@ public class SetSchedule extends AppCompatActivity
         testAddressStringList.add("coowabara");
 
         addressList = new ArrayList<>();
-        addressArrayAdapter = new AddressAdapter(this, android.R.layout.simple_list_item_1, addressList);
+        addressArrayAdapter = new AddressArrayAdapter(this, R.layout.list_item_address, addressList);
 
         editLocation.setThreshold(0);
         editLocation.setAdapter(addressArrayAdapter);
