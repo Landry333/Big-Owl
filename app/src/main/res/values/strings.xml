@@ -30,4 +30,9 @@
     <string name="user_last_name">Last Name</string>
     <string name="user_phone_number">user_phone_number</string>
     <string name="log_out">Log out</string>
+    <string name="logo_overflow">overflow menu</string>
+    <string name="logo_schedule">logo schedule</string>
+    <string name="logo_user">logo user</string>
+    <string name="logo_notification">logo notification</string>
+    <string name="logo_big_owl">logo big owl</string>
 </resources>
