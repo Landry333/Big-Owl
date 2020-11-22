@@ -281,10 +281,13 @@ public class SetSchedule extends AppCompatActivity
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             switch (resultCode) {
                 case Constants.RESULT_CODE_SUCCESS:
-                    List<Address> addressesFromGeocoderSearch = resultData.getParcelableArrayList(Constants.EXTRA_RESULT_DATA_KEY);
-                    addressArrayAdapter.clear();
-                    addressArrayAdapter.addAll(addressesFromGeocoderSearch);
-                    addressArrayAdapter.notifyDataSetChanged();
+                    runOnUiThread(() -> {
+                        List<Address> addressesFromGeocoderSearch = resultData.getParcelableArrayList(Constants.EXTRA_RESULT_DATA_KEY);
+                        addressArrayAdapter.clear();
+                        addressArrayAdapter.addAll(addressesFromGeocoderSearch);
+                        addressArrayAdapter.notifyDataSetChanged();
+                    });
+
                     break;
                 case Constants.RESULT_CODE_FAIL:
                     String errorMessage = resultData.getString(Constants.EXTRA_RESULT_DATA_KEY);
