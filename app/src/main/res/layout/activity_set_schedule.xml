@@ -283,14 +283,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <AutoCompleteTextView
+                <Button
                     android:id="@+id/edit_location"
+                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:backgroundTint="@color/white"
                     android:gravity="center"
-                    android:importantForAutofill="no"
-                    android:inputType="textAutoCorrect|textCapSentences" />
+                    android:text="@string/select_location" />
 
             </TableRow>
 

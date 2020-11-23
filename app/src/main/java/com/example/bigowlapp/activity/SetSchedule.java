@@ -1,49 +1,41 @@
 package com.example.bigowlapp.activity;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.ResultReceiver;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.adapter.AddressArrayAdapter;
 import com.example.bigowlapp.fragments.DatePickerDialogFragment;
 import com.example.bigowlapp.fragments.TimePickerDialogFragment;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.service.GeocoderAddressService;
 import com.example.bigowlapp.utils.Constants;
 import com.example.bigowlapp.viewModel.SetScheduleViewModel;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 import java.util.stream.Collectors;
 
 public class SetSchedule extends AppCompatActivity
         implements DatePickerDialogFragment.DatePickedListener,
         TimePickerDialogFragment.TimePickedListener {
-
-    private static final int MAX_LOCATION_RESULTS = 5;
-    private static final int MIN_CHARS_FOR_ADDRESS_SEARCH = 3;
 
     private List<Group> listOfGroups;
     private List<User> listOfUsers;
@@ -57,11 +49,8 @@ public class SetSchedule extends AppCompatActivity
 
     private Button activeDateTimeButton;
 
-    private Geocoder geocoder;
-    private AddressArrayAdapter addressArrayAdapter;
-    private List<Address> addressList;
-    private AutoCompleteTextView editLocation;
-    private AddressResultReciever addressListResultReceiver;
+    private Button editLocation;
+    private LatLng selectedLocationLatLng;
 
     private String title;
 
@@ -99,80 +88,6 @@ public class SetSchedule extends AppCompatActivity
         setupEditLocation();
     }
 
-    private void setupEditLocation() {
-        addressListResultReceiver = new AddressResultReciever(null);
-        geocoder = new Geocoder(this, Locale.getDefault());
-
-        // TODO: remove test code
-        ArrayList<String> testAddressStringList = new ArrayList<>();
-        testAddressStringList.add("Apple");
-        testAddressStringList.add("Appliance");
-        testAddressStringList.add("AppleWatcher");
-        testAddressStringList.add("coowabara");
-
-        addressList = new ArrayList<>();
-        addressArrayAdapter = new AddressArrayAdapter(this, R.layout.list_item_address, addressList);
-
-        editLocation.setThreshold(0);
-        editLocation.setAdapter(addressArrayAdapter);
-
-        editLocation.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Nothing needed before text change
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Nothing needed after text change
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String text = s.toString().trim();
-                if (text.length() < MIN_CHARS_FOR_ADDRESS_SEARCH) {
-                    return;
-                }
-
-                startServiceToGetAddressList(text);
-//                getAddresses(text).thenAcceptAsync(addresses -> {
-//                    Log.d("BigOwl", "pizzapizza"); // TODO: remove
-//                    if (addresses.isEmpty()) {
-//                        Log.d("BigOwl", "no addresses"); // TODO: remove
-//                        return;
-//                    }
-//
-//                    Log.d("BigOwl", addresses.size() + " \n " + addresses.get(0).toString()); // TODO: remove
-//                    addressArrayAdapter.clear();
-//                    addressArrayAdapter.addAll(addresses);
-//                    addressArrayAdapter.notifyDataSetChanged();
-//                }).exceptionally(e -> {
-//                    Log.d("BigOwl", "pizza_FAIL"); // TODO: remove
-//                    Log.e("BigOwl", Log.getStackTraceString(e));
-//                    return null;
-//                });
-            }
-
-        });
-    }
-
-    private void startServiceToGetAddressList(String text) {
-        Intent intent = new Intent(this, GeocoderAddressService.class);
-        intent.setAction(GeocoderAddressService.ACTION_GET_ADDRESSES);
-        intent.putExtra(GeocoderAddressService.EXTRA_ADDRESS_LIST_RESULT, addressListResultReceiver);
-        intent.putExtra(GeocoderAddressService.EXTRA_TEXT, text);
-        startService(intent);
-    }
-
-    private CompletableFuture<List<Address>> getAddresses(String searchText) throws CompletionException {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                return geocoder.getFromLocationName(searchText, MAX_LOCATION_RESULTS);
-            } catch (IOException e) {
-                throw new CompletionException(e);
-            }
-        });
-    }
 
     private void subscribeToGroupData() {
         if (!setScheduleViewModel.isCurrentUserSet()) {
@@ -272,29 +187,42 @@ public class SetSchedule extends AppCompatActivity
 
     }
 
-    class AddressResultReciever extends ResultReceiver {
-        public AddressResultReciever(Handler handler) {
-            super(handler);
-        }
+    private void setupEditLocation() {
+        editLocation.setOnClickListener(v -> {
+            // TODO: move non-ui logic to viewModel
+            List<Place.Field> fields = Arrays.asList(Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG);
 
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-            switch (resultCode) {
-                case Constants.RESULT_CODE_SUCCESS:
-                    runOnUiThread(() -> {
-                        List<Address> addressesFromGeocoderSearch = resultData.getParcelableArrayList(Constants.EXTRA_RESULT_DATA_KEY);
-                        addressArrayAdapter.clear();
-                        addressArrayAdapter.addAll(addressesFromGeocoderSearch);
-                        addressArrayAdapter.notifyDataSetChanged();
-                    });
+            Autocomplete.IntentBuilder locationAcIntentBuilder = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields);
 
-                    break;
-                case Constants.RESULT_CODE_FAIL:
-                    String errorMessage = resultData.getString(Constants.EXTRA_RESULT_DATA_KEY);
-                    Log.d("BigOwl", errorMessage); // TODO: remove
-                    break;
+            String defaultEditLocationText = getResources().getString(R.string.select_location);
+            if (editLocation.getText().toString().equals(defaultEditLocationText)) {
+                locationAcIntentBuilder.setInitialQuery(editLocation.getText().toString());
             }
+
+            Intent locationIntent = locationAcIntentBuilder.build(this);
+            startActivityForResult(locationIntent, Constants.REQUEST_CODE_LOCATION);
+        });
+    }
+
+    private void handleLocationSelection(int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            Place selectedPlace = Autocomplete.getPlaceFromIntent(data);
+            String editLocationText = (selectedPlace.getName() == null) ? selectedPlace.getAddress() : selectedPlace.getName();
+            editLocation.setText(editLocationText);
+            selectedLocationLatLng = selectedPlace.getLatLng();
+        } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+            Status status = Autocomplete.getStatusFromIntent(data);
+            Log.i("BigOwl", status.getStatusMessage());
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == Constants.REQUEST_CODE_LOCATION) {
+            handleLocationSelection(resultCode, data);
+            return;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }
