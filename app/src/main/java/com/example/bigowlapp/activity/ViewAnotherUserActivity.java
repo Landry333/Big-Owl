@@ -71,11 +71,6 @@ public class ViewAnotherUserActivity extends BigOwlActivity {
         return R.layout.activity_view_another_user;
     }
 
-    @Override
-    protected String getToolbarTitle() {
-        return "View User";
-    }
-
     private void DoRequest(String otherUserID) {
         if (supRequestStatus.equals("none")) {
             HashMap<String, Object> hashMap = new HashMap<>();

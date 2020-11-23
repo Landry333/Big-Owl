@@ -88,11 +88,6 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
         return R.layout.activity_monitoring_group_page;
     }
 
-    @Override
-    protected String getToolbarTitle() {
-        return "Monitoring Group";
-    }
-
     private void setupSearchBar() {
         searchUsers.addTextChangedListener(new TextWatcher() {
             @Override

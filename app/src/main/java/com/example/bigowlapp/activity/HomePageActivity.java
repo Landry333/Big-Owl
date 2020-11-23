@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
 
 public class HomePageActivity extends BigOwlActivity {
@@ -74,6 +75,16 @@ public class HomePageActivity extends BigOwlActivity {
             Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
             startActivity(i);
         });
+
+        imgBtnOverflow = findViewById(R.id.action_overflow);
+        imgBtnOverflow.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(this, v);
+            int view_id = View.generateViewId();
+            popup.getMenu().add(Menu.NONE, view_id, 3, "Edit Profile");
+            popup.setOnMenuItemClickListener(this);
+            popup.inflate(R.menu.big_owl_overflow);
+            popup.show();
+        });
     }
 
     private void subscribeToData() {
@@ -112,20 +123,9 @@ public class HomePageActivity extends BigOwlActivity {
     }
 
     @Override
-    protected String getToolbarTitle() {
-        return "Homepage";
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menuItemEditProfile = menu.add(Menu.NONE, View.generateViewId(), 3, "Edit Profile");
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == menuItemEditProfile.getItemId()) {
-            startActivity(new Intent(HomePageActivity.this, EditProfileActivity.class));
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getTitle().equals("Edit Profile")) {
+            startActivity(new Intent(this, EditProfileActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }

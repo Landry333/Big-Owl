@@ -35,4 +35,9 @@
     <string name="logo_user">logo user</string>
     <string name="logo_notification">logo notification</string>
     <string name="logo_big_owl">logo big owl</string>
+    <string name="overflow_menu">overflow menu</string>
+    <string name="schedule">schedule</string>
+    <string name="user">user</string>
+    <string name="notification">notification</string>
+    <string name="big_owl">Big Owl</string>
 </resources>

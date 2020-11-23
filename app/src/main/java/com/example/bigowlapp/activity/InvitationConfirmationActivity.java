@@ -31,9 +31,4 @@ public class InvitationConfirmationActivity extends BigOwlActivity {
     public int getContentView() {
         return R.layout.activity_invitation_confirmation;
     }
-
-    @Override
-    protected String getToolbarTitle() {
-        return "Invite From Contact list";
-    }
 }

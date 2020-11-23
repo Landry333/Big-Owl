@@ -90,11 +90,6 @@ public class EditProfileActivity extends BigOwlActivity {
         return R.layout.activity_edit_profile;
     }
 
-    @Override
-    protected String getToolbarTitle() {
-        return "Edit Profile";
-    }
-
     @VisibleForTesting
     public void setHomePageViewModel(EditProfileViewModel editProfileViewModel) {
         this.editProfileViewModel = editProfileViewModel;

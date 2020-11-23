@@ -1,112 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="101dp"
+    android:layout_height="51dp"
     android:background="@color/white"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="101dp"
-        android:background="@color/white"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:orientation="vertical">
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:weightSum="5">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:weightSum="5">
-
-            <ImageButton
-                android:id="@+id/action_overflow"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:tint="?attr/colorPrimary"
-                android:src="@drawable/ic_overflow"
-                android:scaleType="fitCenter"
-                android:contentDescription="TODO" />
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="?attr/colorPrimary" />
-
-            <ImageButton
-                android:id="@+id/action_schedule"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:tint="?attr/colorPrimary"
-                android:src="@drawable/ic_schedule"
-                android:scaleType="fitCenter"
-                android:contentDescription="TODO" />
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="?attr/colorPrimary" />
-
-            <ImageButton
-                android:id="@+id/action_user"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:tint="?attr/colorPrimary"
-                android:src="@drawable/ic_user"
-                android:scaleType="fitCenter"
-                android:contentDescription="TODO" />
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="?attr/colorPrimary" />
-
-            <ImageButton
-                android:id="@+id/action_notification"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:tint="?attr/colorPrimary"
-                android:src="@drawable/ic_notification"
-                android:scaleType="fitCenter"
-                android:contentDescription="TODO" />
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="?attr/colorPrimary" />
-
-            <ImageButton
-                android:id="@+id/action_big_owl"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:src="@drawable/logo_square"
-                android:scaleType="fitCenter"
-                android:contentDescription="TODO" />
-
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/action_overflow"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:tint="?attr/colorPrimary"
+            android:src="@drawable/ic_overflow"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/overflow_menu" />
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
             android:background="?attr/colorPrimary" />
+
+        <ImageButton
+            android:id="@+id/action_schedule"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:tint="?attr/colorPrimary"
+            android:src="@drawable/ic_schedule"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/schedule" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="?attr/colorPrimary" />
+
+        <ImageButton
+            android:id="@+id/action_user"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:tint="?attr/colorPrimary"
+            android:src="@drawable/ic_user"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/user" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="?attr/colorPrimary" />
+
+        <ImageButton
+            android:id="@+id/action_notification"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:tint="?attr/colorPrimary"
+            android:src="@drawable/ic_notification"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/notification" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="?attr/colorPrimary" />
+
+        <ImageButton
+            android:id="@+id/action_big_owl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:src="@drawable/logo_square"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/big_owl" />
 
     </LinearLayout>
 
-</androidx.appcompat.widget.Toolbar>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/colorPrimary" />
+
+</LinearLayout>

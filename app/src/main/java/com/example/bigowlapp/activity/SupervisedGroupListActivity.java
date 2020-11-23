@@ -63,11 +63,6 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
         return R.layout.activity_supervised_group_list;
     }
 
-    @Override
-    protected String getToolbarTitle() {
-        return "Supervised Group List";
-    }
-
     private class SupervisedGroupAdaptor extends ArrayAdapter<Group> {
 
         public SupervisedGroupAdaptor(@NonNull Context context, ArrayList<Group> groups) {

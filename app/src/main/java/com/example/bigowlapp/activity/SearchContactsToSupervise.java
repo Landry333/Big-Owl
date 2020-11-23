@@ -144,11 +144,6 @@ public class SearchContactsToSupervise extends BigOwlActivity {
         return R.layout.activity_search_contacts;
     }
 
-    @Override
-    protected String getToolbarTitle() {
-        return "Invite From Contact list";
-    }
-
     private void searchUsers(String s) {
         List<String> filteredUsers = list.stream().filter(u -> {
             boolean containInName = u.toLowerCase().contains(s);

@@ -20,9 +20,4 @@ public class SupervisedGroupPageActivity extends BigOwlActivity {
     public int getContentView() {
         return R.layout.activity_supervised_group_page;
     }
-
-    @Override
-    protected String getToolbarTitle() {
-        return "Supervised Group";
-    }
 }

@@ -59,11 +59,6 @@ public class AddUsers extends BigOwlActivity {
         return R.layout.activity_add_users;
     }
 
-    @Override
-    protected String getToolbarTitle() {
-        return "Add Users";
-    }
-
     private void requestContactPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
             new AlertDialog.Builder(this)

@@ -86,10 +86,4 @@ public class SearchContactsByPhone extends BigOwlActivity {
     public int getContentView() {
         return R.layout.activity_search_byphone;
     }
-
-    @Override
-    protected String getToolbarTitle() {
-        return "Invite by Phone Number";
-    }
-
 }

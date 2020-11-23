@@ -72,11 +72,6 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
         return R.layout.activity_send_sms_invitation;
     }
 
-    @Override
-    protected String getToolbarTitle() {
-        return "Send SMS Invitation";
-    }
-
     private void sendInvitation() {
 
         try {
