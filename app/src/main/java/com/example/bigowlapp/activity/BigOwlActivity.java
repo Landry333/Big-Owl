@@ -12,7 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
 public abstract class BigOwlActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
-    ImageButton imgBtnOverflow, imgBtnSchedule, imgBtnUser, imgBtnNotification, imgBtnBigOwl;
+    ImageButton imgBtnOverflow;
+    ImageButton imgBtnSchedule;
+    ImageButton imgBtnUser;
+    ImageButton imgBtnNotification;
+    ImageButton imgBtnBigOwl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,22 +33,22 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
 
         imgBtnSchedule = findViewById(R.id.action_schedule);
         imgBtnSchedule.setOnClickListener(v -> {
-            // startActivity(new Intent(this, Schedule?.class););
+            // TODO startActivity(new Intent(this, Schedule? .class));
         });
 
         imgBtnUser = findViewById(R.id.action_user);
         imgBtnUser.setOnClickListener(v -> {
-            // startActivity(new Intent(this, User?.class););
+            // TODO startActivity(new Intent(this, User? .class));
         });
 
         imgBtnNotification = findViewById(R.id.action_notification);
         imgBtnNotification.setOnClickListener(v -> {
-            // startActivity(new Intent(this, Notification?.class););
+            // TODO startActivity(new Intent(this, Notification? .class));
         });
 
         imgBtnBigOwl = findViewById(R.id.action_big_owl);
         imgBtnBigOwl.setOnClickListener(v -> {
-            // startActivity(new Intent(this, BigOwl?.class););
+            // TODO startActivity(new Intent(this, BigOwl? .class));
         });
     }
 

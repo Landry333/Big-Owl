@@ -27,11 +27,6 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
     private SupervisedGroupListViewModel supervisedGroupListViewModel;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         if (supervisedGroupListViewModel == null) {

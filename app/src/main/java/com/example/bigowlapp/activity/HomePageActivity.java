@@ -79,8 +79,7 @@ public class HomePageActivity extends BigOwlActivity {
         imgBtnOverflow = findViewById(R.id.action_overflow);
         imgBtnOverflow.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(this, v);
-            int view_id = View.generateViewId();
-            popup.getMenu().add(Menu.NONE, view_id, 3, "Edit Profile");
+            popup.getMenu().add(Menu.NONE, View.generateViewId();, 3, "Edit Profile");
             popup.setOnMenuItemClickListener(this);
             popup.inflate(R.menu.big_owl_overflow);
             popup.show();
