@@ -15,53 +15,53 @@ import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 public class SupervisedGroupListActivity extends AppCompatActivity {
-    private ListView supervisedGroups;
+    private ListView supervisedGroupsListView;
     private SupervisedGroupListViewModel supervisedGroupListViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supervised_group_list);
-        initialize();
     }
 
-    protected void initialize() {
-        try {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (supervisedGroupListViewModel == null) {
             supervisedGroupListViewModel = new ViewModelProvider(this).get(SupervisedGroupListViewModel.class);
-            LiveData<List<Group>> listOfGroupsLiveData = supervisedGroupListViewModel.getSupervisedGroupList();
+        }
+        subscribeToData();
+    }
 
-            listOfGroupsLiveData.observe(this, supervisedGroups -> {
-                if (supervisedGroups != null) {
-                    ArrayList<Group> groupsArrayList = new ArrayList<>(supervisedGroups);
-                    SupervisedGroupAdaptor adapter = new SupervisedGroupAdaptor(getBaseContext(), groupsArrayList);
-
-                    this.supervisedGroups = findViewById(R.id.supervised_groups);
-                    this.supervisedGroups.setAdapter(adapter);
-                    this.supervisedGroups.setOnItemClickListener((arg0, v, position, arg3) -> {
-                        Intent intent = new Intent(getBaseContext(), SupervisedGroupPageActivity.class);
-                        startActivity(intent);
-                    });
-                } else
-                    this.noGroupAlert().show();
-            });
+    private void subscribeToData() {
+        try {
+            supervisedGroupListViewModel.getCurrentUserData().observe(this,
+                    currentUser -> supervisedGroupListViewModel.getSupervisedGroupListData().observe(this,
+                            supervisedGroups -> {
+                                if (supervisedGroups != null) {
+                                    supervisedGroupsListView = findViewById(R.id.supervised_groups);
+                                    supervisedGroupsListView.setAdapter(new SupervisedGroupAdaptor(getBaseContext(), new ArrayList<>(supervisedGroups)));
+                                    supervisedGroupsListView.setOnItemClickListener((arg0, v, position, arg3) -> startActivity(new Intent(getBaseContext(), SupervisedGroupPageActivity.class)));
+                                } else
+                                    this.noGroupAlert().show();
+                            }));
         } catch (
                 Exception e) {
             e.printStackTrace();
         }
     }
 
-
     private class SupervisedGroupAdaptor extends ArrayAdapter<Group> {
+
         public SupervisedGroupAdaptor(@NonNull Context context, ArrayList<Group> groups) {
             super(context, 0, groups);
         }
@@ -82,8 +82,7 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
             supervisedGroupListViewModel.getSupervisor(
                     group.getMonitoringUserId()).observe((LifecycleOwner) parent.getContext(),
                     supervisor -> groupSupervisor.setText(
-                            supervisor.getFirstName()
-                                    .concat(supervisor.getLastName())));
+                            supervisor.getFullName()));
             // Return the completed view to render on screen
             return convertView;
         }
@@ -96,6 +95,11 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
                 .setPositiveButton("Ok", (dialogInterface, which) -> SupervisedGroupListActivity.super.onBackPressed())
                 .setCancelable(false)
                 .create();
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setSupervisedGroupListViewModel(SupervisedGroupListViewModel supervisedGroupListViewModel) {
+        this.supervisedGroupListViewModel = supervisedGroupListViewModel;
     }
 }
 
