@@ -60,10 +60,9 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
             startActivity(getIntent());
         } else if (item.getItemId() == R.id.overflow_logout) {
             FirebaseAuth.getInstance().signOut();
-            Intent i = new Intent(this, LoginPageActivity.class);
-            startActivity(i);
+            finish();
+            startActivity(new Intent(this, LoginPageActivity.class));
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
-
 }

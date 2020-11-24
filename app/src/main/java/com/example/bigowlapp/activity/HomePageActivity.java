@@ -125,9 +125,10 @@ public class HomePageActivity extends BigOwlActivity {
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getTitle().equals("Edit Profile")) {
+            finish();
             startActivity(new Intent(this, EditProfileActivity.class));
         }
-        return super.onOptionsItemSelected(item);
+        return super.onMenuItemClick(item);
     }
 
     private AlertDialog noSignedInAlert() {
