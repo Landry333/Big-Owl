@@ -58,13 +58,24 @@
                 android:inputType="text" />
         </TableRow>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="?android:attr/dividerHorizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </TableLayout>
 
     <TableLayout
-        android:id="@+id/selection_table"
+        android:id="@+id/group_selection_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_schedule">
 
@@ -86,13 +97,47 @@
             android:layout_height="match_parent"
             android:layout_marginTop="8dp">
 
-            <Spinner
-                android:id="@+id/select_group_spinner"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center" />
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                tools:ignore="UselessParent">
+
+                <ImageView
+                    android:id="@+id/select_group_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/group_icon"
+                    android:maxWidth="30dp"
+                    android:maxHeight="30dp"
+                    app:srcCompat="@drawable/ic_select_group" />
+
+                <Button
+                    android:id="@+id/select_group_button"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:padding="0dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#FFFFFF"
+                    android:gravity="center"
+                    android:text="@string/select_a_group"
+                    android:textAllCaps="false" />
+
+            </LinearLayout>
+
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="?android:attr/dividerHorizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -113,14 +158,47 @@
             android:layout_height="match_parent"
             android:layout_marginTop="8dp">
 
-            <Spinner
-                android:id="@+id/select_user_spinner"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center" />
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                tools:ignore="UselessParent">
+
+                <ImageView
+                    android:id="@+id/select_users_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/users_icon"
+                    android:maxWidth="30dp"
+                    android:maxHeight="30dp"
+                    app:srcCompat="@drawable/ic_select_user" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/select_users_group_chip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/select_a_user">
+                </com.google.android.material.chip.ChipGroup>
+
+            </LinearLayout>
+
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="?android:attr/dividerHorizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </TableLayout>
+
+
 
     <TableLayout
         android:id="@+id/start_date_time"
@@ -132,7 +210,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selection_table">
+        app:layout_constraintTop_toBottomOf="@+id/group_selection_table">
 
         <TableRow
             android:layout_width="match_parent"
@@ -169,7 +247,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#FFFFFF"
                 android:gravity="center"
-                android:text="@string/dd_mm_yyyy" />
+                android:text="@string/mm_dd_yyyy" />
 
             <Button
                 android:id="@+id/edit_start_time"
@@ -183,12 +261,20 @@
 
         </TableRow>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="?android:attr/dividerHorizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </TableLayout>
 
     <TableLayout
         android:id="@+id/end_date_time"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -232,7 +318,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#FFFFFF"
                 android:gravity="center"
-                android:text="@string/dd_mm_yyyy"  />
+                android:text="@string/mm_dd_yyyy"  />
 
             <Button
                 android:id="@+id/edit_end_time"
@@ -244,6 +330,14 @@
                 android:gravity="center"
                 android:text="@string/hh_mm"  />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="?android:attr/dividerHorizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </TableLayout>
 
@@ -288,6 +382,14 @@
                 android:inputType="textAutoCorrect|text|textCapSentences" />
 
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="?android:attr/dividerHorizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </TableLayout>
 

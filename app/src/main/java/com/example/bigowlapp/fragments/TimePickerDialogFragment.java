@@ -13,7 +13,7 @@ public class TimePickerDialogFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
 
     public interface TimePickedListener {
-        void onTimePicked(String strTime, int hour, int minute);
+        void onTimePicked(int hour, int minute);
     }
 
     private TimePickedListener timePickedListener;
@@ -29,8 +29,6 @@ public class TimePickerDialogFragment extends DialogFragment
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        String strTime = ((hourOfDay < 10) ? "0" + hourOfDay : hourOfDay) + ":"
-                + ((minute < 10) ? "0" + minute : minute);
-        timePickedListener.onTimePicked(strTime, hourOfDay, minute);
+        timePickedListener.onTimePicked(hourOfDay, minute);
     }
 }
