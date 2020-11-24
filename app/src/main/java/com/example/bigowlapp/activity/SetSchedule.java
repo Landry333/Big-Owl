@@ -21,15 +21,12 @@ import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.Constants;
 import com.example.bigowlapp.viewModel.SetScheduleViewModel;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.firebase.firestore.GeoPoint;
+import com.mapbox.api.geocoding.v5.models.CarmenFeature;
+import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
+import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +47,7 @@ public class SetSchedule extends AppCompatActivity
     private Button activeDateTimeButton;
 
     private Button editLocation;
-    private LatLng selectedLocationLatLng;
+    private GeoPoint selectedLocationLatLng;
 
     private String title;
 
@@ -189,30 +186,25 @@ public class SetSchedule extends AppCompatActivity
 
     private void setupEditLocation() {
         editLocation.setOnClickListener(v -> {
-            // TODO: move non-ui logic to viewModel
-            List<Place.Field> fields = Arrays.asList(Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG);
+            PlaceOptions placeOptions = PlaceOptions.builder()
+                    .limit(10)
+                    .build(PlaceOptions.MODE_CARDS);
 
-            Autocomplete.IntentBuilder locationAcIntentBuilder = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields);
+            Intent locationIntent = new PlaceAutocomplete.IntentBuilder()
+                    .accessToken(getResources().getString(R.string.mapbox_public_access_token))
+                    .placeOptions(placeOptions)
+                    .build(this);
 
-            String defaultEditLocationText = getResources().getString(R.string.select_location);
-            if (editLocation.getText().toString().equals(defaultEditLocationText)) {
-                locationAcIntentBuilder.setInitialQuery(editLocation.getText().toString());
-            }
-
-            Intent locationIntent = locationAcIntentBuilder.build(this);
             startActivityForResult(locationIntent, Constants.REQUEST_CODE_LOCATION);
         });
     }
 
     private void handleLocationSelection(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            Place selectedPlace = Autocomplete.getPlaceFromIntent(data);
-            String editLocationText = (selectedPlace.getName() == null) ? selectedPlace.getAddress() : selectedPlace.getName();
+            CarmenFeature location = PlaceAutocomplete.getPlace(data);
+            String editLocationText = (location.placeName() == null) ? location.address() : location.placeName();
             editLocation.setText(editLocationText);
-            selectedLocationLatLng = selectedPlace.getLatLng();
-        } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-            Status status = Autocomplete.getStatusFromIntent(data);
-            Log.i("BigOwl", status.getStatusMessage());
+            selectedLocationLatLng = new GeoPoint(location.center().latitude(), location.center().longitude());
         }
     }
 

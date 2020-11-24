@@ -1,4 +1,6 @@
 <resources>
+    <string name="mapbox_public_access_token">pk.eyJ1IjoiYmlnb3dsIiwiYSI6ImNraHZlODJ5YzFjdDMyc295azJ1YTdwZWQifQ.yqOHWYeuQPXphvSkx2NAQA</string>
+
     <string name="app_name">BigOwlApp</string>
     <string name="by">by</string>
     <string name="cancel">Cancel</string>
