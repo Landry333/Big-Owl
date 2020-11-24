@@ -36,7 +36,7 @@ public class NotificationActivity extends AppCompatActivity {
         authRepository = new AuthRepository();
         notificationRepository = new NotificationRepository();
         notificationListData = notificationRepository.getListOfDocumentByAttribute("receiverUId", authRepository.getCurrentUser().getUid(), Notification.class);
-
+        
         recyclerView.setHasFixedSize(true);
 
         layoutManager = new LinearLayoutManager(this);

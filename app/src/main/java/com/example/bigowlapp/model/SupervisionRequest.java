@@ -8,7 +8,6 @@ public class SupervisionRequest extends Notification implements Constants {
     private String senderUId;
     private String groupUId;
     private Response response;
-    private Timestamp timeSent;
     private Timestamp timeResponse;
 
     public SupervisionRequest() {
@@ -16,13 +15,11 @@ public class SupervisionRequest extends Notification implements Constants {
     }
 
     public SupervisionRequest(String uId, Timestamp time, String senderUId,
-                              String receiverUId, String groupUId, Response response,
-                              Timestamp timeSent, Timestamp timeResponse) {
+                              String receiverUId, String groupUId, Response response, Timestamp timeResponse) {
         super(uId, SUPERVISION_TYPE, time, receiverUId);
         this.senderUId = senderUId;
         this.groupUId = groupUId;
         this.response = response;
-        this.timeSent = timeSent;
         this.timeResponse = timeResponse;
     }
 
@@ -50,14 +47,6 @@ public class SupervisionRequest extends Notification implements Constants {
         this.response = response;
     }
 
-    public Timestamp getTimeSent() {
-        return timeSent;
-    }
-
-    public void setTimeSent(Timestamp timeSent) {
-        this.timeSent = timeSent;
-    }
-
     public Timestamp getTimeResponse() {
         return timeResponse;
     }
@@ -79,7 +68,6 @@ public class SupervisionRequest extends Notification implements Constants {
                 ", receiverUId='" + receiverUId + '\'' +
                 ", groupUId='" + groupUId + '\'' +
                 ", response=" + response +
-                ", timeSent=" + timeSent +
                 ", timeResponse=" + timeResponse +
                 '}';
     }

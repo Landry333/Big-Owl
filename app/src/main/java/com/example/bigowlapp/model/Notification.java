@@ -23,9 +23,7 @@ public class Notification {
         this.receiverUId = receiverUId;
     }
 
-    public String getuId() {
-        return uId;
-    }
+    public String getuId() { return uId; }
 
     public void setuId(String uId) {
         this.uId = uId;
