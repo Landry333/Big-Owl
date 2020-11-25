@@ -15,7 +15,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        android:text="TextView"
+        android:text="@string/textview"
         android:textColor="@color/black"
         android:textSize="18sp" />
 
@@ -36,7 +36,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        android:text="TextView"
+        android:text="@string/textview"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:visibility="invisible"/>
@@ -64,7 +64,8 @@
             android:layout_height="wrap_content"
             android:visibility="visible"
             android:layout_margin="40dp"
-            android:text="Accept" />
+            android:text="@string/accept"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/button_reject"
@@ -73,7 +74,8 @@
             android:layout_height="wrap_content"
             android:visibility="visible"
             android:layout_margin="40dp"
-            android:text="Reject" />
+            android:text="@string/reject"
+            tools:ignore="ButtonStyle" />
 
     </TableRow>
 
