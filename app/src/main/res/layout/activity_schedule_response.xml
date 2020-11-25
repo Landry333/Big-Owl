@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ScheduleViewRespondActivity">
+
+    <TextView
+        android:id="@+id/text_view_schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/textview"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/text_view_schedule"
+        android:background="@color/colorAccent" />
+
+    <TextView
+        android:id="@+id/text_view_response"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_view_schedule"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/textview"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:visibility="invisible"/>
+
+    <View
+        android:id="@+id/line_below_response"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/text_view_response"
+        android:background="@color/colorAccent"
+        android:visibility="invisible"/>
+
+    <TableRow
+        android:layout_below="@+id/text_view_response"
+        android:gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/button_accept"
+            android:background="@drawable/rounded_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:layout_margin="40dp"
+            android:text="@string/accept"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/button_reject"
+            android:background="@drawable/rounded_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:layout_margin="40dp"
+            android:text="@string/reject"
+            tools:ignore="ButtonStyle" />
+
+    </TableRow>
+
+</RelativeLayout>
