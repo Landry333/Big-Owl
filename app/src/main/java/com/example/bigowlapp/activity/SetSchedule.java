@@ -1,6 +1,7 @@
 package com.example.bigowlapp.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -229,9 +230,11 @@ public class SetSchedule extends AppCompatActivity
 
     private void setupEditLocation() {
         editLocation.setOnClickListener(v -> {
-            PlaceOptions placeOptions = PlaceOptions.builder()
-                    .limit(10)
-                    .build(PlaceOptions.MODE_CARDS);
+            PlaceOptions placeOptions =
+                    PlaceOptions.builder()
+                            .backgroundColor(Color.WHITE)
+                            .limit(10)
+                            .build(PlaceOptions.MODE_CARDS);
 
             Intent locationIntent = new PlaceAutocomplete.IntentBuilder()
                     .accessToken(getResources().getString(R.string.mapbox_public_access_token))
