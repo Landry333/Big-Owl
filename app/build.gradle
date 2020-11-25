@@ -63,6 +63,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0'
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
 
     // Declare local unit testing dependencies
     testImplementation 'junit:junit:4.13.1'
