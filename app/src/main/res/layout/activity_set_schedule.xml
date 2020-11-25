@@ -266,7 +266,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/location_textview"
@@ -281,7 +281,15 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:padding="@dimen/icon_margin"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_location_marker"
+                    android:contentDescription="@string/select_location" />
 
                 <Button
                     android:id="@+id/edit_location"
@@ -292,7 +300,6 @@
                     android:backgroundTint="@color/white"
                     android:gravity="center"
                     android:text="@string/select_location" />
-
             </TableRow>
 
         </TableLayout>
