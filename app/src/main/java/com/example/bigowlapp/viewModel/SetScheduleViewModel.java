@@ -21,6 +21,8 @@ public class SetScheduleViewModel extends ViewModel {
     private GroupRepository groupRepository;
     private UserRepository userRepository;
 
+    private Schedule newSchedule;
+
     private MutableLiveData<Schedule> scheduleData;
     private MutableLiveData<List<User>> listOfUserData;
     private MutableLiveData<List<Group>> listOfGroupData;
@@ -59,5 +61,16 @@ public class SetScheduleViewModel extends ViewModel {
 
     public boolean isCurrentUserSet() {
         return authRepository.getCurrentUser() != null;
+    }
+
+    public Schedule getNewSchedule() {
+        if (newSchedule == null) {
+            newSchedule = new Schedule();
+        }
+        return newSchedule;
+    }
+
+    public void destructNewSchedule() {
+        newSchedule = null;
     }
 }

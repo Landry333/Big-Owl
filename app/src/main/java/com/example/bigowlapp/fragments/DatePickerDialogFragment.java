@@ -13,7 +13,7 @@ public class DatePickerDialogFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
 
     public interface DatePickedListener {
-        void onDatePicked(String strDate, int year, int month, int day);
+        void onDatePicked(int year, int month, int day);
     }
 
     private DatePickedListener datePickedListener;
@@ -30,7 +30,6 @@ public class DatePickerDialogFragment extends DialogFragment
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        String strDate = (month + 1) + "/" + dayOfMonth + "/" + year;
-        datePickedListener.onDatePicked(strDate, year, (month + 1), dayOfMonth);
+        datePickedListener.onDatePicked(year, month, dayOfMonth);
     }
 }

@@ -2,24 +2,25 @@ package com.example.bigowlapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.EditText;
+import android.widget.ListView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.fragments.DatePickerDialogFragment;
+import com.example.bigowlapp.fragments.GroupDialogFragment;
 import com.example.bigowlapp.fragments.TimePickerDialogFragment;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.Constants;
+import com.example.bigowlapp.utils.GroupRecyclerViewListener;
 import com.example.bigowlapp.viewModel.SetScheduleViewModel;
 import com.google.firebase.firestore.GeoPoint;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
@@ -27,29 +28,39 @@ import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SetSchedule extends AppCompatActivity
         implements DatePickerDialogFragment.DatePickedListener,
-        TimePickerDialogFragment.TimePickedListener {
+        TimePickerDialogFragment.TimePickedListener,
+        GroupRecyclerViewListener {
 
     private List<Group> listOfGroups;
     private List<User> listOfUsers;
 
-    private Spinner groupSpinner;
-    private Spinner userSpinner;
+    private Group currentGroup;
+
+    private EditText editTitle;
+    private Button groupButton;
+    private ListView usersRecyclerView;
     private Button editStartDate;
     private Button editStartTime;
     private Button editEndDate;
     private Button editEndTime;
+    private Button confirmSetSchedule;
 
     private Button activeDateTimeButton;
+    private Calendar activeDateTime;
+
+    private DialogFragment groupDialogFragment;
+
+    private Calendar startDateTime;
+    private Calendar endDateTime;
 
     private Button editLocation;
     private GeoPoint selectedLocationLatLng;
-
-    private String title;
 
     private SetScheduleViewModel setScheduleViewModel;
 
@@ -73,56 +84,42 @@ public class SetSchedule extends AppCompatActivity
     }
 
     private void initialize() {
-        groupSpinner = findViewById(R.id.select_group_spinner);
-        userSpinner = findViewById(R.id.select_user_spinner);
+        editTitle = findViewById(R.id.edit_title_schedule);
+        groupButton = findViewById(R.id.select_group_button);
+        usersRecyclerView = findViewById(R.id.select_users_list_view);
         editStartDate = findViewById(R.id.edit_start_date);
         editStartTime = findViewById(R.id.edit_start_time);
         editEndDate = findViewById(R.id.edit_end_date);
         editEndTime = findViewById(R.id.edit_end_time);
+        confirmSetSchedule = findViewById(R.id.set_schedule_confirm_button);
 
         setupDateTimeButtons();
-        setUsersInSpinner();
         setupEditLocation();
+        setupConfirmSetScheduleButton();
     }
-
 
     private void subscribeToGroupData() {
         if (!setScheduleViewModel.isCurrentUserSet()) {
             return;
         }
         setScheduleViewModel.getListOfGroup().observe(this, groups -> {
-            listOfGroups = new ArrayList<>(groups);
-            List<String> groupNamesArray =
-                    listOfGroups.stream().map(Group::getName).collect(Collectors.toList());
+            groupDialogFragment = new GroupDialogFragment(groups);
+        });
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_spinner_item, groupNamesArray);
-
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            groupSpinner.setAdapter(adapter);
+        groupButton.setOnClickListener(view -> {
+            groupDialogFragment.show(getSupportFragmentManager(), "groupDialogFragment");
         });
     }
 
-    private void setUsersInSpinner() {
-        groupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("position: ", Integer.toString(position));
-                subscribeToUserData(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+    private void setupUsersInSpinner() {
+        // TODO: Used in OnClickedGroup(), specify the list of users
     }
 
-    private void subscribeToUserData(int position) {
+    private void subscribeToUserData(Group group) {
         if (!setScheduleViewModel.isCurrentUserSet()) {
             return;
         }
-        setScheduleViewModel.getListOfUsersFromGroup(listOfGroups.get(position))
+        setScheduleViewModel.getListOfUsersFromGroup(group)
                 .observe(this, users -> {
                     listOfUsers = new ArrayList<>(users);
 
@@ -130,58 +127,105 @@ public class SetSchedule extends AppCompatActivity
                             listOfUsers.stream().map(User::getFullName).collect(Collectors.toList());
 
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                            android.R.layout.simple_spinner_item, userNamesArray);
+                            android.R.layout.simple_list_item_1, userNamesArray);
 
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    userSpinner.setAdapter(adapter);
+
+                    //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    usersRecyclerView.setAdapter(adapter);
                 });
     }
 
-    private void setupDateTimeButtons() {
-        editStartDate.setOnClickListener(view -> {
-            showDateDialogByButtonClick(editStartDate);
-        });
-        editStartTime.setOnClickListener(view -> {
-            showTimeDialogButtonClick(editStartTime);
-        });
-        editEndDate.setOnClickListener(view -> {
-            showDateDialogByButtonClick(editEndDate);
-        });
-        editEndTime.setOnClickListener(view -> {
-            showTimeDialogButtonClick(editEndTime);
+    private void setupConfirmSetScheduleButton() {
+        confirmSetSchedule.setOnClickListener(view -> {
+            // TODO: verify that all information is valid
         });
     }
 
-    private void unregisterDateTimeButton() {
+    //===========================================================================================
+    // Time & Date
+    //===========================================================================================
+
+    private void setupDateTimeButtons() {
+        editStartDate.setOnClickListener(view -> {
+            showDateDialogByButtonClick(startDateTime, editStartDate);
+        });
+        editStartTime.setOnClickListener(view -> {
+            showTimeDialogByButtonClick(startDateTime, editStartTime);
+        });
+        editEndDate.setOnClickListener(view -> {
+            showDateDialogByButtonClick(endDateTime, editEndDate);
+        });
+        editEndTime.setOnClickListener(view -> {
+            showTimeDialogByButtonClick(endDateTime, editEndTime);
+        });
+
+        startDateTime = Calendar.getInstance();
+        endDateTime = Calendar.getInstance();
+        endDateTime.add(Calendar.HOUR_OF_DAY, 1);
+
+        editStartDate.setText(dateFormatter(startDateTime));
+        editStartTime.setText(timeFormatter(startDateTime));
+        editEndDate.setText(dateFormatter(endDateTime));
+        editEndTime.setText(timeFormatter(endDateTime));
+    }
+
+    private String dateFormatter(Calendar calendar) {
+        return (calendar.get(Calendar.MONTH) + 1) + "/" +
+                calendar.get(Calendar.DAY_OF_MONTH) + "/" +
+                calendar.get(Calendar.YEAR);
+    }
+
+    private String timeFormatter(Calendar calendar) {
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        return (hourOfDay < 10 ? ("0" + hourOfDay) : hourOfDay) + ":" +
+                (minute < 10 ? ("0" + minute) : minute);
+    }
+
+    private void unregisterActiveDateTimeButton() {
         activeDateTimeButton = null;
     }
 
-    private void showDateDialogByButtonClick(Button buttonDisplay) {
+    private void showDateDialogByButtonClick(Calendar dateTime, Button buttonDisplay) {
+        activeDateTime = dateTime;
         activeDateTimeButton = buttonDisplay;
         DialogFragment newFragment = new DatePickerDialogFragment();
         newFragment.show(getSupportFragmentManager(), "startDatePicker");
     }
 
-    private void showTimeDialogButtonClick(Button buttonDisplay) {
+    private void showTimeDialogByButtonClick(Calendar dateTime, Button buttonDisplay) {
+        activeDateTime = dateTime;
         activeDateTimeButton = buttonDisplay;
         DialogFragment newFragment = new TimePickerDialogFragment();
         newFragment.show(getSupportFragmentManager(), "startTimePicker");
     }
 
     @Override
-    public void onDatePicked(String strDate, int year, int month, int day) {
+    public void onDatePicked(int year, int month, int day) {
+        String strDate = (month + 1) + "/" + day + "/" + year;
+        activeDateTime.set(Calendar.YEAR, year);
+        activeDateTime.set(Calendar.MONTH, month);
+        activeDateTime.set(Calendar.DAY_OF_MONTH, day);
         activeDateTimeButton.setText(strDate);
-        unregisterDateTimeButton();
+        unregisterActiveDateTimeButton();
     }
 
     @Override
-    public void onTimePicked(String strTime, int hour, int minute) {
+    public void onTimePicked(int hour, int minute) {
+        String strTime = ((hour < 10) ? "0" + hour : hour) + ":"
+                + ((minute < 10) ? "0" + minute : minute);
+        activeDateTime.set(Calendar.HOUR_OF_DAY, hour);
+        activeDateTime.set(Calendar.MINUTE, minute);
         activeDateTimeButton.setText(strTime);
-        unregisterDateTimeButton();
+        unregisterActiveDateTimeButton();
     }
 
-    private void sendSchedule() {
-
+    @Override
+    public void onClickedGroup(Group group) {
+        currentGroup = group;
+        subscribeToUserData(group);
+        groupButton.setText(currentGroup.getName());
     }
 
     private void setupEditLocation() {
