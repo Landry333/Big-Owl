@@ -176,8 +176,8 @@
                     android:maxHeight="30dp"
                     app:srcCompat="@drawable/ic_select_user" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/select_users_recycler_view"
+                <ListView
+                    android:id="@+id/select_users_list_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

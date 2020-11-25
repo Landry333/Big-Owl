@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -36,7 +37,7 @@ public class SetSchedule extends AppCompatActivity
 
     private EditText editTitle;
     private Button groupButton;
-    private RecyclerView usersRecyclerView;
+    private ListView usersRecyclerView;
     private Button editStartDate;
     private Button editStartTime;
     private Button editEndDate;
@@ -72,7 +73,7 @@ public class SetSchedule extends AppCompatActivity
     private void initialize() {
         editTitle = findViewById(R.id.edit_title_schedule);
         groupButton = findViewById(R.id.select_group_button);
-        usersRecyclerView = findViewById(R.id.select_users_recycler_view);
+        usersRecyclerView = findViewById(R.id.select_users_list_view);
         editStartDate = findViewById(R.id.edit_start_date);
         editStartTime = findViewById(R.id.edit_start_time);
         editEndDate = findViewById(R.id.edit_end_date);
@@ -100,11 +101,11 @@ public class SetSchedule extends AppCompatActivity
         // TODO: Used in OnClickedGroup(), specify the list of users
     }
 
-    private void subscribeToUserData(int position) {
+    private void subscribeToUserData(Group group) {
         if (!setScheduleViewModel.isCurrentUserSet()) {
             return;
         }
-        setScheduleViewModel.getListOfUsersFromGroup(listOfGroups.get(position))
+        setScheduleViewModel.getListOfUsersFromGroup(group)
                 .observe(this, users -> {
                     listOfUsers = new ArrayList<>(users);
 
@@ -112,12 +113,11 @@ public class SetSchedule extends AppCompatActivity
                             listOfUsers.stream().map(User::getFullName).collect(Collectors.toList());
 
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                            android.R.layout.simple_spinner_item, userNamesArray);
+                            android.R.layout.simple_list_item_1, userNamesArray);
 
 
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    //TODO: implement recyclerview
-                    //usersRecyclerView.setAdapter(adapter);
+                    //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    usersRecyclerView.setAdapter(adapter);
                 });
     }
 
@@ -210,6 +210,7 @@ public class SetSchedule extends AppCompatActivity
     @Override
     public void onClickedGroup(Group group) {
         currentGroup = group;
+        subscribeToUserData(group);
         groupButton.setText(currentGroup.getName());
     }
 }
