@@ -176,13 +176,10 @@
                     android:maxHeight="30dp"
                     app:srcCompat="@drawable/ic_select_user" />
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/select_users_group_chip"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:contentDescription="@string/select_a_user">
-                </com.google.android.material.chip.ChipGroup>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/select_users_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 

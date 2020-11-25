@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.fragments.DatePickerDialogFragment;
@@ -36,7 +36,7 @@ public class SetSchedule extends AppCompatActivity
 
     private EditText editTitle;
     private Button groupButton;
-    //private Spinner userSpinner;
+    private RecyclerView usersRecyclerView;
     private Button editStartDate;
     private Button editStartTime;
     private Button editEndDate;
@@ -46,7 +46,7 @@ public class SetSchedule extends AppCompatActivity
     private Button activeDateTimeButton;
     private Calendar activeDateTime;
 
-    private DialogFragment dialogFragment;
+    private DialogFragment groupDialogFragment;
 
     private Calendar startDateTime;
     private Calendar endDateTime;
@@ -72,7 +72,7 @@ public class SetSchedule extends AppCompatActivity
     private void initialize() {
         editTitle = findViewById(R.id.edit_title_schedule);
         groupButton = findViewById(R.id.select_group_button);
-        //userSpinner = findViewById(R.id.select_user_spinner);
+        usersRecyclerView = findViewById(R.id.select_users_recycler_view);
         editStartDate = findViewById(R.id.edit_start_date);
         editStartTime = findViewById(R.id.edit_start_time);
         editEndDate = findViewById(R.id.edit_end_date);
@@ -81,9 +81,6 @@ public class SetSchedule extends AppCompatActivity
 
         setupConfirmSetScheduleButton();
         setupDateTimeButtons();
-        setupUsersInSpinner();
-
-
     }
 
     private void subscribeToGroupData() {
@@ -91,46 +88,16 @@ public class SetSchedule extends AppCompatActivity
             return;
         }
         setScheduleViewModel.getListOfGroup().observe(this, groups -> {
-            //TODO: remove adapter
-//            listOfGroups = new ArrayList<>(groups);
-//            List<String> groupNamesArray =
-//                    listOfGroups.stream().map(Group::getName).collect(Collectors.toList());
-//
-//            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-//                    android.R.layout.simple_spinner_item, groupNamesArray);
-//
-//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//            groupButton.setAdapter(adapter);
-            dialogFragment = new GroupDialogFragment(groups);
+            groupDialogFragment = new GroupDialogFragment(groups);
+        });
+
+        groupButton.setOnClickListener(view -> {
+            groupDialogFragment.show(getSupportFragmentManager(), "groupDialogFragment");
         });
     }
 
     private void setupUsersInSpinner() {
-
-        groupButton.setOnClickListener(view -> {
-//            FragmentManager manager = getSupportFragmentManager();
-//            FragmentTransaction transaction = manager.beginTransaction();
-//            GroupFragment gf = new GroupFragment();
-//            transaction.add(R.id.caca, gf);
-//            transaction.addToBackStack(null);
-//            transaction.commit();
-
-
-            dialogFragment.show(getSupportFragmentManager(), "df");
-        });
-
-        //TODO: Remove list
-//        groupButton.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.e("position: ", Integer.toString(position));
-//                subscribeToUserData(position);
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//            }
-//        });
+        // TODO: Used in OnClickedGroup(), specify the list of users
     }
 
     private void subscribeToUserData(int position) {
@@ -147,8 +114,10 @@ public class SetSchedule extends AppCompatActivity
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                             android.R.layout.simple_spinner_item, userNamesArray);
 
+
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    //userSpinner.setAdapter(adapter);
+                    //TODO: implement recyclerview
+                    //usersRecyclerView.setAdapter(adapter);
                 });
     }
 
