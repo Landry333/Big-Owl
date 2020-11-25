@@ -10,6 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.ScheduleResponseActivity" />
+        <!-- TODO remove below activity -->
+        <activity android:name=".activity.ScheduleTestActivity" />
         <activity android:name=".activity.EditProfileActivity" />
         <activity android:name=".activity.HomePageActivity" />
         <activity android:name=".activity.InvitationConfirmationActivity" />

@@ -23,6 +23,8 @@ import com.squareup.picasso.Picasso;
 
 public class HomePageActivity extends AppCompatActivity {
     Button btnLogOut, btnAddUsers, btnMonitoringGroup, btnSupervisedGroup;
+    // TODO remove below button
+    Button btnNotifyTest;
     ScrollView scrollView;
     ImageView imgUserAvatar;
     TextView textEmail, textFirstName, textLastName, textPhone;
@@ -76,6 +78,13 @@ public class HomePageActivity extends AppCompatActivity {
 
         btnSupervisedGroup.setOnClickListener(v -> {
             Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
+            startActivity(i);
+        });
+
+        btnNotifyTest = findViewById(R.id.btn_notify_test);
+
+        btnNotifyTest.setOnClickListener(v -> {
+            Intent i = new Intent(this, ScheduleTestActivity.class);
             startActivity(i);
         });
     }
