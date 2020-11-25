@@ -3,10 +3,6 @@ package com.example.bigowlapp.utils;
 public interface Constants {
 
     String SUPERVISION_TYOE = "supervisionRequest";
-    String EXTRA_RESULT_DATA_KEY = "com.example.bigowlapp.extra.ADDRESS_LIST_RESULT";
-
-    int RESULT_CODE_FAIL = 0;
-    int RESULT_CODE_SUCCESS = 1;
 
     // Request Codes for onActivityResult action differentiation
     int REQUEST_CODE_LOCATION = 1;
