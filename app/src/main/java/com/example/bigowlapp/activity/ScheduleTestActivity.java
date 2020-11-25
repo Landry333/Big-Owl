@@ -31,7 +31,7 @@ public class ScheduleTestActivity extends AppCompatActivity {
 
         createNotificationChannel();
 
-        Intent intent = new Intent(this, ScheduleResponseActivity.class);
+        Intent intent = new Intent(this, ScheduleViewRespondActivity.class);
         intent.putExtra("scheduleUId", "KZ-TEST");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);

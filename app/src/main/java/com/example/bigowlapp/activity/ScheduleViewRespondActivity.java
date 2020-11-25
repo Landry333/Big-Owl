@@ -1,9 +1,6 @@
 package com.example.bigowlapp.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,14 +14,9 @@ import com.example.bigowlapp.viewModel.ScheduleResponseViewModel;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-public class ScheduleResponseActivity extends AppCompatActivity {
+public class ScheduleViewRespondActivity extends AppCompatActivity {
     String scheduleUId;
     private ScheduleResponseViewModel scheduleResponseViewModel;
-    private boolean doubleBackToExitPressedOnce = false;
-
-    // groupUId ajtkmncA3SOauyMgDV0x (ng_...)
-    // supervisorUId CBYGDbEW1MfMYcTCbiiccYxwIyZ2 (ng_...)
-    // memberUid 1Yilto5zfkOZYaRCWprRscEs2hE3 (circle...)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +24,16 @@ public class ScheduleResponseActivity extends AppCompatActivity {
         scheduleUId = getIntent().getStringExtra("scheduleUId");
         setContentView(R.layout.activity_schedule_response);
 
-        // if (scheduleResponseViewModel.isCurrentUserInSchedule())
-
         if (scheduleResponseViewModel == null) {
             scheduleResponseViewModel = new ViewModelProvider(this).get(ScheduleResponseViewModel.class);
         }
 
         scheduleResponseViewModel.getCurrentScheduleData(scheduleUId).observe(this, schedule -> {
+            if (!scheduleResponseViewModel.isCurrentUserInSchedule()) {
+                return;
+            }
             TextView textViewSchedule = findViewById(R.id.text_view_schedule);
+            // TODO front-end create multiple elements to handle multiple fields
             String scheduleText = "scheduleUid: \n" + scheduleUId + "\n\n" +
                     "groupUId: \n" + schedule.getGroupUId() + "\n\n" +
                     "groupSupervisorUId: \n" + schedule.getGroupSupervisorUId() + "\n\n" +
@@ -63,19 +57,22 @@ public class ScheduleResponseActivity extends AppCompatActivity {
         });
 
         Button btnAccept = findViewById(R.id.button_accept);
-        btnAccept.setOnClickListener(v -> {
-            scheduleResponseViewModel.responseSchedule(scheduleUId, Response.ACCEPT);
+        btnAccept.setOnClickListener(v -> userClickRespondButton(Response.ACCEPT));
+
+        Button btnReject = findViewById(R.id.button_reject);
+        btnReject.setOnClickListener(v -> userClickRespondButton(Response.REJECT));
+    }
+
+    private void userClickRespondButton(Response response) {
+        if (scheduleResponseViewModel.isOneMinuteAfterLastResponse()) {
+            scheduleResponseViewModel.respondSchedule(scheduleUId, response);
 
             // create type "memberResponseSchedule" notification
             scheduleResponseViewModel.notifySupervisorScheduleResponse();
-        });
-
-        Button btnReject = findViewById(R.id.button_reject);
-        btnReject.setOnClickListener(v -> {
-            scheduleResponseViewModel.responseSchedule(scheduleUId, Response.REJECT);
-
-            // create type "memberResponseSchedule" notification
-        });
+        } else
+            Toast.makeText(this,
+                    "User can only respond to a schedule 1 minute after last response",
+                    Toast.LENGTH_LONG).show();
     }
 
     private void setResponseButtonsVisibility(Response response) {
@@ -94,19 +91,5 @@ public class ScheduleResponseActivity extends AppCompatActivity {
             btnAccept.setVisibility(View.GONE);
             btnReject.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            finish();
-            startActivity(new Intent(this, HomePageActivity.class));
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler(Looper.getMainLooper()).postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
     }
 }

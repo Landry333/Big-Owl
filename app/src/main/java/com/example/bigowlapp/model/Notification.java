@@ -12,10 +12,10 @@ public class Notification {
     private String senderUId;
     private String receiverUId;
     private String groupUId;
-    private Boolean read;
     private String type;
     private Timestamp timeRead;
     private Timestamp timeSend;
+    private Schedule.UserResponse senderResponse;
 
     public Notification() {
     }
@@ -35,15 +35,23 @@ public class Notification {
         this.timeRead = timeRead;
     }
 
-    public Notification(String uId, String senderUId, String receiverUId, String groupUId, Boolean read, String type, Timestamp timeRead, Timestamp timeSend) {
+    public Notification(String uId, String senderUId, String receiverUId, String groupUId, String type, Timestamp timeRead, Timestamp timeSend, Schedule.UserResponse senderResponse) {
         this.uId = uId;
         this.senderUId = senderUId;
         this.receiverUId = receiverUId;
         this.groupUId = groupUId;
-        this.read = read;
         this.type = type;
         this.timeRead = timeRead;
         this.timeSend = timeSend;
+        this.senderResponse = senderResponse;
+    }
+
+    public Schedule.UserResponse getSenderResponse() {
+        return senderResponse;
+    }
+
+    public void setSenderResponse(Schedule.UserResponse senderResponse) {
+        this.senderResponse = senderResponse;
     }
 
     public String getSenderUId() {
@@ -68,14 +76,6 @@ public class Notification {
 
     public void setGroupUId(String groupUId) {
         this.groupUId = groupUId;
-    }
-
-    public Boolean getRead() {
-        return read;
-    }
-
-    public void setRead(Boolean read) {
-        this.read = read;
     }
 
     public Timestamp getTimeSend() {
