@@ -1,28 +1,32 @@
 package com.example.bigowlapp.activity;
 
-import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 public class HomePageActivity extends AppCompatActivity {
-    private final int CONTACT_PERMISSION_CODE = 1;
-    Button btnLogOut, sendSmsInvitation, btnSearchUsers, btnMonitoringGroup, btnSupervisedGroup, btnMonitoringList, btnNotifications;
-    FirebaseAuth m_FirebaseAuth;
-    private FirebaseAuth.AuthStateListener m_AuthStateListener;
+    Button btnLogOut, btnAddUsers, btnMonitoringGroup, btnSupervisedGroup, btnNotifications;
+    ScrollView scrollView;
+    ImageView imgUserAvatar;
+    TextView textEmail, textFirstName, textLastName, textPhone;
+    private HomePageViewModel homePageViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,117 +38,127 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        if (homePageViewModel == null) {
+            homePageViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
+        }
+        subscribeToData();
     }
 
     protected void initialize() {
-        try {
-            btnLogOut = findViewById(R.id.Logout);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        scrollView = findViewById(R.id.scroll_view);
+        scrollView.setVisibility(View.GONE);
 
-            btnLogOut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FirebaseAuth.getInstance().signOut();
-                    Intent i = new Intent(HomePageActivity.this, LoginPageActivity.class);
-                    startActivity(i);
-                }
-            });
+        btnLogOut = findViewById(R.id.btn_logout);
 
-            sendSmsInvitation = findViewById(R.id.SendSmsInvitation);
+        btnLogOut.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent i = new Intent(HomePageActivity.this, LoginPageActivity.class);
+            startActivity(i);
+        });
 
-            sendSmsInvitation.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(HomePageActivity.this, SendSmsInvitationActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
+        btnAddUsers = findViewById(R.id.btn_add_users);
 
-            btnMonitoringGroup = findViewById(R.id.btnMonitoringGroup);
+        btnAddUsers.setOnClickListener(v -> {
+            Intent i = new Intent(HomePageActivity.this, AddUsers.class);
+            startActivity(i);
+        });
 
-            btnMonitoringGroup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(HomePageActivity.this, MonitoringGroupPageActivity.class);
-                    startActivity(i);
-                }
-            });
+        btnMonitoringGroup = findViewById(R.id.btn_monitoring_group);
 
-            btnSupervisedGroup = findViewById(R.id.btnSupervisedGroup);
+        btnMonitoringGroup.setOnClickListener(v -> {
+            Intent i = new Intent(HomePageActivity.this, MonitoringGroupPageActivity.class);
+            startActivity(i);
+        });
 
-            btnSupervisedGroup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
-                    startActivity(i);
-                }
-            });
+        btnSupervisedGroup = findViewById(R.id.btn_supervised_group);
 
-            btnSearchUsers = findViewById(R.id.btnPhoneContacts);
+        btnSupervisedGroup.setOnClickListener(v -> {
+            Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
+            startActivity(i);
+        });
 
-            btnSearchUsers.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ContextCompat.checkSelfPermission(HomePageActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                        //Toast.makeText(HomePageActivity.this, "This permission is already granted", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(HomePageActivity.this, SearchContactsToSupervise.class);
-                        startActivity(i);
-                    } else {
-                        requestContactPermission();
-                    }
-                }
-            });
+        btnNotifications = findViewById(R.id.btnNotifications);
 
-            btnNotifications = findViewById(R.id.btnNotifications);
-
-            btnNotifications.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(HomePageActivity.this, NotificationActivity.class);
-                    startActivity(i);
-                }
-            });
-
-        } catch (Exception ex) {
-
-        }
+        btnNotifications.setOnClickListener(v -> {
+            Intent i = new Intent(HomePageActivity.this, NotificationActivity.class);
+            startActivity(i);
+        });
     }
 
-    //TODO refactor to another class file
-    private void requestContactPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Permission needed")
-                    .setMessage("Permission is required to read phone Contacts")
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int which) {
-                            ActivityCompat.requestPermissions(HomePageActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, CONTACT_PERMISSION_CODE);
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .create().show();
+    private void subscribeToData() {
+        if (homePageViewModel.isCurrentUserSet()) {
+            imgUserAvatar = findViewById(R.id.user_avatar);
+            textEmail = findViewById(R.id.user_email);
+            textFirstName = findViewById(R.id.user_first_name);
+            textLastName = findViewById(R.id.user_last_name);
+            textPhone = findViewById(R.id.user_phone_number);
 
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, CONTACT_PERMISSION_CODE);
+            homePageViewModel.getCurrentUserData().observe(this, user -> {
+                textEmail.setText(user.getEmail());
+                textFirstName.setText(user.getFirstName());
+                textLastName.setText(user.getLastName());
+                textPhone.setText(user.getPhoneNumber());
+
+                Picasso.get()
+                        .load(user.getProfileImage() == null || user.getProfileImage().isEmpty() ?
+                                null : user.getProfileImage())
+                        .placeholder(R.drawable.logo_square)
+                        .error(R.drawable.logo_square)
+                        .into(imgUserAvatar);
+            });
+            scrollView.setVisibility(View.VISIBLE);
         }
+        /*  TODO: find a way to uncomment out below lines and allow HomePageActivityTest to pass
+        else {
+            this.noSignedInAlert().show();
+        }
+         */
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == CONTACT_PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(HomePageActivity.this, SearchContactsToSupervise.class);
-                startActivity(i);
-            } else {
-                Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
-            }
-        }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_page_overflow, menu);
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.overflow_home) {
+            finish();
+            startActivity(getIntent());
+        } else if (item.getItemId() == R.id.overflow_refresh) {
+            finish();
+            startActivity(getIntent());
+        } else if (item.getItemId() == R.id.overflow_edit_profile) {
+            Intent i = new Intent(HomePageActivity.this, EditProfileActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private AlertDialog noSignedInAlert() {
+        return new AlertDialog.Builder(this)
+                .setTitle("You are not logged in!")
+                .setMessage("Please log in or register an account!")
+                .setPositiveButton("Ok", (dialogInterface, which) -> {
+                    startActivity(new Intent(this, LoginPageActivity.class));
+                    finish();
+                })
+                .setCancelable(false)
+                .create();
+    }
+
+    @VisibleForTesting
+    public HomePageViewModel getHomePageViewModel() {
+        return homePageViewModel;
+    }
+
+    @VisibleForTesting
+    public void setHomePageViewModel(HomePageViewModel homePageViewModel) {
+        this.homePageViewModel = homePageViewModel;
+    }
+
 }

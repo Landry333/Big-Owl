@@ -9,6 +9,7 @@ import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,18 +19,30 @@ import com.example.bigowlapp.R;
 public class SendSmsInvitationActivity extends AppCompatActivity {
 
     private EditText number, message;
-    private Button send, testSendRequest;
-    private String number2, message2;
+    private Button send;
+    private String smsNumber, smsMessage, noteText;
+    private TextView noteTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_sms_invitation);
 
+        noteTv = findViewById(R.id.note);
+
+        String contactDetails = getIntent().getStringExtra("contactDetails");
+        String contactNumber = getIntent().getStringExtra("contactNumber");
+
+        noteText = "Contact: " + contactDetails + " is not yet registered to the application. Send her/him this invitation text sms";
+
+        noteTv.setText(noteText);
+
         number = findViewById(R.id.number);
+        number.setText(contactNumber);
+
         message = findViewById(R.id.message);
         send = findViewById(R.id.send);
-        testSendRequest = findViewById(R.id.testSendRequest);
+
         initialize();
     }
 
@@ -52,16 +65,6 @@ public class SendSmsInvitationActivity extends AppCompatActivity {
                 }
             });
 
-
-            testSendRequest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(SendSmsInvitationActivity.this, ViewAnotherUserActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,7 +75,7 @@ public class SendSmsInvitationActivity extends AppCompatActivity {
 
         try {
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(number2, null, message2, null, null);
+            smsManager.sendTextMessage(smsNumber, null, smsMessage, null, null);
             Toast.makeText(this, "Invitation sent", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,17 +84,15 @@ public class SendSmsInvitationActivity extends AppCompatActivity {
     }
 
     private void beginSendingProcess() {
-        number2 = number.getText().toString().trim();
-        message2 = message.getText().toString().trim();
+        smsNumber = number.getText().toString().trim();
+        smsMessage = message.getText().toString().trim();
 
-        if (message2.isEmpty() && number2.isEmpty()) {
+        if (smsMessage.isEmpty() && smsNumber.isEmpty()) {
             Toast.makeText(SendSmsInvitationActivity.this, "Fields are empty!", Toast.LENGTH_SHORT).show();
-        } else if (number2.isEmpty()) {
-            //Toast.makeText(SignUpPageActivity.this, "Please enter a phone number", Toast.LENGTH_SHORT).show();
+        } else if (smsNumber.isEmpty()) {
             number.setError("Please enter a phone number");
             number.requestFocus();
-        } else if (message2.isEmpty()) {
-            //Toast.makeText(SignUpPageActivity.this, "Please enter a message", Toast.LENGTH_SHORT).show();
+        } else if (smsMessage.isEmpty()) {
             message.setError("Please enter a message");
             message.requestFocus();
         } else {
