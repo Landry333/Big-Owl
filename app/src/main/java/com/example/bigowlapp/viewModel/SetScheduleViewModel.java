@@ -12,6 +12,8 @@ import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
 import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.repository.UserRepository;
+import com.google.firebase.firestore.GeoPoint;
+import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +26,11 @@ public class SetScheduleViewModel extends ViewModel {
     private final UserRepository userRepository;
 
     private Group selectedGroup;
+    private CarmenFeature selectedLocation;
 
     private final MutableLiveData<Schedule> newScheduleData;
     private final LiveData<Group> selectedGroupData;
+    private final LiveData<CarmenFeature> selectedLocationData;
 
     private MutableLiveData<List<User>> listOfUserData;
     private MutableLiveData<List<Group>> listOfGroupData;
@@ -39,6 +43,8 @@ public class SetScheduleViewModel extends ViewModel {
 
         newScheduleData = new MutableLiveData<>(Schedule.getPrototypeSchedule());
         selectedGroupData = Transformations.map(newScheduleData, schedule -> selectedGroup);
+        // TODO: use switchMap() to get users instead
+        selectedLocationData = Transformations.map(newScheduleData, schedule -> selectedLocation);
     }
 
     public LiveData<List<Group>> getListOfGroup() {
@@ -81,6 +87,10 @@ public class SetScheduleViewModel extends ViewModel {
         return selectedGroupData;
     }
 
+    public LiveData<CarmenFeature> getSelectedLocationData() {
+        return selectedLocationData;
+    }
+
     public Group getSelectedGroup() {
         return selectedGroup;
     }
@@ -94,20 +104,27 @@ public class SetScheduleViewModel extends ViewModel {
     }
 
     // TODO: Maybe just pass the id instead???
-    public void updateCurrentGroup(Group group) {
+    public void updateScheduleGroup(Group group) {
         this.selectedGroup = group;
         this.newScheduleData.getValue().setGroupId(group.getuId());
         notifyUi();
     }
 
+    public void updateScheduleLocation(CarmenFeature location) {
+        this.selectedLocation = location;
+        GeoPoint locationCoords = new GeoPoint(location.center().latitude(), location.center().longitude());
+        this.newScheduleData.getValue().setLocation(locationCoords);
+        notifyUi();
+    }
+
     // TODO: Update dates in date binding kind of way as well ???
-//    public void updateStartTime(Date date) {
+//    public void updateScheduleStartTime(Date date) {
 //        Timestamp timestamp = new Timestamp(date);
 //        newScheduleData.getValue().setStartTime(timestamp);
 //        notifyUi();
 //    }
 //
-//    public void updateEndTime(Date date) {
+//    public void updateScheduleEndTime(Date date) {
 //        Timestamp timestamp = new Timestamp(date);
 //        newScheduleData.getValue().setEndTime(timestamp);
 //        notifyUi();

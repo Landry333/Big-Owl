@@ -25,7 +25,6 @@ import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.Constants;
 import com.example.bigowlapp.utils.GroupRecyclerViewListener;
 import com.example.bigowlapp.viewModel.SetScheduleViewModel;
-import com.google.firebase.firestore.GeoPoint;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
@@ -65,7 +64,6 @@ public class ScheduleFormFragment extends Fragment implements DatePickerDialogFr
     private Calendar endDateTime;
 
     private Button editLocation;
-    private GeoPoint selectedLocationLatLng;
 
     private SetScheduleViewModel setScheduleViewModel;
 
@@ -118,6 +116,15 @@ public class ScheduleFormFragment extends Fragment implements DatePickerDialogFr
             }
 
             groupButton.setText(group.getName());
+        });
+
+        setScheduleViewModel.getSelectedLocationData().observe(this, location -> {
+            if (location == null) {
+                return;
+            }
+
+            String editLocationText = (location.placeName() == null) ? location.address() : location.placeName();
+            editLocation.setText(editLocationText);
         });
     }
 
@@ -316,7 +323,7 @@ public class ScheduleFormFragment extends Fragment implements DatePickerDialogFr
     public void onClickedGroup(Group group) {
         subscribeToUserData(group);
         selectUserLayout.setEnabled(true);
-        setScheduleViewModel.updateCurrentGroup(group);
+        setScheduleViewModel.updateScheduleGroup(group);
         // TODO: originally group text was set here, now done in a data binding lik way
 //        groupButton.setText(group.getName());
     }
@@ -341,9 +348,10 @@ public class ScheduleFormFragment extends Fragment implements DatePickerDialogFr
     private void handleLocationSelection(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             CarmenFeature location = PlaceAutocomplete.getPlace(data);
-            String editLocationText = (location.placeName() == null) ? location.address() : location.placeName();
-            editLocation.setText(editLocationText);
-            selectedLocationLatLng = new GeoPoint(location.center().latitude(), location.center().longitude());
+//            String editLocationText = (location.placeName() == null) ? location.address() : location.placeName();
+//            editLocation.setText(editLocationText);
+//            selectedLocationLatLng = new GeoPoint(location.center().latitude(), location.center().longitude());
+            setScheduleViewModel.updateScheduleLocation(location);
         }
     }
 
