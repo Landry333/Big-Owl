@@ -3,6 +3,8 @@ package com.example.bigowlapp.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -128,6 +130,19 @@ public class SetSchedule extends AppCompatActivity
                             android.R.layout.simple_list_item_1, userNamesArray);
 
                     usersListView.setAdapter(adapter);
+
+                    //TODO: Optimize or change code to be more clean when linearlayout is implemented
+                    int height = 0;
+                    for(int i = 0; i < adapter.getCount(); i++){
+                        View viewItem = adapter.getView(i, null, usersListView);
+                        viewItem.measure(0, 0);
+                        height += viewItem.getMeasuredHeight();
+                    }
+                    ViewGroup.LayoutParams params = usersListView.getLayoutParams();
+                    params.height = height + (usersListView.getDividerHeight()
+                            * (adapter.getCount() - 1));
+                    usersListView.setLayoutParams(params);
+                    usersListView.requestLayout();
                 });
     }
 
