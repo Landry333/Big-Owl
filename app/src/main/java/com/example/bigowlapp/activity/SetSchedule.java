@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -128,7 +127,9 @@ public class SetSchedule extends AppCompatActivity
         setScheduleViewModel.getListOfUsersFromGroup(group)
                 .observe(this, users -> {
                     listOfUsers = new ArrayList<>(users);
+                    selectUserLayout.setEnabled(false);
 
+                    // TODO : Extract and move these functions to another method
                     List<String> userNamesArray =
                             listOfUsers.stream().map(User::getFullName).collect(Collectors.toList());
 
@@ -144,7 +145,7 @@ public class SetSchedule extends AppCompatActivity
 
                     //TODO: Optimize or change code to be more clean when linearlayout is implemented
                     int height = 0;
-                    for(int i = 0; i < adapter.getCount(); i++){
+                    for (int i = 0; i < adapter.getCount(); i++) {
                         View viewItem = adapter.getView(i, null, usersListView);
                         viewItem.measure(0, 0);
                         height += viewItem.getMeasuredHeight();
@@ -160,9 +161,9 @@ public class SetSchedule extends AppCompatActivity
 
     private void setupSelectUserLayout() {
         selectUserLayout.setEnabled(false);
-        selectUserLayout.setOnClickListener(view ->{
+        selectUserLayout.setOnClickListener(view -> {
             Intent i = new Intent(SetSchedule.this, SelectUsersInGroupActivity.class);
-            startActivity(i);
+            startActivityForResult(i, Constants.REQUEST_CODE_USER_SELECTION);
         });
     }
 
@@ -288,11 +289,16 @@ public class SetSchedule extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == Constants.REQUEST_CODE_LOCATION) {
-            handleLocationSelection(resultCode, data);
-            return;
+        switch (requestCode) {
+            case Constants.REQUEST_CODE_LOCATION:
+                handleLocationSelection(resultCode, data);
+                break;
+            case Constants.REQUEST_CODE_USER_SELECTION:
+                // TODO: handle the data that has been given
+                break;
+            default:
+                break;
         }
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 }
