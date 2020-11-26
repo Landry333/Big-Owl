@@ -1,4 +1,4 @@
-package com.example.bigowlapp.activity;
+package com.example.bigowlapp.fragments;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,9 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.fragments.DatePickerDialogFragment;
-import com.example.bigowlapp.fragments.GroupDialogFragment;
-import com.example.bigowlapp.fragments.TimePickerDialogFragment;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.Constants;
