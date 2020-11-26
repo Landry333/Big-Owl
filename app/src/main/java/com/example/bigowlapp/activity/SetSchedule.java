@@ -5,9 +5,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
@@ -51,6 +53,8 @@ public class SetSchedule extends AppCompatActivity
     private Button editEndTime;
     private Button confirmSetSchedule;
 
+    private LinearLayout selectUserLayout;
+
     private Button activeDateTimeButton;
     private Calendar activeDateTime;
 
@@ -87,6 +91,7 @@ public class SetSchedule extends AppCompatActivity
         editTitle = findViewById(R.id.edit_title_schedule);
         groupButton = findViewById(R.id.select_group_button);
         usersListView = findViewById(R.id.select_users_list_view);
+        selectUserLayout = findViewById(R.id.select_users_container);
         editStartDate = findViewById(R.id.edit_start_date);
         editStartTime = findViewById(R.id.edit_start_time);
         editEndDate = findViewById(R.id.edit_end_date);
@@ -94,6 +99,7 @@ public class SetSchedule extends AppCompatActivity
         confirmSetSchedule = findViewById(R.id.set_schedule_confirm_button);
 
         setupDateTimeButtons();
+        setupSelectUserLayout();
         setupEditLocation();
         setupConfirmSetScheduleButton();
     }
@@ -129,6 +135,11 @@ public class SetSchedule extends AppCompatActivity
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                             android.R.layout.simple_list_item_1, userNamesArray);
 
+                    usersListView.setOnItemClickListener((parent, view, position, id) -> {
+                        Intent i = new Intent(SetSchedule.this, SelectUsersInGroupActivity.class);
+                        startActivity(i);
+                    });
+
                     usersListView.setAdapter(adapter);
 
                     //TODO: Optimize or change code to be more clean when linearlayout is implemented
@@ -142,8 +153,17 @@ public class SetSchedule extends AppCompatActivity
                     params.height = height + (usersListView.getDividerHeight()
                             * (adapter.getCount() - 1));
                     usersListView.setLayoutParams(params);
+                    usersListView.setAnimation(null);
                     usersListView.requestLayout();
                 });
+    }
+
+    private void setupSelectUserLayout() {
+        selectUserLayout.setEnabled(false);
+        selectUserLayout.setOnClickListener(view ->{
+            Intent i = new Intent(SetSchedule.this, SelectUsersInGroupActivity.class);
+            startActivity(i);
+        });
     }
 
     private void setupConfirmSetScheduleButton() {
@@ -235,6 +255,7 @@ public class SetSchedule extends AppCompatActivity
     @Override
     public void onClickedGroup(Group group) {
         subscribeToUserData(group);
+        selectUserLayout.setEnabled(true);
         setScheduleViewModel.setCurrentGroup(group);
         groupButton.setText(group.getName());
     }
