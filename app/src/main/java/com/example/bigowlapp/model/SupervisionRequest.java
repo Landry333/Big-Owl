@@ -13,6 +13,7 @@ public class SupervisionRequest extends Notification implements Constants {
     private Timestamp timeResponse;
     public SupervisionRequest() {
         super();
+        this.setType(Constants.SUPERVISION_TYOE);
     }
 
     public SupervisionRequest(String uId) {
