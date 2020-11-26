@@ -42,7 +42,7 @@ public class SetSchedule extends AppCompatActivity
 
     private EditText editTitle;
     private Button groupButton;
-    private ListView usersRecyclerView;
+    private ListView usersListView;
     private Button editStartDate;
     private Button editStartTime;
     private Button editEndDate;
@@ -84,7 +84,7 @@ public class SetSchedule extends AppCompatActivity
     private void initialize() {
         editTitle = findViewById(R.id.edit_title_schedule);
         groupButton = findViewById(R.id.select_group_button);
-        usersRecyclerView = findViewById(R.id.select_users_list_view);
+        usersListView = findViewById(R.id.select_users_list_view);
         editStartDate = findViewById(R.id.edit_start_date);
         editStartTime = findViewById(R.id.edit_start_time);
         editEndDate = findViewById(R.id.edit_end_date);
@@ -127,7 +127,7 @@ public class SetSchedule extends AppCompatActivity
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                             android.R.layout.simple_list_item_1, userNamesArray);
 
-                    usersRecyclerView.setAdapter(adapter);
+                    usersListView.setAdapter(adapter);
                 });
     }
 
