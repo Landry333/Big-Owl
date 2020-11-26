@@ -3,6 +3,7 @@ package com.example.bigowlapp.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -12,8 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
@@ -35,8 +36,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SetSchedule extends AppCompatActivity
-        implements DatePickerDialogFragment.DatePickedListener,
+import static android.app.Activity.RESULT_OK;
+
+
+public class ScheduleFormFragment extends Fragment implements DatePickerDialogFragment.DatePickedListener,
         TimePickerDialogFragment.TimePickedListener,
         GroupRecyclerViewListener {
 
@@ -67,35 +70,47 @@ public class SetSchedule extends AppCompatActivity
 
     private SetScheduleViewModel setScheduleViewModel;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_set_schedule);
+    public static ScheduleFormFragment newInstance() {
+        return new ScheduleFormFragment();
+    }
 
-        editLocation = findViewById(R.id.edit_location);
-
-        initialize();
+    public ScheduleFormFragment() {
+        // Required empty public constructor
     }
 
     @Override
-    protected void onStart() {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_schedule_form, container, false);
+        initialize(view);
+        return view;
+    }
+
+    @Override
+    public void onStart() {
         super.onStart();
         if (setScheduleViewModel == null) {
-            setScheduleViewModel = new ViewModelProvider(this).get(SetScheduleViewModel.class);
+            setScheduleViewModel = new ViewModelProvider(getActivity()).get(SetScheduleViewModel.class);
         }
         subscribeToGroupData();
     }
 
-    private void initialize() {
-        editTitle = findViewById(R.id.edit_title_schedule);
-        groupButton = findViewById(R.id.select_group_button);
-        usersListView = findViewById(R.id.select_users_list_view);
-        selectUserLayout = findViewById(R.id.select_users_container);
-        editStartDate = findViewById(R.id.edit_start_date);
-        editStartTime = findViewById(R.id.edit_start_time);
-        editEndDate = findViewById(R.id.edit_end_date);
-        editEndTime = findViewById(R.id.edit_end_time);
-        confirmSetSchedule = findViewById(R.id.set_schedule_confirm_button);
+    private void initialize(View view) {
+        editTitle = view.findViewById(R.id.edit_title_schedule);
+        groupButton = view.findViewById(R.id.select_group_button);
+        usersListView = view.findViewById(R.id.select_users_list_view);
+        selectUserLayout = view.findViewById(R.id.select_users_container);
+        editStartDate = view.findViewById(R.id.edit_start_date);
+        editStartTime = view.findViewById(R.id.edit_start_time);
+        editEndDate = view.findViewById(R.id.edit_end_date);
+        editEndTime = view.findViewById(R.id.edit_end_time);
+        confirmSetSchedule = view.findViewById(R.id.set_schedule_confirm_button);
+        editLocation = view.findViewById(R.id.edit_location);
 
         setupDateTimeButtons();
         setupSelectUserLayout();
@@ -108,11 +123,11 @@ public class SetSchedule extends AppCompatActivity
             return;
         }
         setScheduleViewModel.getListOfGroup().observe(this, groups -> {
-            groupDialogFragment = new GroupDialogFragment(groups);
+            groupDialogFragment = new GroupDialogFragment(this, groups);
         });
 
         groupButton.setOnClickListener(view -> {
-            groupDialogFragment.show(getSupportFragmentManager(), "groupDialogFragment");
+            groupDialogFragment.show(getChildFragmentManager(), "groupDialogFragment");
         });
     }
 
@@ -133,13 +148,14 @@ public class SetSchedule extends AppCompatActivity
                     List<String> userNamesArray =
                             listOfUsers.stream().map(User::getFullName).collect(Collectors.toList());
 
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                             android.R.layout.simple_list_item_1, userNamesArray);
 
-                    usersListView.setOnItemClickListener((parent, view, position, id) -> {
-                        Intent i = new Intent(SetSchedule.this, SelectUsersInGroupActivity.class);
-                        startActivity(i);
-                    });
+                    // TODO: switch to fragment
+//                    usersListView.setOnItemClickListener((parent, view, position, id) -> {
+//                        Intent i = new Intent(SetScheduleActivity.this, SelectUsersInGroupActivity.class);
+//                        startActivity(i);
+//                    });
 
                     usersListView.setAdapter(adapter);
 
@@ -161,10 +177,12 @@ public class SetSchedule extends AppCompatActivity
 
     private void setupSelectUserLayout() {
         selectUserLayout.setEnabled(false);
-        selectUserLayout.setOnClickListener(view -> {
-            Intent i = new Intent(SetSchedule.this, SelectUsersInGroupActivity.class);
-            startActivityForResult(i, Constants.REQUEST_CODE_USER_SELECTION);
-        });
+
+        // TODO: switch to fragment
+//        selectUserLayout.setOnClickListener(view -> {
+//            Intent i = new Intent(SetScheduleActivity.this, SelectUsersInGroupActivity.class);
+//            startActivityForResult(i, Constants.REQUEST_CODE_USER_SELECTION);
+//        });
     }
 
     private void setupConfirmSetScheduleButton() {
@@ -222,15 +240,15 @@ public class SetSchedule extends AppCompatActivity
     private void showDateDialogByButtonClick(Calendar dateTime, Button buttonDisplay) {
         activeDateTime = dateTime;
         activeDateTimeButton = buttonDisplay;
-        DialogFragment newFragment = new DatePickerDialogFragment();
-        newFragment.show(getSupportFragmentManager(), "startDatePicker");
+        DialogFragment newFragment = DatePickerDialogFragment.newInstance(this);
+        newFragment.show(getChildFragmentManager(), "startDatePicker");
     }
 
     private void showTimeDialogByButtonClick(Calendar dateTime, Button buttonDisplay) {
         activeDateTime = dateTime;
         activeDateTimeButton = buttonDisplay;
-        DialogFragment newFragment = new TimePickerDialogFragment();
-        newFragment.show(getSupportFragmentManager(), "startTimePicker");
+        DialogFragment newFragment = TimePickerDialogFragment.newInstance(this);
+        newFragment.show(getChildFragmentManager(), "startTimePicker");
     }
 
     @Override
@@ -272,7 +290,7 @@ public class SetSchedule extends AppCompatActivity
             Intent locationIntent = new PlaceAutocomplete.IntentBuilder()
                     .accessToken(getResources().getString(R.string.mapbox_public_access_token))
                     .placeOptions(placeOptions)
-                    .build(this);
+                    .build(getActivity());
 
             startActivityForResult(locationIntent, Constants.REQUEST_CODE_LOCATION);
         });
@@ -288,7 +306,7 @@ public class SetSchedule extends AppCompatActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode) {
             case Constants.REQUEST_CODE_LOCATION:
                 handleLocationSelection(resultCode, data);

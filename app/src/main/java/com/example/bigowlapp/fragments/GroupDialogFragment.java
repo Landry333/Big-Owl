@@ -25,14 +25,14 @@ public class GroupDialogFragment extends DialogFragment implements GroupRecycler
     public GroupDialogFragment() {
     }
 
-    public GroupDialogFragment(List<Group> listOfGroup) {
+    public GroupDialogFragment(GroupRecyclerViewListener listener, List<Group> listOfGroup) {
+        this.groupRecyclerViewListener = listener;
         this.listOfGroup = listOfGroup;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        groupRecyclerViewListener = (GroupRecyclerViewListener) getActivity();
     }
 
     @Override

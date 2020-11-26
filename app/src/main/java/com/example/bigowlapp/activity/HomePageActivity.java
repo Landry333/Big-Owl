@@ -62,7 +62,7 @@ public class HomePageActivity extends AppCompatActivity {
         btnSetSchedule = findViewById(R.id.btn_set_schedule);
 
         btnSetSchedule.setOnClickListener(v -> {
-            Intent i = new Intent(HomePageActivity.this, SetSchedule.class);
+            Intent i = new Intent(HomePageActivity.this, SetScheduleActivity.class);
             startActivity(i);
         });
 

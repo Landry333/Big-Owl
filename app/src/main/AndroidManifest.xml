@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.SelectUsersInGroupActivity" />
-        <activity android:name=".activity.SetSchedule" />
+        <activity android:name=".activity.SetScheduleActivity" />
         <activity android:name=".activity.EditProfileActivity" />
         <activity android:name=".activity.HomePageActivity" />
         <activity android:name=".activity.InvitationConfirmationActivity" />
