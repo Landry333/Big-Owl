@@ -32,4 +32,5 @@
     <string name="accept">Accept</string>
     <string name="reject">Reject</string>
     <string name="textview">TextView</string>
+    <string name="schedule_list">Schedules</string>
 </resources>
