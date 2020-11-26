@@ -5,6 +5,7 @@ import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+import java.util.Calendar;
 import java.util.List;
 
 @IgnoreExtraProperties
@@ -19,6 +20,20 @@ public class Schedule {
     private Timestamp startTime;
     private Timestamp endTime;
     private GeoPoint location;
+
+    public static Schedule getPrototypeSchedule() {
+        Schedule schedule = new Schedule();
+        schedule.title = "";
+        schedule.event = "";
+
+        Calendar currentTime = Calendar.getInstance();
+        Calendar oneHourLaterTime = Calendar.getInstance();
+        oneHourLaterTime.add(Calendar.HOUR_OF_DAY, 1);
+
+        schedule.startTime = new Timestamp(currentTime.getTime());
+        schedule.endTime = new Timestamp(oneHourLaterTime.getTime());
+        return schedule;
+    }
 
     public Schedule() {
     }

@@ -2,6 +2,7 @@ package com.example.bigowlapp.viewModel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bigowlapp.model.Group;
@@ -17,16 +18,16 @@ import java.util.List;
 
 public class SetScheduleViewModel extends ViewModel {
 
-    private AuthRepository authRepository;
-    private ScheduleRepository scheduleRepository;
-    private GroupRepository groupRepository;
-    private UserRepository userRepository;
+    private final AuthRepository authRepository;
+    private final ScheduleRepository scheduleRepository;
+    private final GroupRepository groupRepository;
+    private final UserRepository userRepository;
 
-    private Schedule newSchedule;
+    private Group selectedGroup;
 
-    private Group currentGroup;
+    private final MutableLiveData<Schedule> newScheduleData;
+    private final LiveData<Group> selectedGroupData;
 
-    private MutableLiveData<Schedule> scheduleData;
     private MutableLiveData<List<User>> listOfUserData;
     private MutableLiveData<List<Group>> listOfGroupData;
 
@@ -35,6 +36,9 @@ public class SetScheduleViewModel extends ViewModel {
         scheduleRepository = new ScheduleRepository();
         groupRepository = new GroupRepository();
         userRepository = new UserRepository();
+
+        newScheduleData = new MutableLiveData<>(Schedule.getPrototypeSchedule());
+        selectedGroupData = Transformations.map(newScheduleData, schedule -> selectedGroup);
     }
 
     public LiveData<List<Group>> getListOfGroup() {
@@ -46,10 +50,10 @@ public class SetScheduleViewModel extends ViewModel {
     }
 
     public LiveData<List<User>> getListOfUsersFromGroup(Group group) {
-        if(group.getSupervisedUserId().isEmpty()){
+        if (group.getSupervisedUserId().isEmpty()) {
             return listOfUserData = new MutableLiveData<>(new ArrayList<>());
         }
-        if (currentGroup == null || currentGroup != group) {
+        if (selectedGroup == null || selectedGroup != group) {
             listOfUserData = new MutableLiveData<>();
             loadUsers(group);
         }
@@ -69,22 +73,43 @@ public class SetScheduleViewModel extends ViewModel {
         return authRepository.getCurrentUser() != null;
     }
 
-    public Schedule getNewSchedule() {
-        if (newSchedule == null) {
-            newSchedule = new Schedule();
-        }
-        return newSchedule;
+    public LiveData<Schedule> getNewScheduleData() {
+        return newScheduleData;
     }
 
-    public Group getCurrentGroup() {
-        return currentGroup;
+    public LiveData<Group> getSelectedGroupData() {
+        return selectedGroupData;
     }
 
-    public void setCurrentGroup(Group currentGroup) {
-        this.currentGroup = currentGroup;
+    public Group getSelectedGroup() {
+        return selectedGroup;
     }
 
-    public void destructNewSchedule() {
-        newSchedule = null;
+    public void notifyUi() {
+        this.newScheduleData.setValue(this.newScheduleData.getValue());
     }
+
+    public void updateScheduleTitle(String title) {
+        newScheduleData.getValue().setTitle(title);
+    }
+
+    // TODO: Maybe just pass the id instead???
+    public void updateCurrentGroup(Group group) {
+        this.selectedGroup = group;
+        this.newScheduleData.getValue().setGroupId(group.getuId());
+        notifyUi();
+    }
+
+    // TODO: Update dates in date binding kind of way as well ???
+//    public void updateStartTime(Date date) {
+//        Timestamp timestamp = new Timestamp(date);
+//        newScheduleData.getValue().setStartTime(timestamp);
+//        notifyUi();
+//    }
+//
+//    public void updateEndTime(Date date) {
+//        Timestamp timestamp = new Timestamp(date);
+//        newScheduleData.getValue().setEndTime(timestamp);
+//        notifyUi();
+//    }
 }

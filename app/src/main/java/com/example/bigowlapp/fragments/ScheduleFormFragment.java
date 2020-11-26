@@ -3,6 +3,8 @@ package com.example.bigowlapp.fragments;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,7 +96,29 @@ public class ScheduleFormFragment extends Fragment implements DatePickerDialogFr
         if (setScheduleViewModel == null) {
             setScheduleViewModel = new ViewModelProvider(getActivity()).get(SetScheduleViewModel.class);
         }
+
+        setupScheduleDataBind();
         subscribeToGroupData();
+    }
+
+    private void setupScheduleDataBind() {
+        setScheduleViewModel.getNewScheduleData().observe(this, schedule -> {
+            editTitle.setText(schedule.getTitle());
+
+            // TODO: implement dates in data binding like way
+//            editStartDate.setText(dateFormatter(startDateTime));
+//            editStartTime.setText(timeFormatter(startDateTime));
+//            editEndDate.setText(dateFormatter(endDateTime));
+//            editEndTime.setText(timeFormatter(endDateTime));
+        });
+
+        setScheduleViewModel.getSelectedGroupData().observe(this, group -> {
+            if (group == null) {
+                return;
+            }
+
+            groupButton.setText(group.getName());
+        });
     }
 
     private void initialize(View view) {
@@ -109,10 +133,30 @@ public class ScheduleFormFragment extends Fragment implements DatePickerDialogFr
         confirmSetSchedule = view.findViewById(R.id.set_schedule_confirm_button);
         editLocation = view.findViewById(R.id.edit_location);
 
+        setupTitle();
         setupDateTimeButtons();
         setupSelectUserLayout();
         setupEditLocation();
         setupConfirmSetScheduleButton();
+    }
+
+    private void setupTitle() {
+        editTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Nothing needs to be checked before the title's change
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Nothing needs to be checked after the title's change
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                setScheduleViewModel.updateScheduleTitle(s.toString());
+            }
+        });
     }
 
     private void subscribeToGroupData() {
@@ -272,8 +316,9 @@ public class ScheduleFormFragment extends Fragment implements DatePickerDialogFr
     public void onClickedGroup(Group group) {
         subscribeToUserData(group);
         selectUserLayout.setEnabled(true);
-        setScheduleViewModel.setCurrentGroup(group);
-        groupButton.setText(group.getName());
+        setScheduleViewModel.updateCurrentGroup(group);
+        // TODO: originally group text was set here, now done in a data binding lik way
+//        groupButton.setText(group.getName());
     }
 
     private void setupEditLocation() {
