@@ -40,8 +40,6 @@ public class SetSchedule extends AppCompatActivity
     private List<Group> listOfGroups;
     private List<User> listOfUsers;
 
-    private Group currentGroup;
-
     private EditText editTitle;
     private Button groupButton;
     private ListView usersRecyclerView;
@@ -129,8 +127,6 @@ public class SetSchedule extends AppCompatActivity
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                             android.R.layout.simple_list_item_1, userNamesArray);
 
-
-                    //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     usersRecyclerView.setAdapter(adapter);
                 });
     }
@@ -223,9 +219,9 @@ public class SetSchedule extends AppCompatActivity
 
     @Override
     public void onClickedGroup(Group group) {
-        currentGroup = group;
         subscribeToUserData(group);
-        groupButton.setText(currentGroup.getName());
+        setScheduleViewModel.setCurrentGroup(group);
+        groupButton.setText(group.getName());
     }
 
     private void setupEditLocation() {

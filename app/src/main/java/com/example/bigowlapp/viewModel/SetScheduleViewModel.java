@@ -12,6 +12,7 @@ import com.example.bigowlapp.repository.GroupRepository;
 import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SetScheduleViewModel extends ViewModel {
@@ -22,6 +23,8 @@ public class SetScheduleViewModel extends ViewModel {
     private UserRepository userRepository;
 
     private Schedule newSchedule;
+
+    private Group currentGroup;
 
     private MutableLiveData<Schedule> scheduleData;
     private MutableLiveData<List<User>> listOfUserData;
@@ -43,7 +46,10 @@ public class SetScheduleViewModel extends ViewModel {
     }
 
     public LiveData<List<User>> getListOfUsersFromGroup(Group group) {
-        if (listOfUserData == null) {
+        if(group.getSupervisedUserId().isEmpty()){
+            return listOfUserData = new MutableLiveData<>(new ArrayList<>());
+        }
+        if (currentGroup == null || currentGroup != group) {
             listOfUserData = new MutableLiveData<>();
             loadUsers(group);
         }
@@ -68,6 +74,14 @@ public class SetScheduleViewModel extends ViewModel {
             newSchedule = new Schedule();
         }
         return newSchedule;
+    }
+
+    public Group getCurrentGroup() {
+        return currentGroup;
+    }
+
+    public void setCurrentGroup(Group currentGroup) {
+        this.currentGroup = currentGroup;
     }
 
     public void destructNewSchedule() {
