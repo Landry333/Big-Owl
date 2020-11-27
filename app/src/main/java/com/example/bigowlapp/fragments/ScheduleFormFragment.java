@@ -94,6 +94,7 @@ public class ScheduleFormFragment extends Fragment
         }
         setupScheduleDataBind();
         subscribeToGroupData();
+        subscribeToUserData();
     }
 
     private void setupScheduleDataBind() {
@@ -173,11 +174,11 @@ public class ScheduleFormFragment extends Fragment
         });
     }
 
-    private void subscribeToUserData(Group group) {
+    private void subscribeToUserData() {
         if (!setScheduleViewModel.isCurrentUserSet()) {
             return;
         }
-        setScheduleViewModel.getListOfUsersFromGroup(group)
+        setScheduleViewModel.getListOfUserInGroupData()
                 .observe(this, users -> {
                     listOfUsers = new ArrayList<>(users);
                     selectUserLayout.setEnabled(false);
@@ -313,7 +314,6 @@ public class ScheduleFormFragment extends Fragment
 
     @Override
     public void onClickedGroup(Group group) {
-        subscribeToUserData(group);
         selectUserLayout.setEnabled(true);
         setScheduleViewModel.updateScheduleGroup(group);
     }

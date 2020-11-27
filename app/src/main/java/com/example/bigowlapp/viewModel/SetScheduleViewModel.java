@@ -25,14 +25,16 @@ public class SetScheduleViewModel extends ViewModel {
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
 
+    private List<User> listOfUser;
     private Group selectedGroup;
+    private Group previousSelectedGroup;
     private CarmenFeature selectedLocation;
 
     private final MutableLiveData<Schedule> newScheduleData;
     private final LiveData<Group> selectedGroupData;
     private final LiveData<CarmenFeature> selectedLocationData;
 
-    private MutableLiveData<List<User>> listOfUserData;
+    private LiveData<List<User>> listOfUserInGroupData;
     private MutableLiveData<List<Group>> listOfGroupData;
 
     public SetScheduleViewModel() {
@@ -43,6 +45,7 @@ public class SetScheduleViewModel extends ViewModel {
 
         newScheduleData = new MutableLiveData<>(Schedule.getPrototypeSchedule());
         selectedGroupData = Transformations.map(newScheduleData, schedule -> selectedGroup);
+        listOfUserInGroupData = Transformations.switchMap(selectedGroupData, group -> getListOfUsersFromGroup(group));
         selectedLocationData = Transformations.map(newScheduleData, schedule -> selectedLocation);
         // TODO: use switchMap() to get users instead
     }
@@ -55,24 +58,13 @@ public class SetScheduleViewModel extends ViewModel {
         return listOfGroupData;
     }
 
-    public LiveData<List<User>> getListOfUsersFromGroup(Group group) {
-        if (group.getSupervisedUserId().isEmpty()) {
-            return listOfUserData = new MutableLiveData<>(new ArrayList<>());
-        }
-        if (selectedGroup == null || selectedGroup != group) {
-            listOfUserData = new MutableLiveData<>();
-            loadUsers(group);
-        }
-        return listOfUserData;
-    }
-
     public void loadListOfGroup() {
         String userId = authRepository.getCurrentUser().getUid();
         listOfGroupData = groupRepository.getListOfDocumentByAttribute("monitoringUserId", userId, Group.class);
     }
 
     public void loadUsers(Group group) {
-        listOfUserData = userRepository.getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
+        listOfUserInGroupData = userRepository.getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
     }
 
     public void updateScheduleTitle(String title) {
@@ -113,6 +105,10 @@ public class SetScheduleViewModel extends ViewModel {
         return selectedGroupData;
     }
 
+    public LiveData<List<User>> getListOfUserInGroupData() {
+        return listOfUserInGroupData;
+    }
+
     public LiveData<CarmenFeature> getSelectedLocationData() {
         return selectedLocationData;
     }
@@ -127,5 +123,14 @@ public class SetScheduleViewModel extends ViewModel {
 
     public void notifyUi() {
         this.newScheduleData.setValue(this.newScheduleData.getValue());
+    }
+
+    private LiveData<List<User>> getListOfUsersFromGroup(Group group) {
+        if (group == null || group.getSupervisedUserId().isEmpty()) {
+            return new MutableLiveData<>(new ArrayList<>());
+        }
+
+        // TODO: Check if the group was already selected
+        return userRepository.getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
     }
 }
