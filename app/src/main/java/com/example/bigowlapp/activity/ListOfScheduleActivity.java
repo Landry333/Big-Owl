@@ -9,12 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.viewModel.ScheduleResponseViewModel;
 import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ListOfScheduleActivity extends AppCompatActivity {
     private ListView scheduleListView;
-    private ScheduleListViewModel scheduleListViewModel;
+    private ScheduleResponseViewModel scheduleListViewModel;
 
 
     @Override
@@ -27,9 +28,9 @@ public class ListOfScheduleActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (scheduleListViewModel == null) {
-            scheduleListViewModel = new ViewModelProvider(this).get(ScheduleListViewModel.class);
+            scheduleListViewModel = new ViewModelProvider(this).get(ScheduleResponseViewModel.class);
         }
-        subscribeToData();
+        //subscribeToData();
     }
 
     private void initialize() {
