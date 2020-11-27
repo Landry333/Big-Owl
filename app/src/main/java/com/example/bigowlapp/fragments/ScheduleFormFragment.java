@@ -189,11 +189,13 @@ public class ScheduleFormFragment extends Fragment
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                             android.R.layout.simple_list_item_1, userNamesArray);
 
-                    // TODO: switch to fragment
-//                    usersListView.setOnItemClickListener((parent, view, position, id) -> {
-//                        Intent i = new Intent(SetScheduleActivity.this, SelectUsersInGroupActivity.class);
-//                        startActivity(i);
-//                    });
+                    usersListView.setOnItemClickListener((parent, view, position, id) -> {
+                        getParentFragmentManager().beginTransaction()
+                                .replace(R.id.schedule_form_container, new UserFragment())
+                                .addToBackStack(null)
+                                .commit();
+
+                    });
 
                     usersListView.setAdapter(adapter);
 

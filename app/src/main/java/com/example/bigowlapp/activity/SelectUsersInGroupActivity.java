@@ -16,7 +16,7 @@ public class SelectUsersInGroupActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.user_list_container, UserFragment.newInstance(1))
+                    .replace(R.id.user_list_container, new UserFragment())
                     .commitNow();
         }
     }

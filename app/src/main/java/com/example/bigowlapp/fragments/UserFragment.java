@@ -8,48 +8,25 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.activity.dummy.DummyContent;
 import com.example.bigowlapp.adapter.UserRecyclerViewAdapter;
+import com.example.bigowlapp.viewModel.SetScheduleViewModel;
 
-/**
- * A fragment representing a list of Items.
- */
 public class UserFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private SetScheduleViewModel setScheduleViewModel;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public UserFragment() {
-    }
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static UserFragment newInstance(int columnCount) {
-        UserFragment fragment = new UserFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
@@ -61,14 +38,18 @@ public class UserFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(new UserRecyclerViewAdapter(DummyContent.ITEMS));
         }
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (setScheduleViewModel == null) {
+            setScheduleViewModel = new ViewModelProvider(getActivity()).get(SetScheduleViewModel.class);
+        }
     }
 
     @Override
