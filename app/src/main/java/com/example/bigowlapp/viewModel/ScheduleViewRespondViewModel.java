@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModel;
 
 import static com.google.firebase.Timestamp.now;
 
-public class ScheduleResponseViewModel extends ViewModel {
+public class ScheduleViewRespondViewModel extends ViewModel {
 
     private final AuthRepository authRepository;
     private final NotificationRepository notificationRepository;
@@ -24,7 +24,7 @@ public class ScheduleResponseViewModel extends ViewModel {
     private Schedule.UserResponse currentUserNewResponse;
 
     // TODO: Dependency Injection
-    public ScheduleResponseViewModel() {
+    public ScheduleViewRespondViewModel() {
         authRepository = new AuthRepository();
         notificationRepository = new NotificationRepository();
         scheduleRepository = new ScheduleRepository();

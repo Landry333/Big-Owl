@@ -9,14 +9,14 @@ import android.widget.Toast;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
-import com.example.bigowlapp.viewModel.ScheduleResponseViewModel;
+import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 public class ScheduleViewRespondActivity extends AppCompatActivity {
     String scheduleUId;
-    private ScheduleResponseViewModel scheduleResponseViewModel;
+    private ScheduleViewRespondViewModel scheduleViewRespondViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +24,12 @@ public class ScheduleViewRespondActivity extends AppCompatActivity {
         scheduleUId = getIntent().getStringExtra("scheduleUId");
         setContentView(R.layout.activity_schedule_response);
 
-        if (scheduleResponseViewModel == null) {
-            scheduleResponseViewModel = new ViewModelProvider(this).get(ScheduleResponseViewModel.class);
+        if (scheduleViewRespondViewModel == null) {
+            scheduleViewRespondViewModel = new ViewModelProvider(this).get(ScheduleViewRespondViewModel.class);
         }
 
-        scheduleResponseViewModel.getCurrentScheduleData(scheduleUId).observe(this, schedule -> {
-            if (!scheduleResponseViewModel.isCurrentUserInSchedule()) {
+        scheduleViewRespondViewModel.getCurrentScheduleData(scheduleUId).observe(this, schedule -> {
+            if (!scheduleViewRespondViewModel.isCurrentUserInSchedule()) {
                 return;
             }
             TextView textViewSchedule = findViewById(R.id.text_view_schedule);
@@ -44,7 +44,7 @@ public class ScheduleViewRespondActivity extends AppCompatActivity {
 
             TextView textViewResponse = findViewById(R.id.text_view_response);
             View viewLineBelowResponse = findViewById(R.id.line_below_response);
-            Schedule.UserResponse userResponse = scheduleResponseViewModel.getUserResponseInSchedule();
+            Schedule.UserResponse userResponse = scheduleViewRespondViewModel.getUserResponseInSchedule();
             if (userResponse.getResponse() != Response.NEUTRAL) {
                 String responseText = "You last " + (userResponse.getResponse() == Response.ACCEPT ? "accepted" : "rejected") +
                         " this schedule on \n"
@@ -64,11 +64,9 @@ public class ScheduleViewRespondActivity extends AppCompatActivity {
     }
 
     private void userClickRespondButton(Response response) {
-        if (scheduleResponseViewModel.isOneMinuteAfterLastResponse()) {
-            scheduleResponseViewModel.respondSchedule(scheduleUId, response);
-
-            // create type "memberResponseSchedule" notification
-            scheduleResponseViewModel.notifySupervisorScheduleResponse();
+        if (scheduleViewRespondViewModel.isOneMinuteAfterLastResponse()) {
+            scheduleViewRespondViewModel.respondSchedule(scheduleUId, response);
+            scheduleViewRespondViewModel.notifySupervisorScheduleResponse();
         } else
             Toast.makeText(this,
                     "User can only respond to a schedule 1 minute after last response",
