@@ -133,7 +133,6 @@ public class SetScheduleViewModel extends ViewModel {
         if (group == null || group.getSupervisedUserId().isEmpty()) {
             return new MutableLiveData<>(new ArrayList<>());
         }
-        
         return userRepository.getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
     }
 }

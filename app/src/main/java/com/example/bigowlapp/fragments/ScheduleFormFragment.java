@@ -181,7 +181,9 @@ public class ScheduleFormFragment extends Fragment
         setScheduleViewModel.getListOfUserInGroupData()
                 .observe(this, users -> {
                     listOfUsers = new ArrayList<>(users);
-                    selectUserLayout.setEnabled(false);
+                    if (setScheduleViewModel.getSelectedGroup() != null) {
+                        selectUserLayout.setEnabled(true);
+                    }
 
                     // TODO : Extract and move these functions to another method
                     List<String> userNamesArray =
@@ -195,7 +197,6 @@ public class ScheduleFormFragment extends Fragment
                                 .replace(R.id.schedule_form_container, new UserFragment())
                                 .addToBackStack(null)
                                 .commit();
-
                     });
 
                     usersListView.setAdapter(adapter);
@@ -219,11 +220,12 @@ public class ScheduleFormFragment extends Fragment
     private void setupSelectUserLayout() {
         selectUserLayout.setEnabled(false);
 
-        // TODO: switch to fragment
-//        selectUserLayout.setOnClickListener(view -> {
-//            Intent i = new Intent(SetScheduleActivity.this, SelectUsersInGroupActivity.class);
-//            startActivityForResult(i, Constants.REQUEST_CODE_USER_SELECTION);
-//        });
+        selectUserLayout.setOnClickListener(view -> {
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.schedule_form_container, new UserFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
     }
 
     private void setupConfirmSetScheduleButton() {
@@ -314,7 +316,6 @@ public class ScheduleFormFragment extends Fragment
 
     @Override
     public void onClickedGroup(Group group) {
-        selectUserLayout.setEnabled(true);
         setScheduleViewModel.updateScheduleGroup(group);
     }
 
@@ -349,7 +350,7 @@ public class ScheduleFormFragment extends Fragment
                 handleLocationSelection(resultCode, data);
                 break;
             case Constants.REQUEST_CODE_USER_SELECTION:
-                // TODO: handle the data that has been given
+                // TODO: handle the data that has been given (Unnecessary anymore)
                 break;
             default:
                 break;
