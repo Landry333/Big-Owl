@@ -3,6 +3,7 @@ package com.example.bigowlapp.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -11,11 +12,13 @@ import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 public class ScheduleViewRespondActivity extends AppCompatActivity {
-    String scheduleUId;
+
+    private String scheduleUId;
     private ScheduleViewRespondViewModel scheduleViewRespondViewModel;
 
     @Override
@@ -32,26 +35,19 @@ public class ScheduleViewRespondActivity extends AppCompatActivity {
             if (!scheduleViewRespondViewModel.isCurrentUserInSchedule()) {
                 return;
             }
-            TextView textViewSchedule = findViewById(R.id.text_view_schedule);
-            // TODO front-end create multiple elements to handle multiple fields
-            String scheduleText = "scheduleUid: \n" + scheduleUId + "\n\n" +
-                    "groupUId: \n" + schedule.getGroupUId() + "\n\n" +
-                    "groupSupervisorUId: \n" + schedule.getGroupSupervisorUId() + "\n\n" +
-                    "location: \n" + schedule.getLocation() + "\n\n" +
-                    "startTime: \n" + schedule.getStartTime().toDate() + "\n\n" +
-                    "getEndTime: \n" + schedule.getEndTime().toDate() + "\n\n";
-            textViewSchedule.setText(scheduleText);
+            ((TextView) findViewById(R.id.text_view_group_uid)).setText(schedule.getGroupUId());
+            ((TextView) findViewById(R.id.text_view_group_supervisor_uid)).setText(schedule.getGroupSupervisorUId());
+            ((TextView) findViewById(R.id.text_view_schedule_start_time)).setText(schedule.getStartTime().toDate().toString());
+            ((TextView) findViewById(R.id.text_view_schedule_end_time)).setText(schedule.getEndTime().toDate().toString());
 
-            TextView textViewResponse = findViewById(R.id.text_view_response);
-            View viewLineBelowResponse = findViewById(R.id.line_below_response);
             Schedule.UserResponse userResponse = scheduleViewRespondViewModel.getUserResponseInSchedule();
             if (userResponse.getResponse() != Response.NEUTRAL) {
-                String responseText = "You last " + (userResponse.getResponse() == Response.ACCEPT ? "accepted" : "rejected") +
-                        " this schedule on \n"
-                        + userResponse.getResponseTime().toDate().toString();
-                textViewResponse.setText(responseText);
-                textViewResponse.setVisibility(View.VISIBLE);
-                viewLineBelowResponse.setVisibility(View.VISIBLE);
+                ((TextView) findViewById(R.id.text_view_schedule_user_response_text))
+                        .setText(userResponse.getResponse() == Response.ACCEPT ? "Accepted" : "Rejected");
+                ((TextView) findViewById(R.id.text_view_schedule_user_response_time))
+                        .setText(userResponse.getResponseTime().toDate().toString());
+                ((LinearLayout) findViewById(R.id.linear_layout_response)).setVisibility(View.VISIBLE);
+                findViewById(R.id.line_below_response).setVisibility(View.VISIBLE);
                 setResponseButtonsVisibility(userResponse.getResponse());
             }
         });
