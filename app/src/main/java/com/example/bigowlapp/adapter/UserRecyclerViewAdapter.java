@@ -8,19 +8,15 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.activity.dummy.DummyContent.DummyItem;
+import com.example.bigowlapp.model.User;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<User> mValues;
 
-    public UserRecyclerViewAdapter(List<DummyItem> items) {
+    public UserRecyclerViewAdapter(List<User> items) {
         mValues = items;
     }
 
@@ -34,8 +30,10 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(String.valueOf(position + 1));
+        String strContent = mValues.get(position).getFullName() + "\n"
+                + mValues.get(position).getEmail();
+        holder.mContentView.setText(strContent);
     }
 
     @Override
@@ -47,7 +45,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public User mItem;
 
         public ViewHolder(View view) {
             super(view);

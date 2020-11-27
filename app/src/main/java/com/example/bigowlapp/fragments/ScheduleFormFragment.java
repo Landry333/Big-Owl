@@ -185,35 +185,37 @@ public class ScheduleFormFragment extends Fragment
                         selectUserLayout.setEnabled(true);
                     }
 
+                    // TODO: Only display selected users here not all users in the group
+
                     // TODO : Extract and move these functions to another method
-                    List<String> userNamesArray =
-                            listOfUsers.stream().map(User::getFullName).collect(Collectors.toList());
-
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                            android.R.layout.simple_list_item_1, userNamesArray);
-
-                    usersListView.setOnItemClickListener((parent, view, position, id) -> {
-                        getParentFragmentManager().beginTransaction()
-                                .replace(R.id.schedule_form_container, new UserFragment())
-                                .addToBackStack(null)
-                                .commit();
-                    });
-
-                    usersListView.setAdapter(adapter);
+//                    List<String> userNamesArray =
+//                            listOfUsers.stream().map(User::getFullName).collect(Collectors.toList());
+//
+//                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+//                            android.R.layout.simple_list_item_1, userNamesArray);
+//
+//                    usersListView.setOnItemClickListener((parent, view, position, id) -> {
+//                        getParentFragmentManager().beginTransaction()
+//                                .replace(R.id.schedule_form_container, new UserFragment(setScheduleViewModel))
+//                                .addToBackStack(null)
+//                                .commit();
+//                    });
+//
+//                    usersListView.setAdapter(adapter);
 
                     //TODO: Optimize or change code to be more clean when linearlayout is implemented
-                    int height = 0;
-                    for (int i = 0; i < adapter.getCount(); i++) {
-                        View viewItem = adapter.getView(i, null, usersListView);
-                        viewItem.measure(0, 0);
-                        height += viewItem.getMeasuredHeight();
-                    }
-                    ViewGroup.LayoutParams params = usersListView.getLayoutParams();
-                    params.height = height + (usersListView.getDividerHeight()
-                            * (adapter.getCount() - 1));
-                    usersListView.setLayoutParams(params);
-                    usersListView.setAnimation(null);
-                    usersListView.requestLayout();
+//                    int height = 0;
+//                    for (int i = 0; i < adapter.getCount(); i++) {
+//                        View viewItem = adapter.getView(i, null, usersListView);
+//                        viewItem.measure(0, 0);
+//                        height += viewItem.getMeasuredHeight();
+//                    }
+//                    ViewGroup.LayoutParams params = usersListView.getLayoutParams();
+//                    params.height = height + (usersListView.getDividerHeight()
+//                            * (adapter.getCount() - 1));
+//                    usersListView.setLayoutParams(params);
+//                    usersListView.setAnimation(null);
+//                    usersListView.requestLayout();
                 });
     }
 
@@ -222,7 +224,7 @@ public class ScheduleFormFragment extends Fragment
 
         selectUserLayout.setOnClickListener(view -> {
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.schedule_form_container, new UserFragment())
+                    .replace(R.id.schedule_form_container, new UserFragment(setScheduleViewModel))
                     .addToBackStack(null)
                     .commit();
         });
