@@ -126,11 +126,14 @@ public class SetScheduleViewModel extends ViewModel {
     }
 
     private LiveData<List<User>> getListOfUsersFromGroup(Group group) {
+        if(previousSelectedGroup != null && previousSelectedGroup.equals(group)) {
+            return new MutableLiveData<>(listOfUserInGroupData.getValue());
+        }
+        previousSelectedGroup = group;
         if (group == null || group.getSupervisedUserId().isEmpty()) {
             return new MutableLiveData<>(new ArrayList<>());
         }
-
-        // TODO: Check if the group was already selected
+        
         return userRepository.getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
     }
 }
