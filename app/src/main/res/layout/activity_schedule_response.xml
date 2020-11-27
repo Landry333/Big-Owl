@@ -5,56 +5,141 @@
     android:layout_height="match_parent"
     tools:context=".activity.ScheduleViewRespondActivity">
 
-    <TextView
-        android:id="@+id/text_view_schedule"
+    <LinearLayout
+        android:id="@+id/linear_layout_schedule_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:text="@string/textview"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical"
         android:textColor="@color/black"
-        android:textSize="18sp" />
+        android:textSize="36sp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/group_name" />
+
+        <TextView
+            android:id="@+id/text_view_group_uid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/group_supervisor" />
+
+        <TextView
+            android:id="@+id/text_view_group_supervisor_uid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_time" />
+
+        <TextView
+            android:id="@+id/text_view_schedule_start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/end_time" />
+
+        <TextView
+            android:id="@+id/text_view_schedule_end_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <View
+        android:id="@+id/view_divider_below_schedule"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="12dp"
-        android:layout_below="@+id/text_view_schedule"
+        android:layout_below="@+id/linear_layout_schedule_view"
         android:background="@color/colorAccent" />
 
-    <TextView
-        android:id="@+id/text_view_response"
+    <LinearLayout
+        android:id="@+id/linear_layout_response"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_view_schedule"
+        android:layout_below="@+id/view_divider_below_schedule"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:text="@string/textview"
+        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        android:visibility="invisible"/>
+        android:textSize="36sp"
+        android:visibility="invisible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/you_last" />
+
+            <TextView
+                android:id="@+id/text_view_schedule_user_response_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/this_schedule_on" />
+
+        </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_view_schedule_user_response_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold" />
+
+    </LinearLayout>
 
     <View
         android:id="@+id/line_below_response"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="12dp"
-        android:layout_below="@+id/text_view_response"
+        android:layout_below="@+id/linear_layout_response"
         android:background="@color/colorAccent"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
-    <TableRow
-        android:layout_below="@+id/text_view_response"
+    <LinearLayout
+        android:layout_below="@+id/line_below_response"
         android:gravity="center"
-        android:layout_marginTop="24dp"
+        android:layout_margin="20dp"
         android:layout_width="match_parent"
+        android:orientation="horizontal"
         android:layout_height="wrap_content">
 
         <Button
@@ -63,7 +148,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            android:layout_margin="40dp"
+            android:layout_margin="20dp"
             android:text="@string/accept"
             tools:ignore="ButtonStyle" />
 
@@ -73,10 +158,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            android:layout_margin="40dp"
+            android:layout_margin="20dp"
             android:text="@string/reject"
             tools:ignore="ButtonStyle" />
 
-    </TableRow>
+    </LinearLayout>
 
 </RelativeLayout>
