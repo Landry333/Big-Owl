@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
 
 import static android.app.Activity.RESULT_OK;
 
-
-public class ScheduleFormFragment extends Fragment implements DatePickerDialogFragment.DatePickedListener,
+public class ScheduleFormFragment extends Fragment
+        implements DatePickerDialogFragment.DatePickedListener,
         TimePickerDialogFragment.TimePickedListener,
         GroupRecyclerViewListener {
 
@@ -47,23 +47,21 @@ public class ScheduleFormFragment extends Fragment implements DatePickerDialogFr
     private EditText editTitle;
     private Button groupButton;
     private ListView usersListView;
+    private LinearLayout selectUserLayout;
     private Button editStartDate;
     private Button editStartTime;
     private Button editEndDate;
     private Button editEndTime;
+    private Button editLocation;
     private Button confirmSetSchedule;
-
-    private LinearLayout selectUserLayout;
 
     private Button activeDateTimeButton;
     private Calendar activeDateTime;
 
-    private DialogFragment groupDialogFragment;
-
     private Calendar startDateTime;
     private Calendar endDateTime;
 
-    private Button editLocation;
+    private DialogFragment groupDialogFragment;
 
     private SetScheduleViewModel setScheduleViewModel;
 
@@ -94,7 +92,6 @@ public class ScheduleFormFragment extends Fragment implements DatePickerDialogFr
         if (setScheduleViewModel == null) {
             setScheduleViewModel = new ViewModelProvider(getActivity()).get(SetScheduleViewModel.class);
         }
-
         setupScheduleDataBind();
         subscribeToGroupData();
     }
@@ -114,7 +111,6 @@ public class ScheduleFormFragment extends Fragment implements DatePickerDialogFr
             if (group == null) {
                 return;
             }
-
             groupButton.setText(group.getName());
         });
 
@@ -122,7 +118,6 @@ public class ScheduleFormFragment extends Fragment implements DatePickerDialogFr
             if (location == null) {
                 return;
             }
-
             String editLocationText = (location.placeName() == null) ? location.address() : location.placeName();
             editLocation.setText(editLocationText);
         });
@@ -173,14 +168,9 @@ public class ScheduleFormFragment extends Fragment implements DatePickerDialogFr
         setScheduleViewModel.getListOfGroup().observe(this, groups -> {
             groupDialogFragment = new GroupDialogFragment(this, groups);
         });
-
         groupButton.setOnClickListener(view -> {
             groupDialogFragment.show(getChildFragmentManager(), "groupDialogFragment");
         });
-    }
-
-    private void setupUsersInSpinner() {
-        // TODO: Used in OnClickedGroup(), specify the list of users
     }
 
     private void subscribeToUserData(Group group) {
@@ -324,8 +314,6 @@ public class ScheduleFormFragment extends Fragment implements DatePickerDialogFr
         subscribeToUserData(group);
         selectUserLayout.setEnabled(true);
         setScheduleViewModel.updateScheduleGroup(group);
-        // TODO: originally group text was set here, now done in a data binding lik way
-//        groupButton.setText(group.getName());
     }
 
     private void setupEditLocation() {
@@ -348,9 +336,6 @@ public class ScheduleFormFragment extends Fragment implements DatePickerDialogFr
     private void handleLocationSelection(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             CarmenFeature location = PlaceAutocomplete.getPlace(data);
-//            String editLocationText = (location.placeName() == null) ? location.address() : location.placeName();
-//            editLocation.setText(editLocationText);
-//            selectedLocationLatLng = new GeoPoint(location.center().latitude(), location.center().longitude());
             setScheduleViewModel.updateScheduleLocation(location);
         }
     }

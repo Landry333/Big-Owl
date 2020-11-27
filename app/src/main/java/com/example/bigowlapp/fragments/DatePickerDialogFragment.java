@@ -16,17 +16,13 @@ public class DatePickerDialogFragment extends DialogFragment
     public interface DatePickedListener {
         void onDatePicked(int year, int month, int day);
     }
-    
+
+    private DatePickedListener datePickedListener;
+
     public static DatePickerDialogFragment newInstance(DatePickedListener listener) {
         DatePickerDialogFragment fragment = new DatePickerDialogFragment();
         fragment.setDatePickedListener(listener);
         return fragment;
-    }
-
-    private DatePickedListener datePickedListener;
-
-    public void setDatePickedListener(DatePickedListener datePickedListener) {
-        this.datePickedListener = datePickedListener;
     }
 
     @NonNull
@@ -42,5 +38,9 @@ public class DatePickerDialogFragment extends DialogFragment
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         datePickedListener.onDatePicked(year, month, dayOfMonth);
+    }
+
+    public void setDatePickedListener(DatePickedListener datePickedListener) {
+        this.datePickedListener = datePickedListener;
     }
 }

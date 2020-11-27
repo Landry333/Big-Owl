@@ -17,16 +17,12 @@ public class TimePickerDialogFragment extends DialogFragment
         void onTimePicked(int hour, int minute);
     }
 
+    private TimePickedListener timePickedListener;
+
     public static TimePickerDialogFragment newInstance(TimePickedListener listener) {
         TimePickerDialogFragment fragment = new TimePickerDialogFragment();
         fragment.setTimePickedListener(listener);
         return fragment;
-    }
-
-    private TimePickedListener timePickedListener;
-
-    public void setTimePickedListener(TimePickedListener timePickedListener) {
-        this.timePickedListener = timePickedListener;
     }
 
     @NonNull
@@ -41,5 +37,9 @@ public class TimePickerDialogFragment extends DialogFragment
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         timePickedListener.onTimePicked(hourOfDay, minute);
+    }
+
+    public void setTimePickedListener(TimePickedListener timePickedListener) {
+        this.timePickedListener = timePickedListener;
     }
 }

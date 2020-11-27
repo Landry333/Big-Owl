@@ -24,7 +24,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-
+// TODO: Remove unused Class; use UserFragment instead
+@Deprecated
 public class UsersFragment extends AppCompatActivity {
     EditText search_users;
     private ListView users_listview;

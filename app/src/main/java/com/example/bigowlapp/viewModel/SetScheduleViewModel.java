@@ -43,8 +43,8 @@ public class SetScheduleViewModel extends ViewModel {
 
         newScheduleData = new MutableLiveData<>(Schedule.getPrototypeSchedule());
         selectedGroupData = Transformations.map(newScheduleData, schedule -> selectedGroup);
-        // TODO: use switchMap() to get users instead
         selectedLocationData = Transformations.map(newScheduleData, schedule -> selectedLocation);
+        // TODO: use switchMap() to get users instead
     }
 
     public LiveData<List<Group>> getListOfGroup() {
@@ -75,35 +75,10 @@ public class SetScheduleViewModel extends ViewModel {
         listOfUserData = userRepository.getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
     }
 
-    public boolean isCurrentUserSet() {
-        return authRepository.getCurrentUser() != null;
-    }
-
-    public LiveData<Schedule> getNewScheduleData() {
-        return newScheduleData;
-    }
-
-    public LiveData<Group> getSelectedGroupData() {
-        return selectedGroupData;
-    }
-
-    public LiveData<CarmenFeature> getSelectedLocationData() {
-        return selectedLocationData;
-    }
-
-    public Group getSelectedGroup() {
-        return selectedGroup;
-    }
-
-    public void notifyUi() {
-        this.newScheduleData.setValue(this.newScheduleData.getValue());
-    }
-
     public void updateScheduleTitle(String title) {
         newScheduleData.getValue().setTitle(title);
     }
 
-    // TODO: Maybe just pass the id instead???
     public void updateScheduleGroup(Group group) {
         this.selectedGroup = group;
         this.newScheduleData.getValue().setGroupId(group.getuId());
@@ -129,4 +104,28 @@ public class SetScheduleViewModel extends ViewModel {
 //        newScheduleData.getValue().setEndTime(timestamp);
 //        notifyUi();
 //    }
+
+    public LiveData<Schedule> getNewScheduleData() {
+        return newScheduleData;
+    }
+
+    public LiveData<Group> getSelectedGroupData() {
+        return selectedGroupData;
+    }
+
+    public LiveData<CarmenFeature> getSelectedLocationData() {
+        return selectedLocationData;
+    }
+
+    public Group getSelectedGroup() {
+        return selectedGroup;
+    }
+
+    public boolean isCurrentUserSet() {
+        return authRepository.getCurrentUser() != null;
+    }
+
+    public void notifyUi() {
+        this.newScheduleData.setValue(this.newScheduleData.getValue());
+    }
 }
