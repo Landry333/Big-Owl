@@ -14,16 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.adapter.UserRecyclerViewAdapter;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.utils.UserRecyclerViewListener;
 import com.example.bigowlapp.viewModel.SetScheduleViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class UserFragment extends Fragment {
+public class UserFragment extends Fragment implements UserRecyclerViewListener {
 
     private SetScheduleViewModel setScheduleViewModel;
     private List<User> listOfUsers;
-    private List<Boolean> listOfSelection;
+    private Map<User, Boolean> listOfSelectedUsers;
     private UserRecyclerViewAdapter userRecyclerViewAdapter;
 
 
@@ -46,6 +49,7 @@ public class UserFragment extends Fragment {
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             listOfUsers = new ArrayList<>();
+            listOfSelectedUsers = new HashMap<>();
             userRecyclerViewAdapter = new UserRecyclerViewAdapter(listOfUsers);
             userRecyclerViewAdapter.notifyDataSetChanged();
             recyclerView.setAdapter(userRecyclerViewAdapter);
@@ -62,15 +66,32 @@ public class UserFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //mViewModel = ViewModelProviders.of(this).get(ViewModel.class);
-        // TODO: Use the ViewModel
     }
 
     private void subscribeToData() {
-        setScheduleViewModel.getListOfUserInGroupData().observe(this, users -> {
+//        setScheduleViewModel.getListOfUserInGroupData().observe(this, users -> {
+//            listOfUsers.clear();
+//            listOfUsers.addAll(users);
+//            userRecyclerViewAdapter.notifyDataSetChanged();
+//
+//            listOfSelectedUsers = new HashMap<>();
+//            for (User listOfUser : listOfUsers) {
+//                listOfSelectedUsers.put(listOfUser, false);
+//            }
+//        });
+
+        setScheduleViewModel.getSelectableUsersData().observe(this, selectableUsers -> {
             listOfUsers.clear();
-            listOfUsers.addAll(users);
+            listOfUsers.addAll(new ArrayList<>(selectableUsers.keySet()));
+            listOfSelectedUsers.clear();
+            listOfSelectedUsers.putAll(selectableUsers);
+            userRecyclerViewAdapter.setmSelectableValues(listOfSelectedUsers);
             userRecyclerViewAdapter.notifyDataSetChanged();
         });
+    }
+
+    @Override
+    public void onClickedUser(User user) {
+        listOfSelectedUsers.put(user, !listOfSelectedUsers.get(user));
     }
 }

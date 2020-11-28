@@ -16,7 +16,9 @@ import com.google.firebase.firestore.GeoPoint;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SetScheduleViewModel extends ViewModel {
 
@@ -25,9 +27,9 @@ public class SetScheduleViewModel extends ViewModel {
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
 
-    private List<User> listOfUser;
     private Group selectedGroup;
     private Group previousSelectedGroup;
+    private Map<User, Boolean> selectableUsers;
     private CarmenFeature selectedLocation;
 
     private final MutableLiveData<Schedule> newScheduleData;
@@ -35,6 +37,7 @@ public class SetScheduleViewModel extends ViewModel {
     private final LiveData<CarmenFeature> selectedLocationData;
 
     private LiveData<List<User>> listOfUserInGroupData;
+    private LiveData<Map<User, Boolean>> selectableUsersData;
     private MutableLiveData<List<Group>> listOfGroupData;
 
     public SetScheduleViewModel() {
@@ -46,8 +49,8 @@ public class SetScheduleViewModel extends ViewModel {
         newScheduleData = new MutableLiveData<>(Schedule.getPrototypeSchedule());
         selectedGroupData = Transformations.map(newScheduleData, schedule -> selectedGroup);
         listOfUserInGroupData = Transformations.switchMap(selectedGroupData, group -> getListOfUsersFromGroup(group));
+        selectableUsersData = Transformations.map(listOfUserInGroupData, users -> selectableUsers);
         selectedLocationData = Transformations.map(newScheduleData, schedule -> selectedLocation);
-        // TODO: use switchMap() to get users instead
     }
 
     public LiveData<List<Group>> getListOfGroup() {
@@ -109,6 +112,10 @@ public class SetScheduleViewModel extends ViewModel {
         return listOfUserInGroupData;
     }
 
+    public LiveData<Map<User, Boolean>> getSelectableUsersData() {
+        return selectableUsersData;
+    }
+
     public LiveData<CarmenFeature> getSelectedLocationData() {
         return selectedLocationData;
     }
@@ -126,7 +133,7 @@ public class SetScheduleViewModel extends ViewModel {
     }
 
     private LiveData<List<User>> getListOfUsersFromGroup(Group group) {
-        if(previousSelectedGroup != null && previousSelectedGroup.equals(group)) {
+        if (previousSelectedGroup != null && previousSelectedGroup.equals(group)) {
             return new MutableLiveData<>(listOfUserInGroupData.getValue());
         }
         previousSelectedGroup = group;
@@ -134,5 +141,14 @@ public class SetScheduleViewModel extends ViewModel {
             return new MutableLiveData<>(new ArrayList<>());
         }
         return userRepository.getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
+    }
+
+    public void initializeSelectableUsersMap(List<User> users) {
+        Map<User, Boolean> newSelectableUserMap = new HashMap<>();
+        for (User user : users) {
+            newSelectableUserMap.put(user, false);
+        }
+
+        selectableUsers = newSelectableUserMap;
     }
 }

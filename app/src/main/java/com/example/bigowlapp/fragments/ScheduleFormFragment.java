@@ -183,6 +183,7 @@ public class ScheduleFormFragment extends Fragment
                     listOfUsers = new ArrayList<>(users);
                     if (setScheduleViewModel.getSelectedGroup() != null) {
                         selectUserLayout.setEnabled(true);
+                        setScheduleViewModel.initializeSelectableUsersMap(users);
                     }
 
                     // TODO: Only display selected users here not all users in the group

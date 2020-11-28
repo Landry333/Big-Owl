@@ -1,5 +1,6 @@
 package com.example.bigowlapp.adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,12 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerViewAdapter.ViewHolder> {
 
     private final List<User> mValues;
+    private  Map<User, Boolean> mSelectableValues;
 
     public UserRecyclerViewAdapter(List<User> items) {
         mValues = items;
@@ -34,11 +37,26 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         String strContent = mValues.get(position).getFullName() + "\n"
                 + mValues.get(position).getEmail();
         holder.mContentView.setText(strContent);
+
+        holder.mView.setBackgroundColor(Color.GRAY);
+
+        if (mSelectableValues == null) {
+            holder.mView.setBackgroundColor(Color.GREEN);
+        } else if (mSelectableValues.get(mValues.get(position))) {
+            holder.mView.setBackgroundColor(Color.GRAY);
+        } else {
+            holder.mView.setBackgroundColor(Color.RED);
+        }
+
     }
 
     @Override
     public int getItemCount() {
         return mValues.size();
+    }
+
+    public void setmSelectableValues(Map<User, Boolean> mSelectableValues) {
+        this.mSelectableValues = mSelectableValues;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
