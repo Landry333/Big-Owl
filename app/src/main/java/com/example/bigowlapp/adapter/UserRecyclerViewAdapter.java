@@ -1,5 +1,6 @@
 package com.example.bigowlapp.adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerViewAdapter.ViewHolder> {
 
-    private final List<User> mValues;
+    private final List<User> users;
+    private List<User> selectedUsers;
 
-    public UserRecyclerViewAdapter(List<User> items) {
-        mValues = items;
+    public UserRecyclerViewAdapter(List<User> users, List<User> selectedUsers) {
+        this.users = users;
+        this.selectedUsers = selectedUsers;
     }
 
     @Override
@@ -29,34 +33,48 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
+        holder.mUser = users.get(position);
         holder.mIdView.setText(String.valueOf(position + 1));
-        String strContent = mValues.get(position).getFullName() + "\n"
-                + mValues.get(position).getEmail();
+        String strContent = users.get(position).getFullName() + "\n"
+                + users.get(position).getEmail();
         holder.mContentView.setText(strContent);
+        holder.mView.setOnClickListener(holder);
+        // Refactor
+        holder.mView.setBackgroundColor(selectedUsers.contains(holder.mUser) ? Color.GRAY : Color.WHITE);
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return users.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public User mItem;
+        public User mUser;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = view.findViewById(R.id.item_number);
+            mContentView = view.findViewById(R.id.content);
         }
 
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (selectedUsers.contains(mUser)) {
+                selectedUsers.remove(mUser);
+                v.setBackgroundColor(Color.WHITE);
+            } else {
+                selectedUsers.add(mUser);
+                v.setBackgroundColor(Color.GRAY);
+            }
         }
     }
 }

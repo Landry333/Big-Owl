@@ -42,7 +42,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         return listOfGroup.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
@@ -66,7 +66,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         }
     }
 
-    public void setListener(GroupRecyclerViewListener listener){
+    public void setListener(GroupRecyclerViewListener listener) {
         this.groupRecyclerViewListener = listener;
     }
 }

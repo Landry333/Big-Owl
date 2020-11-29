@@ -15,6 +15,8 @@ import com.example.bigowlapp.model.User;
 
 import java.util.List;
 
+// TODO: Remove Class not in use
+@Deprecated
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private Context mContext;
