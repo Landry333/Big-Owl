@@ -12,13 +12,14 @@ import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
 import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.repository.UserRepository;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SetScheduleViewModel extends ViewModel {
 
@@ -27,9 +28,11 @@ public class SetScheduleViewModel extends ViewModel {
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
 
+    // Probably not needed
+    // private List<User> listOfUser;
+    private List<User> selectedUsers;
     private Group selectedGroup;
     private Group previousSelectedGroup;
-    private Map<User, Boolean> selectableUsers;
     private CarmenFeature selectedLocation;
 
     private final MutableLiveData<Schedule> newScheduleData;
@@ -37,7 +40,7 @@ public class SetScheduleViewModel extends ViewModel {
     private final LiveData<CarmenFeature> selectedLocationData;
 
     private LiveData<List<User>> listOfUserInGroupData;
-    private LiveData<Map<User, Boolean>> selectableUsersData;
+    private LiveData<List<User>> listOfSelectedUsersData;
     private MutableLiveData<List<Group>> listOfGroupData;
 
     public SetScheduleViewModel() {
@@ -49,7 +52,8 @@ public class SetScheduleViewModel extends ViewModel {
         newScheduleData = new MutableLiveData<>(Schedule.getPrototypeSchedule());
         selectedGroupData = Transformations.map(newScheduleData, schedule -> selectedGroup);
         listOfUserInGroupData = Transformations.switchMap(selectedGroupData, group -> getListOfUsersFromGroup(group));
-        selectableUsersData = Transformations.map(listOfUserInGroupData, users -> selectableUsers);
+        selectedUsers = new ArrayList<>();
+        listOfSelectedUsersData = Transformations.map(newScheduleData, schedule -> selectedUsers);
         selectedLocationData = Transformations.map(newScheduleData, schedule -> selectedLocation);
     }
 
@@ -77,6 +81,12 @@ public class SetScheduleViewModel extends ViewModel {
     public void updateScheduleGroup(Group group) {
         this.selectedGroup = group;
         this.newScheduleData.getValue().setGroupId(group.getuId());
+
+        // Temp; As soon as the group is selected, then reset the selected users list
+        List<String> listOfUserIds = new ArrayList<>();
+        this.newScheduleData.getValue().setListOfUserIds(listOfUserIds);
+        // Temp
+
         notifyUi();
     }
 
@@ -87,18 +97,43 @@ public class SetScheduleViewModel extends ViewModel {
         notifyUi();
     }
 
-    // TODO: Update dates in date binding kind of way as well ???
-//    public void updateScheduleStartTime(Date date) {
-//        Timestamp timestamp = new Timestamp(date);
-//        newScheduleData.getValue().setStartTime(timestamp);
+    public void updateSelectedUsers(List<User> users) {
+        this.selectedUsers = users;
+        List<String> listOfUserIds = new ArrayList<>();
+        for (User selectedUser : selectedUsers) {
+            listOfUserIds.add(selectedUser.getUId());
+        }
+        this.newScheduleData.getValue().setListOfUserIds(listOfUserIds);
+        notifyUi();
+    }
+
+//    // TODO: Remove this method
+//    // For updating the list one user at a time (i.e. adding/removing)
+//    public void updateSelectedUser(User user) {
+//        if (selectedUsers.contains(user)) {
+//            selectedUsers.add(user);
+//        } else {
+//            selectedUsers.remove(user);
+//        }
+//        List<String> listOfUserIds = selectedUsers
+//                .stream()
+//                .map(User::getUId)
+//                .collect(Collectors.toList());
+//        this.newScheduleData.getValue().setListOfUserIds(listOfUserIds);
 //        notifyUi();
 //    }
-//
-//    public void updateScheduleEndTime(Date date) {
-//        Timestamp timestamp = new Timestamp(date);
-//        newScheduleData.getValue().setEndTime(timestamp);
-//        notifyUi();
-//    }
+
+    public void updateScheduleStartTime(Date date) {
+        Timestamp timestamp = new Timestamp(date);
+        newScheduleData.getValue().setStartTime(timestamp);
+        notifyUi();
+    }
+
+    public void updateScheduleEndTime(Date date) {
+        Timestamp timestamp = new Timestamp(date);
+        newScheduleData.getValue().setEndTime(timestamp);
+        notifyUi();
+    }
 
     public LiveData<Schedule> getNewScheduleData() {
         return newScheduleData;
@@ -112,8 +147,8 @@ public class SetScheduleViewModel extends ViewModel {
         return listOfUserInGroupData;
     }
 
-    public LiveData<Map<User, Boolean>> getSelectableUsersData() {
-        return selectableUsersData;
+    public LiveData<List<User>> getListOfSelectedUsersData() {
+        return listOfSelectedUsersData;
     }
 
     public LiveData<CarmenFeature> getSelectedLocationData() {
@@ -141,14 +176,5 @@ public class SetScheduleViewModel extends ViewModel {
             return new MutableLiveData<>(new ArrayList<>());
         }
         return userRepository.getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
-    }
-
-    public void initializeSelectableUsersMap(List<User> users) {
-        Map<User, Boolean> newSelectableUserMap = new HashMap<>();
-        for (User user : users) {
-            newSelectableUserMap.put(user, false);
-        }
-
-        selectableUsers = newSelectableUserMap;
     }
 }
