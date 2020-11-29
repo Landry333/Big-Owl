@@ -182,15 +182,9 @@ public class ScheduleFormFragment extends Fragment
                 .observe(this, users -> {
                     if (setScheduleViewModel.getSelectedGroup() != null) {
                         selectUserLayout.setEnabled(true);
-                        setScheduleViewModel.initializeSelectableUsersMap(users);
                     }
                 });
         setScheduleViewModel.getListOfSelectedUsersData().observe(this, selectedUsers -> {
-
-
-            // TODO: Only display selected users here not all users in the group
-
-//             TODO : Extract and move these functions to another method
 
                     List<String> userNamesArray =
                             selectedUsers.stream().map(User::getFullName).collect(Collectors.toList());

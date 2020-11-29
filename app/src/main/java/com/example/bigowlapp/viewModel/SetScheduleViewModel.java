@@ -82,11 +82,8 @@ public class SetScheduleViewModel extends ViewModel {
         this.selectedGroup = group;
         this.newScheduleData.getValue().setGroupId(group.getuId());
 
-        // Temp; As soon as the group is selected, then reset the selected users list
-        List<String> listOfUserIds = new ArrayList<>();
-        this.newScheduleData.getValue().setListOfUserIds(listOfUserIds);
-        // Temp
-
+        this.selectedUsers = new ArrayList<>();
+        this.newScheduleData.getValue().setListOfUserIds(new ArrayList<>());
         notifyUi();
     }
 

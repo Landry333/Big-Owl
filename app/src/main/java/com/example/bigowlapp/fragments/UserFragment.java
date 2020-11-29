@@ -17,6 +17,7 @@ import com.example.bigowlapp.adapter.UserRecyclerViewAdapter;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.UserFragmentListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserFragment extends Fragment {
@@ -36,7 +37,7 @@ public class UserFragment extends Fragment {
     public UserFragment(UserFragmentListener listener,
                         List<User> listOfUsers, List<User> listOfSelectedUsers) {
         this.listOfUsers = listOfUsers;
-        this.listOfSelectedUsers = listOfSelectedUsers;
+        this.listOfSelectedUsers = new ArrayList<>(listOfSelectedUsers);
         this.userFragmentListener = listener;
     }
 
