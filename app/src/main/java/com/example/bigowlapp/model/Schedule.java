@@ -18,16 +18,31 @@ public class Schedule {
     private GeoPoint location;
     private String groupSupervisorUId;
     private Map<String, UserResponse> members;
+    private String title;
+    private String event;
 
     public static class UserResponse {
         private Response response;
         private Timestamp responseTime;
+        private boolean exists;
 
-        public UserResponse() {}
+
+        public UserResponse() {
+            exists = true;
+        }
 
         public UserResponse(Response response, Timestamp responseTime) {
             this.response = response;
             this.responseTime = responseTime;
+            exists = true;
+        }
+
+        public boolean isExists() {
+            return exists;
+        }
+
+        public void setExists(boolean exists) {
+            this.exists = exists;
         }
 
         public Response getResponse() {
@@ -63,7 +78,8 @@ public class Schedule {
         this.groupSupervisorUId = groupSupervisorUId;
     }
 
-    public Schedule() {}
+    public Schedule() {
+    }
 
     public String getuId() {
         return uId;
@@ -103,5 +119,21 @@ public class Schedule {
 
     public void setLocation(GeoPoint location) {
         this.location = location;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
     }
 }

@@ -3,6 +3,7 @@ package com.example.bigowlapp.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,12 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
                                 if (supervisedGroups != null) {
                                     supervisedGroupsListView = findViewById(R.id.supervised_groups);
                                     supervisedGroupsListView.setAdapter(new SupervisedGroupAdaptor(getBaseContext(), new ArrayList<>(supervisedGroups)));
-                                    supervisedGroupsListView.setOnItemClickListener((arg0, v, position, arg3) -> startActivity(new Intent(getBaseContext(), SupervisedGroupPageActivity.class)));
+                                    supervisedGroupsListView.setOnItemClickListener((arg0, v, position, arg3) ->{
+                                        Intent intent = new Intent(getBaseContext(), SupervisedGroupPageActivity.class);
+                                        intent.putExtra("groupID", supervisedGroups.get(position).getuId());
+                                        Log.d("test", supervisedGroups.get(position).getuId());
+                                        startActivity(intent);
+                                    });
                                 } else
                                     this.noGroupAlert().show();
                             }));
