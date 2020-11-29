@@ -42,8 +42,6 @@ public class ScheduleFormFragment extends Fragment
         GroupRecyclerViewListener,
         UserFragmentListener {
 
-    private List<Group> listOfGroups;
-
     private EditText editTitle;
     private Button groupButton;
     private ListView usersListView;
@@ -57,6 +55,7 @@ public class ScheduleFormFragment extends Fragment
 
     private Button activeDateTimeButton;
     private Calendar activeDateTime;
+    private boolean isStartTime = false;
 
     private Calendar startDateTime;
     private Calendar endDateTime;
@@ -101,11 +100,17 @@ public class ScheduleFormFragment extends Fragment
         setScheduleViewModel.getNewScheduleData().observe(this, schedule -> {
             editTitle.setText(schedule.getTitle());
 
-            // TODO: implement dates in data binding like way
-//            editStartDate.setText(dateFormatter(startDateTime));
-//            editStartTime.setText(timeFormatter(startDateTime));
-//            editEndDate.setText(dateFormatter(endDateTime));
-//            editEndTime.setText(timeFormatter(endDateTime));
+
+            startDateTime = Calendar.getInstance();
+            endDateTime = Calendar.getInstance();
+
+            startDateTime.setTime(schedule.getStartTime().toDate());
+            endDateTime.setTime(schedule.getEndTime().toDate());
+
+            editStartDate.setText(dateFormatter(startDateTime));
+            editStartTime.setText(timeFormatter(startDateTime));
+            editEndDate.setText(dateFormatter(endDateTime));
+            editEndTime.setText(timeFormatter(endDateTime));
         });
 
         setScheduleViewModel.getSelectedGroupData().observe(this, group -> {
@@ -247,26 +252,17 @@ public class ScheduleFormFragment extends Fragment
 
     private void setupDateTimeButtons() {
         editStartDate.setOnClickListener(view -> {
-            showDateDialogByButtonClick(startDateTime, editStartDate);
+            showDateDialogByButtonClick(startDateTime, editStartDate, true);
         });
         editStartTime.setOnClickListener(view -> {
-            showTimeDialogByButtonClick(startDateTime, editStartTime);
+            showTimeDialogByButtonClick(startDateTime, editStartTime, true);
         });
         editEndDate.setOnClickListener(view -> {
-            showDateDialogByButtonClick(endDateTime, editEndDate);
+            showDateDialogByButtonClick(endDateTime, editEndDate, false);
         });
         editEndTime.setOnClickListener(view -> {
-            showTimeDialogByButtonClick(endDateTime, editEndTime);
+            showTimeDialogByButtonClick(endDateTime, editEndTime, false);
         });
-
-        startDateTime = Calendar.getInstance();
-        endDateTime = Calendar.getInstance();
-        endDateTime.add(Calendar.HOUR_OF_DAY, 1);
-
-        editStartDate.setText(dateFormatter(startDateTime));
-        editStartTime.setText(timeFormatter(startDateTime));
-        editEndDate.setText(dateFormatter(endDateTime));
-        editEndTime.setText(timeFormatter(endDateTime));
     }
 
     private String dateFormatter(Calendar calendar) {
@@ -287,14 +283,16 @@ public class ScheduleFormFragment extends Fragment
         activeDateTimeButton = null;
     }
 
-    private void showDateDialogByButtonClick(Calendar dateTime, Button buttonDisplay) {
+    private void showDateDialogByButtonClick(Calendar dateTime, Button buttonDisplay, boolean isStart) {
+        isStartTime = isStart;
         activeDateTime = dateTime;
         activeDateTimeButton = buttonDisplay;
         DialogFragment newFragment = DatePickerDialogFragment.newInstance(this);
         newFragment.show(getChildFragmentManager(), "startDatePicker");
     }
 
-    private void showTimeDialogByButtonClick(Calendar dateTime, Button buttonDisplay) {
+    private void showTimeDialogByButtonClick(Calendar dateTime, Button buttonDisplay, boolean isStart) {
+        isStartTime = isStart;
         activeDateTime = dateTime;
         activeDateTimeButton = buttonDisplay;
         DialogFragment newFragment = TimePickerDialogFragment.newInstance(this);
@@ -303,21 +301,26 @@ public class ScheduleFormFragment extends Fragment
 
     @Override
     public void onDatePicked(int year, int month, int day) {
-        String strDate = (month + 1) + "/" + day + "/" + year;
         activeDateTime.set(Calendar.YEAR, year);
         activeDateTime.set(Calendar.MONTH, month);
         activeDateTime.set(Calendar.DAY_OF_MONTH, day);
-        activeDateTimeButton.setText(strDate);
+        if (isStartTime) {
+            setScheduleViewModel.updateScheduleStartTime(startDateTime.getTime());
+        } else {
+            setScheduleViewModel.updateScheduleEndTime(endDateTime.getTime());
+        }
         unregisterActiveDateTimeButton();
     }
 
     @Override
     public void onTimePicked(int hour, int minute) {
-        String strTime = ((hour < 10) ? "0" + hour : hour) + ":"
-                + ((minute < 10) ? "0" + minute : minute);
         activeDateTime.set(Calendar.HOUR_OF_DAY, hour);
         activeDateTime.set(Calendar.MINUTE, minute);
-        activeDateTimeButton.setText(strTime);
+        if (isStartTime) {
+            setScheduleViewModel.updateScheduleStartTime(startDateTime.getTime());
+        } else {
+            setScheduleViewModel.updateScheduleEndTime(endDateTime.getTime());
+        }
         unregisterActiveDateTimeButton();
     }
 

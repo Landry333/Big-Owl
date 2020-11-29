@@ -28,8 +28,6 @@ public class SetScheduleViewModel extends ViewModel {
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
 
-    // Probably not needed
-    // private List<User> listOfUser;
     private List<User> selectedUsers;
     private Group selectedGroup;
     private Group previousSelectedGroup;
@@ -103,22 +101,6 @@ public class SetScheduleViewModel extends ViewModel {
         this.newScheduleData.getValue().setListOfUserIds(listOfUserIds);
         notifyUi();
     }
-
-//    // TODO: Remove this method
-//    // For updating the list one user at a time (i.e. adding/removing)
-//    public void updateSelectedUser(User user) {
-//        if (selectedUsers.contains(user)) {
-//            selectedUsers.add(user);
-//        } else {
-//            selectedUsers.remove(user);
-//        }
-//        List<String> listOfUserIds = selectedUsers
-//                .stream()
-//                .map(User::getUId)
-//                .collect(Collectors.toList());
-//        this.newScheduleData.getValue().setListOfUserIds(listOfUserIds);
-//        notifyUi();
-//    }
 
     public void updateScheduleStartTime(Date date) {
         Timestamp timestamp = new Timestamp(date);
