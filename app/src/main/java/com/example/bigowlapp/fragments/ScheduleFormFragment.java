@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.Constants;
 import com.example.bigowlapp.utils.GroupRecyclerViewListener;
@@ -44,8 +45,8 @@ public class ScheduleFormFragment extends Fragment
 
     private EditText editTitle;
     private Button groupButton;
+    private Button selectUserButton;
     private ListView usersListView;
-    private LinearLayout selectUserLayout;
     private Button editStartDate;
     private Button editStartTime;
     private Button editEndDate;
@@ -53,7 +54,6 @@ public class ScheduleFormFragment extends Fragment
     private Button editLocation;
     private Button confirmSetSchedule;
 
-    private Button activeDateTimeButton;
     private Calendar activeDateTime;
     private boolean isStartTime = false;
 
@@ -111,6 +111,14 @@ public class ScheduleFormFragment extends Fragment
             editStartTime.setText(timeFormatter(startDateTime));
             editEndDate.setText(dateFormatter(endDateTime));
             editEndTime.setText(timeFormatter(endDateTime));
+
+            if (schedule.getStartTime().compareTo(schedule.getEndTime()) >= 0) {
+                editStartDate.setTextColor(Color.RED);
+                editStartTime.setTextColor(Color.RED);
+            } else {
+                editStartDate.setTextColor(Color.BLACK);
+                editStartTime.setTextColor(Color.BLACK);
+            }
         });
 
         setScheduleViewModel.getSelectedGroupData().observe(this, group -> {
@@ -118,6 +126,7 @@ public class ScheduleFormFragment extends Fragment
                 return;
             }
             groupButton.setText(group.getName());
+            groupButton.setError(null);
         });
 
         setScheduleViewModel.getSelectedLocationData().observe(this, location -> {
@@ -126,14 +135,15 @@ public class ScheduleFormFragment extends Fragment
             }
             String editLocationText = (location.placeName() == null) ? location.address() : location.placeName();
             editLocation.setText(editLocationText);
+            editLocation.setError(null);
         });
     }
 
     private void initialize(View view) {
         editTitle = view.findViewById(R.id.edit_title_schedule);
         groupButton = view.findViewById(R.id.select_group_button);
+        selectUserButton = view.findViewById(R.id.select_user_button);
         usersListView = view.findViewById(R.id.select_users_list_view);
-        selectUserLayout = view.findViewById(R.id.select_users_container);
         editStartDate = view.findViewById(R.id.edit_start_date);
         editStartTime = view.findViewById(R.id.edit_start_time);
         editEndDate = view.findViewById(R.id.edit_end_date);
@@ -186,50 +196,59 @@ public class ScheduleFormFragment extends Fragment
         setScheduleViewModel.getListOfUserInGroupData()
                 .observe(this, users -> {
                     if (setScheduleViewModel.getSelectedGroup() != null) {
-                        selectUserLayout.setEnabled(true);
+                        selectUserButton.setEnabled(true);
                     }
                 });
         setScheduleViewModel.getListOfSelectedUsersData().observe(this, selectedUsers -> {
 
-                    List<String> userNamesArray =
-                            selectedUsers.stream().map(User::getFullName).collect(Collectors.toList());
+            if (selectedUsers.isEmpty()) {
+                selectUserButton.setVisibility(View.VISIBLE);
+                usersListView.setVisibility(View.GONE);
+            } else {
+                selectUserButton.setVisibility(View.GONE);
+                usersListView.setVisibility(View.VISIBLE);
+                selectUserButton.setError(null);
+            }
 
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                            android.R.layout.simple_list_item_1, userNamesArray);
+            List<String> userNamesArray =
+                    selectedUsers.stream().map(User::getFullName).collect(Collectors.toList());
 
-                    usersListView.setOnItemClickListener((parent, view, position, id) -> {
-                        getParentFragmentManager().beginTransaction()
-                                .replace(R.id.schedule_form_container,
-                                        new UserFragment(this,
-                                                setScheduleViewModel
-                                                        .getListOfUserInGroupData().getValue(),
-                                                setScheduleViewModel
-                                                        .getListOfSelectedUsersData().getValue()))
-                                .addToBackStack(null)
-                                .commit();
-                    });
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                    android.R.layout.simple_list_item_1, userNamesArray);
 
-                    usersListView.setAdapter(adapter);
+            usersListView.setOnItemClickListener((parent, view, position, id) -> {
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.schedule_form_container,
+                                new UserFragment(this,
+                                        setScheduleViewModel
+                                                .getListOfUserInGroupData().getValue(),
+                                        setScheduleViewModel
+                                                .getListOfSelectedUsersData().getValue()))
+                        .addToBackStack(null)
+                        .commit();
+            });
+
+            usersListView.setAdapter(adapter);
 
             //TODO: Optimize or change code to be more clean when linearlayout is implemented
-                    int height = 0;
-                    for (int i = 0; i < adapter.getCount(); i++) {
-                        View viewItem = adapter.getView(i, null, usersListView);
-                        viewItem.measure(0, 0);
-                        height += viewItem.getMeasuredHeight();
-                    }
-                    ViewGroup.LayoutParams params = usersListView.getLayoutParams();
-                    params.height = height + (usersListView.getDividerHeight()
-                            * (adapter.getCount() - 1));
-                    usersListView.setLayoutParams(params);
-                    usersListView.setAnimation(null);
-                    usersListView.requestLayout();
+            int height = 0;
+            for (int i = 0; i < adapter.getCount(); i++) {
+                View viewItem = adapter.getView(i, null, usersListView);
+                viewItem.measure(0, 0);
+                height += viewItem.getMeasuredHeight();
+            }
+            ViewGroup.LayoutParams params = usersListView.getLayoutParams();
+            params.height = height + (usersListView.getDividerHeight()
+                    * (adapter.getCount() - 1));
+            usersListView.setLayoutParams(params);
+            usersListView.setAnimation(null);
+            usersListView.requestLayout();
         });
     }
 
     private void setupSelectUserLayout() {
-        selectUserLayout.setEnabled(false);
-        selectUserLayout.setOnClickListener(view -> {
+        selectUserButton.setEnabled(false);
+        selectUserButton.setOnClickListener(view -> {
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.schedule_form_container,
                             new UserFragment(this,
@@ -243,6 +262,47 @@ public class ScheduleFormFragment extends Fragment
     private void setupConfirmSetScheduleButton() {
         confirmSetSchedule.setOnClickListener(view -> {
             // TODO: verify that all information is valid
+            Schedule scheduleToAdd = setScheduleViewModel.getNewScheduleData().getValue();
+
+            boolean hasError = false;
+
+            if (scheduleToAdd == null) {
+                hasError = true;
+            }
+
+            if (scheduleToAdd.getTitle().trim().isEmpty()) {
+                editTitle.setError("Please enter title.");
+                hasError = true;
+            }
+
+            if (scheduleToAdd.getGroupId() == null) {
+                groupButton.setError("Please select a group");
+                hasError = true;
+            }
+
+            if (scheduleToAdd.getListOfUserIds() == null || scheduleToAdd.getListOfUserIds().isEmpty()) {
+                selectUserButton.setError("Please select at lease one user");
+                hasError = true;
+            }
+
+            if (scheduleToAdd.getStartTime().compareTo(scheduleToAdd.getEndTime()) >= 0) {
+                editStartDate.setTextColor(Color.RED);
+                editStartTime.setTextColor(Color.RED);
+                hasError = true;
+            }
+
+            if (scheduleToAdd.getLocation() == null) {
+                editLocation.setError("Please select a location");
+                hasError = true;
+            }
+
+            if (hasError) {
+                Toast.makeText(getContext(), "Please complete all the necessary fields", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            // TODO: add schedule to db when no errors
+
         });
     }
 
@@ -279,14 +339,9 @@ public class ScheduleFormFragment extends Fragment
                 (minute < 10 ? ("0" + minute) : minute);
     }
 
-    private void unregisterActiveDateTimeButton() {
-        activeDateTimeButton = null;
-    }
-
     private void showDateDialogByButtonClick(Calendar dateTime, Button buttonDisplay, boolean isStart) {
         isStartTime = isStart;
         activeDateTime = dateTime;
-        activeDateTimeButton = buttonDisplay;
         DialogFragment newFragment = DatePickerDialogFragment.newInstance(this);
         newFragment.show(getChildFragmentManager(), "startDatePicker");
     }
@@ -294,7 +349,6 @@ public class ScheduleFormFragment extends Fragment
     private void showTimeDialogByButtonClick(Calendar dateTime, Button buttonDisplay, boolean isStart) {
         isStartTime = isStart;
         activeDateTime = dateTime;
-        activeDateTimeButton = buttonDisplay;
         DialogFragment newFragment = TimePickerDialogFragment.newInstance(this);
         newFragment.show(getChildFragmentManager(), "startTimePicker");
     }
@@ -309,7 +363,6 @@ public class ScheduleFormFragment extends Fragment
         } else {
             setScheduleViewModel.updateScheduleEndTime(endDateTime.getTime());
         }
-        unregisterActiveDateTimeButton();
     }
 
     @Override
@@ -321,7 +374,6 @@ public class ScheduleFormFragment extends Fragment
         } else {
             setScheduleViewModel.updateScheduleEndTime(endDateTime.getTime());
         }
-        unregisterActiveDateTimeButton();
     }
 
     @Override

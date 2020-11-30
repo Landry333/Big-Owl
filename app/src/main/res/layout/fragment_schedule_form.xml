@@ -156,12 +156,25 @@
                     android:padding="@dimen/icon_padding"
                     android:src="@drawable/ic_select_user" />
 
+                <Button
+                    android:id="@+id/select_user_button"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#FFFFFF"
+                    android:gravity="center"
+                    android:padding="0dp"
+                    android:visibility="visible"
+                    android:text="@string/select_a_user"
+                    android:textAllCaps="false" />
+
                 <ListView
                     android:id="@+id/select_users_list_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:listSelector="@android:color/transparent"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
@@ -368,7 +381,8 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/white"
                     android:gravity="center"
-                    android:text="@string/select_location" />
+                    android:text="@string/select_location"
+                    android:textAllCaps="false" />
             </LinearLayout>
 
             <View
