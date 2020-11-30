@@ -2,7 +2,6 @@ package com.example.bigowlapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +25,6 @@ public class HomePageActivity extends BigOwlActivity {
     ScrollView scrollView;
     ImageView imgUserAvatar;
     TextView textEmail, textFirstName, textLastName, textPhone;
-    MenuItem menuItemEditProfile;
     private HomePageViewModel homePageViewModel;
 
     @Override
@@ -83,7 +81,6 @@ public class HomePageActivity extends BigOwlActivity {
             popup.setOnMenuItemClickListener(this);
             popup.inflate(R.menu.big_owl_overflow);
             for (int i = 0; i < popup.getMenu().size(); i++) {
-                System.out.println("menuItem? " +  (String) popup.getMenu().getItem(i).getTitle());
                 if (popup.getMenu().getItem(i).getItemId() == R.id.overflow_refresh) {
                     popup.getMenu().add(Menu.NONE, View.generateViewId(), i + 1, "Edit Profile");
                     break;
