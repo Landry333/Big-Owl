@@ -2,6 +2,7 @@ package com.example.bigowlapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -79,9 +80,15 @@ public class HomePageActivity extends BigOwlActivity {
         imgBtnOverflow = findViewById(R.id.action_overflow);
         imgBtnOverflow.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(this, v);
-            popup.getMenu().add(Menu.NONE, View.generateViewId(), 3, "Edit Profile");
             popup.setOnMenuItemClickListener(this);
             popup.inflate(R.menu.big_owl_overflow);
+            for (int i = 0; i < popup.getMenu().size(); i++) {
+                System.out.println("menuItem? " +  (String) popup.getMenu().getItem(i).getTitle());
+                if (popup.getMenu().getItem(i).getItemId() == R.id.overflow_refresh) {
+                    popup.getMenu().add(Menu.NONE, View.generateViewId(), i + 1, "Edit Profile");
+                    break;
+                }
+            }
             popup.show();
         });
     }
