@@ -79,7 +79,7 @@ public class HomePageActivity extends AppCompatActivity {
             startActivity(i);
         });
 
-        btnNotifications = findViewById(R.id.btnNotifications);
+        btnNotifications = findViewById(R.id.btn_notifications);
 
         btnNotifications.setOnClickListener(v -> {
             Intent i = new Intent(HomePageActivity.this, NotificationActivity.class);

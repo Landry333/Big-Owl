@@ -29,8 +29,6 @@
     <string name="invite_contacts">Invite From Contact List</string>
     <string name="invite_phone">Invite By Phone Number</string>
     <string name="sign_up">Sign Up</string>
-    <string name="supervised_group">Supervised Group</string>
-    <string name="supervisor_name">supervisor_name</string>
     <string name="user_avatar">User Avatar</string>
     <string name="user_email">user_email</string>
     <string name="user_first_name">First Name</string>
