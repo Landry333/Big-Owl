@@ -2,7 +2,6 @@ package com.example.bigowlapp.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,19 +18,12 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 
-public class SupervisedGroupListActivity extends AppCompatActivity {
+public class SupervisedGroupListActivity extends BigOwlActivity {
     private ListView supervisedGroupsListView;
     private SupervisedGroupListViewModel supervisedGroupListViewModel;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_supervised_group_list);
-    }
 
     @Override
     protected void onStart() {
@@ -58,6 +50,11 @@ public class SupervisedGroupListActivity extends AppCompatActivity {
                 Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.activity_supervised_group_list;
     }
 
     private class SupervisedGroupAdaptor extends ArrayAdapter<Group> {

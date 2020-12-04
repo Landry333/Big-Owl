@@ -17,7 +17,6 @@ import com.google.firebase.Timestamp;
 
 import java.util.List;
 
-
 public class ViewAnotherUserActivity extends AppCompatActivity {
     String otherUserID;
     String currentUserID, noteText;
@@ -43,6 +42,7 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_view_another_user);
         otherUser = getIntent().getParcelableExtra("user");
         otherUserID = otherUser.getUId();
@@ -96,7 +96,7 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
 
     private void observeRequests() {
         aRequestAlready = false; // A false value allows for search for an existing request with
-                                // in repository until one is found
+        // in repository until one is found
         supRequestBtn.setText(supBtnSend); // Default setText
         noteTv2.setText(noRequest);
         LiveData<List<SupervisionRequest>> senderRequestsData = notificationRepository.getListOfSupervisionRequestByAttribute("senderUId", currentUserID, SupervisionRequest.class);

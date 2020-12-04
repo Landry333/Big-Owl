@@ -3,7 +3,6 @@
     <string name="by">by</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
-    <string name="edit_profile">Edit Profile</string>
     <string name="first_name">First Name</string>
     <string name="group_name">group_name</string>
     <string name="have_account_text">Already have an account? Sign in here</string>
@@ -29,4 +28,12 @@
     <string name="user_first_name">First Name</string>
     <string name="user_last_name">Last Name</string>
     <string name="user_phone_number">user_phone_number</string>
+    <string name="log_out">Log out</string>
+    <string name="overflow_menu">overflow menu</string>
+    <string name="schedule">schedule</string>
+    <string name="user">user</string>
+    <string name="notification">notification</string>
+    <string name="big_owl">Big Owl</string>
+    <string name="search_user">Search User</string>
+    <string name="enter_phone_number">Enter Phone Number</string>
 </resources>
