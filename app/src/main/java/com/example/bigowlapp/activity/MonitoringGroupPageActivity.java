@@ -23,11 +23,10 @@ import java.util.stream.Collectors;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 
-public class MonitoringGroupPageActivity extends AppCompatActivity {
+public class MonitoringGroupPageActivity extends BigOwlActivity {
     private EditText searchUsers;
     private ListView usersListView;
     private TextView groupName;
@@ -39,7 +38,6 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_monitoring_group_page);
 
         groupName = findViewById(R.id.text_view_group_name);
         usersListView = findViewById(R.id.list_view_monitoring_users);
@@ -83,6 +81,11 @@ public class MonitoringGroupPageActivity extends AppCompatActivity {
                 registerForContextMenu(usersListView);
             });
         });
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.activity_monitoring_group_page;
     }
 
     private void setupSearchBar() {
