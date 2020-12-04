@@ -59,6 +59,7 @@ public class ListOfScheduleActivity extends AppCompatActivity {
                     scheduleListView.setOnItemClickListener((arg0, v, position, arg3) -> {
                         Intent intent = new Intent(getBaseContext(), ScheduleViewRespondActivity.class);
                         intent.putExtra("scheduleUId", schedules.get(position).getuId());
+                        intent.putExtra("groupID", groupID);
                         startActivity(intent);
                         });
                 } else {

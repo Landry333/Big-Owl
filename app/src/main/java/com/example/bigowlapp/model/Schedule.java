@@ -5,6 +5,7 @@ import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+import java.util.List;
 import java.util.Map;
 
 @IgnoreExtraProperties
@@ -20,6 +21,7 @@ public class Schedule {
     private Map<String, UserResponse> members;
     private String title;
     private String event;
+    private List<String> memberList;
 
     public static class UserResponse {
         private Response response;
@@ -135,5 +137,13 @@ public class Schedule {
 
     public void setEvent(String event) {
         this.event = event;
+    }
+
+    public List<String> getMemberList() {
+        return memberList;
+    }
+
+    public void setMemberList(List<String> memberList) {
+        this.memberList = memberList;
     }
 }
