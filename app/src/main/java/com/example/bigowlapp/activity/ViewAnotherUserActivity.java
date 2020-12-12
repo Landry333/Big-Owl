@@ -1,12 +1,8 @@
 package com.example.bigowlapp.activity;
 
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
@@ -22,10 +18,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Objects;
-import com.example.bigowlapp.model.User;
+
+import androidx.annotation.NonNull;
 //import com.google.firebase.auth.*;
 
-public class ViewAnotherUserActivity extends AppCompatActivity {
+public class ViewAnotherUserActivity extends BigOwlActivity {
     /*String otherUserID = getIntent().getStringExtra("userID");*/
     String otherUserID;
     User otherUser;
@@ -44,7 +41,6 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_another_user);
 
         supRequestBtn = findViewById(R.id.SupRequest);
         supRequestRef = FirebaseDatabase.getInstance().getReference().child("SupRequests");
@@ -68,6 +64,11 @@ public class ViewAnotherUserActivity extends AppCompatActivity {
         otherUserID = otherUser.getUId();
         mUser = mAuth.getCurrentUser();
         supRequestBtn.setOnClickListener(v -> DoRequest(otherUserID));
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.activity_view_another_user;
     }
 
     private void DoRequest(String otherUserID) {

@@ -10,18 +10,17 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
-public class HomePageActivity extends AppCompatActivity {
+import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.lifecycle.ViewModelProvider;
+
+public class HomePageActivity extends BigOwlActivity {
     Button btnLogOut, btnAddUsers, btnMonitoringGroup, btnSupervisedGroup, btnSetSchedule;
     ScrollView scrollView;
     ImageView imgUserAvatar;
@@ -31,7 +30,6 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
         initialize();
     }
 
@@ -45,8 +43,6 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     protected void initialize() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         scrollView = findViewById(R.id.scroll_view);
         scrollView.setVisibility(View.GONE);
 
@@ -86,6 +82,20 @@ public class HomePageActivity extends AppCompatActivity {
             Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
             startActivity(i);
         });
+
+        imgBtnOverflow = findViewById(R.id.action_overflow);
+        imgBtnOverflow.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(this, v);
+            popup.setOnMenuItemClickListener(this);
+            popup.inflate(R.menu.big_owl_overflow);
+            for (int i = 0; i < popup.getMenu().size(); i++) {
+                if (popup.getMenu().getItem(i).getItemId() == R.id.overflow_refresh) {
+                    popup.getMenu().add(Menu.NONE, View.generateViewId(), i + 1, "Edit Profile");
+                    break;
+                }
+            }
+            popup.show();
+        });
     }
 
     private void subscribeToData() {
@@ -119,25 +129,17 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home_page_overflow, menu);
-        return true;
+    public int getContentView() {
+        return R.layout.activity_home;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.overflow_home) {
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getTitle().equals("Edit Profile")) {
             finish();
-            startActivity(getIntent());
-        } else if (item.getItemId() == R.id.overflow_refresh) {
-            finish();
-            startActivity(getIntent());
-        } else if (item.getItemId() == R.id.overflow_edit_profile) {
-            Intent i = new Intent(HomePageActivity.this, EditProfileActivity.class);
-            startActivity(i);
-            return true;
+            startActivity(new Intent(this, EditProfileActivity.class));
         }
-        return super.onOptionsItemSelected(item);
+        return super.onMenuItemClick(item);
     }
 
     private AlertDialog noSignedInAlert() {
