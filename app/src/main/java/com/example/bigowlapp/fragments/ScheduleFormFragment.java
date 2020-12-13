@@ -261,7 +261,6 @@ public class ScheduleFormFragment extends Fragment
 
     private void setupConfirmSetScheduleButton() {
         confirmSetSchedule.setOnClickListener(view -> {
-            // TODO: verify that all information is valid
             Schedule scheduleToAdd = setScheduleViewModel.getNewScheduleData().getValue();
 
             boolean hasError = false;
@@ -275,12 +274,12 @@ public class ScheduleFormFragment extends Fragment
                 hasError = true;
             }
 
-            if (scheduleToAdd.getGroupId() == null) {
+            if (scheduleToAdd.getGroupUId() == null) {
                 groupButton.setError("Please select a group");
                 hasError = true;
             }
 
-            if (scheduleToAdd.getListOfUserIds() == null || scheduleToAdd.getListOfUserIds().isEmpty()) {
+            if (scheduleToAdd.getMemberList() == null || scheduleToAdd.getMemberList().isEmpty()) {
                 selectUserButton.setError("Please select at lease one user");
                 hasError = true;
             }

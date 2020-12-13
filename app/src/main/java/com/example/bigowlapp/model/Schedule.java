@@ -7,6 +7,7 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 @IgnoreExtraProperties
 public class Schedule {
@@ -14,12 +15,15 @@ public class Schedule {
     @DocumentId
     private String uId;
     private String title;
-    private List<String> listOfUserIds;
-    private String groupId;
     private String event;
+    private String groupUId;
+    private String groupSupervisorUId;
+    private List<String> memberList;
     private Timestamp startTime;
     private Timestamp endTime;
     private GeoPoint location;
+    //TODO: Change this name to userReponseMap after database change
+    private Map<String, UserResponse> members;
 
     public static Schedule getPrototypeSchedule() {
         Schedule schedule = new Schedule();
@@ -35,6 +39,35 @@ public class Schedule {
         return schedule;
     }
 
+    public static class UserResponse {
+        private Response response;
+        private Timestamp responseTime;
+
+        public UserResponse() {
+        }
+
+        public UserResponse(Response response, Timestamp responseTime) {
+            this.response = response;
+            this.responseTime = responseTime;
+        }
+
+        public Response getResponse() {
+            return response;
+        }
+
+        public void setResponse(Response response) {
+            this.response = response;
+        }
+
+        public Timestamp getResponseTime() {
+            return responseTime;
+        }
+
+        public void setResponseTime(Timestamp responseTime) {
+            this.responseTime = responseTime;
+        }
+    }
+
     public Schedule() {
     }
 
@@ -46,36 +79,12 @@ public class Schedule {
         this.uId = uId;
     }
 
-    public String getTitle() {
-        return title;
+    public String getGroupUId() {
+        return groupUId;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public List<String> getListOfUserIds() {
-        return listOfUserIds;
-    }
-
-    public void setListOfUserIds(List<String> listOfUserIds) {
-        this.listOfUserIds = listOfUserIds;
-    }
-
-    public String getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
-    }
-
-    public String getEvent() {
-        return event;
-    }
-
-    public void setEvent(String event) {
-        this.event = event;
+    public void setGroupUId(String groupUId) {
+        this.groupUId = groupUId;
     }
 
     public Timestamp getStartTime() {
@@ -100,5 +109,46 @@ public class Schedule {
 
     public void setLocation(GeoPoint location) {
         this.location = location;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
+    }
+
+    public List<String> getMemberList() {
+        return memberList;
+    }
+
+    public void setMemberList(List<String> memberList) {
+        this.memberList = memberList;
+    }
+
+
+    public Map<String, UserResponse> getMembers() {
+        return members;
+    }
+
+    public void setMembers(Map<String, UserResponse> members) {
+        this.members = members;
+    }
+
+    public String getGroupSupervisorUId() {
+        return groupSupervisorUId;
+    }
+
+    public void setGroupSupervisorUId(String groupSupervisorUId) {
+        this.groupSupervisorUId = groupSupervisorUId;
     }
 }

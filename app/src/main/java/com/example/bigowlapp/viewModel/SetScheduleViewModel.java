@@ -19,7 +19,6 @@ import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SetScheduleViewModel extends ViewModel {
 
@@ -78,10 +77,10 @@ public class SetScheduleViewModel extends ViewModel {
 
     public void updateScheduleGroup(Group group) {
         this.selectedGroup = group;
-        this.newScheduleData.getValue().setGroupId(group.getuId());
+        this.newScheduleData.getValue().setGroupUId(group.getuId());
 
         this.selectedUsers = new ArrayList<>();
-        this.newScheduleData.getValue().setListOfUserIds(new ArrayList<>());
+        this.newScheduleData.getValue().setMemberList(new ArrayList<>());
         notifyUi();
     }
 
@@ -98,7 +97,7 @@ public class SetScheduleViewModel extends ViewModel {
         for (User selectedUser : selectedUsers) {
             listOfUserIds.add(selectedUser.getUId());
         }
-        this.newScheduleData.getValue().setListOfUserIds(listOfUserIds);
+        this.newScheduleData.getValue().setMemberList(listOfUserIds);
         notifyUi();
     }
 
