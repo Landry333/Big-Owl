@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
@@ -19,6 +20,8 @@ import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SetScheduleViewModel extends ViewModel {
 
@@ -54,6 +57,17 @@ public class SetScheduleViewModel extends ViewModel {
         selectedLocationData = Transformations.map(newScheduleData, schedule -> selectedLocation);
     }
 
+    public MutableLiveData<Schedule> addSchedule() {
+        Schedule schedule = newScheduleData.getValue();
+        Map<String, Schedule.UserResponse> userResponseMap =
+                schedule.getMemberList().stream().collect(Collectors.toMap(
+                        memberUId -> memberUId,
+                        memberUId -> new Schedule.UserResponse(Response.NEUTRAL, null))
+                );
+        schedule.setMembers(userResponseMap);
+        return scheduleRepository.addDocument(schedule);
+    }
+
     public LiveData<List<Group>> getListOfGroup() {
         if (listOfGroupData == null) {
             listOfGroupData = new MutableLiveData<>();
@@ -78,6 +92,7 @@ public class SetScheduleViewModel extends ViewModel {
     public void updateScheduleGroup(Group group) {
         this.selectedGroup = group;
         this.newScheduleData.getValue().setGroupUId(group.getuId());
+        this.newScheduleData.getValue().setGroupSupervisorUId(group.getMonitoringUserId());
 
         this.selectedUsers = new ArrayList<>();
         this.newScheduleData.getValue().setMemberList(new ArrayList<>());
