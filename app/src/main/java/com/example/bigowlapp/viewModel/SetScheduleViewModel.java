@@ -88,13 +88,9 @@ public class SetScheduleViewModel extends ViewModel {
         return listOfGroupData;
     }
 
-    public void loadListOfGroup() {
+    private void loadListOfGroup() {
         String userId = authRepository.getCurrentUser().getUid();
         listOfGroupData = groupRepository.getListOfDocumentByAttribute("monitoringUserId", userId, Group.class);
-    }
-
-    public void loadUsers(Group group) {
-        listOfUserInGroupData = userRepository.getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
     }
 
     public void updateScheduleTitle(String title) {
@@ -187,5 +183,10 @@ public class SetScheduleViewModel extends ViewModel {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setNewScheduleData(MutableLiveData<Schedule> newScheduleData) {
         this.newScheduleData = newScheduleData;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setListOfGroupData(MutableLiveData<List<Group>> listOfGroupData) {
+        this.listOfGroupData = listOfGroupData;
     }
 }

@@ -3,12 +3,15 @@ package com.example.bigowlapp.viewModel;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
+import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
 import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.repository.UserRepository;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,12 +19,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -42,11 +51,15 @@ public class SetScheduleViewModelTest {
     private GroupRepository groupRepository;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private FirebaseUser testFirebaseUser;
 
     @Before
     public void setUp() throws Exception {
         setScheduleViewModel = new SetScheduleViewModel(authRepository, scheduleRepository,
                 groupRepository, userRepository);
+        when(authRepository.getCurrentUser()).thenReturn(testFirebaseUser);
+        when(testFirebaseUser.getUid()).thenReturn("123");
     }
 
     @After
@@ -79,14 +92,11 @@ public class SetScheduleViewModelTest {
 
     @Test
     public void getListOfGroup() {
-    }
-
-    @Test
-    public void loadListOfGroup() {
-    }
-
-    @Test
-    public void loadUsers() {
+        setScheduleViewModel.setListOfGroupData(null);
+        when(groupRepository.getListOfDocumentByAttribute("monitoringUserId", "123", Group.class)).thenReturn(new MutableLiveData<>());
+        assertNotNull(setScheduleViewModel.getListOfGroup());
+        assertNotNull(setScheduleViewModel.getListOfGroup());
+        verify(groupRepository, times(1)).getListOfDocumentByAttribute("monitoringUserId", "123", Group.class);
     }
 
     @Test
