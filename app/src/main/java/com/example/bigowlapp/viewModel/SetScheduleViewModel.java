@@ -1,5 +1,6 @@
 package com.example.bigowlapp.viewModel;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -35,9 +36,9 @@ public class SetScheduleViewModel extends ViewModel {
     private Group previousSelectedGroup;
     private CarmenFeature selectedLocation;
 
-    private final MutableLiveData<Schedule> newScheduleData;
-    private final LiveData<Group> selectedGroupData;
-    private final LiveData<CarmenFeature> selectedLocationData;
+    private MutableLiveData<Schedule> newScheduleData;
+    private LiveData<Group> selectedGroupData;
+    private LiveData<CarmenFeature> selectedLocationData;
 
     private LiveData<List<User>> listOfUserInGroupData;
     private LiveData<List<User>> listOfSelectedUsersData;
@@ -55,6 +56,17 @@ public class SetScheduleViewModel extends ViewModel {
         selectedUsers = new ArrayList<>();
         listOfSelectedUsersData = Transformations.map(newScheduleData, schedule -> selectedUsers);
         selectedLocationData = Transformations.map(newScheduleData, schedule -> selectedLocation);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public SetScheduleViewModel(AuthRepository authRepository,
+                                ScheduleRepository scheduleRepository,
+                                GroupRepository groupRepository,
+                                UserRepository userRepository) {
+        this.authRepository = authRepository;
+        this.scheduleRepository = scheduleRepository;
+        this.groupRepository = groupRepository;
+        this.userRepository = userRepository;
     }
 
     public MutableLiveData<Schedule> addSchedule() {
@@ -160,7 +172,8 @@ public class SetScheduleViewModel extends ViewModel {
         this.newScheduleData.setValue(this.newScheduleData.getValue());
     }
 
-    private LiveData<List<User>> getListOfUsersFromGroup(Group group) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public LiveData<List<User>> getListOfUsersFromGroup(Group group) {
         if (previousSelectedGroup != null && previousSelectedGroup.equals(group)) {
             return new MutableLiveData<>(listOfUserInGroupData.getValue());
         }
@@ -169,5 +182,10 @@ public class SetScheduleViewModel extends ViewModel {
             return new MutableLiveData<>(new ArrayList<>());
         }
         return userRepository.getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setNewScheduleData(MutableLiveData<Schedule> newScheduleData) {
+        this.newScheduleData = newScheduleData;
     }
 }

@@ -71,6 +71,21 @@ public class Schedule {
     public Schedule() {
     }
 
+    public Schedule(String uId, String title, String event, String groupUId,
+                    String groupSupervisorUId, List<String> memberList, Timestamp startTime,
+                    Timestamp endTime, GeoPoint location, Map<String, UserResponse> members) {
+        this.uId = uId;
+        this.title = title;
+        this.event = event;
+        this.groupUId = groupUId;
+        this.groupSupervisorUId = groupSupervisorUId;
+        this.memberList = memberList;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.location = location;
+        this.members = members;
+    }
+
     public String getuId() {
         return uId;
     }
