@@ -160,11 +160,12 @@ public class SetScheduleViewModel extends ViewModel {
         return selectedGroup;
     }
 
+    // TODO: Shouldn't be on the class, should be generalized
     public boolean isCurrentUserSet() {
         return authRepository.getCurrentUser() != null;
     }
 
-    public void notifyUi() {
+    private void notifyUi() {
         this.newScheduleData.setValue(this.newScheduleData.getValue());
     }
 

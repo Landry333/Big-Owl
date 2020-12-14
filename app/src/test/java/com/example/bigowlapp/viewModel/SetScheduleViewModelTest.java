@@ -124,14 +124,6 @@ public class SetScheduleViewModelTest {
     }
 
     @Test
-    public void isCurrentUserSet() {
-    }
-
-    @Test
-    public void notifyUi() {
-    }
-
-    @Test
     public void getListOfUsersFromGroup() {
 
     }
