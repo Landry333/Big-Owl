@@ -111,6 +111,7 @@ public abstract class Repository<T> {
     // Fetching a Documents
     //===========================================================================================
 
+    // TODO: incorrect naming convention -------------V
     public MutableLiveData<T> getDocumentByUId(String UId, Class<? extends T> tClass) {
         MutableLiveData<T> tData = new MutableLiveData<>();
         collectionReference.document(UId)
@@ -212,13 +213,13 @@ public abstract class Repository<T> {
     }
 
     public MutableLiveData<List<T>> getListOfDocumentByArrayContains(String attribute, String attrValue,
-                                                                 Class<? extends T> tClass) {
+                                                                     Class<? extends T> tClass) {
         MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
         collectionReference.whereArrayContains(attribute, attrValue)
                 .get()
                 .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                     QuerySnapshot tDocs = task.getResult();
+                    if (task.isSuccessful()) {
+                        QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
                             List<T> listOfT = new ArrayList<>();
                             for (QueryDocumentSnapshot doc : task.getResult()) {
@@ -230,8 +231,7 @@ public abstract class Repository<T> {
                             listOfTData.setValue(null);
                         }
 
-                    }
-                    else{
+                    } else {
                         Log.e(getClassName(), "Error getting documents: " +
                                 task.getException());
                     }

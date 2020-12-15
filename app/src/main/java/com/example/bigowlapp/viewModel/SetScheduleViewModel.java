@@ -67,6 +67,7 @@ public class SetScheduleViewModel extends ViewModel {
         this.scheduleRepository = scheduleRepository;
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
+        newScheduleData = new MutableLiveData<>(Schedule.getPrototypeSchedule());
     }
 
     public MutableLiveData<Schedule> addSchedule() {
@@ -165,10 +166,6 @@ public class SetScheduleViewModel extends ViewModel {
         return authRepository.getCurrentUser() != null;
     }
 
-    private void notifyUi() {
-        this.newScheduleData.setValue(this.newScheduleData.getValue());
-    }
-
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public LiveData<List<User>> getListOfUsersFromGroup(Group group) {
         if (previousSelectedGroup != null && previousSelectedGroup.equals(group)) {
@@ -189,5 +186,29 @@ public class SetScheduleViewModel extends ViewModel {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setListOfGroupData(MutableLiveData<List<Group>> listOfGroupData) {
         this.listOfGroupData = listOfGroupData;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public List<User> getSelectedUsers() {
+        return selectedUsers;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public CarmenFeature getSelectedLocation() {
+        return selectedLocation;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setPreviousSelectedGroup(Group previousSelectedGroup) {
+        this.previousSelectedGroup = previousSelectedGroup;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setListOfUserInGroupData(LiveData<List<User>> listOfUserInGroupData) {
+        this.listOfUserInGroupData = listOfUserInGroupData;
+    }
+
+    private void notifyUi() {
+        this.newScheduleData.setValue(this.newScheduleData.getValue());
     }
 }

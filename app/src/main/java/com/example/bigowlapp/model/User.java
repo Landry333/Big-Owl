@@ -1,9 +1,9 @@
 package com.example.bigowlapp.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.IgnoreExtraProperties;
-
-import androidx.annotation.NonNull;
 
 @IgnoreExtraProperties
 public class User {
@@ -15,6 +15,8 @@ public class User {
     private String phoneNumber;
     private String email;
     private String profileImage;
+
+    // TODO: Create a builder (possibly for all models)
 
     public User() {
     }
