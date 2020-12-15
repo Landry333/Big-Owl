@@ -163,7 +163,7 @@ public class SetScheduleViewModelTest {
         assertEquals(startTime, setScheduleViewModel.getNewScheduleData().getValue().getStartTime());
 
         Timestamp endTime = new Timestamp(Calendar.getInstance().getTime());
-        setScheduleViewModel.updateScheduleStartTime(endTime.toDate());
+        setScheduleViewModel.updateScheduleEndTime(endTime.toDate());
         assertEquals(endTime, setScheduleViewModel.getNewScheduleData().getValue().getStartTime());
     }
 
@@ -187,11 +187,9 @@ public class SetScheduleViewModelTest {
         List<User> scheduleUserList = setScheduleViewModel.getListOfUsersFromGroup(group).getValue();
         assertEquals(userList, scheduleUserList);
 
-        // case where the group is either null or has no users
+        // case where the group is null
         scheduleUserList = setScheduleViewModel.getListOfUsersFromGroup(null).getValue();
         assertEquals(new ArrayList<>(), scheduleUserList);
-
-        // TODO: empty list case
 
         // case where data was not loaded yet
         setScheduleViewModel.setPreviousSelectedGroup(null);
@@ -200,5 +198,10 @@ public class SetScheduleViewModelTest {
         verify(userRepository).getDocumentsByListOfUId(userIdsList, User.class);
         assertEquals(userList, scheduleUserList);
 
+        // case where the group is empty
+        setScheduleViewModel.setPreviousSelectedGroup(null);
+        group.setSupervisedUserId(new ArrayList<>());
+        scheduleUserList = setScheduleViewModel.getListOfUsersFromGroup(group).getValue();
+        assertEquals(new ArrayList<>(), scheduleUserList);
     }
 }
