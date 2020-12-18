@@ -11,8 +11,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.ScheduleViewRespondActivity" />
-        <!-- TODO remove below activity -->
-        <activity android:name=".activity.ScheduleTestActivity" />
         <activity android:name=".activity.EditProfileActivity" />
         <activity android:name=".activity.HomePageActivity" />
         <activity android:name=".activity.InvitationConfirmationActivity" />

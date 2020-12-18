@@ -99,13 +99,6 @@
                     android:layout_height="wrap_content"
                     android:text="Log Out"
                     tools:ignore="HardcodedText" />
-
-                <!-- TODO remove below button element -->
-                <Button
-                    android:id="@+id/btn_notify_test"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="notify test" />
             </TableRow>
 
         </TableLayout>
