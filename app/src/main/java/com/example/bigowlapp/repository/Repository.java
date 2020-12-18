@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.database.Firestore;
+import com.example.bigowlapp.model.Model;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class Repository<T> {
+public abstract class Repository<T extends Model> {
 
     private final FirebaseFirestore mFirebaseFirestore;
     private final CollectionReference collectionReference;

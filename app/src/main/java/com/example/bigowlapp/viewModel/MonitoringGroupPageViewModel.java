@@ -55,9 +55,9 @@ public class MonitoringGroupPageViewModel extends ViewModel {
 
     public void removeUserFromGroup(User userToBeRemoved) {
         Group groupWithRemovedUser = getGroup().getValue();
-        Objects.requireNonNull(groupWithRemovedUser).getSupervisedUserId().remove(userToBeRemoved.getUId());
+        Objects.requireNonNull(groupWithRemovedUser).getSupervisedUserId().remove(userToBeRemoved.getUid());
 
-        groupRepository.updateDocument(groupWithRemovedUser.getuId(), groupWithRemovedUser);
+        groupRepository.updateDocument(groupWithRemovedUser.getUid(), groupWithRemovedUser);
     }
 
     public boolean isCurrentUserSet() {

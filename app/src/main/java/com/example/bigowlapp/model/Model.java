@@ -1,24 +1,26 @@
 package com.example.bigowlapp.model;
 
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.IgnoreExtraProperties;
 
+@IgnoreExtraProperties
 public abstract class Model {
 
     @DocumentId
-    private String uId;
+    private String uid;
 
     public Model() {
     }
 
-    public Model(String uId) {
-        this.uId = uId;
+    public Model(String uid) {
+        this.uid = uid;
     }
 
-    public String getuId() {
-        return uId;
+    public String getUid() {
+        return uid;
     }
 
-    public void setuId(String uId) {
-        this.uId = uId;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

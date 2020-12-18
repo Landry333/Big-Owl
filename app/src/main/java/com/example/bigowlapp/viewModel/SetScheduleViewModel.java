@@ -100,7 +100,7 @@ public class SetScheduleViewModel extends ViewModel {
 
     public void updateScheduleGroup(Group group) {
         this.selectedGroup = group;
-        this.newScheduleData.getValue().setGroupUId(group.getuId());
+        this.newScheduleData.getValue().setGroupUId(group.getUid());
         this.newScheduleData.getValue().setGroupSupervisorUId(group.getMonitoringUserId());
 
         this.selectedUsers = new ArrayList<>();
@@ -119,7 +119,7 @@ public class SetScheduleViewModel extends ViewModel {
         this.selectedUsers = users;
         List<String> listOfUserIds = new ArrayList<>();
         for (User selectedUser : selectedUsers) {
-            listOfUserIds.add(selectedUser.getUId());
+            listOfUserIds.add(selectedUser.getUid());
         }
         this.newScheduleData.getValue().setMemberList(listOfUserIds);
         notifyUi();

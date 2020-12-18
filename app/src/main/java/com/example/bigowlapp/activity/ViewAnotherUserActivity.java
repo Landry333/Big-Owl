@@ -61,7 +61,7 @@ public class ViewAnotherUserActivity extends BigOwlActivity {
                     }
                 });
 
-        otherUserID = otherUser.getUId();
+        otherUserID = otherUser.getUid();
         mUser = mAuth.getCurrentUser();
         supRequestBtn.setOnClickListener(v -> DoRequest(otherUserID));
     }

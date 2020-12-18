@@ -30,7 +30,7 @@ public class AuthRepository {
             if (task.isSuccessful()) {
                 UserRepository userRepository = new UserRepository();
                 String uId = this.getCurrentUser().getUid();
-                user.setUId(uId);
+                user.setUid(uId);
                 user.setEmail(email);
                 user.setPhoneNumber(phoneNumber);
                 user.setFirstName(firstName);

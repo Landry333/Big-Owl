@@ -71,7 +71,7 @@ public class SetScheduleViewModelTest {
     @Test
     public void addSchedule() {
         Schedule schedule = Schedule.getPrototypeSchedule();
-        schedule.setuId("Testing");
+        schedule.setUid("Testing");
         schedule.setMemberList(Arrays.asList("joe", "doe", "john"));
 
         testScheduleData = new MutableLiveData<>(schedule);
@@ -81,7 +81,7 @@ public class SetScheduleViewModelTest {
         Schedule returnedSchedule = setScheduleViewModel.addSchedule().getValue();
 
         verify(scheduleRepository).addDocument(schedule);
-        assertEquals(schedule.getuId(), returnedSchedule.getuId());
+        assertEquals(schedule.getUid(), returnedSchedule.getUid());
         assertEquals(schedule.getMemberList(), returnedSchedule.getMemberList());
         assertEquals(schedule.getMemberList().size(), returnedSchedule.getMembers().size());
         assertEquals(Response.NEUTRAL, returnedSchedule.getMembers().get("joe").getResponse());
@@ -111,14 +111,14 @@ public class SetScheduleViewModelTest {
     @Test
     public void updateScheduleGroup() {
         Group group = new Group();
-        group.setuId("GroupId");
+        group.setUid("GroupId");
         group.setMonitoringUserId("MonitoringId");
 
         setScheduleViewModel.updateScheduleGroup(group);
 
         Schedule returnedSchedule = setScheduleViewModel.getNewScheduleData().getValue();
 
-        assertEquals(group.getuId(), returnedSchedule.getGroupUId());
+        assertEquals(group.getUid(), returnedSchedule.getGroupUId());
         assertEquals(group.getMonitoringUserId(), returnedSchedule.getGroupSupervisorUId());
         assertEquals(new ArrayList<>(), returnedSchedule.getMemberList());
         assertEquals(group, setScheduleViewModel.getSelectedGroup());
@@ -145,7 +145,7 @@ public class SetScheduleViewModelTest {
         List<String> userIdsList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             User user = new User();
-            user.setUId(Integer.toString(i));
+            user.setUid(Integer.toString(i));
             userList.add(user);
             userIdsList.add(Integer.toString(i));
         }
@@ -173,7 +173,7 @@ public class SetScheduleViewModelTest {
         List<String> userIdsList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             User user = new User();
-            user.setUId(Integer.toString(i));
+            user.setUid(Integer.toString(i));
             userList.add(user);
             userIdsList.add(Integer.toString(i));
         }

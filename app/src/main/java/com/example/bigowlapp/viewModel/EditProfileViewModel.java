@@ -29,7 +29,7 @@ public class EditProfileViewModel extends ViewModel {
         if (!imageUrl.equals(""))
             userWithNewProfile.setProfileImage(imageUrl);
 
-        userRepository.updateDocument(userWithNewProfile.getUId(), userWithNewProfile);
+        userRepository.updateDocument(userWithNewProfile.getUid(), userWithNewProfile);
         userData.setValue(userWithNewProfile);
     }
 

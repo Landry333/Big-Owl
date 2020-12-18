@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 
-import com.example.bigowlapp.R;
-import com.google.firebase.auth.FirebaseAuth;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+
+import com.example.bigowlapp.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public abstract class BigOwlActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     ImageButton imgBtnOverflow;

@@ -2,7 +2,6 @@ package com.example.bigowlapp.model;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
