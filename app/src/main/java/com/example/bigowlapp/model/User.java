@@ -6,10 +6,8 @@ import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
-public class User {
+public class User extends Model {
 
-    @DocumentId
-    private String uId;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -19,23 +17,16 @@ public class User {
     // TODO: Create a builder (possibly for all models)
 
     public User() {
+        super();
     }
 
     public User(String uId, String firstName, String lastName, String phoneNumber, String email, String profileImage) {
-        this.uId = uId;
+        super(uId);
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.profileImage = profileImage;
-    }
-
-    public String getUId() {
-        return uId;
-    }
-
-    public void setUId(String uId) {
-        this.uId = uId;
     }
 
     public String getFirstName() {

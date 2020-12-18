@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.activity.SignUpPageActivity;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
@@ -301,16 +299,12 @@ public class ScheduleFormFragment extends Fragment
                 Toast.makeText(getContext(), "Please complete all the necessary fields", Toast.LENGTH_LONG).show();
                 return;
             }
-            
+
             setScheduleViewModel.addSchedule();
             Toast.makeText(getContext(), "Schedule added successfully", Toast.LENGTH_LONG).show();
             getActivity().finish();
         });
     }
-
-    //===========================================================================================
-    // Time & Date
-    //===========================================================================================
 
     private void setupDateTimeButtons() {
         editStartDate.setOnClickListener(view -> {

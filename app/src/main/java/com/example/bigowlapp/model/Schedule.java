@@ -1,7 +1,6 @@
 package com.example.bigowlapp.model;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
@@ -10,10 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 @IgnoreExtraProperties
-public class Schedule {
+public class Schedule extends Model {
 
-    @DocumentId
-    private String uId;
     private String title;
     private String event;
     private String groupUId;
@@ -69,12 +66,13 @@ public class Schedule {
     }
 
     public Schedule() {
+        super();
     }
 
     public Schedule(String uId, String title, String event, String groupUId,
                     String groupSupervisorUId, List<String> memberList, Timestamp startTime,
                     Timestamp endTime, GeoPoint location, Map<String, UserResponse> members) {
-        this.uId = uId;
+        super(uId);
         this.title = title;
         this.event = event;
         this.groupUId = groupUId;
@@ -84,14 +82,6 @@ public class Schedule {
         this.endTime = endTime;
         this.location = location;
         this.members = members;
-    }
-
-    public String getuId() {
-        return uId;
-    }
-
-    public void setuId(String uId) {
-        this.uId = uId;
     }
 
     public String getGroupUId() {

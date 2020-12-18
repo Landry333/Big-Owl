@@ -10,31 +10,22 @@ import java.util.List;
 
 // Exclude uneeded data from documents
 @IgnoreExtraProperties
-public class Group {
+public class Group extends Model {
 
-    @DocumentId
-    private String uId;
     private String name;
     private String monitoringUserId;
     private List<String> supervisedUserId;
 
     public Group() {
+        super();
         supervisedUserId = new ArrayList<>();
     }
 
     public Group(String uId, String name, String monitoringUserId, List<String> supervisedUserId) {
-        this.uId = uId;
+        super(uId);
         this.name = name;
         this.monitoringUserId = monitoringUserId;
         this.supervisedUserId = supervisedUserId;
-    }
-
-    public String getuId() {
-        return uId;
-    }
-
-    public void setuId(String uId) {
-        this.uId = uId;
     }
 
     public String getName() {

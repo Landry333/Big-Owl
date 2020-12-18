@@ -11,6 +11,7 @@ public class SupervisionRequest extends Notification implements Constants {
     private Response response;
     private Timestamp timeSent;
     private Timestamp timeResponse;
+    
     public SupervisionRequest() {
         super();
     }
