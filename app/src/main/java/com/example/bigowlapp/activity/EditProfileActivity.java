@@ -9,10 +9,9 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.viewModel.EditProfileViewModel;
 
 import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-public class EditProfileActivity extends AppCompatActivity {
+public class EditProfileActivity extends BigOwlActivity {
     Button editButtonCancel, editButtonConfirm;
     EditText editUserFirstName, editUserLastName, editPhoneNumber, editImageURL;
     private EditProfileViewModel editProfileViewModel;
@@ -20,7 +19,6 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
         initialize();
     }
 
@@ -85,6 +83,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 editImageURL.setText(user.getProfileImage());
             });
         }
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.activity_edit_profile;
     }
 
     @VisibleForTesting

@@ -11,21 +11,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.bigowlapp.R;
 
 
-public class AddUsersActivity extends AppCompatActivity {
+public class AddUsersActivity extends BigOwlActivity {
     private final int CONTACT_PERMISSION_CODE = 1;
     Button btnContacts, btnPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_users);
         initialize();
     }
 
@@ -54,6 +52,11 @@ public class AddUsersActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.activity_add_users;
     }
 
     private void requestContactPermission() {

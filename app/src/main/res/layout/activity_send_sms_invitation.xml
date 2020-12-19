@@ -7,6 +7,12 @@
     android:orientation="vertical"
     tools:context=".activity.SendSmsInvitationActivity">
 
+    <include
+        android:id="@+id/top_app_bar"
+        layout="@layout/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:id="@+id/note"
         android:layout_width="match_parent"
