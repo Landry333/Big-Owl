@@ -3,6 +3,7 @@ package com.example.bigowlapp.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,7 @@ public class ListOfScheduleActivity extends BigOwlActivity {
             });
         } catch (
                 Exception e) {
-            e.printStackTrace();
+            Log.e("BigOwl", Log.getStackTraceString(e));
         }
     }
 
