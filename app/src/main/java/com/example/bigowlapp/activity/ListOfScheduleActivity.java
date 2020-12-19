@@ -28,7 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListOfScheduleActivity extends AppCompatActivity {
+public class ListOfScheduleActivity extends BigOwlActivity {
     private ListView scheduleListView;
     private ScheduleListViewModel scheduleListViewModel;
     String groupID;
@@ -36,8 +36,12 @@ public class ListOfScheduleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_of_schedule);
         groupID = getIntent().getStringExtra("groupID");
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_list_of_schedule;
     }
 
     @Override
