@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
 import com.example.bigowlapp.repository.NotificationRepository;
@@ -22,7 +23,7 @@ public class ScheduleListViewModel extends ViewModel {
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
     private MutableLiveData<List<Schedule>> scheduleData;
-    private Schedule.UserResponse currentUserNewResponse;
+    private UserScheduleResponse currentUserNewResponse;
 
     public ScheduleListViewModel() {
         authRepository = new AuthRepository();

@@ -15,7 +15,7 @@ public class Notification {
     private String type;
     private Timestamp timeRead;
     private Timestamp timeSend;
-    private Schedule.UserResponse senderResponse;
+    private UserScheduleResponse senderResponse;
 
     public Notification() {
     }
@@ -35,7 +35,7 @@ public class Notification {
         this.timeRead = timeRead;
     }
 
-    public Notification(String uId, String senderUId, String receiverUId, String groupUId, String type, Timestamp timeRead, Timestamp timeSend, Schedule.UserResponse senderResponse) {
+    public Notification(String uId, String senderUId, String receiverUId, String groupUId, String type, Timestamp timeRead, Timestamp timeSend, UserScheduleResponse senderResponse) {
         this.uId = uId;
         this.senderUId = senderUId;
         this.receiverUId = receiverUId;
@@ -46,11 +46,11 @@ public class Notification {
         this.senderResponse = senderResponse;
     }
 
-    public Schedule.UserResponse getSenderResponse() {
+    public UserScheduleResponse getSenderResponse() {
         return senderResponse;
     }
 
-    public void setSenderResponse(Schedule.UserResponse senderResponse) {
+    public void setSenderResponse(UserScheduleResponse senderResponse) {
         this.senderResponse = senderResponse;
     }
 

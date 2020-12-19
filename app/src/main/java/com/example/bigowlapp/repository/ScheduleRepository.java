@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.model.Schedule;
+import com.example.bigowlapp.model.UserScheduleResponse;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.Query;
@@ -22,8 +23,8 @@ public class ScheduleRepository extends Repository<Schedule> {
         super("schedules");
     }
 
-    public Task<Void> updateScheduleMemberResponse(String scheduleId, String userUId, Schedule.UserResponse currentUserResponse) {
-        return collectionReference.document(scheduleId).update("members.".concat(userUId), currentUserResponse);
+    public Task<Void> updateScheduleMemberResponse(String scheduleId, String userUId, UserScheduleResponse currentUserScheduleResponse) {
+        return collectionReference.document(scheduleId).update("members.".concat(userUId), currentUserScheduleResponse);
     }
 
     public MutableLiveData<List<Schedule>> getListSchedulesFromGroupForUser(String groupID, String userID) {

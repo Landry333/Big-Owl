@@ -3,6 +3,7 @@ package com.example.bigowlapp.viewModel;
 import com.example.bigowlapp.model.Notification;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
+import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.NotificationRepository;
 import com.example.bigowlapp.repository.ScheduleRepository;
@@ -21,7 +22,7 @@ public class ScheduleViewRespondViewModel extends ViewModel {
     private final NotificationRepository notificationRepository;
     private final ScheduleRepository scheduleRepository;
     private MutableLiveData<Schedule> scheduleData;
-    private Schedule.UserResponse currentUserNewResponse;
+    private UserScheduleResponse currentUserNewResponse;
     private static final int ONE_MINUTE = 60000;
 
     // TODO: Dependency Injection
@@ -33,7 +34,7 @@ public class ScheduleViewRespondViewModel extends ViewModel {
 
     public void respondSchedule(String scheduleId, Response response) {
         if (isCurrentUserInSchedule()) {
-            currentUserNewResponse = getUserResponseInSchedule();
+            currentUserNewResponse = getUserScheduleResponse();
             currentUserNewResponse.setResponse(response);
             currentUserNewResponse.setResponseTime(now());
             scheduleRepository.updateScheduleMemberResponse(scheduleId, authRepository.getCurrentUser().getUid(), currentUserNewResponse);
@@ -41,7 +42,7 @@ public class ScheduleViewRespondViewModel extends ViewModel {
         }
     }
 
-    public Schedule.UserResponse getUserResponseInSchedule() {
+    public UserScheduleResponse getUserScheduleResponse() {
         return Objects.requireNonNull(scheduleData.getValue()).getMembers()
                 .get(authRepository.getCurrentUser().getUid());
     }
@@ -72,7 +73,7 @@ public class ScheduleViewRespondViewModel extends ViewModel {
     }
 
     public boolean isOneMinuteAfterLastResponse() {
-        long userLastResponseTime = getUserResponseInSchedule().getResponseTime().toDate().getTime();
+        long userLastResponseTime = getUserScheduleResponse().getResponseTime().toDate().getTime();
         return now().toDate().getTime() >= (userLastResponseTime + ONE_MINUTE);
     }
 }

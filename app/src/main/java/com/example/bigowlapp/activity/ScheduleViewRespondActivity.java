@@ -3,16 +3,14 @@ package com.example.bigowlapp.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Response;
-import com.example.bigowlapp.model.Schedule;
+import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
 
-import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -40,15 +38,15 @@ public class ScheduleViewRespondActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.text_view_schedule_start_time)).setText(schedule.getStartTime().toDate().toString());
             ((TextView) findViewById(R.id.text_view_schedule_end_time)).setText(schedule.getEndTime().toDate().toString());
 
-            Schedule.UserResponse userResponse = scheduleViewRespondViewModel.getUserResponseInSchedule();
-            if (userResponse.getResponse() != Response.NEUTRAL) {
+            UserScheduleResponse userScheduleResponse = scheduleViewRespondViewModel.getUserScheduleResponse();
+            if (userScheduleResponse.getResponse() != Response.NEUTRAL) {
                 ((TextView) findViewById(R.id.text_view_schedule_user_response_text))
-                        .setText(userResponse.getResponse() == Response.ACCEPT ? "Accepted" : "Rejected");
+                        .setText(userScheduleResponse.getResponse() == Response.ACCEPT ? "Accepted" : "Rejected");
                 ((TextView) findViewById(R.id.text_view_schedule_user_response_time))
-                        .setText(userResponse.getResponseTime().toDate().toString());
-                ((LinearLayout) findViewById(R.id.linear_layout_response)).setVisibility(View.VISIBLE);
+                        .setText(userScheduleResponse.getResponseTime().toDate().toString());
+                (findViewById(R.id.linear_layout_response)).setVisibility(View.VISIBLE);
                 findViewById(R.id.line_below_response).setVisibility(View.VISIBLE);
-                setResponseButtonsVisibility(userResponse.getResponse());
+                setResponseButtonsVisibility(userScheduleResponse.getResponse());
             }
         });
 
