@@ -22,6 +22,7 @@ public class ScheduleViewRespondViewModel extends ViewModel {
     private final ScheduleRepository scheduleRepository;
     private MutableLiveData<Schedule> scheduleData;
     private Schedule.UserResponse currentUserNewResponse;
+    private static final int ONE_MINUTE = 60000;
 
     // TODO: Dependency Injection
     public ScheduleViewRespondViewModel() {
@@ -72,6 +73,6 @@ public class ScheduleViewRespondViewModel extends ViewModel {
 
     public boolean isOneMinuteAfterLastResponse() {
         long userLastResponseTime = getUserResponseInSchedule().getResponseTime().toDate().getTime();
-        return now().toDate().getTime() >= (userLastResponseTime + 60000);
+        return now().toDate().getTime() >= (userLastResponseTime + ONE_MINUTE);
     }
 }

@@ -18,7 +18,7 @@ public class Schedule {
     private Timestamp endTime;
     private GeoPoint location;
     private String groupSupervisorUId;
-    private Map<String, UserResponse> members;
+    private Map<String, UserResponse> userResponseMap;
     private String title;
     private String event;
     private List<String> memberList;
@@ -65,11 +65,11 @@ public class Schedule {
     }
 
     public Map<String, UserResponse> getMembers() {
-        return members;
+        return userResponseMap;
     }
 
-    public void setMembers(Map<String, UserResponse> members) {
-        this.members = members;
+    public void setMembers(Map<String, UserResponse> userResponseMap) {
+        this.userResponseMap = userResponseMap;
     }
 
     public String getGroupSupervisorUId() {
