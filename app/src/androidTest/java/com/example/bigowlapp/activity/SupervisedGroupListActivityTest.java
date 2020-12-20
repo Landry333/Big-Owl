@@ -44,16 +44,12 @@ public class SupervisedGroupListActivityTest {
 
     @Mock
     private SupervisedGroupListViewModel supervisedGroupListViewModel;
-
     @Mock
     private AuthRepository authRepository;
-
     @Mock
     private GroupRepository groupRepository;
-
     @Mock
     private UserRepository userRepository;
-
     @Mock
     private FirebaseUser testFirebaseUser;
 
@@ -89,14 +85,14 @@ public class SupervisedGroupListActivityTest {
             Group newGroup = new Group(
                     "group00".concat(String.valueOf(i)),
                     "groupName00".concat(String.valueOf(i)),
-                    groupSupervisor.getUId(),
+                    groupSupervisor.getUid(),
                     groupSupervisedUserId
             );
             testUserSupervisedGroupList.add(newGroup);
 
-            when(userRepository.getDocumentByUId(groupSupervisor.getUId(), User.class))
+            when(userRepository.getDocumentByUId(groupSupervisor.getUid(), User.class))
                     .thenReturn(groupSupervisorData);
-            when(supervisedGroupListViewModel.getSupervisor(groupSupervisor.getUId())).thenReturn(groupSupervisorData);
+            when(supervisedGroupListViewModel.getSupervisor(groupSupervisor.getUid())).thenReturn(groupSupervisorData);
         }
         MutableLiveData<List<Group>> testUserSupervisedGroupListData = new MutableLiveData<>(testUserSupervisedGroupList);
         testUserSupervisedGroupListData.postValue(testUserSupervisedGroupList);

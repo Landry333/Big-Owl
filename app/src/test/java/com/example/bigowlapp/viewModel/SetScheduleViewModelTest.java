@@ -9,6 +9,7 @@ import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
+import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.repository.UserRepository;
 import com.google.firebase.Timestamp;
@@ -46,6 +47,8 @@ public class SetScheduleViewModelTest {
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     @Mock
+    private RepositoryFacade repositoryFacade;
+    @Mock
     private AuthRepository authRepository;
     @Mock
     private ScheduleRepository scheduleRepository;
@@ -58,8 +61,13 @@ public class SetScheduleViewModelTest {
 
     @Before
     public void setUp() throws Exception {
-        setScheduleViewModel = new SetScheduleViewModel(authRepository, scheduleRepository,
-                groupRepository, userRepository);
+        when(repositoryFacade.getAuthRepository()).thenReturn(authRepository);
+        when(repositoryFacade.getScheduleRepository()).thenReturn(scheduleRepository);
+        when(repositoryFacade.getGroupRepository()).thenReturn(groupRepository);
+        when(repositoryFacade.getUserRepository()).thenReturn(userRepository);
+
+        setScheduleViewModel = new SetScheduleViewModel(repositoryFacade);
+
         when(authRepository.getCurrentUser()).thenReturn(testFirebaseUser);
         when(testFirebaseUser.getUid()).thenReturn("123");
     }

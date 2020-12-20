@@ -2,6 +2,7 @@ package com.example.bigowlapp.viewModel;
 
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
+import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.UserRepository;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -36,16 +37,19 @@ public class EditProfileViewModelTest {
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     @Mock
+    private RepositoryFacade repositoryFacade;
+    @Mock
     private UserRepository userRepository;
-
     @Mock
     private AuthRepository authRepository;
-
     @Mock
     private FirebaseUser testFirebaseUser;
 
     @Before
     public void setUp() {
+        when(repositoryFacade.getAuthRepository()).thenReturn(authRepository);
+        when(repositoryFacade.getUserRepository()).thenReturn(userRepository);
+
         testUser = new User("abc123", "first", "last", "+911", "test@mail.com", "url");
         testUserData = new MutableLiveData<>(testUser);
 
@@ -53,7 +57,7 @@ public class EditProfileViewModelTest {
         when(userRepository.getDocumentByUId(anyString(), eq(User.class))).thenReturn(testUserData);
         when(testFirebaseUser.getUid()).thenReturn("abc123");
 
-        editProfileViewModel = new EditProfileViewModel(authRepository, userRepository, testUserData);
+        editProfileViewModel = new EditProfileViewModel(repositoryFacade, testUserData);
     }
 
     @Test
@@ -72,7 +76,7 @@ public class EditProfileViewModelTest {
 
     @Test
     public void getCurrentUserDataTest() {
-        editProfileViewModel = new EditProfileViewModel(authRepository, userRepository, null);
+        editProfileViewModel = new EditProfileViewModel(repositoryFacade, null);
         LiveData<User> target = editProfileViewModel.getCurrentUserData();
         verify(userRepository).getDocumentByUId(anyString(), eq(User.class));
         assertEquals(testUserData, target);
