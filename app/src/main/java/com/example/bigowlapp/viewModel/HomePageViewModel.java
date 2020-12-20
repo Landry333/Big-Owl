@@ -1,22 +1,15 @@
 package com.example.bigowlapp.viewModel;
 
-import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.AuthRepository;
-import com.example.bigowlapp.repository.UserRepository;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-public class HomePageViewModel extends ViewModel {
+import com.example.bigowlapp.model.User;
 
-    private final AuthRepository authRepository;
-    private final UserRepository userRepository;
+public class HomePageViewModel extends BaseViewModel {
+
     private MutableLiveData<User> user;
 
     public HomePageViewModel() {
-        authRepository = new AuthRepository();
-        userRepository = new UserRepository();
     }
 
     public LiveData<User> getCurrentUserData() {
@@ -28,10 +21,7 @@ public class HomePageViewModel extends ViewModel {
     }
 
     private void loadUserCurrentProfile() {
-        user = userRepository.getDocumentByUId(authRepository.getCurrentUser().getUid(), User.class);
-    }
-
-    public boolean isCurrentUserSet() {
-        return authRepository.getCurrentUser() != null;
+        user = repositoryFacade.getUserRepository()
+                .getDocumentByUId(getCurrentUserUid(), User.class);
     }
 }

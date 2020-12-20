@@ -12,6 +12,7 @@ import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
+import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.repository.UserRepository;
 import com.google.firebase.Timestamp;
@@ -24,12 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SetScheduleViewModel extends ViewModel {
-
-    private final AuthRepository authRepository;
-    private final ScheduleRepository scheduleRepository;
-    private final GroupRepository groupRepository;
-    private final UserRepository userRepository;
+public class SetScheduleViewModel extends BaseViewModel {
 
     private List<User> selectedUsers;
     private Group selectedGroup;
@@ -45,11 +41,6 @@ public class SetScheduleViewModel extends ViewModel {
     private MutableLiveData<List<Group>> listOfGroupData;
 
     public SetScheduleViewModel() {
-        authRepository = new AuthRepository();
-        scheduleRepository = new ScheduleRepository();
-        groupRepository = new GroupRepository();
-        userRepository = new UserRepository();
-
         newScheduleData = new MutableLiveData<>(Schedule.getPrototypeSchedule());
         selectedGroupData = Transformations.map(newScheduleData, schedule -> selectedGroup);
         listOfUserInGroupData = Transformations.switchMap(selectedGroupData, group -> getListOfUsersFromGroup(group));
@@ -58,15 +49,10 @@ public class SetScheduleViewModel extends ViewModel {
         selectedLocationData = Transformations.map(newScheduleData, schedule -> selectedLocation);
     }
 
+    // TODO: Fix test that uses this method
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public SetScheduleViewModel(AuthRepository authRepository,
-                                ScheduleRepository scheduleRepository,
-                                GroupRepository groupRepository,
-                                UserRepository userRepository) {
-        this.authRepository = authRepository;
-        this.scheduleRepository = scheduleRepository;
-        this.groupRepository = groupRepository;
-        this.userRepository = userRepository;
+    public SetScheduleViewModel(RepositoryFacade repositoryFacade) {
+        this.repositoryFacade = repositoryFacade;
         newScheduleData = new MutableLiveData<>(Schedule.getPrototypeSchedule());
     }
 
@@ -78,7 +64,7 @@ public class SetScheduleViewModel extends ViewModel {
                         memberUId -> new Schedule.UserResponse(Response.NEUTRAL, null))
                 );
         schedule.setMembers(userResponseMap);
-        return scheduleRepository.addDocument(schedule);
+        return repositoryFacade.getScheduleRepository().addDocument(schedule);
     }
 
     public LiveData<List<Group>> getListOfGroup() {
@@ -90,8 +76,9 @@ public class SetScheduleViewModel extends ViewModel {
     }
 
     private void loadListOfGroup() {
-        String userId = authRepository.getCurrentUser().getUid();
-        listOfGroupData = groupRepository.getListOfDocumentByAttribute("monitoringUserId", userId, Group.class);
+        String userId = getCurrentUserUid();
+        listOfGroupData = repositoryFacade.getGroupRepository()
+                .getListOfDocumentByAttribute("monitoringUserId", userId, Group.class);
     }
 
     public void updateScheduleTitle(String title) {
@@ -161,11 +148,7 @@ public class SetScheduleViewModel extends ViewModel {
         return selectedGroup;
     }
 
-    // TODO: Shouldn't be on the class, should be generalized
-    public boolean isCurrentUserSet() {
-        return authRepository.getCurrentUser() != null;
-    }
-
+    // TODO: Fix test that uses this method
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public LiveData<List<User>> getListOfUsersFromGroup(Group group) {
         if (previousSelectedGroup != null && previousSelectedGroup.equals(group)) {
@@ -175,7 +158,8 @@ public class SetScheduleViewModel extends ViewModel {
         if (group == null || group.getSupervisedUserId().isEmpty()) {
             return new MutableLiveData<>(new ArrayList<>());
         }
-        return userRepository.getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
+        return repositoryFacade.getUserRepository()
+                .getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

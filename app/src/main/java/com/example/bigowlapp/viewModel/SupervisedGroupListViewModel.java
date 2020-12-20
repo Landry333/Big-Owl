@@ -12,18 +12,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SupervisedGroupListViewModel extends ViewModel {
-
-    private final AuthRepository authRepository;
-    private final GroupRepository groupRepository;
-    private final UserRepository userRepository;
+public class SupervisedGroupListViewModel extends BaseViewModel {
     private MutableLiveData<List<Group>> groupLiveData;
     private MutableLiveData<User> userData;
 
     public SupervisedGroupListViewModel() {
-        authRepository = new AuthRepository();
-        groupRepository = new GroupRepository();
-        userRepository = new UserRepository();
     }
 
     public LiveData<List<Group>> getSupervisedGroupListData() {
@@ -34,12 +27,13 @@ public class SupervisedGroupListViewModel extends ViewModel {
     }
 
     public LiveData<User> getSupervisor(String supervisorUid) {
-        return userRepository.getDocumentByUId(supervisorUid, User.class);
+        return repositoryFacade.getUserRepository().getDocumentByUId(supervisorUid, User.class);
     }
 
     private void loadListOfDocumentByArrayContains() {
-        groupLiveData = groupRepository.getListOfDocumentByArrayContains("supervisedUserId",
-                authRepository.getCurrentUser().getUid(), Group.class);
+        groupLiveData = repositoryFacade.getGroupRepository()
+                .getListOfDocumentByArrayContains("supervisedUserId",
+                        getCurrentUserUid(), Group.class);
     }
 
     public LiveData<User> getCurrentUserData() {
@@ -51,6 +45,7 @@ public class SupervisedGroupListViewModel extends ViewModel {
     }
 
     private void loadUserCurrentProfile() {
-        userData = userRepository.getDocumentByUId(authRepository.getCurrentUser().getUid(), User.class);
+        userData = repositoryFacade.getUserRepository()
+                .getDocumentByUId(getCurrentUserUid(), User.class);
     }
 }

@@ -1,24 +1,18 @@
 package com.example.bigowlapp.viewModel;
 
-import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.AuthRepository;
-import com.example.bigowlapp.repository.UserRepository;
-
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-public class EditProfileViewModel extends ViewModel {
+import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.repository.RepositoryFacade;
 
-    private final AuthRepository authRepository;
-    private final UserRepository userRepository;
+public class EditProfileViewModel extends BaseViewModel {
+
     private MutableLiveData<User> userData;
 
     // TODO: Dependency Injection
     public EditProfileViewModel() {
-        authRepository = new AuthRepository();
-        userRepository = new UserRepository();
     }
 
     public void editUserProfile(String fName, String lName, String pNum, String imageUrl) {
@@ -29,7 +23,8 @@ public class EditProfileViewModel extends ViewModel {
         if (!imageUrl.equals(""))
             userWithNewProfile.setProfileImage(imageUrl);
 
-        userRepository.updateDocument(userWithNewProfile.getUid(), userWithNewProfile);
+
+        repositoryFacade.getUserRepository().updateDocument(userWithNewProfile.getUid(), userWithNewProfile);
         userData.setValue(userWithNewProfile);
     }
 
@@ -42,17 +37,14 @@ public class EditProfileViewModel extends ViewModel {
     }
 
     private void loadUserCurrentProfile() {
-        userData = userRepository.getDocumentByUId(authRepository.getCurrentUser().getUid(), User.class);
+        userData = repositoryFacade.getUserRepository()
+                .getDocumentByUId(getCurrentUserUid(), User.class);
     }
 
-    public boolean isCurrentUserSet() {
-        return authRepository.getCurrentUser() != null;
-    }
-
+    // TODO: Fix test that uses this method
     @VisibleForTesting
-    public EditProfileViewModel(AuthRepository authRepository, UserRepository userRepository, MutableLiveData<User> userData) {
-        this.authRepository = authRepository;
-        this.userRepository = userRepository;
+    public EditProfileViewModel(RepositoryFacade repositoryFacade, MutableLiveData<User> userData) {
+        this.repositoryFacade = repositoryFacade;
         this.userData = userData;
     }
 }

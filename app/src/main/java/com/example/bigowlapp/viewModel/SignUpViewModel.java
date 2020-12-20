@@ -7,24 +7,20 @@ import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
 import com.google.android.gms.tasks.Task;
 
-public class SignUpViewModel extends ViewModel {
-
-    private AuthRepository authRepository;
-    private GroupRepository groupRepository;
+public class SignUpViewModel extends BaseViewModel {
 
     // TODO: Dependency Injection
     public SignUpViewModel() {
-        authRepository = new AuthRepository();
-        groupRepository = new GroupRepository();
     }
 
     public Task<Boolean> createUser(String email, String password, String phoneNumber, String firstName, String lastName) {
-        return authRepository.signUpUser(email, password, phoneNumber, firstName, lastName)
+        return repositoryFacade.getAuthRepository()
+                .signUpUser(email, password, phoneNumber, firstName, lastName)
                 .addOnSuccessListener(isSuccess -> {
                     Group group = new Group();
-                    group.setMonitoringUserId(authRepository.getCurrentUser().getUid());
+                    group.setMonitoringUserId(getCurrentUserUid());
                     group.setName(getFullName(firstName, lastName) + "'s group " + "#" + randomStringGenerator());
-                    groupRepository.addDocument(group);
+                    repositoryFacade.getGroupRepository().addDocument(group);
                 });
 
     }
