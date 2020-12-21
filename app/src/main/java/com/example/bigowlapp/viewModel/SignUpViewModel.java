@@ -1,11 +1,11 @@
 package com.example.bigowlapp.viewModel;
 
-import androidx.lifecycle.ViewModel;
-
 import com.example.bigowlapp.model.Group;
-import com.example.bigowlapp.repository.AuthRepository;
-import com.example.bigowlapp.repository.GroupRepository;
+import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.repository.UserRepository;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.AuthResult;
 
 public class SignUpViewModel extends BaseViewModel {
 
@@ -13,16 +13,34 @@ public class SignUpViewModel extends BaseViewModel {
     public SignUpViewModel() {
     }
 
+    // TODO: Handle exceptions concerning the failure of the "user" database collection
     public Task<Boolean> createUser(String email, String password, String phoneNumber, String firstName, String lastName) {
-        return repositoryFacade.getAuthRepository()
-                .signUpUser(email, password, phoneNumber, firstName, lastName)
-                .addOnSuccessListener(isSuccess -> {
-                    Group group = new Group();
-                    group.setMonitoringUserId(getCurrentUserUid());
-                    group.setName(getFullName(firstName, lastName) + "'s group " + "#" + randomStringGenerator());
-                    repositoryFacade.getGroupRepository().addDocument(group);
-                });
 
+        Task<AuthResult> taskAuthSignUpResult = repositoryFacade.getAuthRepository()
+                .signUpUser(email, password);
+
+        Task<Boolean> taskAddUser = taskAuthSignUpResult.continueWithTask(task -> {
+            if (task.isSuccessful()) {
+                User user = new User();
+                String uId = getCurrentUserUid();
+                user.setUid(uId);
+                user.setEmail(email);
+                user.setPhoneNumber(phoneNumber);
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
+                repositoryFacade.getUserRepository().addDocument(uId, user);
+                return Tasks.forResult(true);
+            } else {
+                throw task.getException();
+            }
+        });
+
+        return taskAddUser.addOnSuccessListener(isSuccess -> {
+            Group group = new Group();
+            group.setMonitoringUserId(getCurrentUserUid());
+            group.setName(getFullName(firstName, lastName) + "'s group " + "#" + randomStringGenerator());
+            repositoryFacade.getGroupRepository().addDocument(group);
+        });
     }
 
     public String getFullName(String firstName, String lastName) {

@@ -21,27 +21,8 @@ public class AuthRepository {
         return mfirebaseAuth.getCurrentUser();
     }
 
-    // TODO: Handle exceptions concerning the failure of the "user" database collection
-    public Task<Boolean> signUpUser(String email, String password, String phoneNumber,
-                                    String firstName, String lastName) {
-        User user = new User();
-        Task<AuthResult> taskAuthResult = mfirebaseAuth.createUserWithEmailAndPassword(email, password);
-        Task<Boolean> taskBoolean = taskAuthResult.continueWithTask(task -> {
-            if (task.isSuccessful()) {
-                UserRepository userRepository = new UserRepository();
-                String uId = this.getCurrentUser().getUid();
-                user.setUid(uId);
-                user.setEmail(email);
-                user.setPhoneNumber(phoneNumber);
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                userRepository.addDocument(uId, user);
-                return Tasks.forResult(true);
-            } else {
-                throw task.getException();
-            }
-        });
-        return taskBoolean;
+    public Task<AuthResult> signUpUser(String email, String password) {
+        return mfirebaseAuth.createUserWithEmailAndPassword(email, password);
     }
 
     public Task<Boolean> signInUser(String email, String password) {
