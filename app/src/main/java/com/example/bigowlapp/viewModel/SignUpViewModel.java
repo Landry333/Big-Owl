@@ -2,10 +2,12 @@ package com.example.bigowlapp.viewModel;
 
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.UserRepository;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
+
+import java.security.SecureRandom;
+import java.util.Locale;
 
 public class SignUpViewModel extends BaseViewModel {
 
@@ -37,7 +39,7 @@ public class SignUpViewModel extends BaseViewModel {
         taskAddUser.addOnSuccessListener(isSuccess -> {
             Group group = new Group();
             group.setMonitoringUserId(getCurrentUserUid());
-            group.setName(getFullName(firstName, lastName) + "'s group " + "#" + randomStringGenerator());
+            group.setName(getFullName(firstName, lastName) + "'s group " + "#" + randomNumberStringGenerator());
             repositoryFacade.getGroupRepository().addDocument(group);
         });
         return taskAddUser;
@@ -47,14 +49,12 @@ public class SignUpViewModel extends BaseViewModel {
         return firstName + " " + lastName;
     }
 
-    public String randomStringGenerator() {
-        StringBuilder randomStr = new StringBuilder();
-        int max = 9;
-        int min = 0;
-        for (int i = 0; i < 4; i++) {
-            randomStr.append((int) ((Math.random() * (max + 1)) + min));
-        }
-        return randomStr.toString();
+    public String randomNumberStringGenerator() {
+        SecureRandom random = new SecureRandom();
+        final int max = 9999;
+        final int min = 0;
+        int randomNumber = (int)((random.nextDouble() * (max - min + 1)) + min);
+        return String.format(Locale.getDefault(), "%04d", randomNumber);
     }
 
 }
