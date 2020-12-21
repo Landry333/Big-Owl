@@ -45,6 +45,7 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
                                     supervisedGroupsListView.setOnItemClickListener((arg0, v, position, arg3) ->{
                                         Intent intent = new Intent(getBaseContext(), SupervisedGroupPageActivity.class);
                                         intent.putExtra("groupID", supervisedGroups.get(position).getuId());
+                                        intent.putExtra("groupName", supervisedGroups.get(position).getName());
                                         startActivity(intent);
                                     });
                                 } else

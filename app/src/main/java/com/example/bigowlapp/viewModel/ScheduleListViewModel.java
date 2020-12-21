@@ -19,16 +19,11 @@ import java.util.List;
 public class ScheduleListViewModel extends ViewModel {
 
     private final AuthRepository authRepository;
-    private final GroupRepository groupRepository;
-    private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
     private MutableLiveData<List<Schedule>> scheduleData;
-    private UserScheduleResponse currentUserNewResponse;
 
     public ScheduleListViewModel() {
         authRepository = new AuthRepository();
-        groupRepository = new GroupRepository();
-        userRepository = new UserRepository();
         scheduleRepository = new ScheduleRepository();
     }
 

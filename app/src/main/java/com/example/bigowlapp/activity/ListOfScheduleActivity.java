@@ -32,12 +32,13 @@ import java.util.List;
 public class ListOfScheduleActivity extends BigOwlActivity {
     private ListView scheduleListView;
     private ScheduleListViewModel scheduleListViewModel;
-    String groupID;
+    private String groupID, groupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         groupID = getIntent().getStringExtra("groupID");
+        groupName = getIntent().getStringExtra("groupName");
     }
 
     @Override
@@ -59,12 +60,13 @@ public class ListOfScheduleActivity extends BigOwlActivity {
             scheduleListViewModel.getScheduleList(groupID).observe(this, schedules -> {
                 if (schedules != null) {
                     scheduleListView = findViewById(R.id.schedule_list);
-                    scheduleListView.setAdapter(new ListOfScheduleActivity.ScheduleAdaptor(getBaseContext(), new ArrayList<>(schedules)));
+                    scheduleListView.setAdapter(new ListOfScheduleActivity.ScheduleAdapter(getBaseContext(), new ArrayList<>(schedules)));
 
                     scheduleListView.setOnItemClickListener((arg0, v, position, arg3) -> {
                         Intent intent = new Intent(getBaseContext(), ScheduleViewRespondActivity.class);
                         intent.putExtra("scheduleUId", schedules.get(position).getuId());
                         intent.putExtra("groupID", groupID);
+                        intent.putExtra("groupName", groupName);
                         startActivity(intent);
                         });
                 } else {
@@ -77,9 +79,9 @@ public class ListOfScheduleActivity extends BigOwlActivity {
         }
     }
 
-    private class ScheduleAdaptor extends ArrayAdapter<Schedule> {
+    private class ScheduleAdapter extends ArrayAdapter<Schedule> {
 
-        public ScheduleAdaptor(@NonNull Context context, ArrayList<Schedule> schedules) {
+        public ScheduleAdapter(@NonNull Context context, ArrayList<Schedule> schedules) {
             super(context, 0, schedules);
         }
 

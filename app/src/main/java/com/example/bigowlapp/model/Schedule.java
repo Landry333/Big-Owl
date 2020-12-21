@@ -40,6 +40,7 @@ public class Schedule {
     }
 
     public Schedule() {
+        // Necessary for Firbase data mapping to model object
     }
 
     public String getuId() {
