@@ -2,6 +2,8 @@ package com.example.bigowlapp.model;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
@@ -68,6 +70,7 @@ public class User extends Model {
         this.profileImage = profileImage;
     }
 
+    @Exclude
     public String getFullName() {
         return firstName + " " + lastName;
     }
