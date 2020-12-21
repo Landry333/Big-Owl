@@ -14,12 +14,11 @@ public class SignUpViewModel extends BaseViewModel {
     }
 
     // TODO: Handle exceptions concerning the failure of the "user" database collection
-    public Task<Boolean> createUser(String email, String password, String phoneNumber, String firstName, String lastName) {
-
-        Task<AuthResult> taskAuthSignUpResult = repositoryFacade.getAuthRepository()
-                .signUpUser(email, password);
-
-        Task<Boolean> taskAddUser = taskAuthSignUpResult.continueWithTask(task -> {
+    public Task<Void> createUser(String email, String password, String phoneNumber, String firstName, String lastName) {
+        // add user email and password to authentication database
+        Task<AuthResult> taskAuthSignUpResult = repositoryFacade.getAuthRepository().signUpUser(email, password);
+        // add basic user information to user document in firestore database
+        Task<Void> taskAddUser = taskAuthSignUpResult.continueWithTask(task -> {
             if (task.isSuccessful()) {
                 User user = new User();
                 String uId = getCurrentUserUid();
@@ -29,18 +28,19 @@ public class SignUpViewModel extends BaseViewModel {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 repositoryFacade.getUserRepository().addDocument(uId, user);
-                return Tasks.forResult(true);
+                return Tasks.forResult(null);
             } else {
                 throw task.getException();
             }
         });
-
-        return taskAddUser.addOnSuccessListener(isSuccess -> {
+        // add a default group when the user registers to a system where the user is the supervisor
+        taskAddUser.addOnSuccessListener(isSuccess -> {
             Group group = new Group();
             group.setMonitoringUserId(getCurrentUserUid());
             group.setName(getFullName(firstName, lastName) + "'s group " + "#" + randomStringGenerator());
             repositoryFacade.getGroupRepository().addDocument(group);
         });
+        return taskAddUser;
     }
 
     public String getFullName(String firstName, String lastName) {
