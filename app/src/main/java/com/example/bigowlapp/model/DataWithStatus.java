@@ -1,5 +1,6 @@
 package com.example.bigowlapp.model;
 
+// Class not in use for now
 /**
  * A model representing the data models with a status
  * @param <T> Generic extending Model

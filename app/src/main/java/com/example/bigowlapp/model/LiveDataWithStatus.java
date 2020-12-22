@@ -2,6 +2,7 @@ package com.example.bigowlapp.model;
 
 import androidx.lifecycle.MutableLiveData;
 
+// Class not in use for now
 public class LiveDataWithStatus<T extends Model> extends MutableLiveData<DataWithStatus<T>> {
 
     /**
