@@ -12,16 +12,18 @@ public class DataWithStatus<T extends Model> {
         this.error = null;
     }
 
-    public void setSuccessStatus(T data) {
+    public DataWithStatus<T> success(T data) {
         this.status = Status.SUCCESS;
         this.data = data;
         this.error = null;
+        return this;
     }
 
-    public void setErrorStatus(Throwable error) {
+    public DataWithStatus<T> error(Throwable error) {
         this.status = Status.ERROR;
         this.data = null;
         this.error = error;
+        return this;
     }
 
     public Status getStatus() {
