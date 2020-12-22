@@ -16,14 +16,13 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class Repository<T extends Model> {
 
     private final FirebaseFirestore mFirebaseFirestore;
     private final CollectionReference collectionReference;
 
-    public Repository(String collectionName) {
+    protected Repository(String collectionName) {
         mFirebaseFirestore = Firestore.getDatabase();
         collectionReference = mFirebaseFirestore.collection(collectionName);
     }
@@ -48,10 +47,10 @@ public abstract class Repository<T extends Model> {
         return tData;
     }
 
-    public MutableLiveData<T> addDocument(String docUId, T documentData) {
+    public MutableLiveData<T> addDocument(String docUid, T documentData) {
         MutableLiveData<T> tData = new MutableLiveData<>();
         tData.setValue(documentData);
-        collectionReference.document(docUId)
+        collectionReference.document(docUid)
                 .set(documentData)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -68,34 +67,29 @@ public abstract class Repository<T extends Model> {
     // Remove Document
     //===========================================================================================
 
-    // TODO: Check for Asynchronous boolean value
-    public boolean removeDocument(String docUId) {
-        // We are using AtomicBoolean because the lambda function is asynchronous.
-        // Thus we need an atomic variable, so we can set the boolean value in the lambda function.
-        AtomicBoolean isSuccessful = new AtomicBoolean();
-        collectionReference.document(docUId)
+    // TODO: Change this method's return type
+    public boolean removeDocument(String docUid) {
+        collectionReference.document(docUid)
                 .delete()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d(getClassName(), "Document removed successfully.");
-                        isSuccessful.set(true);
                     } else {
                         Log.e(getClassName(), "Error removing document: " +
                                 task.getException());
-                        isSuccessful.set(false);
                     }
                 });
-        return isSuccessful.get();
+        return false;
     }
 
     //===========================================================================================
     // Updating Document
     //===========================================================================================
 
-    public MutableLiveData<T> updateDocument(String docUId, T documentData) {
+    public MutableLiveData<T> updateDocument(String docUid, T documentData) {
         MutableLiveData<T> tData = new MutableLiveData<>();
         tData.setValue(documentData);
-        collectionReference.document(docUId)
+        collectionReference.document(docUid)
                 .set(documentData, SetOptions.merge())
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -109,13 +103,12 @@ public abstract class Repository<T extends Model> {
     }
 
     //===========================================================================================
-    // Fetching a Documents
+    // Fetching a Document
     //===========================================================================================
 
-    // TODO: incorrect naming convention -------------V
-    public MutableLiveData<T> getDocumentByUId(String UId, Class<? extends T> tClass) {
+    public MutableLiveData<T> getDocumentByUid(String docUid, Class<? extends T> tClass) {
         MutableLiveData<T> tData = new MutableLiveData<>();
-        collectionReference.document(UId)
+        collectionReference.document(docUid)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -132,32 +125,6 @@ public abstract class Repository<T extends Model> {
                     }
                 });
         return tData;
-    }
-
-    // TODO: bug where can only handle 10 items in the list, should allow any size list
-    public MutableLiveData<List<T>> getDocumentsByListOfUId(List<String> uIdList, Class<? extends T> tClass) {
-        MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
-        collectionReference.whereIn(FieldPath.documentId(), uIdList)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot tDocs = task.getResult();
-                        if (tDocs != null && !tDocs.isEmpty()) {
-                            List<T> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                T t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
-                        } else {
-                            listOfTData.setValue(null);
-                        }
-                    } else {
-                        Log.e(getClassName(), "Error getting documents: " +
-                                task.getException());
-                    }
-                });
-        return listOfTData;
     }
 
     public MutableLiveData<T> getDocumentByAttribute(String attribute, String attrValue,
@@ -196,12 +163,7 @@ public abstract class Repository<T extends Model> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            List<T> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                T t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
+                            listOfTData.setValue(this.extractListOfDataToModel(task.getResult(), tClass));
                         } else {
                             listOfTData.setValue(null);
                         }
@@ -222,12 +184,7 @@ public abstract class Repository<T extends Model> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            List<T> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                T t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
+                            listOfTData.setValue(this.extractListOfDataToModel(task.getResult(), tClass));
                         } else {
                             listOfTData.setValue(null);
                         }
@@ -247,12 +204,7 @@ public abstract class Repository<T extends Model> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            List<T> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                T t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
+                            listOfTData.setValue(this.extractListOfDataToModel(task.getResult(), tClass));
                         } else {
                             listOfTData.setValue(null);
                         }
@@ -262,6 +214,37 @@ public abstract class Repository<T extends Model> {
                     }
                 });
         return listOfTData;
+    }
+
+    // TODO: bug where can only handle 10 items in the list, should allow any size list
+    public MutableLiveData<List<T>> getDocumentsByListOfUid(List<String> docUidList,
+                                                            Class<? extends T> tClass) {
+        MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
+        collectionReference.whereIn(FieldPath.documentId(), docUidList)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot tDocs = task.getResult();
+                        if (tDocs != null && !tDocs.isEmpty()) {
+                            listOfTData.setValue(this.extractListOfDataToModel(task.getResult(), tClass));
+                        } else {
+                            listOfTData.setValue(null);
+                        }
+                    } else {
+                        Log.e(getClassName(), "Error getting documents: " +
+                                task.getException());
+                    }
+                });
+        return listOfTData;
+    }
+
+    private List<T> extractListOfDataToModel(QuerySnapshot results, Class<? extends T> tClass) {
+        List<T> listOfT = new ArrayList<>();
+        for (QueryDocumentSnapshot doc : results) {
+            T t = doc.toObject(tClass);
+            listOfT.add(t);
+        }
+        return listOfT;
     }
 
     String getClassName() {

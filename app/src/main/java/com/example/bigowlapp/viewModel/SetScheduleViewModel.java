@@ -4,17 +4,12 @@ import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import androidx.lifecycle.ViewModel;
 
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.AuthRepository;
-import com.example.bigowlapp.repository.GroupRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
-import com.example.bigowlapp.repository.ScheduleRepository;
-import com.example.bigowlapp.repository.UserRepository;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
@@ -159,7 +154,7 @@ public class SetScheduleViewModel extends BaseViewModel {
             return new MutableLiveData<>(new ArrayList<>());
         }
         return repositoryFacade.getUserRepository()
-                .getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
+                .getDocumentsByListOfUid(group.getSupervisedUserId(), User.class);
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

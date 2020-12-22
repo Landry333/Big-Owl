@@ -1,16 +1,12 @@
 package com.example.bigowlapp.viewModel;
 
-import com.example.bigowlapp.model.Group;
-import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.AuthRepository;
-import com.example.bigowlapp.repository.GroupRepository;
-import com.example.bigowlapp.repository.UserRepository;
-
-import java.util.List;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+
+import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.model.User;
+
+import java.util.List;
 
 public class SupervisedGroupListViewModel extends BaseViewModel {
     private MutableLiveData<List<Group>> groupLiveData;
@@ -27,7 +23,7 @@ public class SupervisedGroupListViewModel extends BaseViewModel {
     }
 
     public LiveData<User> getSupervisor(String supervisorUid) {
-        return repositoryFacade.getUserRepository().getDocumentByUId(supervisorUid, User.class);
+        return repositoryFacade.getUserRepository().getDocumentByUid(supervisorUid, User.class);
     }
 
     private void loadListOfDocumentByArrayContains() {
@@ -46,6 +42,6 @@ public class SupervisedGroupListViewModel extends BaseViewModel {
 
     private void loadUserCurrentProfile() {
         userData = repositoryFacade.getUserRepository()
-                .getDocumentByUId(getCurrentUserUid(), User.class);
+                .getDocumentByUid(getCurrentUserUid(), User.class);
     }
 }

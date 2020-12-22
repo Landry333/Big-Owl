@@ -1,5 +1,10 @@
 package com.example.bigowlapp.activity;
 
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.MutableLiveData;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
@@ -17,11 +22,6 @@ import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.MutableLiveData;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -90,7 +90,7 @@ public class SupervisedGroupListActivityTest {
             );
             testUserSupervisedGroupList.add(newGroup);
 
-            when(userRepository.getDocumentByUId(groupSupervisor.getUid(), User.class))
+            when(userRepository.getDocumentByUid(groupSupervisor.getUid(), User.class))
                     .thenReturn(groupSupervisorData);
             when(supervisedGroupListViewModel.getSupervisor(groupSupervisor.getUid())).thenReturn(groupSupervisorData);
         }

@@ -22,6 +22,6 @@ public class HomePageViewModel extends BaseViewModel {
 
     private void loadUserCurrentProfile() {
         user = repositoryFacade.getUserRepository()
-                .getDocumentByUId(getCurrentUserUid(), User.class);
+                .getDocumentByUid(getCurrentUserUid(), User.class);
     }
 }

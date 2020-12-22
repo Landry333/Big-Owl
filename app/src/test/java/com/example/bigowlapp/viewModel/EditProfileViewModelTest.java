@@ -1,5 +1,9 @@
 package com.example.bigowlapp.viewModel;
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
@@ -12,10 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -54,7 +54,7 @@ public class EditProfileViewModelTest {
         testUserData = new MutableLiveData<>(testUser);
 
         when(authRepository.getCurrentUser()).thenReturn(testFirebaseUser);
-        when(userRepository.getDocumentByUId(anyString(), eq(User.class))).thenReturn(testUserData);
+        when(userRepository.getDocumentByUid(anyString(), eq(User.class))).thenReturn(testUserData);
         when(testFirebaseUser.getUid()).thenReturn("abc123");
 
         editProfileViewModel = new EditProfileViewModel(repositoryFacade, testUserData);
@@ -78,11 +78,11 @@ public class EditProfileViewModelTest {
     public void getCurrentUserDataTest() {
         editProfileViewModel = new EditProfileViewModel(repositoryFacade, null);
         LiveData<User> target = editProfileViewModel.getCurrentUserData();
-        verify(userRepository).getDocumentByUId(anyString(), eq(User.class));
+        verify(userRepository).getDocumentByUid(anyString(), eq(User.class));
         assertEquals(testUserData, target);
 
         LiveData<User> target2 = editProfileViewModel.getCurrentUserData();
-        verify(userRepository, times(1)).getDocumentByUId(anyString(), eq(User.class));
+        verify(userRepository, times(1)).getDocumentByUid(anyString(), eq(User.class));
         assertEquals(testUserData, target2);
     }
 

@@ -201,9 +201,9 @@ public class SetScheduleViewModelTest {
 
         // case where data was not loaded yet
         setScheduleViewModel.setPreviousSelectedGroup(null);
-        when(userRepository.getDocumentsByListOfUId(userIdsList, User.class)).thenReturn(new MutableLiveData<>(userList));
+        when(userRepository.getDocumentsByListOfUid(userIdsList, User.class)).thenReturn(new MutableLiveData<>(userList));
         scheduleUserList = setScheduleViewModel.getListOfUsersFromGroup(group).getValue();
-        verify(userRepository).getDocumentsByListOfUId(userIdsList, User.class);
+        verify(userRepository).getDocumentsByListOfUid(userIdsList, User.class);
         assertEquals(userList, scheduleUserList);
 
         // case where the group is empty

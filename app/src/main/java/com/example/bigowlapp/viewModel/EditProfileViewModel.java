@@ -38,7 +38,7 @@ public class EditProfileViewModel extends BaseViewModel {
 
     private void loadUserCurrentProfile() {
         userData = repositoryFacade.getUserRepository()
-                .getDocumentByUId(getCurrentUserUid(), User.class);
+                .getDocumentByUid(getCurrentUserUid(), User.class);
     }
 
     // TODO: Fix test that uses this method
