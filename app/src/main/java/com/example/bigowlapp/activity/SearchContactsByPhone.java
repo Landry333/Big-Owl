@@ -68,7 +68,7 @@ public class SearchContactsByPhone extends BigOwlActivity {
                                         listContactsView.setAdapter(adapter);
                                         Toast.makeText(SearchContactsByPhone.this, "User found in the app system! This user has the app already. Please choose another user ", Toast.LENGTH_SHORT).show();
                                         User user = task.getResult().toObjects(User.class).get(0);
-                                        Intent intent = new Intent(SearchContactsByPhone.this, ViewAnotherUserActivity.class);
+                                        Intent intent = new Intent(SearchContactsByPhone.this, SendingRequestToSuperviseActivity.class);
                                         intent.putExtra("user", user);
                                         intent.putExtra("contactDetails", smsNumber);
                                         startActivity(intent);
