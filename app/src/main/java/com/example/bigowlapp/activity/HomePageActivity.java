@@ -9,8 +9,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.model.LiveDataWithStatus;
+import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
@@ -106,7 +109,14 @@ public class HomePageActivity extends BigOwlActivity {
             textLastName = findViewById(R.id.user_last_name);
             textPhone = findViewById(R.id.user_phone_number);
 
-            homePageViewModel.getCurrentUserData().observe(this, user -> {
+            LiveDataWithStatus<User> currentUserData = homePageViewModel.getCurrentUserData();
+            currentUserData.observe(this, user -> {
+                if (currentUserData.hasError()) {
+                    Toast.makeText(getBaseContext(), currentUserData.getError().getMessage(), Toast.LENGTH_LONG).show();
+                    // TODO: Handle this failure (exist page, modify page, or set up page for error case)
+                    return;
+                }
+
                 textEmail.setText(user.getEmail());
                 textFirstName.setText(user.getFirstName());
                 textLastName.setText(user.getLastName());

@@ -254,7 +254,13 @@ public abstract class Repository<T extends Model> {
         return this.getClass().toString();
     }
 
+    // TODO: error should be its own class instead of using Exception class.
+    /**
+     * An exception that indicates that a document in the database either does not exist in the remote database
+     * @param tClass indicates the type of data that could not be found using class name
+     * @return the exception with a message indicating the document could not be found
+     */
     public Exception getDocumentNotFoundException(Class<? extends T> tClass) {
-        return new Exception("The " + tClass.getSimpleName() + "data does not exist!");
+        return new Exception("The " + tClass.getSimpleName() + " does not exist!");
     }
 }

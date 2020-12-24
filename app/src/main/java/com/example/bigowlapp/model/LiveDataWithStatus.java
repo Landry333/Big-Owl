@@ -83,6 +83,10 @@ public class LiveDataWithStatus<T extends Model> extends MutableLiveData<T> {
         return this.status == Status.ERROR || this.status == Status.SUCCESS;
     }
 
+    public boolean hasError() {
+        return this.status == Status.ERROR;
+    }
+
     public Status getStatus() {
         return status;
     }
