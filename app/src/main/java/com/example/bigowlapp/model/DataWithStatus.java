@@ -5,6 +5,7 @@ package com.example.bigowlapp.model;
  * A model representing the data models with a status
  * @param <T> Generic extending Model
  */
+@Deprecated
 public class DataWithStatus<T extends Model> {
 
     private Status status;
