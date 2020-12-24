@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.database.Firestore;
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Model;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -106,8 +107,8 @@ public abstract class Repository<T extends Model> {
     // Fetching a Document
     //===========================================================================================
 
-    public MutableLiveData<T> getDocumentByUid(String docUid, Class<? extends T> tClass) {
-        MutableLiveData<T> tData = new MutableLiveData<>();
+    public LiveDataWithStatus<T> getDocumentByUid(String docUid, Class<? extends T> tClass) {
+        LiveDataWithStatus<T> tData = new LiveDataWithStatus<>();
         collectionReference.document(docUid)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -115,13 +116,15 @@ public abstract class Repository<T extends Model> {
                         DocumentSnapshot tDoc = task.getResult();
                         if (tDoc != null && tDoc.exists()) {
                             T t = tDoc.toObject(tClass);
-                            tData.setValue(t);
+                            tData.setSuccess(t);
                         } else {
-                            tData.setValue(null);
+                            tData.setError(getDocumentNotFoundException(tClass));
                         }
                     } else {
                         Log.e(getClassName(), "Error getting documents: " +
                                 task.getException());
+
+                        tData.setError(task.getException());
                     }
                 });
         return tData;
@@ -249,5 +252,9 @@ public abstract class Repository<T extends Model> {
 
     String getClassName() {
         return this.getClass().toString();
+    }
+
+    public Exception getDocumentNotFoundException(Class<? extends T> tClass) {
+        return new Exception("The " + tClass.getSimpleName() + "data does not exist!");
     }
 }

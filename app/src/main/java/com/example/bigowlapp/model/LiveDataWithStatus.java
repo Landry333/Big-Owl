@@ -51,7 +51,7 @@ public class LiveDataWithStatus<T extends Model> extends MutableLiveData<T> {
     public void setError(Throwable error) {
         this.error = error;
         this.status = Status.ERROR;
-        this.setValue(this.getValue());
+        this.setValue(null);
     }
 
     /**
@@ -72,7 +72,7 @@ public class LiveDataWithStatus<T extends Model> extends MutableLiveData<T> {
     public void postError(Throwable error) {
         this.error = error;
         this.status = Status.ERROR;
-        this.postValue(this.getValue());
+        this.postValue(null);
     }
 
     /**
