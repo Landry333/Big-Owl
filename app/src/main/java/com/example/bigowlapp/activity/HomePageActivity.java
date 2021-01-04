@@ -1,6 +1,9 @@
 package com.example.bigowlapp.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,12 +12,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
@@ -31,6 +36,26 @@ public class HomePageActivity extends BigOwlActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initialize();
+
+        // RECEIVE SMS permission for the text sms authentication system
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                checkSelfPermission(Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[] {Manifest.permission.RECEIVE_SMS}, 1000);
+        }
+    }
+
+
+    @Override // This is solely for the RECEIVE SMS permission for the text sms authentication system
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+        if(requestCode == 1000){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this, "RECEIVE SMS Permission GRANTED", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(this, "RECEIVE SMS Permission DENIED", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
     }
 
     @Override
