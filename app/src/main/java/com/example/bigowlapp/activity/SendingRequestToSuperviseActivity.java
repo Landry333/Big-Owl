@@ -105,39 +105,39 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         resultNoteTv.setText(noRequest);
         LiveData<List<SupervisionRequest>> senderRequestsData = notificationRepository.getListOfSupervisionRequestByAttribute("senderUId", currentUserID, SupervisionRequest.class);
         senderRequestsData.observe(this, senderRequests -> {
-            if (senderRequests != null) {
-                for (SupervisionRequest senderRequest : senderRequests) {
-                    if (aRequestAlready) {
-                        break;
-                    } else if (senderRequest.getReceiverUId().equals(otherUser.getUId())) {
+            if (senderRequests == null)
+                return;
+            for (SupervisionRequest senderRequest : senderRequests) {
+                if (aRequestAlready) {
+                    break;
+                } else if (senderRequest.getReceiverUId().equals(otherUser.getUId())) {
 
-                        if (senderRequest.getResponse().equals(SupervisionRequest.Response.ACCEPT)) {
-                            supRequestBtn.setText(supBtnAlready);
-                            supRequestBtn.setClickable(false);
-                            aRequestAlready = true;
-                            resultNoteTv.setText(superviseAlready);
-                        } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.NEUTRAL)) {
-                            supRequestBtn.setText(supBtnCancel);
-                            supRequestBtn.setClickable(true);
-                            //Toast.makeText(ViewAnotherUserActivity.this,
-                            // "You currently have a pending request to supervise this user",
-                            //Toast.LENGTH_SHORT).show();
-                            resultNoteTv.setText(canCancel);
-                            aRequestAlready = true;
-                            shouldCancelRequest = true;
-                            requestUID = senderRequest.getuId();
-                        } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.REJECT)) {
-                            supRequestBtn.setText(sendNewRequest);
-                            supRequestBtn.setClickable(true);
-                            resultNoteTv.setText(requestRejected);
-                            aRequestAlready = true;
-                            shouldSendAnOtherRequest = true;
-                            requestUID = senderRequest.getuId();
-                        }
-
+                    if (senderRequest.getResponse().equals(SupervisionRequest.Response.ACCEPT)) {
+                        supRequestBtn.setText(supBtnAlready);
+                        supRequestBtn.setClickable(false);
+                        aRequestAlready = true;
+                        resultNoteTv.setText(superviseAlready);
                     }
+                    else if (senderRequest.getResponse().equals(SupervisionRequest.Response.NEUTRAL)) {
+                        supRequestBtn.setText(supBtnCancel);
+                        supRequestBtn.setClickable(true);
+                        resultNoteTv.setText(canCancel);
+                        aRequestAlready = true;
+                        shouldCancelRequest = true;
+                        requestUID = senderRequest.getuId();
+                    }
+                    else if (senderRequest.getResponse().equals(SupervisionRequest.Response.REJECT)) {
+                        supRequestBtn.setText(sendNewRequest);
+                        supRequestBtn.setClickable(true);
+                        resultNoteTv.setText(requestRejected);
+                        aRequestAlready = true;
+                        shouldSendAnOtherRequest = true;
+                        requestUID = senderRequest.getuId();
+                    }
+
                 }
             }
+
         });
     }
 }
