@@ -5,13 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".activity.SearchContactsToSupervise">
 
-    <TextView
-        android:id="@+id/textView_groupName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/invite_phone"
-        android:textSize="30sp" />
-
+    <include
+        android:id="@+id/top_app_bar"
+        layout="@layout/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/get_users"
@@ -20,19 +18,18 @@
         android:layout_below="@+id/search_users"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:text="Search User"
-        />
-
+        android:text="@string/search_user" />
 
     <EditText
         android:id="@+id/search_users"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_groupName"
+        android:layout_below="@+id/top_app_bar"
         android:layout_margin="5dp"
-        android:hint="Enter Phone Number"
+        android:hint="@string/enter_phone_number"
         android:digits="0123456789+"
-        android:inputType="phone" />
+        android:inputType="phone"
+        android:importantForAutofill="no" />
 
     <ListView
         android:id="@+id/listContacts"
