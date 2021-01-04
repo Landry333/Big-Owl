@@ -10,15 +10,15 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.example.bigowlapp.R;
-import com.example.bigowlapp.viewModel.HomePageViewModel;
-import com.google.firebase.auth.FirebaseAuth;
-import com.squareup.picasso.Picasso;
-
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.example.bigowlapp.R;
+import com.example.bigowlapp.viewModel.HomePageViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 public class HomePageActivity extends BigOwlActivity {
     Button btnLogOut, btnAddUsers, btnMonitoringGroup, btnSupervisedGroup, btnNotifications;
@@ -72,13 +72,6 @@ public class HomePageActivity extends BigOwlActivity {
 
         btnSupervisedGroup.setOnClickListener(v -> {
             Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
-            startActivity(i);
-        });
-
-        btnNotifications = findViewById(R.id.btn_notifications);
-
-        btnNotifications.setOnClickListener(v -> {
-            Intent i = new Intent(HomePageActivity.this, NotificationActivity.class);
             startActivity(i);
         });
 
