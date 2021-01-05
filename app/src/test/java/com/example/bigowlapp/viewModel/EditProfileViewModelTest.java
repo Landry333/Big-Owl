@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
@@ -30,7 +31,7 @@ import static org.mockito.Mockito.when;
 public class EditProfileViewModelTest {
 
     private EditProfileViewModel editProfileViewModel;
-    private MutableLiveData<User> testUserData;
+    private LiveDataWithStatus<User> testUserData;
     private User testUser;
 
     @Rule
@@ -51,7 +52,7 @@ public class EditProfileViewModelTest {
         when(repositoryFacade.getUserRepository()).thenReturn(userRepository);
 
         testUser = new User("abc123", "first", "last", "+911", "test@mail.com", "url");
-        testUserData = new MutableLiveData<>(testUser);
+        testUserData = new LiveDataWithStatus<>(testUser);
 
         when(authRepository.getCurrentUser()).thenReturn(testFirebaseUser);
         when(userRepository.getDocumentByUid(anyString(), eq(User.class))).thenReturn(testUserData);

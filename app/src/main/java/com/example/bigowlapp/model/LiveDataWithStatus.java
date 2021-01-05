@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
  * This class extends Android MutableLiveData class to add the ability to store and handle errors
  * @param <T> The data object which represent data from the database
  */
-public class LiveDataWithStatus<T extends Model> extends MutableLiveData<T> {
+public class LiveDataWithStatus<T> extends MutableLiveData<T> {
     /**
      * Enumerated value used to determine if the data is set or not and if there was an error or not
      */
