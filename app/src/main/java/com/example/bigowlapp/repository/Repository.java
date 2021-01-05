@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class Repository<T> {
 
     private final FirebaseFirestore mFirebaseFirestore;
-    private final CollectionReference collectionReference;
+    protected final CollectionReference collectionReference;
 
     public Repository(String collectionName) {
         mFirebaseFirestore = Firestore.getDatabase();
