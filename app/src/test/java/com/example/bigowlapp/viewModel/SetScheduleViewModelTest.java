@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
@@ -41,7 +42,7 @@ import static org.mockito.Mockito.when;
 public class SetScheduleViewModelTest {
 
     private SetScheduleViewModel setScheduleViewModel;
-    private MutableLiveData<Schedule> testScheduleData;
+    private LiveDataWithStatus<Schedule> testScheduleData;
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
@@ -82,7 +83,7 @@ public class SetScheduleViewModelTest {
         schedule.setUid("Testing");
         schedule.setMemberList(Arrays.asList("joe", "doe", "john"));
 
-        testScheduleData = new MutableLiveData<>(schedule);
+        testScheduleData = new LiveDataWithStatus<>(schedule);
         setScheduleViewModel.setNewScheduleData(testScheduleData);
         when(scheduleRepository.addDocument(schedule)).thenReturn(testScheduleData);
 
@@ -103,7 +104,7 @@ public class SetScheduleViewModelTest {
     @Test
     public void getListOfGroup() {
         setScheduleViewModel.setListOfGroupData(null);
-        when(groupRepository.getListOfDocumentByAttribute("monitoringUserId", "123", Group.class)).thenReturn(new MutableLiveData<>());
+        when(groupRepository.getListOfDocumentByAttribute("monitoringUserId", "123", Group.class)).thenReturn(new LiveDataWithStatus<>());
         assertNotNull(setScheduleViewModel.getListOfGroup());
         assertNotNull(setScheduleViewModel.getListOfGroup());
         verify(groupRepository, times(1)).getListOfDocumentByAttribute("monitoringUserId", "123", Group.class);
@@ -172,7 +173,7 @@ public class SetScheduleViewModelTest {
 
         Timestamp endTime = new Timestamp(Calendar.getInstance().getTime());
         setScheduleViewModel.updateScheduleEndTime(endTime.toDate());
-        assertEquals(endTime, setScheduleViewModel.getNewScheduleData().getValue().getStartTime());
+        assertEquals(endTime, setScheduleViewModel.getNewScheduleData().getValue().getEndTime());
     }
 
     @Test
@@ -201,7 +202,7 @@ public class SetScheduleViewModelTest {
 
         // case where data was not loaded yet
         setScheduleViewModel.setPreviousSelectedGroup(null);
-        when(userRepository.getDocumentsByListOfUid(userIdsList, User.class)).thenReturn(new MutableLiveData<>(userList));
+        when(userRepository.getDocumentsByListOfUid(userIdsList, User.class)).thenReturn(new LiveDataWithStatus<>(userList));
         scheduleUserList = setScheduleViewModel.getListOfUsersFromGroup(group).getValue();
         verify(userRepository).getDocumentsByListOfUid(userIdsList, User.class);
         assertEquals(userList, scheduleUserList);

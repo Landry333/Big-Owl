@@ -26,12 +26,12 @@ public class LiveDataWithStatus<T> extends MutableLiveData<T> {
     }
 
     /**
-     * Constructor with initial value, which assumes succes since data already set
+     * Constructor with initial value, but without status or error
      * @param data the initial value
      */
     public LiveDataWithStatus(T data) {
         super(data);
-        this.status = Status.SUCCESS;
+        this.status = Status.NONE;
         this.error = null;
     }
 
