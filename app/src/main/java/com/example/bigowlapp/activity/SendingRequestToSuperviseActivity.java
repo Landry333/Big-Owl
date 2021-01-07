@@ -50,7 +50,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sending_request_to_supervise);
         otherUser = getIntent().getParcelableExtra("user");
         assert otherUser != null;
-        otherUserID = otherUser.getUId();
+        otherUserID = otherUser.getUid();
         supRequestBtn = findViewById(R.id.SupRequest);
         currentUserID = authRepository.getCurrentUser().getUid();
         noteTv = findViewById(R.id.note);
@@ -110,7 +110,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
             for (SupervisionRequest senderRequest : senderRequests) {
                 if (aRequestAlready) {
                     break;
-                } else if (senderRequest.getReceiverUId().equals(otherUser.getUId())) {
+                } else if (senderRequest.getReceiverUId().equals(otherUser.getUid())) {
 
                     if (senderRequest.getResponse().equals(SupervisionRequest.Response.ACCEPT)) {
                         supRequestBtn.setText(supBtnAlready);
@@ -124,7 +124,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
                         resultNoteTv.setText(canCancel);
                         aRequestAlready = true;
                         shouldCancelRequest = true;
-                        requestUID = senderRequest.getuId();
+                        requestUID = senderRequest.getUid();
                     }
                     else if (senderRequest.getResponse().equals(SupervisionRequest.Response.REJECT)) {
                         supRequestBtn.setText(sendNewRequest);
@@ -132,7 +132,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
                         resultNoteTv.setText(requestRejected);
                         aRequestAlready = true;
                         shouldSendAnOtherRequest = true;
-                        requestUID = senderRequest.getuId();
+                        requestUID = senderRequest.getUid();
                     }
 
                 }

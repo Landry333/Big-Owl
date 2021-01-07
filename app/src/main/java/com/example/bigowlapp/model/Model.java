@@ -1,5 +1,7 @@
 package com.example.bigowlapp.model;
 
+import android.os.Parcelable;
+
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
@@ -7,7 +9,7 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 public abstract class Model {
 
     @DocumentId
-    private String uid;
+    protected String uid;
 
     public Model() {
     }

@@ -3,6 +3,9 @@ package com.example.bigowlapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.IgnoreExtraProperties;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.firestore.Exclude;
@@ -33,6 +36,7 @@ public class User extends Model implements Parcelable {
     }
 
     protected User(Parcel in) {
+        uid = in.readString();
         firstName = in.readString();
         lastName = in.readString();
         phoneNumber = in.readString();
@@ -42,6 +46,7 @@ public class User extends Model implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uid);
         dest.writeString(firstName);
         dest.writeString(lastName);
         dest.writeString(phoneNumber);
