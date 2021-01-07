@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
@@ -73,7 +74,7 @@ public class SupervisedGroupListActivityTest {
                     "group00".concat(String.valueOf(i)).concat("@mail.com"),
                     null
             );
-            MutableLiveData<User> groupSupervisorData = new MutableLiveData<>(groupSupervisor);
+            LiveDataWithStatus<User> groupSupervisorData = new LiveDataWithStatus<>(groupSupervisor);
 
             List<String> groupSupervisedUserId = new ArrayList<>();
             for (int j = 1; j < (int) ((Math.random() * 2) + 1); j++) {
@@ -94,7 +95,7 @@ public class SupervisedGroupListActivityTest {
                     .thenReturn(groupSupervisorData);
             when(supervisedGroupListViewModel.getSupervisor(groupSupervisor.getUid())).thenReturn(groupSupervisorData);
         }
-        MutableLiveData<List<Group>> testUserSupervisedGroupListData = new MutableLiveData<>(testUserSupervisedGroupList);
+        LiveDataWithStatus<List<Group>> testUserSupervisedGroupListData = new LiveDataWithStatus<>(testUserSupervisedGroupList);
         testUserSupervisedGroupListData.postValue(testUserSupervisedGroupList);
 
         when(testFirebaseUser.getUid()).thenReturn("abc123");

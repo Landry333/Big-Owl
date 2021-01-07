@@ -3,7 +3,7 @@ package com.example.bigowlapp.activity;
 import android.app.Activity;
 import android.app.Instrumentation;
 
-import androidx.test.rule.ActivityTestRule;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.example.bigowlapp.R;
 
@@ -21,14 +21,15 @@ import static org.junit.Assert.assertNotNull;
 public class InvitationConfirmationActivityTest {
 
     @Rule
-    public ActivityTestRule<InvitationConfirmationActivity> invitationConfirmationActivityTestRule = new ActivityTestRule<InvitationConfirmationActivity>(InvitationConfirmationActivity.class);
+    public ActivityScenarioRule<InvitationConfirmationActivity> invitationConfirmationActivityTestRule = new ActivityScenarioRule<InvitationConfirmationActivity>(InvitationConfirmationActivity.class);
     private InvitationConfirmationActivity invitationConfirmActivity = null;
     Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(HomePageActivity.class.getName(), null, false);
 
     @Before
     public void setUp() throws Exception {
-
-        invitationConfirmActivity = invitationConfirmationActivityTestRule.getActivity();
+        invitationConfirmationActivityTestRule.getScenario().onActivity(activity -> {
+            invitationConfirmActivity = activity;
+        });
     }
 
     @Test
