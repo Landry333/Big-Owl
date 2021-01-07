@@ -18,7 +18,7 @@ import java.util.List;
 public abstract class Repository<T extends Model> {
 
     private final FirebaseFirestore mFirebaseFirestore;
-    private final CollectionReference collectionReference;
+    protected final CollectionReference collectionReference;
 
     protected Repository(String collectionName) {
         mFirebaseFirestore = Firestore.getDatabase();

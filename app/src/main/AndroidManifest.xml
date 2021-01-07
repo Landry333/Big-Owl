@@ -26,7 +26,7 @@
         <activity android:name=".activity.SignUpPageActivity" />
         <activity android:name=".activity.SupervisedGroupListActivity" />
         <activity android:name=".activity.SupervisedGroupPageActivity" />
-        <activity android:name=".activity.ViewAnotherUserActivity" />
+        <activity android:name=".activity.SendingRequestToSuperviseActivity" />
         <activity android:name=".activity.AddUsers" />
         <activity android:name=".fragments.UsersFragment" />
         <activity

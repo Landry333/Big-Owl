@@ -16,6 +16,7 @@ public class SupervisionRequest extends Notification implements Constants {
 
     public SupervisionRequest() {
         super();
+        this.setType(Constants.SUPERVISION_TYOE);
     }
 
     public SupervisionRequest(String uId) {
