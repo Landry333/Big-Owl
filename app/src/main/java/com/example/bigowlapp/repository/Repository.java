@@ -2,6 +2,7 @@ package com.example.bigowlapp.repository;
 
 import android.util.Log;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.database.Firestore;
@@ -25,6 +26,13 @@ public abstract class Repository<T> {
     public Repository(String collectionName) {
         mFirebaseFirestore = Firestore.getDatabase();
         collectionReference = mFirebaseFirestore.collection(collectionName);
+    }
+
+    // TODO: Remove or Modify when dependency injection implemented
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public Repository(FirebaseFirestore mFirebaseFirestore, CollectionReference collectionReference) {
+        this.mFirebaseFirestore = mFirebaseFirestore;
+        this.collectionReference = collectionReference;
     }
 
     //===========================================================================================
@@ -141,12 +149,7 @@ public abstract class Repository<T> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            List<T> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                T t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
+                            listOfTData.setValue(this.extractListOfDataToModel(task.getResult(), tClass));
                         } else {
                             listOfTData.setValue(null);
                         }
@@ -194,12 +197,7 @@ public abstract class Repository<T> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            List<T> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                T t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
+                            listOfTData.setValue(this.extractListOfDataToModel(task.getResult(), tClass));
                         } else {
                             listOfTData.setValue(null);
                         }
@@ -220,12 +218,7 @@ public abstract class Repository<T> {
                     if(task.isSuccessful()){
                      QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            List<T> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                T t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
+                            listOfTData.setValue(this.extractListOfDataToModel(task.getResult(), tClass));
                         } else {
                             listOfTData.setValue(null);
                         }
@@ -246,12 +239,7 @@ public abstract class Repository<T> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            List<T> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                T t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
+                            listOfTData.setValue(this.extractListOfDataToModel(task.getResult(), tClass));
                         } else {
                             listOfTData.setValue(null);
                         }
@@ -261,6 +249,15 @@ public abstract class Repository<T> {
                     }
                 });
         return listOfTData;
+    }
+
+    List<T> extractListOfDataToModel(QuerySnapshot results, Class<? extends T> tClass) {
+        List<T> listOfT = new ArrayList<>();
+        for (QueryDocumentSnapshot doc : results) {
+            T t = doc.toObject(tClass);
+            listOfT.add(t);
+        }
+        return listOfT;
     }
 
     String getClassName() {
