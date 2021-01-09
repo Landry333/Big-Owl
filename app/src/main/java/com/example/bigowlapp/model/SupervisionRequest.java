@@ -2,15 +2,19 @@ package com.example.bigowlapp.model;
 
 import com.example.bigowlapp.utils.Constants;
 import com.google.firebase.Timestamp;
+import com.google.firebase.database.IgnoreExtraProperties;
 
+@IgnoreExtraProperties
 public class SupervisionRequest extends Notification implements Constants {
 
     private String senderUId;
     private String receiverUId;
     private String groupUId;
     private Response response;
+    // TODO: remove timeSent,as it is redundant since 'time' is in base Notification class
     private Timestamp timeSent;
     private Timestamp timeResponse;
+
     public SupervisionRequest() {
         super();
         this.setType(Constants.SUPERVISION_TYPE);

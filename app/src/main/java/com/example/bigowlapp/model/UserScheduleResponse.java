@@ -6,6 +6,10 @@ public class UserScheduleResponse {
     private Response response;
     private Timestamp responseTime;
 
+    public UserScheduleResponse() {
+
+    }
+
     public UserScheduleResponse(Response response, Timestamp responseTime) {
         this.response = response;
         this.responseTime = responseTime;

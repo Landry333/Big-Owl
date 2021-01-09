@@ -31,7 +31,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
     String canNotSend = "Can not send ";
     String sendNewRequest = "Send a new request";
     private Button supRequestBtn;
-    private AuthRepository authRepository = new AuthRepository();
+    private final AuthRepository authRepository = new AuthRepository();
     String requestUID;
     private TextView noteTv;
     private TextView resultNoteTv;
@@ -81,15 +81,13 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         supervisionRequest.setResponse(SupervisionRequest.Response.NEUTRAL);
         supervisionRequest.setGroupUId(""); // TODO think about creating and setting group IDs
         supervisionRequest.setTimeSent(Timestamp.now());
-        supervisionRequest.setTimeSend(Timestamp.now());
+        supervisionRequest.setTime(Timestamp.now());
 
         if (!aRequestAlready) {
             notificationRepository.addDocument(supervisionRequest);
-        }
-        else if (shouldCancelRequest) {
+        } else if (shouldCancelRequest) {
             notificationRepository.removeDocument(requestUID);
-        }
-        else if(shouldSendAnOtherRequest){
+        } else if (shouldSendAnOtherRequest) {
             notificationRepository.removeDocument(requestUID);
             notificationRepository.addDocument(supervisionRequest);
         }
@@ -117,16 +115,14 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
                         supRequestBtn.setClickable(false);
                         aRequestAlready = true;
                         resultNoteTv.setText(superviseAlready);
-                    }
-                    else if (senderRequest.getResponse().equals(SupervisionRequest.Response.NEUTRAL)) {
+                    } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.NEUTRAL)) {
                         supRequestBtn.setText(supBtnCancel);
                         supRequestBtn.setClickable(true);
                         resultNoteTv.setText(canCancel);
                         aRequestAlready = true;
                         shouldCancelRequest = true;
                         requestUID = senderRequest.getuId();
-                    }
-                    else if (senderRequest.getResponse().equals(SupervisionRequest.Response.REJECT)) {
+                    } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.REJECT)) {
                         supRequestBtn.setText(sendNewRequest);
                         supRequestBtn.setClickable(true);
                         resultNoteTv.setText(requestRejected);

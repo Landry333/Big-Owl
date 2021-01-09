@@ -1,18 +1,18 @@
 package com.example.bigowlapp.viewModel;
 
-import com.example.bigowlapp.model.Notification;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
+import com.example.bigowlapp.model.ScheduleRequest;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.NotificationRepository;
 import com.example.bigowlapp.repository.ScheduleRepository;
 
 import java.util.Objects;
-
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import static com.google.firebase.Timestamp.now;
 
@@ -61,13 +61,14 @@ public class ScheduleViewRespondViewModel extends ViewModel {
     }
 
     public void notifySupervisorScheduleResponse() {
-        Notification newNotification = new Notification();
+        ScheduleRequest newNotification = new ScheduleRequest();
         newNotification.setSenderUId(authRepository.getCurrentUser().getUid());
         newNotification.setReceiverUId(scheduleData.getValue().getGroupSupervisorUId());
         newNotification.setGroupUId(scheduleData.getValue().getGroupUId());
         newNotification.setType("memberResponseSchedule");
         newNotification.setTimeRead(null);
         newNotification.setTimeSend(now());
+        newNotification.setTime(now());
         newNotification.setSenderResponse(currentUserNewResponse);
         notificationRepository.addDocument(newNotification);
     }
