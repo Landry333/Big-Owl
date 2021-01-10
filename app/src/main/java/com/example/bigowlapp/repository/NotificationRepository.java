@@ -1,8 +1,12 @@
 package com.example.bigowlapp.repository;
 
+import android.util.Log;
+
 import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.model.Notification;
+import com.example.bigowlapp.model.ScheduleRequest;
 import com.example.bigowlapp.model.SupervisionRequest;
 import com.example.bigowlapp.utils.Constants;
 import com.google.firebase.firestore.CollectionReference;
@@ -21,9 +25,36 @@ public class NotificationRepository extends Repository<Notification> {
     }
 
     // TODO: Remove or Modify when dependency injection implemented
-    @VisibleForTesting
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public NotificationRepository(FirebaseFirestore mFirebaseFirestore, CollectionReference collectionReference) {
         super(mFirebaseFirestore, collectionReference);
+    }
+
+    public MutableLiveData<List<SupervisionRequest>> getListOfSupervisionRequestByAttribute(String attribute, String attrValue,
+                                                                                            Class<? extends SupervisionRequest> tClass) {
+        MutableLiveData<List<SupervisionRequest>> listOfTData = new MutableLiveData<>();
+        collectionReference.whereEqualTo(attribute, attrValue)
+                .whereEqualTo("type", Constants.SUPERVISION_TYPE)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot tDocs = task.getResult();
+                        if (tDocs != null && !tDocs.isEmpty()) {
+                            List<SupervisionRequest> listOfT = new ArrayList<>();
+                            for (QueryDocumentSnapshot doc : task.getResult()) {
+                                SupervisionRequest t = doc.toObject(tClass);
+                                listOfT.add(t);
+                            }
+                            listOfTData.setValue(listOfT);
+                        } else {
+                            listOfTData.setValue(null);
+                        }
+                    } else {
+                        Log.e(getClassName(), "Error getting documents: " +
+                                task.getException());
+                    }
+                });
+        return listOfTData;
     }
 
     @Override
@@ -38,15 +69,15 @@ public class NotificationRepository extends Repository<Notification> {
     }
 
     Class<? extends Notification> getClassFromType(String type) {
-        if (type == null) {
-            return Notification.class;
-        }
+        switch (String.valueOf(type)) {
+            case Constants.SUPERVISION_TYPE:
+                return SupervisionRequest.class;
 
-        if (type.equals(Constants.SUPERVISION_TYPE)) {
-            return SupervisionRequest.class;
-        } else {
-            return Notification.class;
+            case Constants.SCHEDULE_TYPE:
+                return ScheduleRequest.class;
+
+            default:
+                return Notification.class;
         }
     }
-
 }

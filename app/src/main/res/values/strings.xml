@@ -4,7 +4,7 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="first_name">First Name</string>
-    <string name="group_name">group_name</string>
+    <string name="group_name">Group Name</string>
     <string name="have_account_text">Already have an account? Sign in here</string>
     <string name="hint_email">Email</string>
     <string name="hint_search">Search…</string>
@@ -41,6 +41,16 @@
     <string name="big_owl">Big Owl</string>
     <string name="search_user">Search User</string>
     <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="accept">Accept</string>
+    <string name="reject">Reject</string>
+    <string name="group_supervisor">Group Supervisor</string>
+    <string name="start_time">Start time</string>
+    <string name="end_time">End Time</string>
+    <string name="you_last">You last</string>
+    <string name="this_schedule_on">this schedule on</string>
+    <string name="schedule_list">Schedules</string>
+    <string name="schedule_title">Schedules title</string>
+    <string name="schedule_start_time">Schedules Start time</string>
     <string name="search_users2">Search an user to supervise</string>
     <string name="btn_notifications">Notifications</string>
 </resources>
