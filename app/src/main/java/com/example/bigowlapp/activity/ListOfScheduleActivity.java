@@ -32,13 +32,14 @@ import java.util.List;
 public class ListOfScheduleActivity extends BigOwlActivity {
     private ListView scheduleListView;
     private ScheduleListViewModel scheduleListViewModel;
-    private String groupID, groupName;
+    private String groupID, groupName, supervisorName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         groupID = getIntent().getStringExtra("groupID");
         groupName = getIntent().getStringExtra("groupName");
+        supervisorName = getIntent().getStringExtra("supervisorName");
     }
 
     @Override
@@ -67,6 +68,7 @@ public class ListOfScheduleActivity extends BigOwlActivity {
                         intent.putExtra("scheduleUId", schedules.get(position).getuId());
                         intent.putExtra("groupID", groupID);
                         intent.putExtra("groupName", groupName);
+                        intent.putExtra("supervisorName", supervisorName);
                         startActivity(intent);
                         });
                 } else {

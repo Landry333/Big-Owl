@@ -9,13 +9,14 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
 
 public class SupervisedGroupPageActivity extends BigOwlActivity {
-    private String groupID, groupName;
+    private String groupID, groupName, supervisorName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         groupID = getIntent().getStringExtra("groupID");
         groupName = getIntent().getStringExtra("groupName");
+        supervisorName = getIntent().getStringExtra("supervisorName");
         initialize();
     }
 
@@ -29,6 +30,7 @@ public class SupervisedGroupPageActivity extends BigOwlActivity {
             Intent i = new Intent(com.example.bigowlapp.activity.SupervisedGroupPageActivity.this, ListOfScheduleActivity.class);
             i.putExtra("groupID", groupID);
             i.putExtra("groupName", groupName);
+            i.putExtra("supervisorName", supervisorName);
             startActivity(i);
         });
     }

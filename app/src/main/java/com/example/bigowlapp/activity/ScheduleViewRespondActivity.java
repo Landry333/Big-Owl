@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class ScheduleViewRespondActivity extends AppCompatActivity {
 
-    private String scheduleUId, groupName;
+    private String scheduleUId, groupName, supervisorName;
     private ScheduleViewRespondViewModel scheduleViewRespondViewModel;
 
     @Override
@@ -24,6 +24,7 @@ public class ScheduleViewRespondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         scheduleUId = getIntent().getStringExtra("scheduleUId");
         groupName = getIntent().getStringExtra("groupName");
+        supervisorName = getIntent().getStringExtra("supervisorName");
         setContentView(R.layout.activity_schedule_response);
 
         if (scheduleViewRespondViewModel == null) {
@@ -35,7 +36,7 @@ public class ScheduleViewRespondActivity extends AppCompatActivity {
                 return;
             }
             ((TextView) findViewById(R.id.text_view_group_uid)).setText(groupName);
-            ((TextView) findViewById(R.id.text_view_group_supervisor_uid)).setText(schedule.getGroupSupervisorUId());
+            ((TextView) findViewById(R.id.text_view_group_supervisor_name)).setText(supervisorName);
             ((TextView) findViewById(R.id.text_view_schedule_start_time)).setText(schedule.getStartTime().toDate().toString());
             ((TextView) findViewById(R.id.text_view_schedule_end_time)).setText(schedule.getEndTime().toDate().toString());
 

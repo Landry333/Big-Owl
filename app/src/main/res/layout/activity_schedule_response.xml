@@ -38,7 +38,7 @@
             android:text="@string/group_supervisor" />
 
         <TextView
-            android:id="@+id/text_view_group_supervisor_uid"
+            android:id="@+id/text_view_group_supervisor_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
