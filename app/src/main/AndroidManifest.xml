@@ -10,6 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.ScheduleViewRespondActivity" />
         <activity android:name=".activity.EditProfileActivity" />
         <activity android:name=".activity.HomePageActivity" />
         <activity android:name=".activity.InvitationConfirmationActivity" />
@@ -23,7 +24,8 @@
         <activity android:name=".activity.SupervisedGroupListActivity" />
         <activity android:name=".activity.SupervisedGroupPageActivity" />
         <activity android:name=".activity.SendingRequestToSuperviseActivity" />
-        <activity android:name=".activity.AddUsers" />
+        <activity android:name=".activity.ListOfScheduleActivity" />
+        <activity android:name=".activity.AddUsersActivity" />
         <activity android:name=".fragments.UsersFragment" />
         <activity
             android:name=".activity.WelcomePageActivity"
