@@ -251,7 +251,7 @@ public abstract class Repository<T> {
         return listOfTData;
     }
 
-    List<T> extractListOfDataToModel(QuerySnapshot results, Class<? extends T> tClass) {
+    protected List<T> extractListOfDataToModel(QuerySnapshot results, Class<? extends T> tClass) {
         List<T> listOfT = new ArrayList<>();
         for (QueryDocumentSnapshot doc : results) {
             T t = doc.toObject(tClass);

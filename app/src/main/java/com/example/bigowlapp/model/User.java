@@ -9,7 +9,6 @@ import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
-// TODO NOW Cleanup
 
 @IgnoreExtraProperties
 public class User implements Parcelable {

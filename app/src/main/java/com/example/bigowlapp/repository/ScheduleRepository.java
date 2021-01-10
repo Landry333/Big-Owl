@@ -2,21 +2,15 @@ package com.example.bigowlapp.repository;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.List;
-
-// TODO NOW: cleanup
 
 
 public class ScheduleRepository extends Repository<Schedule> {
@@ -40,12 +34,7 @@ public class ScheduleRepository extends Repository<Schedule> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            List<Schedule> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                Schedule t = doc.toObject(Schedule.class);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
+                            listOfTData.setValue(this.extractListOfDataToModel(task.getResult(), Schedule.class));
                         } else {
                             listOfTData.setValue(null);
                         }

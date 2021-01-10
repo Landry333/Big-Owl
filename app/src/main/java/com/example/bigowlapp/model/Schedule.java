@@ -4,12 +4,12 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.PropertyName;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-// TODO NOW: cleanup getter setter order
 
 @IgnoreExtraProperties
 public class Schedule {
@@ -41,23 +41,7 @@ public class Schedule {
     }
 
     public Schedule() {
-        // Necessary for Firbase data mapping to model object
-    }
-
-    public Map<String, UserScheduleResponse> getMembers() {
-        return userScheduleResponseMap;
-    }
-
-    public void setMembers(Map<String, UserScheduleResponse> userScheduleResponseMap) {
-        this.userScheduleResponseMap = userScheduleResponseMap;
-    }
-
-    public String getGroupSupervisorUId() {
-        return groupSupervisorUId;
-    }
-
-    public void setGroupSupervisorUId(String groupSupervisorUId) {
-        this.groupSupervisorUId = groupSupervisorUId;
+        // Necessary for Firebase data mapping to model object
     }
 
     public String getuId() {
@@ -68,12 +52,44 @@ public class Schedule {
         this.uId = uId;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
+    }
+
     public String getGroupUId() {
         return groupUId;
     }
 
     public void setGroupUId(String groupUId) {
         this.groupUId = groupUId;
+    }
+
+    public String getGroupSupervisorUId() {
+        return groupSupervisorUId;
+    }
+
+    public void setGroupSupervisorUId(String groupSupervisorUId) {
+        this.groupSupervisorUId = groupSupervisorUId;
+    }
+
+    public List<String> getMemberList() {
+        return memberList;
+    }
+
+    public void setMemberList(List<String> memberList) {
+        this.memberList = memberList;
     }
 
     public Timestamp getStartTime() {
@@ -100,27 +116,15 @@ public class Schedule {
         this.location = location;
     }
 
-    public String getTitle() {
-        return title;
+    // TODO: Temp fix since db still has old field name
+    @PropertyName("members")
+    public Map<String, UserScheduleResponse> getUserScheduleResponseMap() {
+        return userScheduleResponseMap;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getEvent() {
-        return event;
-    }
-
-    public void setEvent(String event) {
-        this.event = event;
-    }
-
-    public List<String> getMemberList() {
-        return memberList;
-    }
-
-    public void setMemberList(List<String> memberList) {
-        this.memberList = memberList;
+    // TODO: Temp fix since db still has old field name
+    @PropertyName("members")
+    public void setUserScheduleResponseMap(Map<String, UserScheduleResponse> userScheduleResponseMap) {
+        this.userScheduleResponseMap = userScheduleResponseMap;
     }
 }
