@@ -65,7 +65,7 @@ public class HomePageActivity extends BigOwlActivity {
         btnAddUsers = findViewById(R.id.btn_add_users);
 
         btnAddUsers.setOnClickListener(v -> {
-            Intent i = new Intent(HomePageActivity.this, AddUsers.class);
+            Intent i = new Intent(HomePageActivity.this, AddUsersActivity.class);
             startActivity(i);
         });
 

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -105,9 +106,15 @@ public class SearchContactsToSupervise extends BigOwlActivity {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    if (!task.getResult().isEmpty())
+                                    if (!task.getResult().isEmpty()) {
                                         Toast.makeText(SearchContactsToSupervise.this, "This user has the app already. Please choose another user", Toast.LENGTH_SHORT).show();
-                                    else {
+                                        User user = task.getResult().toObjects(User.class).get(0);
+                                        Intent intent = new Intent(SearchContactsToSupervise.this, SendingRequestToSuperviseActivity.class);
+                                        intent.putExtra("user", user);
+                                        intent.putExtra("contactDetails", contactDetails);
+                                        startActivity(intent);
+
+                                    } else {
                                         Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
                                         intent.putExtra("contactDetails", contactDetails);

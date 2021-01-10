@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+// TODO NOW: cleanup getter setter order
+
 @IgnoreExtraProperties
 public class Schedule {
 
@@ -22,8 +24,7 @@ public class Schedule {
     private Timestamp startTime;
     private Timestamp endTime;
     private GeoPoint location;
-    //TODO: Change this name to userReponseMap after database change
-    private Map<String, UserResponse> members;
+    private Map<String, UserScheduleResponse> userScheduleResponseMap;
 
     public static Schedule getPrototypeSchedule() {
         Schedule schedule = new Schedule();
@@ -39,51 +40,24 @@ public class Schedule {
         return schedule;
     }
 
-    public static class UserResponse {
-        private Response response;
-        private Timestamp responseTime;
-
-        public UserResponse() {
-        }
-
-        public UserResponse(Response response, Timestamp responseTime) {
-            this.response = response;
-            this.responseTime = responseTime;
-        }
-
-        public Response getResponse() {
-            return response;
-        }
-
-        public void setResponse(Response response) {
-            this.response = response;
-        }
-
-        public Timestamp getResponseTime() {
-            return responseTime;
-        }
-
-        public void setResponseTime(Timestamp responseTime) {
-            this.responseTime = responseTime;
-        }
-    }
-
     public Schedule() {
+        // Necessary for Firbase data mapping to model object
     }
 
-    public Schedule(String uId, String title, String event, String groupUId,
-                    String groupSupervisorUId, List<String> memberList, Timestamp startTime,
-                    Timestamp endTime, GeoPoint location, Map<String, UserResponse> members) {
-        this.uId = uId;
-        this.title = title;
-        this.event = event;
-        this.groupUId = groupUId;
+    public Map<String, UserScheduleResponse> getMembers() {
+        return userScheduleResponseMap;
+    }
+
+    public void setMembers(Map<String, UserScheduleResponse> userScheduleResponseMap) {
+        this.userScheduleResponseMap = userScheduleResponseMap;
+    }
+
+    public String getGroupSupervisorUId() {
+        return groupSupervisorUId;
+    }
+
+    public void setGroupSupervisorUId(String groupSupervisorUId) {
         this.groupSupervisorUId = groupSupervisorUId;
-        this.memberList = memberList;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.location = location;
-        this.members = members;
     }
 
     public String getuId() {
@@ -148,22 +122,5 @@ public class Schedule {
 
     public void setMemberList(List<String> memberList) {
         this.memberList = memberList;
-    }
-
-
-    public Map<String, UserResponse> getMembers() {
-        return members;
-    }
-
-    public void setMembers(Map<String, UserResponse> members) {
-        this.members = members;
-    }
-
-    public String getGroupSupervisorUId() {
-        return groupSupervisorUId;
-    }
-
-    public void setGroupSupervisorUId(String groupSupervisorUId) {
-        this.groupSupervisorUId = groupSupervisorUId;
     }
 }

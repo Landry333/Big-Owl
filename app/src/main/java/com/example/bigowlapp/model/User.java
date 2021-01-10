@@ -1,13 +1,18 @@
 package com.example.bigowlapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+// TODO NOW Cleanup
+
 @IgnoreExtraProperties
-public class User {
+public class User implements Parcelable {
 
     @DocumentId
     private String uId;
@@ -30,6 +35,42 @@ public class User {
         this.email = email;
         this.profileImage = profileImage;
     }
+
+    protected User(Parcel in) {
+        uId = in.readString();
+        firstName = in.readString();
+        lastName = in.readString();
+        phoneNumber = in.readString();
+        email = in.readString();
+        profileImage = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uId);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(phoneNumber);
+        dest.writeString(email);
+        dest.writeString(profileImage);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public String getUId() {
         return uId;
