@@ -83,13 +83,13 @@ public class SetScheduleViewModelTest {
         verify(scheduleRepository).addDocument(schedule);
         assertEquals(schedule.getuId(), returnedSchedule.getuId());
         assertEquals(schedule.getMemberList(), returnedSchedule.getMemberList());
-        assertEquals(schedule.getMemberList().size(), returnedSchedule.getMembers().size());
-        assertEquals(Response.NEUTRAL, returnedSchedule.getMembers().get("joe").getResponse());
-        assertEquals(Response.NEUTRAL, returnedSchedule.getMembers().get("doe").getResponse());
-        assertEquals(Response.NEUTRAL, returnedSchedule.getMembers().get("john").getResponse());
-        assertNull(returnedSchedule.getMembers().get("joe").getResponseTime());
-        assertNull(returnedSchedule.getMembers().get("doe").getResponseTime());
-        assertNull(returnedSchedule.getMembers().get("john").getResponseTime());
+        assertEquals(schedule.getMemberList().size(), returnedSchedule.getUserScheduleResponseMap().size());
+        assertEquals(Response.NEUTRAL, returnedSchedule.getUserScheduleResponseMap().get("joe").getResponse());
+        assertEquals(Response.NEUTRAL, returnedSchedule.getUserScheduleResponseMap().get("doe").getResponse());
+        assertEquals(Response.NEUTRAL, returnedSchedule.getUserScheduleResponseMap().get("john").getResponse());
+        assertNull(returnedSchedule.getUserScheduleResponseMap().get("joe").getResponseTime());
+        assertNull(returnedSchedule.getUserScheduleResponseMap().get("doe").getResponseTime());
+        assertNull(returnedSchedule.getUserScheduleResponseMap().get("john").getResponseTime());
     }
 
     @Test
@@ -164,7 +164,7 @@ public class SetScheduleViewModelTest {
 
         Timestamp endTime = new Timestamp(Calendar.getInstance().getTime());
         setScheduleViewModel.updateScheduleEndTime(endTime.toDate());
-        assertEquals(endTime, setScheduleViewModel.getNewScheduleData().getValue().getStartTime());
+        assertEquals(endTime, setScheduleViewModel.getNewScheduleData().getValue().getEndTime());
     }
 
     @Test
