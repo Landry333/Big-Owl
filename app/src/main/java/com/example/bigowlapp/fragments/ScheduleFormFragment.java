@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.activity.SignUpPageActivity;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
@@ -72,11 +70,6 @@ public class ScheduleFormFragment extends Fragment
 
     public ScheduleFormFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -183,12 +176,10 @@ public class ScheduleFormFragment extends Fragment
         if (!setScheduleViewModel.isCurrentUserSet()) {
             return;
         }
-        setScheduleViewModel.getListOfGroup().observe(this, groups -> {
-            groupDialogFragment = new GroupDialogFragment(this, groups);
-        });
-        groupButton.setOnClickListener(view -> {
-            groupDialogFragment.show(getChildFragmentManager(), "groupDialogFragment");
-        });
+        setScheduleViewModel.getListOfGroup().observe(this, groups ->
+                groupDialogFragment = new GroupDialogFragment(this, groups));
+        groupButton.setOnClickListener(view ->
+                groupDialogFragment.show(getChildFragmentManager(), "groupDialogFragment"));
     }
 
     private void subscribeToUserData() {
@@ -218,21 +209,22 @@ public class ScheduleFormFragment extends Fragment
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_list_item_1, userNamesArray);
 
-            usersListView.setOnItemClickListener((parent, view, position, id) -> {
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.schedule_form_container,
-                                new UserFragment(this,
-                                        setScheduleViewModel
-                                                .getListOfUserInGroupData().getValue(),
-                                        setScheduleViewModel
-                                                .getListOfSelectedUsersData().getValue()))
-                        .addToBackStack(null)
-                        .commit();
-            });
+            usersListView.setOnItemClickListener((parent, view, position, id) ->
+                    getParentFragmentManager().beginTransaction()
+                            .replace(R.id.schedule_form_container,
+                                    new UserFragment(this,
+                                            setScheduleViewModel
+                                                    .getListOfUserInGroupData().getValue(),
+                                            setScheduleViewModel
+                                                    .getListOfSelectedUsersData().getValue()))
+                            .addToBackStack(null)
+                            .commit());
 
             usersListView.setAdapter(adapter);
 
-            //TODO: Optimize or change code to be more clean when linearlayout is implemented
+            // Optimize or change code to be more clean when linearlayout is implemented
+            // Needed to make a non-scrolling ListView, although a better approach would be to use a LinearLayout
+            // TODO: refactor: extract method
             int height = 0;
             for (int i = 0; i < adapter.getCount(); i++) {
                 View viewItem = adapter.getView(i, null, usersListView);
@@ -250,15 +242,14 @@ public class ScheduleFormFragment extends Fragment
 
     private void setupSelectUserLayout() {
         selectUserButton.setEnabled(false);
-        selectUserButton.setOnClickListener(view -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.schedule_form_container,
-                            new UserFragment(this,
-                                    setScheduleViewModel.getListOfUserInGroupData().getValue(),
-                                    setScheduleViewModel.getListOfSelectedUsersData().getValue()))
-                    .addToBackStack(null)
-                    .commit();
-        });
+        selectUserButton.setOnClickListener(view ->
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.schedule_form_container,
+                                new UserFragment(this,
+                                        setScheduleViewModel.getListOfUserInGroupData().getValue(),
+                                        setScheduleViewModel.getListOfSelectedUsersData().getValue()))
+                        .addToBackStack(null)
+                        .commit());
     }
 
     private void setupConfirmSetScheduleButton() {
@@ -301,7 +292,7 @@ public class ScheduleFormFragment extends Fragment
                 Toast.makeText(getContext(), "Please complete all the necessary fields", Toast.LENGTH_LONG).show();
                 return;
             }
-            
+
             setScheduleViewModel.addSchedule();
             Toast.makeText(getContext(), "Schedule added successfully", Toast.LENGTH_LONG).show();
             getActivity().finish();
@@ -313,18 +304,17 @@ public class ScheduleFormFragment extends Fragment
     //===========================================================================================
 
     private void setupDateTimeButtons() {
-        editStartDate.setOnClickListener(view -> {
-            showDateDialogByButtonClick(startDateTime, editStartDate, true);
-        });
-        editStartTime.setOnClickListener(view -> {
-            showTimeDialogByButtonClick(startDateTime, editStartTime, true);
-        });
-        editEndDate.setOnClickListener(view -> {
-            showDateDialogByButtonClick(endDateTime, editEndDate, false);
-        });
-        editEndTime.setOnClickListener(view -> {
-            showTimeDialogByButtonClick(endDateTime, editEndTime, false);
-        });
+        editStartDate.setOnClickListener(view ->
+                showDateDialogByButtonClick(startDateTime, true));
+
+        editStartTime.setOnClickListener(view ->
+                showTimeDialogByButtonClick(startDateTime, true));
+
+        editEndDate.setOnClickListener(view ->
+                showDateDialogByButtonClick(endDateTime, false));
+
+        editEndTime.setOnClickListener(view ->
+                showTimeDialogByButtonClick(endDateTime, false));
     }
 
     private String dateFormatter(Calendar calendar) {
@@ -341,18 +331,18 @@ public class ScheduleFormFragment extends Fragment
                 (minute < 10 ? ("0" + minute) : minute);
     }
 
-    private void showDateDialogByButtonClick(Calendar dateTime, Button buttonDisplay, boolean isStart) {
+    private void showDateDialogByButtonClick(Calendar dateTime, boolean isStart) {
         isStartTime = isStart;
         activeDateTime = dateTime;
         DialogFragment newFragment = DatePickerDialogFragment.newInstance(this);
-        newFragment.show(getChildFragmentManager(), "startDatePicker");
+        newFragment.show(getChildFragmentManager(), "datePicker");
     }
 
-    private void showTimeDialogByButtonClick(Calendar dateTime, Button buttonDisplay, boolean isStart) {
+    private void showTimeDialogByButtonClick(Calendar dateTime, boolean isStart) {
         isStartTime = isStart;
         activeDateTime = dateTime;
         DialogFragment newFragment = TimePickerDialogFragment.newInstance(this);
-        newFragment.show(getChildFragmentManager(), "startTimePicker");
+        newFragment.show(getChildFragmentManager(), "timePicker");
     }
 
     @Override
@@ -409,15 +399,8 @@ public class ScheduleFormFragment extends Fragment
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        switch (requestCode) {
-            case Constants.REQUEST_CODE_LOCATION:
-                handleLocationSelection(resultCode, data);
-                break;
-            case Constants.REQUEST_CODE_USER_SELECTION:
-                // TODO: handle the data that has been given (Unnecessary anymore)
-                break;
-            default:
-                break;
+        if (requestCode == Constants.REQUEST_CODE_LOCATION) {
+            handleLocationSelection(resultCode, data);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

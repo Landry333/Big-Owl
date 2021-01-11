@@ -32,7 +32,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mUser = users.get(position);
+        holder.setmUser(users.get(position));
         holder.mIdView.setText(String.valueOf(position + 1));
         String strContent = users.get(position).getFullName() + "\n"
                 + users.get(position).getEmail();
@@ -58,6 +58,10 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
             mView = view;
             mIdView = view.findViewById(R.id.item_number);
             mContentView = view.findViewById(R.id.content);
+        }
+
+        public void setmUser(User mUser) {
+            this.mUser = mUser;
         }
 
         @Override
