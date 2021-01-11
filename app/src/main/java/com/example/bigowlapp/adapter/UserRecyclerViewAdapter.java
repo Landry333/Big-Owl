@@ -38,7 +38,6 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
                 + users.get(position).getEmail();
         holder.mContentView.setText(strContent);
         holder.mView.setOnClickListener(holder);
-        // Refactor
         holder.mView.setBackgroundColor(selectedUsers.contains(holder.mUser) ? Color.GRAY : Color.WHITE);
     }
 
@@ -51,7 +50,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public User mUser;
+        private User mUser;
 
         public ViewHolder(View view) {
             super(view);
