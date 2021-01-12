@@ -31,7 +31,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = listOfGroup.get(position);
+        holder.setmItem(listOfGroup.get(position));
         holder.mIdView.setText(String.valueOf(position + 1));
         holder.mContentView.setText(listOfGroup.get(position).getName());
         holder.mView.setOnClickListener(holder);
@@ -46,7 +46,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public Group mItem;
+        private Group mItem;
 
         public ViewHolder(View view) {
             super(view);
@@ -63,6 +63,10 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         @Override
         public void onClick(View view) {
             groupRecyclerViewListener.onClickedGroup(mItem);
+        }
+
+        public void setmItem(Group mItem) {
+            this.mItem = mItem;
         }
     }
 

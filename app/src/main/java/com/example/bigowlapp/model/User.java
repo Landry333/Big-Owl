@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+
 @IgnoreExtraProperties
 public class User extends Model implements Parcelable {
 

@@ -168,13 +168,15 @@
                     android:text="@string/select_a_user"
                     android:textAllCaps="false" />
 
+                <!-- NestedScrolling warning is ignored since we made the non-scrollable -->
                 <ListView
                     android:id="@+id/select_users_list_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:listSelector="@android:color/transparent"
                     android:gravity="center"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    tools:ignore="NestedScrolling" />
 
             </LinearLayout>
 

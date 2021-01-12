@@ -6,7 +6,7 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="first_name">First Name</string>
-    <string name="group_name">group_name</string>
+    <string name="group_name">Group Name</string>
     <string name="have_account_text">Already have an account? Sign in here</string>
     <string name="hint_email">Email</string>
     <string name="hint_search">Search…</string>
@@ -30,20 +30,14 @@
     <string name="user_first_name">First Name</string>
     <string name="user_last_name">Last Name</string>
     <string name="user_phone_number">user_phone_number</string>
-    <string name="view_profile">View Profile</string>
     <string name="set_schedule">Set Schedule</string>
     <string name="select_group">Select Group</string>
     <string name="select_user">Select User</string>
     <string name="create_new_schedule">Create New Schedule</string>
-    <string name="start_time">Start Time</string>
     <string name="end_date">End Date</string>
-    <string name="longitude">Longitude</string>
     <string name="start_date">Start Date</string>
-    <string name="latitude">Latitude</string>
-    <string name="end_time">End Time</string>
     <string name="title">Title</string>
     <string name="location">Location</string>
-    <string name="dd_mm_yyyy">dd/mm/yyyy</string>
     <string name="hh_mm">hh:mm</string>
     <string name="select_a_group">Select a Group</string>
     <string name="users_icon">users_icon</string>
@@ -59,4 +53,14 @@
     <string name="big_owl">Big Owl</string>
     <string name="search_user">Search User</string>
     <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="accept">Accept</string>
+    <string name="reject">Reject</string>
+    <string name="group_supervisor">Group Supervisor</string>
+    <string name="start_time">Start time</string>
+    <string name="end_time">End Time</string>
+    <string name="you_last">You last</string>
+    <string name="this_schedule_on">this schedule on</string>
+    <string name="schedule_list">Schedules</string>
+    <string name="schedule_title">Schedules title</string>
+    <string name="schedule_start_time">Schedules Start time</string>
 </resources>

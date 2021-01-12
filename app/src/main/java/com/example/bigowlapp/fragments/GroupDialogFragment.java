@@ -31,11 +31,6 @@ public class GroupDialogFragment extends DialogFragment implements GroupRecycler
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_item_list, container, false);

@@ -1,7 +1,5 @@
 package com.example.bigowlapp.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
 import com.example.bigowlapp.R;

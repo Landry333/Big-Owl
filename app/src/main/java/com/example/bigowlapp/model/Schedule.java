@@ -3,10 +3,12 @@ package com.example.bigowlapp.model;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.PropertyName;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+
 
 @IgnoreExtraProperties
 public class Schedule extends Model {
@@ -19,8 +21,7 @@ public class Schedule extends Model {
     private Timestamp startTime;
     private Timestamp endTime;
     private GeoPoint location;
-    //TODO: Change this name to userReponseMap after database change
-    private Map<String, UserResponse> members;
+    private Map<String, UserScheduleResponse> userScheduleResponseMap;
 
     public static Schedule getPrototypeSchedule() {
         Schedule schedule = new Schedule();
@@ -36,42 +37,13 @@ public class Schedule extends Model {
         return schedule;
     }
 
-    public static class UserResponse {
-        private Response response;
-        private Timestamp responseTime;
-
-        public UserResponse() {
-        }
-
-        public UserResponse(Response response, Timestamp responseTime) {
-            this.response = response;
-            this.responseTime = responseTime;
-        }
-
-        public Response getResponse() {
-            return response;
-        }
-
-        public void setResponse(Response response) {
-            this.response = response;
-        }
-
-        public Timestamp getResponseTime() {
-            return responseTime;
-        }
-
-        public void setResponseTime(Timestamp responseTime) {
-            this.responseTime = responseTime;
-        }
-    }
-
     public Schedule() {
         super();
     }
 
     public Schedule(String uId, String title, String event, String groupUId,
                     String groupSupervisorUId, List<String> memberList, Timestamp startTime,
-                    Timestamp endTime, GeoPoint location, Map<String, UserResponse> members) {
+                    Timestamp endTime, GeoPoint location, Map<String, UserScheduleResponse> userScheduleResponseMap) {
         super(uId);
         this.title = title;
         this.event = event;
@@ -81,7 +53,23 @@ public class Schedule extends Model {
         this.startTime = startTime;
         this.endTime = endTime;
         this.location = location;
-        this.members = members;
+        this.userScheduleResponseMap = userScheduleResponseMap;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
     }
 
     public String getGroupUId() {
@@ -90,6 +78,22 @@ public class Schedule extends Model {
 
     public void setGroupUId(String groupUId) {
         this.groupUId = groupUId;
+    }
+
+    public String getGroupSupervisorUId() {
+        return groupSupervisorUId;
+    }
+
+    public void setGroupSupervisorUId(String groupSupervisorUId) {
+        this.groupSupervisorUId = groupSupervisorUId;
+    }
+
+    public List<String> getMemberList() {
+        return memberList;
+    }
+
+    public void setMemberList(List<String> memberList) {
+        this.memberList = memberList;
     }
 
     public Timestamp getStartTime() {
@@ -116,44 +120,15 @@ public class Schedule extends Model {
         this.location = location;
     }
 
-    public String getTitle() {
-        return title;
+    // TODO: Temp fix since db still has old field name
+    @PropertyName("members")
+    public Map<String, UserScheduleResponse> getUserScheduleResponseMap() {
+        return userScheduleResponseMap;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getEvent() {
-        return event;
-    }
-
-    public void setEvent(String event) {
-        this.event = event;
-    }
-
-    public List<String> getMemberList() {
-        return memberList;
-    }
-
-    public void setMemberList(List<String> memberList) {
-        this.memberList = memberList;
-    }
-
-
-    public Map<String, UserResponse> getMembers() {
-        return members;
-    }
-
-    public void setMembers(Map<String, UserResponse> members) {
-        this.members = members;
-    }
-
-    public String getGroupSupervisorUId() {
-        return groupSupervisorUId;
-    }
-
-    public void setGroupSupervisorUId(String groupSupervisorUId) {
-        this.groupSupervisorUId = groupSupervisorUId;
+    // TODO: Temp fix since db still has old field name
+    @PropertyName("members")
+    public void setUserScheduleResponseMap(Map<String, UserScheduleResponse> userScheduleResponseMap) {
+        this.userScheduleResponseMap = userScheduleResponseMap;
     }
 }

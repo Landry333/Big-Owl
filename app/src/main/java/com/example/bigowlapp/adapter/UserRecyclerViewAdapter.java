@@ -32,13 +32,12 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mUser = users.get(position);
+        holder.setmUser(users.get(position));
         holder.mIdView.setText(String.valueOf(position + 1));
         String strContent = users.get(position).getFullName() + "\n"
                 + users.get(position).getEmail();
         holder.mContentView.setText(strContent);
         holder.mView.setOnClickListener(holder);
-        // Refactor
         holder.mView.setBackgroundColor(selectedUsers.contains(holder.mUser) ? Color.GRAY : Color.WHITE);
     }
 
@@ -51,13 +50,17 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public User mUser;
+        private User mUser;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = view.findViewById(R.id.item_number);
             mContentView = view.findViewById(R.id.content);
+        }
+
+        public void setmUser(User mUser) {
+            this.mUser = mUser;
         }
 
         @Override

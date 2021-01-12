@@ -28,7 +28,6 @@ public class UserFragment extends Fragment {
     private Button cancelButton;
     private Button confirmButton;
 
-    private UserRecyclerViewAdapter userRecyclerViewAdapter;
     private UserFragmentListener userFragmentListener;
 
     public UserFragment() {
@@ -42,11 +41,6 @@ public class UserFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_user_item_list, container, false);
@@ -57,30 +51,16 @@ public class UserFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = view.findViewById(R.id.user_item_list_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        userRecyclerViewAdapter = new UserRecyclerViewAdapter(listOfUsers, listOfSelectedUsers);
-        recyclerView.setAdapter(userRecyclerViewAdapter);
+        recyclerView.setAdapter(new UserRecyclerViewAdapter(listOfUsers, listOfSelectedUsers));
 
         cancelButton = view.findViewById(R.id.user_item_list_cancel);
         confirmButton = view.findViewById(R.id.user_item_list_confirm);
         setupButtons();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        //mViewModel = ViewModelProviders.of(this).get(ViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
     public void setupButtons() {
-        cancelButton.setOnClickListener(view -> {
-            getActivity().onBackPressed();
-        });
+        cancelButton.setOnClickListener(view -> getActivity().onBackPressed());
+
         confirmButton.setOnClickListener(view -> {
             userFragmentListener.userFragmentOnSubmitClicked(listOfSelectedUsers);
             getParentFragmentManager().popBackStack();

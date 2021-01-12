@@ -9,6 +9,7 @@ import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
@@ -53,12 +54,12 @@ public class SetScheduleViewModel extends BaseViewModel {
 
     public MutableLiveData<Schedule> addSchedule() {
         Schedule schedule = newScheduleData.getValue();
-        Map<String, Schedule.UserResponse> userResponseMap =
+        Map<String, UserScheduleResponse> userResponseMap =
                 schedule.getMemberList().stream().collect(Collectors.toMap(
                         memberUId -> memberUId,
-                        memberUId -> new Schedule.UserResponse(Response.NEUTRAL, null))
+                        memberUId -> new UserScheduleResponse(Response.NEUTRAL, null))
                 );
-        schedule.setMembers(userResponseMap);
+        schedule.setUserScheduleResponseMap(userResponseMap);
         return repositoryFacade.getScheduleRepository().addDocument(schedule);
     }
 

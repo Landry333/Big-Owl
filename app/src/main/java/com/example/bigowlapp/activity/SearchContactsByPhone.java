@@ -34,10 +34,6 @@ public class SearchContactsByPhone extends BigOwlActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initialize();
-    }
-
-    protected void initialize() {
         loadContacts();
     }
 

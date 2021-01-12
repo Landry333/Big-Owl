@@ -1,9 +1,10 @@
 package com.example.bigowlapp.repository;
 
+import android.util.Log;
+
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.bigowlapp.database.Firestore;
-import com.example.bigowlapp.model.LiveDataWithStatus;
-import com.example.bigowlapp.model.Model;
-import com.example.bigowlapp.repository.exception.DocumentNotFoundException;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
@@ -17,12 +18,19 @@ import java.util.List;
 
 public abstract class Repository<T extends Model> {
 
-    private final FirebaseFirestore mFirebaseFirestore;
+    protected final FirebaseFirestore mFirebaseFirestore;
     protected final CollectionReference collectionReference;
 
     protected Repository(String collectionName) {
         mFirebaseFirestore = Firestore.getDatabase();
         collectionReference = mFirebaseFirestore.collection(collectionName);
+    }
+
+    // TODO: Remove or Modify when dependency injection implemented
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public Repository(FirebaseFirestore mFirebaseFirestore, CollectionReference collectionReference) {
+        this.mFirebaseFirestore = mFirebaseFirestore;
+        this.collectionReference = collectionReference;
     }
 
     //===========================================================================================
@@ -223,7 +231,7 @@ public abstract class Repository<T extends Model> {
         return listOfTData;
     }
 
-    private List<T> extractListOfDataToModel(QuerySnapshot results, Class<? extends T> tClass) {
+    protected List<T> extractListOfDataToModel(QuerySnapshot results, Class<? extends T> tClass) {
         List<T> listOfT = new ArrayList<>();
         for (QueryDocumentSnapshot doc : results) {
             T t = doc.toObject(tClass);
@@ -238,6 +246,8 @@ public abstract class Repository<T extends Model> {
      * @param tClass indicates the type of data that could not be found using class name
      * @return the exception with a message indicating the document could not be found
      */
+
+    // TODO: Make private???
     public DocumentNotFoundException getDocumentNotFoundException(Class<? extends T> tClass) {
         return new DocumentNotFoundException("The " + tClass.getSimpleName() + " does not exist!");
     }
