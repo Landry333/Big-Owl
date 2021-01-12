@@ -31,7 +31,6 @@ public class AuthRepository {
         return mfirebaseAuth.getCurrentUser().delete();
     }
 
-    // TODO: Use this method when signing out
     public void signOutUser() {
         mfirebaseAuth.signOut();
     }

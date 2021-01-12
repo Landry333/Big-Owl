@@ -23,4 +23,8 @@ public class HomePageViewModel extends BaseViewModel {
         user = repositoryFacade.getUserRepository()
                 .getDocumentByUid(getCurrentUserUid(), User.class);
     }
+
+    public void signOut() {
+        repositoryFacade.getAuthRepository().signOutUser();
+    }
 }

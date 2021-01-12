@@ -20,7 +20,6 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
-import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 public class HomePageActivity extends BigOwlActivity {
@@ -59,7 +58,7 @@ public class HomePageActivity extends BigOwlActivity {
         btnLogOut = findViewById(R.id.btn_logout);
 
         btnLogOut.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
+            homePageViewModel.signOut();
             Intent i = new Intent(HomePageActivity.this, LoginPageActivity.class);
             startActivity(i);
         });
