@@ -8,6 +8,7 @@ public class LogInViewModel extends BaseViewModel {
 
     // TODO: Dependency Injection
     public LogInViewModel() {
+        // used implicitly when ViewModel constructed using ViewModelProvider
     }
 
     public Task<AuthResult> logInUser(String email, String password) {

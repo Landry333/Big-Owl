@@ -15,6 +15,7 @@ public class MonitoringGroupPageViewModel extends BaseViewModel {
     private MutableLiveData<List<User>> usersInGroup;
 
     public MonitoringGroupPageViewModel() {
+        // used implicitly when ViewModel constructed using ViewModelProvider
     }
 
     public LiveData<Group> getGroup() {

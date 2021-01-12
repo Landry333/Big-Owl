@@ -247,9 +247,7 @@ public abstract class Repository<T extends Model> {
      * @param tClass indicates the type of data that could not be found using class name
      * @return the exception with a message indicating the document could not be found
      */
-
-    // TODO: Make private???
-    public DocumentNotFoundException getDocumentNotFoundException(Class<? extends T> tClass) {
+    protected DocumentNotFoundException getDocumentNotFoundException(Class<? extends T> tClass) {
         return new DocumentNotFoundException("The " + tClass.getSimpleName() + " does not exist!");
     }
 }

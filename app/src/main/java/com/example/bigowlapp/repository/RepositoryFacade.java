@@ -12,6 +12,7 @@ public class RepositoryFacade {
     private GroupRepository groupRepository;
 
     public RepositoryFacade() {
+        // Repositories are only initialized when needed by a ViewModel
     }
 
     public AuthRepository getAuthRepository() {

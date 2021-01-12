@@ -1,7 +1,7 @@
 package com.example.bigowlapp.model;
 
-// Class not in use for now
 /**
+ * @deprecated Class not in use; added different way to implement errors
  * A model representing the data models with a status
  * @param <T> Generic extending Model
  */

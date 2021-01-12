@@ -13,6 +13,7 @@ public class SignUpViewModel extends BaseViewModel {
 
     // TODO: Dependency Injection
     public SignUpViewModel() {
+        // used implicitly when ViewModel constructed using ViewModelProvider
     }
 
     // TODO: Handle exceptions concerning the failure of the "user" database collection
@@ -23,13 +24,13 @@ public class SignUpViewModel extends BaseViewModel {
         Task<Void> taskAddUser = taskAuthSignUpResult.continueWithTask(task -> {
             if (task.isSuccessful()) {
                 User user = new User();
-                String uId = getCurrentUserUid();
-                user.setUid(uId);
+                String uid = getCurrentUserUid();
+                user.setUid(uid);
                 user.setEmail(email);
                 user.setPhoneNumber(phoneNumber);
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
-                repositoryFacade.getUserRepository().addDocument(uId, user);
+                repositoryFacade.getUserRepository().addDocument(uid, user);
                 return Tasks.forResult(null);
             } else {
                 throw task.getException();

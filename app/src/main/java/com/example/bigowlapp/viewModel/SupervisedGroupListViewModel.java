@@ -13,6 +13,7 @@ public class SupervisedGroupListViewModel extends BaseViewModel {
     private MutableLiveData<User> userData;
 
     public SupervisedGroupListViewModel() {
+        // used implicitly when ViewModel constructed using ViewModelProvider
     }
 
     public LiveData<List<Group>> getSupervisedGroupListData() {

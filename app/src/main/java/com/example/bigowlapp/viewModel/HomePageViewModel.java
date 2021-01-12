@@ -8,6 +8,7 @@ public class HomePageViewModel extends BaseViewModel {
     private LiveDataWithStatus<User> user;
 
     public HomePageViewModel() {
+        // used implicitly when ViewModel constructed using ViewModelProvider
     }
 
     public LiveDataWithStatus<User> getCurrentUserData() {

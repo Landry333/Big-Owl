@@ -41,21 +41,6 @@ public class Schedule extends Model {
         super();
     }
 
-    public Schedule(String uId, String title, String event, String groupUId,
-                    String groupSupervisorUId, List<String> memberList, Timestamp startTime,
-                    Timestamp endTime, GeoPoint location, Map<String, UserScheduleResponse> userScheduleResponseMap) {
-        super(uId);
-        this.title = title;
-        this.event = event;
-        this.groupUId = groupUId;
-        this.groupSupervisorUId = groupSupervisorUId;
-        this.memberList = memberList;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.location = location;
-        this.userScheduleResponseMap = userScheduleResponseMap;
-    }
-
     public String getTitle() {
         return title;
     }

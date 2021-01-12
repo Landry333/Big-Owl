@@ -9,7 +9,7 @@ public abstract class BaseViewModel extends ViewModel {
 
     protected RepositoryFacade repositoryFacade;
 
-    public BaseViewModel() {
+    protected BaseViewModel() {
         repositoryFacade = new RepositoryFacade();
     }
 

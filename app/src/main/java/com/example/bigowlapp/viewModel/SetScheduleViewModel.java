@@ -45,7 +45,6 @@ public class SetScheduleViewModel extends BaseViewModel {
         selectedLocationData = Transformations.map(newScheduleData, schedule -> selectedLocation);
     }
 
-    // TODO: Fix test that uses this method
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public SetScheduleViewModel(RepositoryFacade repositoryFacade) {
         this.repositoryFacade = repositoryFacade;
@@ -144,7 +143,6 @@ public class SetScheduleViewModel extends BaseViewModel {
         return selectedGroup;
     }
 
-    // TODO: Fix test that uses this method
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public LiveData<List<User>> getListOfUsersFromGroup(Group group) {
         if (previousSelectedGroup != null && previousSelectedGroup.equals(group)) {

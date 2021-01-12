@@ -13,6 +13,7 @@ public class EditProfileViewModel extends BaseViewModel {
 
     // TODO: Dependency Injection
     public EditProfileViewModel() {
+        // used implicitly when ViewModel constructed using ViewModelProvider
     }
 
     public void editUserProfile(String fName, String lName, String pNum, String imageUrl) {
@@ -41,7 +42,6 @@ public class EditProfileViewModel extends BaseViewModel {
                 .getDocumentByUid(getCurrentUserUid(), User.class);
     }
 
-    // TODO: Fix test that uses this method
     @VisibleForTesting
     public EditProfileViewModel(RepositoryFacade repositoryFacade, MutableLiveData<User> userData) {
         this.repositoryFacade = repositoryFacade;
