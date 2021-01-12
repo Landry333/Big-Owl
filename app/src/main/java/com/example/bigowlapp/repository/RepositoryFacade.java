@@ -10,36 +10,44 @@ public class RepositoryFacade {
     private UserRepository userRepository;
     private ScheduleRepository scheduleRepository;
     private GroupRepository groupRepository;
+    private NotificationRepository notificationRepository;
 
     public RepositoryFacade() {
         // Repositories are only initialized when needed by a ViewModel
     }
 
     public AuthRepository getAuthRepository() {
-        if(authRepository == null){
+        if (authRepository == null) {
             authRepository = new AuthRepository();
         }
         return authRepository;
     }
 
     public UserRepository getUserRepository() {
-        if(userRepository == null){
+        if (userRepository == null) {
             userRepository = new UserRepository();
         }
         return userRepository;
     }
 
     public ScheduleRepository getScheduleRepository() {
-        if(scheduleRepository == null){
+        if (scheduleRepository == null) {
             scheduleRepository = new ScheduleRepository();
         }
         return scheduleRepository;
     }
 
     public GroupRepository getGroupRepository() {
-        if(groupRepository == null){
+        if (groupRepository == null) {
             groupRepository = new GroupRepository();
         }
         return groupRepository;
+    }
+
+    public NotificationRepository getNotificationRepository() {
+        if (notificationRepository == null) {
+            notificationRepository = new NotificationRepository();
+        }
+        return notificationRepository;
     }
 }

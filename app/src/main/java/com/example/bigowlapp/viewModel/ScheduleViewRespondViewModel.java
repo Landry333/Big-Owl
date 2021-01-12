@@ -2,34 +2,25 @@ package com.example.bigowlapp.viewModel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.ScheduleRequest;
 import com.example.bigowlapp.model.UserScheduleResponse;
-import com.example.bigowlapp.repository.AuthRepository;
-import com.example.bigowlapp.repository.NotificationRepository;
-import com.example.bigowlapp.repository.ScheduleRepository;
 
 import java.util.Objects;
 
 import static com.google.firebase.Timestamp.now;
 
-public class ScheduleViewRespondViewModel extends ViewModel {
+public class ScheduleViewRespondViewModel extends BaseViewModel {
 
-    private final AuthRepository authRepository;
-    private final NotificationRepository notificationRepository;
-    private final ScheduleRepository scheduleRepository;
     private MutableLiveData<Schedule> scheduleData;
     private UserScheduleResponse currentUserNewResponse;
     private static final int ONE_MINUTE = 60000;
 
     // TODO: Dependency Injection
     public ScheduleViewRespondViewModel() {
-        authRepository = new AuthRepository();
-        notificationRepository = new NotificationRepository();
-        scheduleRepository = new ScheduleRepository();
+        // used implicitly when ViewModel constructed using ViewModelProvider
     }
 
     public void respondSchedule(String scheduleId, Response response) {
@@ -37,32 +28,32 @@ public class ScheduleViewRespondViewModel extends ViewModel {
             currentUserNewResponse = getUserScheduleResponse();
             currentUserNewResponse.setResponse(response);
             currentUserNewResponse.setResponseTime(now());
-            scheduleRepository.updateScheduleMemberResponse(scheduleId, authRepository.getCurrentUser().getUid(), currentUserNewResponse);
+            repositoryFacade.getScheduleRepository().updateScheduleMemberResponse(scheduleId, getCurrentUserUid(), currentUserNewResponse);
             scheduleData.setValue(scheduleData.getValue());
         }
     }
 
     public UserScheduleResponse getUserScheduleResponse() {
         return Objects.requireNonNull(scheduleData.getValue()).getUserScheduleResponseMap()
-                .get(authRepository.getCurrentUser().getUid());
+                .get(getCurrentUserUid());
     }
 
     public boolean isCurrentUserInSchedule() {
         return Objects.requireNonNull(scheduleData.getValue()).getUserScheduleResponseMap()
-                .containsKey(authRepository.getCurrentUser().getUid());
+                .containsKey(getCurrentUserUid());
     }
 
     public LiveData<Schedule> getCurrentScheduleData(String scheduleId) {
         if (scheduleData == null) {
             scheduleData = new MutableLiveData<>();
-            scheduleData = scheduleRepository.getDocumentByUid(scheduleId, Schedule.class);
+            scheduleData = repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class);
         }
         return scheduleData;
     }
 
     public void notifySupervisorScheduleResponse() {
         ScheduleRequest newNotification = new ScheduleRequest();
-        newNotification.setSenderUId(authRepository.getCurrentUser().getUid());
+        newNotification.setSenderUId(getCurrentUserUid());
         newNotification.setReceiverUId(scheduleData.getValue().getGroupSupervisorUId());
         newNotification.setGroupUId(scheduleData.getValue().getGroupUId());
         newNotification.setType("memberResponseSchedule");
@@ -70,7 +61,7 @@ public class ScheduleViewRespondViewModel extends ViewModel {
         newNotification.setTimeSend(now());
         newNotification.setTime(now());
         newNotification.setSenderResponse(currentUserNewResponse);
-        notificationRepository.addDocument(newNotification);
+        repositoryFacade.getNotificationRepository().addDocument(newNotification);
     }
 
     public boolean isOneMinuteAfterLastResponse() {
