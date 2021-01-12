@@ -1,9 +1,6 @@
 package com.example.bigowlapp.repository;
 
-import android.util.Log;
-
-import androidx.lifecycle.MutableLiveData;
-
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.google.android.gms.tasks.Task;
@@ -24,8 +21,8 @@ public class ScheduleRepository extends Repository<Schedule> {
         return collectionReference.document(scheduleId).update("members.".concat(userUId), currentUserScheduleResponse);
     }
 
-    public MutableLiveData<List<Schedule>> getListSchedulesFromGroupForUser(String groupID, String userID) {
-        MutableLiveData<List<Schedule>> listOfTData = new MutableLiveData<>();
+    public LiveDataWithStatus<List<Schedule>> getListSchedulesFromGroupForUser(String groupID, String userID) {
+        LiveDataWithStatus<List<Schedule>> listOfTData = new LiveDataWithStatus<>();
         collectionReference.whereEqualTo("groupUId", groupID)
                 .whereArrayContains("membersList", userID)
                 .orderBy("startTime", Query.Direction.ASCENDING)
@@ -34,13 +31,12 @@ public class ScheduleRepository extends Repository<Schedule> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            listOfTData.setValue(this.extractListOfDataToModel(task.getResult(), Schedule.class));
+                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), Schedule.class));
                         } else {
-                            listOfTData.setValue(null);
+                            listOfTData.setError(getDocumentNotFoundException(Schedule.class));
                         }
                     } else {
-                        Log.e(getClassName(), "Error getting documents: " +
-                                task.getException());
+                        listOfTData.setError(task.getException());
                     }
                 });
         return listOfTData;

@@ -55,7 +55,7 @@ public class ScheduleViewRespondViewModel extends ViewModel {
     public LiveData<Schedule> getCurrentScheduleData(String scheduleId) {
         if (scheduleData == null) {
             scheduleData = new MutableLiveData<>();
-            scheduleData = scheduleRepository.getDocumentByUId(scheduleId, Schedule.class);
+            scheduleData = scheduleRepository.getDocumentByUid(scheduleId, Schedule.class);
         }
         return scheduleData;
     }
