@@ -15,7 +15,7 @@ import com.example.bigowlapp.repository.NotificationRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotificationActivity extends BigOwlActivity {
+public class NotificationActivity extends BigOwlActivity implements NotificationAdapter.OnNotificationListener {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -50,5 +50,10 @@ public class NotificationActivity extends BigOwlActivity {
     @Override
     protected int getContentView() {
         return R.layout.activity_notification;
+    }
+
+    @Override
+    public void onNotificationClick(int position) {
+
     }
 }

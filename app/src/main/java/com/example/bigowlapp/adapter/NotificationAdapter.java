@@ -12,20 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Notification;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
     private static final String TAG = "NotificationAdapter";
     private List<Notification> mNotificationTitles;
-    private Context mContext;
+//    private Context mContext;
+    private OnNotificationListener mOnNotificationListener;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem, parent, false);
-        return new ViewHolder(v);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_list_of_notification, parent, false);
+        return new ViewHolder(v, mOnNotificationListener);
     }
 
     @Override
@@ -41,24 +40,36 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return mNotificationTitles.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView nameTextView;
         public TextView contentTextView;
         public TextView timeTextView;
         public ConstraintLayout parentLayout;
+        OnNotificationListener onNotificationListener;
 
-        public ViewHolder(View v) {
+        public ViewHolder(View v, OnNotificationListener onNotificationListener) {
             super(v);
             nameTextView = v.findViewById(R.id.notification_name);
             contentTextView = v.findViewById(R.id.notification_content);
             timeTextView = v.findViewById(R.id.notification_time);
             parentLayout = v.findViewById(R.id.parent_layout);
+            this.onNotificationListener = onNotificationListener;
+
+            itemView.setOnClickListener(this);
+        }
+
+        public void onClick(View view) {
+            onNotificationListener.onNotificationClick(getAdapterPosition());
         }
     }
 
-    public NotificationAdapter(List<Notification> notificationTitles, Context context) {
+    public interface  OnNotificationListener {
+        void onNotificationClick(int position);
+    }
+
+    public NotificationAdapter(List<Notification> notificationTitles, OnNotificationListener onNotificationListener) {
         mNotificationTitles = notificationTitles;
-        mContext = context;
+        this.mOnNotificationListener = onNotificationListener;
     }
 }
