@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.bigowlapp.utils.DateTimeFormatter.dateFormatter;
+import static com.example.bigowlapp.utils.DateTimeFormatter.timeFormatter;
 
 public class ScheduleFormFragment extends Fragment
         implements DatePickerDialogFragment.DatePickedListener,
@@ -46,7 +48,7 @@ public class ScheduleFormFragment extends Fragment
     private EditText editTitle;
     private Button groupButton;
     private Button selectUserButton;
-    private ListView usersListView;
+    private LinearLayout usersListView;
     private Button editStartDate;
     private Button editStartTime;
     private Button editEndDate;
@@ -209,7 +211,7 @@ public class ScheduleFormFragment extends Fragment
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_list_item_1, userNamesArray);
 
-            usersListView.setOnItemClickListener((parent, view, position, id) ->
+            usersListView.setOnClickListener(view ->
                     getParentFragmentManager().beginTransaction()
                             .replace(R.id.schedule_form_container,
                                     new UserFragment(this,
@@ -220,24 +222,17 @@ public class ScheduleFormFragment extends Fragment
                             .addToBackStack(null)
                             .commit());
 
-            usersListView.setAdapter(adapter);
-
-            // Optimize or change code to be more clean when linearlayout is implemented
-            // Needed to make a non-scrolling ListView, although a better approach would be to use a LinearLayout
-            // TODO: refactor: extract method
-            int height = 0;
-            for (int i = 0; i < adapter.getCount(); i++) {
-                View viewItem = adapter.getView(i, null, usersListView);
-                viewItem.measure(0, 0);
-                height += viewItem.getMeasuredHeight();
-            }
-            ViewGroup.LayoutParams params = usersListView.getLayoutParams();
-            params.height = height + (usersListView.getDividerHeight()
-                    * (adapter.getCount() - 1));
-            usersListView.setLayoutParams(params);
-            usersListView.setAnimation(null);
-            usersListView.requestLayout();
+            addItemListToLinearLayout(adapter);
         });
+    }
+
+    private void addItemListToLinearLayout(ArrayAdapter<String> adapter) {
+        final int count = adapter.getCount();
+        usersListView.removeAllViews();
+        for (int i = 0; i < count; i++) {
+            View view = adapter.getView(i, null, null);
+            usersListView.addView(view);
+        }
     }
 
     private void setupSelectUserLayout() {
@@ -311,20 +306,6 @@ public class ScheduleFormFragment extends Fragment
 
         editEndTime.setOnClickListener(view ->
                 showTimeDialogByButtonClick(endDateTime, false));
-    }
-
-    private String dateFormatter(Calendar calendar) {
-        return (calendar.get(Calendar.MONTH) + 1) + "/" +
-                calendar.get(Calendar.DAY_OF_MONTH) + "/" +
-                calendar.get(Calendar.YEAR);
-    }
-
-    private String timeFormatter(Calendar calendar) {
-        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-
-        return (hourOfDay < 10 ? ("0" + hourOfDay) : hourOfDay) + ":" +
-                (minute < 10 ? ("0" + minute) : minute);
     }
 
     private void showDateDialogByButtonClick(Calendar dateTime, boolean isStart) {
