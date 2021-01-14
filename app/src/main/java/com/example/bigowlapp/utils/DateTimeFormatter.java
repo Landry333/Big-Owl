@@ -13,7 +13,10 @@ public class DateTimeFormatter {
         int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
 
-        return (hourOfDay < 10 ? ("0" + hourOfDay) : hourOfDay) + ":" +
-                (minute < 10 ? ("0" + minute) : minute);
+        return doubleDigitFormatter(hourOfDay) + ":" + doubleDigitFormatter(minute);
+    }
+
+    private static String doubleDigitFormatter(int num) {
+        return num < 10 ? ("0" + num) : String.valueOf(num);
     }
 }
