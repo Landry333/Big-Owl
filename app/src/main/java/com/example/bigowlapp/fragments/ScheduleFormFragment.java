@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -46,7 +46,7 @@ public class ScheduleFormFragment extends Fragment
     private EditText editTitle;
     private Button groupButton;
     private Button selectUserButton;
-    private ListView usersListView;
+    private LinearLayout usersListView;
     private Button editStartDate;
     private Button editStartTime;
     private Button editEndDate;
@@ -209,7 +209,7 @@ public class ScheduleFormFragment extends Fragment
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_list_item_1, userNamesArray);
 
-            usersListView.setOnItemClickListener((parent, view, position, id) ->
+            usersListView.setOnClickListener(view ->
                     getParentFragmentManager().beginTransaction()
                             .replace(R.id.schedule_form_container,
                                     new UserFragment(this,
@@ -220,23 +220,12 @@ public class ScheduleFormFragment extends Fragment
                             .addToBackStack(null)
                             .commit());
 
-            usersListView.setAdapter(adapter);
-
-            // Optimize or change code to be more clean when linearlayout is implemented
-            // Needed to make a non-scrolling ListView, although a better approach would be to use a LinearLayout
-            // TODO: refactor: extract method
-            int height = 0;
-            for (int i = 0; i < adapter.getCount(); i++) {
-                View viewItem = adapter.getView(i, null, usersListView);
-                viewItem.measure(0, 0);
-                height += viewItem.getMeasuredHeight();
+            final int count = adapter.getCount();
+            usersListView.removeAllViews();
+            for(int i = 0; i < count; i++) {
+                View view = adapter.getView(i,null, null);
+                usersListView.addView(view);
             }
-            ViewGroup.LayoutParams params = usersListView.getLayoutParams();
-            params.height = height + (usersListView.getDividerHeight()
-                    * (adapter.getCount() - 1));
-            usersListView.setLayoutParams(params);
-            usersListView.setAnimation(null);
-            usersListView.requestLayout();
         });
     }
 
