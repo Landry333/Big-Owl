@@ -1,5 +1,7 @@
 package com.example.bigowlapp.utils;
 
+import androidx.annotation.VisibleForTesting;
+
 import java.util.Calendar;
 
 public class DateTimeFormatter {
@@ -16,7 +18,8 @@ public class DateTimeFormatter {
         return doubleDigitFormatter(hourOfDay) + ":" + doubleDigitFormatter(minute);
     }
 
-    private static String doubleDigitFormatter(int num) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public static String doubleDigitFormatter(int num) {
         return num < 10 ? ("0" + num) : String.valueOf(num);
     }
 }
