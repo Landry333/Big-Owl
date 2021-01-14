@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.bigowlapp.utils.DateTimeFormatter.dateFormatter;
+import static com.example.bigowlapp.utils.DateTimeFormatter.timeFormatter;
 
 public class ScheduleFormFragment extends Fragment
         implements DatePickerDialogFragment.DatePickedListener,
@@ -227,8 +229,8 @@ public class ScheduleFormFragment extends Fragment
     private void addItemListToLinearLayout(ArrayAdapter<String> adapter) {
         final int count = adapter.getCount();
         usersListView.removeAllViews();
-        for(int i = 0; i < count; i++) {
-            View view = adapter.getView(i,null, null);
+        for (int i = 0; i < count; i++) {
+            View view = adapter.getView(i, null, null);
             usersListView.addView(view);
         }
     }
@@ -308,20 +310,6 @@ public class ScheduleFormFragment extends Fragment
 
         editEndTime.setOnClickListener(view ->
                 showTimeDialogByButtonClick(endDateTime, false));
-    }
-
-    private String dateFormatter(Calendar calendar) {
-        return (calendar.get(Calendar.MONTH) + 1) + "/" +
-                calendar.get(Calendar.DAY_OF_MONTH) + "/" +
-                calendar.get(Calendar.YEAR);
-    }
-
-    private String timeFormatter(Calendar calendar) {
-        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-
-        return (hourOfDay < 10 ? ("0" + hourOfDay) : hourOfDay) + ":" +
-                (minute < 10 ? ("0" + minute) : minute);
     }
 
     private void showDateDialogByButtonClick(Calendar dateTime, boolean isStart) {
