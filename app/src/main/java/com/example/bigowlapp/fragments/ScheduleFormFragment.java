@@ -220,13 +220,17 @@ public class ScheduleFormFragment extends Fragment
                             .addToBackStack(null)
                             .commit());
 
-            final int count = adapter.getCount();
-            usersListView.removeAllViews();
-            for(int i = 0; i < count; i++) {
-                View view = adapter.getView(i,null, null);
-                usersListView.addView(view);
-            }
+            addItemListToLinearLayout(adapter);
         });
+    }
+
+    private void addItemListToLinearLayout(ArrayAdapter<String> adapter) {
+        final int count = adapter.getCount();
+        usersListView.removeAllViews();
+        for(int i = 0; i < count; i++) {
+            View view = adapter.getView(i,null, null);
+            usersListView.addView(view);
+        }
     }
 
     private void setupSelectUserLayout() {
