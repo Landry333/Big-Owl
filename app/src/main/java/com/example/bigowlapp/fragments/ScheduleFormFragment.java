@@ -230,7 +230,7 @@ public class ScheduleFormFragment extends Fragment
         final int count = adapter.getCount();
         usersListView.removeAllViews();
         for (int i = 0; i < count; i++) {
-            View view = adapter.getView(i, null, null);
+            View view = adapter.getView(i, null, usersListView);
             usersListView.addView(view);
         }
     }

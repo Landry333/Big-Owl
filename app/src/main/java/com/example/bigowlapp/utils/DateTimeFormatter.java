@@ -5,6 +5,11 @@ import androidx.annotation.VisibleForTesting;
 import java.util.Calendar;
 
 public class DateTimeFormatter {
+
+    private DateTimeFormatter() {
+        // This is a util class, it has no state
+    }
+
     public static String dateFormatter(Calendar calendar) {
         return (calendar.get(Calendar.MONTH) + 1) + "/" +
                 calendar.get(Calendar.DAY_OF_MONTH) + "/" +
