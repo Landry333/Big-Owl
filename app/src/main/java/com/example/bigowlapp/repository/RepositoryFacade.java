@@ -12,7 +12,13 @@ public class RepositoryFacade {
     private GroupRepository groupRepository;
     private NotificationRepository notificationRepository;
 
-    public RepositoryFacade() {
+    private static RepositoryFacade instance = new RepositoryFacade();
+
+    public static RepositoryFacade getInstance() {
+        return instance;
+    }
+
+    private RepositoryFacade() {
         // Repositories are only initialized when needed by a ViewModel
     }
 

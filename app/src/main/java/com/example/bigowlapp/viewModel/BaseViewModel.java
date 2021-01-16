@@ -10,7 +10,7 @@ public abstract class BaseViewModel extends ViewModel {
     protected RepositoryFacade repositoryFacade;
 
     protected BaseViewModel() {
-        repositoryFacade = new RepositoryFacade();
+        repositoryFacade = RepositoryFacade.getInstance();
     }
 
     public FirebaseUser getCurrentUser() {
