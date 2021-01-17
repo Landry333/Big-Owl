@@ -19,6 +19,11 @@ public class Group extends Model {
         supervisedUserId = new ArrayList<>();
     }
 
+    public Group(String uid, String name) {
+        super(uid);
+        this.name = name;
+    }
+
     public Group(String uId, String name, String monitoringUserId, List<String> supervisedUserId) {
         super(uId);
         this.name = name;

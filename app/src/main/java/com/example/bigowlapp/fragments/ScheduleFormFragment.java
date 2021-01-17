@@ -240,7 +240,7 @@ public class ScheduleFormFragment extends Fragment
         selectUserButton.setEnabled(false);
         selectUserButton.setOnClickListener(view ->
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.schedule_form_container,
+                        .replace(((ViewGroup) getView().getParent()).getId(),
                                 new UserFragment(this,
                                         setScheduleViewModel.getListOfUserInGroupData().getValue(),
                                         setScheduleViewModel.getListOfSelectedUsersData().getValue()))

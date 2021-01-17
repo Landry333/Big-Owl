@@ -24,8 +24,15 @@ public class User extends Model implements Parcelable {
         super();
     }
 
-    public User(String uId, String firstName, String lastName, String phoneNumber, String email, String profileImage) {
-        super(uId);
+    public User(String uid, String firstName, String lastName, String email) {
+        super(uid);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+
+    public User(String uid, String firstName, String lastName, String phoneNumber, String email, String profileImage) {
+        super(uid);
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
