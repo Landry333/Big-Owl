@@ -269,7 +269,7 @@ public class ScheduleFormFragment extends Fragment
             }
 
             if (scheduleToAdd.getMemberList() == null || scheduleToAdd.getMemberList().isEmpty()) {
-                selectUserButton.setError("Please select at lease one user");
+                selectUserButton.setError("Please select at least one user");
                 hasError = true;
             }
 
@@ -391,5 +391,20 @@ public class ScheduleFormFragment extends Fragment
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setSetScheduleViewModel(SetScheduleViewModel setScheduleViewModel) {
         this.setScheduleViewModel = setScheduleViewModel;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public Button getGroupButton() {
+        return groupButton;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public Button getSelectUserButton() {
+        return selectUserButton;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public Button getEditLocation() {
+        return editLocation;
     }
 }

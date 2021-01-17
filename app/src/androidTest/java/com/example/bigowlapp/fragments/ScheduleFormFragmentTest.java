@@ -6,6 +6,7 @@ import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.bigowlapp.R;
@@ -19,6 +20,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -26,10 +33,12 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class ScheduleFormFragmentTest {
 
     private FragmentScenario<ScheduleFormFragment> fragmentScenario;
+    ScheduleFormFragment scheduleFormFragment;
 
     @Mock
     private SetScheduleViewModel mockSetScheduleViewModel;
 
+    // Fake data
     private Schedule fakeSchedule;
     private MutableLiveData<Schedule> newScheduleData;
     private Group fakeSelectedGroup;
@@ -37,9 +46,24 @@ public class ScheduleFormFragmentTest {
     private CarmenFeature fakeSelectedLocation;
     private LiveData<CarmenFeature> locationData;
 
+    // Views
+    private ViewInteraction editTitle;
+    private ViewInteraction groupButton;
+    private ViewInteraction selectUserButton;
+    private ViewInteraction usersListView;
+    private ViewInteraction editStartDate;
+    private ViewInteraction editStartTime;
+    private ViewInteraction editEndDate;
+    private ViewInteraction editEndTime;
+    private ViewInteraction editLocation;
+    private ViewInteraction confirmSetSchedule;
+
+
     @Before
     public void setUp() throws Exception {
         initMocks(this);
+
+        setupViews();
 
         // setup fake data for schedules initial state
         fakeSchedule = Schedule.getPrototypeSchedule();
@@ -56,11 +80,12 @@ public class ScheduleFormFragmentTest {
         locationData = new MutableLiveData<>(fakeSelectedLocation);
         when(mockSetScheduleViewModel.getSelectedLocationData()).thenReturn(locationData);
 
-
-        fragmentScenario = FragmentScenario.launchInContainer(ScheduleFormFragment.class, null,  R.style.AppTheme);
+        // initialize the fragment with a mocked viewModel
+        fragmentScenario = FragmentScenario.launchInContainer(ScheduleFormFragment.class, null, R.style.AppTheme);
         fragmentScenario.moveToState(Lifecycle.State.CREATED);
         fragmentScenario.onFragment(scheduleFormFragment -> {
             scheduleFormFragment.setSetScheduleViewModel(mockSetScheduleViewModel);
+            this.scheduleFormFragment = scheduleFormFragment;
         });
         fragmentScenario.moveToState(Lifecycle.State.RESUMED);
     }
@@ -69,5 +94,29 @@ public class ScheduleFormFragmentTest {
     public void exampleTest() {
         // TODO: Remove this
         SystemClock.sleep(30000);
+    }
+
+    @Test
+    public void shouldDisplayErrorsIfNoFilledEntries() {
+        // click on setSchedule without any form data filled
+        confirmSetSchedule.perform(click());
+        // check the error indicators correctly show up
+        editTitle.check(matches(hasErrorText("Please enter title.")));
+        assertEquals("Please select a group", scheduleFormFragment.getGroupButton().getError().toString());
+        assertEquals("Please select at least one user", scheduleFormFragment.getSelectUserButton().getError().toString());
+        assertEquals("Please select a location", scheduleFormFragment.getEditLocation().getError().toString());
+    }
+
+    private void setupViews() {
+        editTitle = onView(withId(R.id.edit_title_schedule));
+        groupButton = onView(withId(R.id.select_group_button));
+        selectUserButton = onView(withId(R.id.select_user_button));
+        usersListView = onView(withId(R.id.select_users_list_view));
+        editStartDate = onView(withId(R.id.edit_start_date));
+        editStartTime = onView(withId(R.id.edit_start_time));
+        editEndDate = onView(withId(R.id.edit_end_date));
+        editEndTime = onView(withId(R.id.edit_end_time));
+        confirmSetSchedule = onView(withId(R.id.set_schedule_confirm_button));
+        editLocation = onView(withId(R.id.edit_location));
     }
 }
