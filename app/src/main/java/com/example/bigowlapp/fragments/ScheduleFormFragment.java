@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -385,5 +386,10 @@ public class ScheduleFormFragment extends Fragment
     @Override
     public void userFragmentOnSubmitClicked(List<User> selectedUsers) {
         setScheduleViewModel.updateSelectedUsers(selectedUsers);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setSetScheduleViewModel(SetScheduleViewModel setScheduleViewModel) {
+        this.setScheduleViewModel = setScheduleViewModel;
     }
 }
