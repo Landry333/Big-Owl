@@ -5,10 +5,7 @@ apply plugin: 'jacoco-android'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
-    // `ndkVersion "22.0.7026061"` Should be used when github mac-os machines mostly use NDK r22
-    // check version progress: https://github.com/actions/virtual-environments
-    // issue announcement: https://github.com/actions/virtual-environments/issues/2420
-    ndkVersion "21.3.6528147"
+    ndkVersion "22.0.7026061"
 
     defaultConfig {
         applicationId "com.example.bigowlapp"
