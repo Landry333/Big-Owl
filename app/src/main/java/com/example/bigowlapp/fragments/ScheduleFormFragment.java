@@ -214,7 +214,7 @@ public class ScheduleFormFragment extends Fragment
 
             usersListView.setOnClickListener(view ->
                     getParentFragmentManager().beginTransaction()
-                            .replace(R.id.schedule_form_container,
+                            .replace(((ViewGroup) getView().getParent()).getId(),
                                     new UserFragment(this,
                                             setScheduleViewModel
                                                     .getListOfUserInGroupData().getValue(),

@@ -40,6 +40,8 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.hasTextColor;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -296,6 +298,27 @@ public class ScheduleFormFragmentTest {
 
         editStartDate.check(matches(hasTextColor(R.color.error)));
         editStartTime.check(matches(hasTextColor(R.color.error)));
+    }
+
+    @Test
+    public void shouldHaveAccessToUserListWhenAlreadyHaveSelectedUsers() {
+        // Select a Group
+        groupData.postValue(fakeListOfGroup.get(0));
+        listOfUsersData.postValue(fakeListOfUsers);
+
+        // Select Users from Group
+        SystemClock.sleep(2000);
+        selectedListOfUsersData.postValue(fakeListOfUsers);
+
+        // Try to select users again
+        usersListView.check(matches(isDisplayed()));
+        usersListView.check(matches(isEnabled()));
+        usersListView.perform(click());
+
+        // Click three times to check that item can be selected and deselected
+        onView(withText("1")).perform(click());
+        onView(withText("1")).perform(click());
+        cancelUserselection.perform(click());
     }
 
     private void setupViews() {
