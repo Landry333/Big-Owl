@@ -39,6 +39,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
+import static androidx.test.espresso.matcher.ViewMatchers.hasTextColor;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -243,6 +244,58 @@ public class ScheduleFormFragmentTest {
         // Click on Set Schedule
         confirmSetSchedule.perform(click());
         verify(mockSetScheduleViewModel).addSchedule();
+    }
+
+    @Test
+    public void shouldMakeStartDateRedIfGreaterThanEndDate() {
+        // Modify Start Date
+        // --> setup date to add
+        Calendar startNewTime = Calendar.getInstance();
+        startNewTime.set(2025, Calendar.MARCH, 12);
+        // --> do modification
+        editStartDate.perform(click());
+        onView(withClassName((Matchers.equalTo(DatePicker.class.getName())))).perform(PickerActions.setDate(2025, 3, 12));
+        onView(withText("OK")).perform(click());
+        fakeSchedule.setStartTime(new Timestamp(startNewTime.getTime()));
+        newScheduleData.postValue(fakeSchedule);
+
+        // Modify Start Time
+        // --> setup time to add
+        startNewTime.set(Calendar.HOUR_OF_DAY, 9);
+        startNewTime.set(Calendar.MINUTE, 10);
+        // --> do modification
+        editStartTime.perform(click());
+        onView(withClassName((Matchers.equalTo(TimePicker.class.getName())))).perform(PickerActions.setTime(9, 10));
+        onView(withText("OK")).perform(click());
+        verify(mockSetScheduleViewModel).updateScheduleStartTime(startNewTime.getTime());
+        fakeSchedule.setStartTime(new Timestamp(startNewTime.getTime()));
+        newScheduleData.postValue(fakeSchedule);
+
+        // Modify End Date
+        // --> setup date to add
+        Calendar newEndTime = Calendar.getInstance();
+        newEndTime.set(2023, Calendar.JUNE, 15);
+        // --> do modification
+        editStartDate.perform(click());
+        onView(withClassName((Matchers.equalTo(DatePicker.class.getName())))).perform(PickerActions.setDate(2023, 6, 15));
+        onView(withText("OK")).perform(click());
+        fakeSchedule.setEndTime(new Timestamp(newEndTime.getTime()));
+        newScheduleData.postValue(fakeSchedule);
+
+        // Modify End Time
+        // --> setup time to add
+        newEndTime.set(Calendar.HOUR_OF_DAY, 16);
+        newEndTime.set(Calendar.MINUTE, 23);
+        // --> do modification
+        editEndTime.perform(click());
+        onView(withClassName((Matchers.equalTo(TimePicker.class.getName())))).perform(PickerActions.setTime(16, 23));
+        onView(withText("OK")).perform(click());
+        verify(mockSetScheduleViewModel).updateScheduleEndTime(newEndTime.getTime());
+        fakeSchedule.setEndTime(new Timestamp(newEndTime.getTime()));
+        newScheduleData.postValue(fakeSchedule);
+
+        editStartDate.check(matches(hasTextColor(R.color.error)));
+        editStartTime.check(matches(hasTextColor(R.color.error)));
     }
 
     private void setupViews() {

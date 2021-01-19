@@ -111,8 +111,8 @@ public class ScheduleFormFragment extends Fragment
             editEndTime.setText(timeFormatter(endDateTime));
 
             if (schedule.getStartTime().compareTo(schedule.getEndTime()) >= 0) {
-                editStartDate.setTextColor(Color.RED);
-                editStartTime.setTextColor(Color.RED);
+                editStartDate.setTextColor(getResources().getColor(R.color.error, null));
+                editStartTime.setTextColor(getResources().getColor(R.color.error, null));
             } else {
                 editStartDate.setTextColor(Color.BLACK);
                 editStartTime.setTextColor(Color.BLACK);
@@ -274,8 +274,8 @@ public class ScheduleFormFragment extends Fragment
             }
 
             if (scheduleToAdd.getStartTime().compareTo(scheduleToAdd.getEndTime()) >= 0) {
-                editStartDate.setTextColor(Color.RED);
-                editStartTime.setTextColor(Color.RED);
+                editStartDate.setTextColor(getResources().getColor(R.color.error, null));
+                editStartTime.setTextColor(getResources().getColor(R.color.error, null));
                 hasError = true;
             }
 
