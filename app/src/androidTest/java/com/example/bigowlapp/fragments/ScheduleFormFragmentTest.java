@@ -43,6 +43,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -152,11 +153,11 @@ public class ScheduleFormFragmentTest {
         // TODO: check for toast
     }
 
-    // TODO: add more verifies
     @Test
     public void completeAScheduleForm() {
         // Set up Title
         editTitle.perform(replaceText("Schedule_Title"));
+        verify(mockSetScheduleViewModel).updateScheduleTitle("Schedule_Title");
         fakeSchedule.setTitle("Schedule_Title");
 
         // Select a Group
@@ -166,7 +167,7 @@ public class ScheduleFormFragmentTest {
         onView(withText("group_name")).perform(click());
         groupData.postValue(fakeListOfGroup.get(0));
         fakeSchedule.setGroupUId(fakeSelectedGroup.getUid());
-        // TODO: maybe verify update before hand
+        verify(mockSetScheduleViewModel).updateScheduleGroup(fakeListOfGroup.get(0));
         listOfUsersData.postValue(fakeListOfUsers);
 
         // Select Users from Group
@@ -174,19 +175,41 @@ public class ScheduleFormFragmentTest {
         selectUserButton.perform(click());
         onView(withText("1")).perform(click());
         confirmUserselection.perform(click());
-        // TODO: maybe verify update before hand
+        verify(mockSetScheduleViewModel).updateSelectedUsers(fakeListOfUsers);
         selectedListOfUsersData.postValue(fakeListOfUsers);
         fakeSchedule.setMemberList(Arrays.asList(fakeListOfUsers.stream().map(u -> u.getUid()).collect(Collectors.joining())));
+
+        // Modify Start Date
+        // --> setup date to add
+        Calendar startNewTime = Calendar.getInstance();
+        startNewTime.set(2021, Calendar.MARCH, 12);
+        // --> do modification
+        editStartDate.perform(click());
+        onView(withClassName((Matchers.equalTo(DatePicker.class.getName())))).perform(PickerActions.setDate(2021, 3, 12));
+        onView(withText("OK")).perform(click());
+        fakeSchedule.setStartTime(new Timestamp(startNewTime.getTime()));
+        newScheduleData.postValue(fakeSchedule);
+
+        // Modify Start Time
+        // --> setup time to add
+        startNewTime.set(Calendar.HOUR_OF_DAY, 9);
+        startNewTime.set(Calendar.MINUTE, 10);
+        // --> do modification
+        editStartTime.perform(click());
+        onView(withClassName((Matchers.equalTo(TimePicker.class.getName())))).perform(PickerActions.setTime(9, 10));
+        onView(withText("OK")).perform(click());
+        verify(mockSetScheduleViewModel).updateScheduleStartTime(startNewTime.getTime());
+        fakeSchedule.setStartTime(new Timestamp(startNewTime.getTime()));
+        newScheduleData.postValue(fakeSchedule);
 
         // Modify End Date
         // --> setup date to add
         Calendar newEndTime = Calendar.getInstance();
-        newEndTime.set(2023, 6, 15);
+        newEndTime.set(2023, Calendar.JUNE, 15);
         // --> do modification
         editStartDate.perform(click());
         onView(withClassName((Matchers.equalTo(DatePicker.class.getName())))).perform(PickerActions.setDate(2023, 6, 15));
         onView(withText("OK")).perform(click());
-        // TODO: maybe verify update before hand
         fakeSchedule.setEndTime(new Timestamp(newEndTime.getTime()));
         newScheduleData.postValue(fakeSchedule);
 
@@ -198,7 +221,7 @@ public class ScheduleFormFragmentTest {
         editEndTime.perform(click());
         onView(withClassName((Matchers.equalTo(TimePicker.class.getName())))).perform(PickerActions.setTime(16, 23));
         onView(withText("OK")).perform(click());
-        // TODO: maybe verify update before hand
+        verify(mockSetScheduleViewModel).updateScheduleEndTime(newEndTime.getTime());
         fakeSchedule.setEndTime(new Timestamp(newEndTime.getTime()));
         newScheduleData.postValue(fakeSchedule);
 
@@ -213,14 +236,13 @@ public class ScheduleFormFragmentTest {
         // --> do ui actions
         editLocation.perform(click());
         pressBack();
-        // TODO: maybe verify update before hand
         fakeSelectedLocation = location;
         locationData.postValue(fakeSelectedLocation);
         fakeSchedule.setLocation(locationCoordinate);
 
         // Click on Set Schedule
         confirmSetSchedule.perform(click());
-        // TODO: check for toast or check the fragment was destroyed
+        verify(mockSetScheduleViewModel).addSchedule();
     }
 
     private void setupViews() {
