@@ -43,12 +43,12 @@ public class ScheduleViewRespondViewModel extends ViewModel {
     }
 
     public UserScheduleResponse getUserScheduleResponse() {
-        return Objects.requireNonNull(scheduleData.getValue()).getMembers()
+        return Objects.requireNonNull(scheduleData.getValue()).getUserScheduleResponseMap()
                 .get(authRepository.getCurrentUser().getUid());
     }
 
     public boolean isCurrentUserInSchedule() {
-        return Objects.requireNonNull(scheduleData.getValue()).getMembers()
+        return Objects.requireNonNull(scheduleData.getValue()).getUserScheduleResponseMap()
                 .containsKey(authRepository.getCurrentUser().getUid());
     }
 

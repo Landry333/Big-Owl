@@ -58,7 +58,7 @@ public class NotificationRepository extends Repository<Notification> {
     }
 
     @Override
-    List<Notification> extractListOfDataToModel(QuerySnapshot results, Class<? extends Notification> tClass) {
+    protected List<Notification> extractListOfDataToModel(QuerySnapshot results, Class<? extends Notification> tClass) {
         List<Notification> notificationsFromDb = new ArrayList<>();
         for (QueryDocumentSnapshot doc : results) {
             String type = doc.toObject(Notification.class).getType();

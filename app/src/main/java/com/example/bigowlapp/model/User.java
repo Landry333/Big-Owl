@@ -3,10 +3,12 @@ package com.example.bigowlapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
-import androidx.annotation.NonNull;
 
 @IgnoreExtraProperties
 public class User implements Parcelable {
@@ -18,6 +20,8 @@ public class User implements Parcelable {
     private String phoneNumber;
     private String email;
     private String profileImage;
+
+    // TODO: Create a builder (possibly for all models)
 
     public User() {
     }
@@ -115,6 +119,7 @@ public class User implements Parcelable {
         this.profileImage = profileImage;
     }
 
+    @Exclude
     public String getFullName() {
         return firstName + " " + lastName;
     }

@@ -4,43 +4,44 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.PropertyName;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+
 
 @IgnoreExtraProperties
 public class Schedule {
 
     @DocumentId
     private String uId;
+    private String title;
+    private String event;
     private String groupUId;
+    private String groupSupervisorUId;
+    private List<String> memberList;
     private Timestamp startTime;
     private Timestamp endTime;
     private GeoPoint location;
-    private String groupSupervisorUId;
     private Map<String, UserScheduleResponse> userScheduleResponseMap;
-    private String title;
-    private String event;
-    private List<String> memberList;
 
-    public Map<String, UserScheduleResponse> getMembers() {
-        return userScheduleResponseMap;
-    }
+    public static Schedule getPrototypeSchedule() {
+        Schedule schedule = new Schedule();
+        schedule.title = "";
+        schedule.event = "";
 
-    public void setMembers(Map<String, UserScheduleResponse> userScheduleResponseMap) {
-        this.userScheduleResponseMap = userScheduleResponseMap;
-    }
+        Calendar currentTime = Calendar.getInstance();
+        Calendar oneHourLaterTime = Calendar.getInstance();
+        oneHourLaterTime.add(Calendar.HOUR_OF_DAY, 1);
 
-    public String getGroupSupervisorUId() {
-        return groupSupervisorUId;
-    }
-
-    public void setGroupSupervisorUId(String groupSupervisorUId) {
-        this.groupSupervisorUId = groupSupervisorUId;
+        schedule.startTime = new Timestamp(currentTime.getTime());
+        schedule.endTime = new Timestamp(oneHourLaterTime.getTime());
+        return schedule;
     }
 
     public Schedule() {
-        // Necessary for Firbase data mapping to model object
+        // Necessary for Firebase data mapping to model object
     }
 
     public String getuId() {
@@ -51,12 +52,44 @@ public class Schedule {
         this.uId = uId;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
+    }
+
     public String getGroupUId() {
         return groupUId;
     }
 
     public void setGroupUId(String groupUId) {
         this.groupUId = groupUId;
+    }
+
+    public String getGroupSupervisorUId() {
+        return groupSupervisorUId;
+    }
+
+    public void setGroupSupervisorUId(String groupSupervisorUId) {
+        this.groupSupervisorUId = groupSupervisorUId;
+    }
+
+    public List<String> getMemberList() {
+        return memberList;
+    }
+
+    public void setMemberList(List<String> memberList) {
+        this.memberList = memberList;
     }
 
     public Timestamp getStartTime() {
@@ -83,27 +116,15 @@ public class Schedule {
         this.location = location;
     }
 
-    public String getTitle() {
-        return title;
+    // TODO: Temp fix since db still has old field name
+    @PropertyName("members")
+    public Map<String, UserScheduleResponse> getUserScheduleResponseMap() {
+        return userScheduleResponseMap;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getEvent() {
-        return event;
-    }
-
-    public void setEvent(String event) {
-        this.event = event;
-    }
-
-    public List<String> getMemberList() {
-        return memberList;
-    }
-
-    public void setMemberList(List<String> memberList) {
-        this.memberList = memberList;
+    // TODO: Temp fix since db still has old field name
+    @PropertyName("members")
+    public void setUserScheduleResponseMap(Map<String, UserScheduleResponse> userScheduleResponseMap) {
+        this.userScheduleResponseMap = userScheduleResponseMap;
     }
 }
