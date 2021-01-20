@@ -37,7 +37,7 @@ jobs:
         run: ./gradlew lint
 
       - name: Run app on an emulator
-        uses: ReactiveCircus/android-emulator-runner@v2.12.0
+        uses: ReactiveCircus/android-emulator-runner@v2.14.3
         with:
           api-level: 29
           arch: x86
