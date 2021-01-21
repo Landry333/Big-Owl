@@ -29,7 +29,6 @@ public class AddUsersActivity extends BigOwlActivity {
 
     protected void initialize() {
         btnContacts = findViewById(R.id.btnContacts);
-
         btnContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
