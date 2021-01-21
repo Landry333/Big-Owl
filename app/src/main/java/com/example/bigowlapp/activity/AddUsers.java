@@ -31,7 +31,6 @@ public class AddUsers extends AppCompatActivity {
 
     protected void initialize() {
         btnContacts = findViewById(R.id.btnContacts);
-
         btnContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
