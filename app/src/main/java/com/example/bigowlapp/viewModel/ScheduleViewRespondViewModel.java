@@ -1,5 +1,6 @@
 package com.example.bigowlapp.viewModel;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -84,5 +85,17 @@ public class ScheduleViewRespondViewModel extends ViewModel {
 
         long userLastResponseTime = responseTimestamp.toDate().getTime();
         return now().toDate().getTime() >= (userLastResponseTime + ONE_MINUTE);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public ScheduleViewRespondViewModel(AuthRepository authRepository, NotificationRepository notificationRepository, ScheduleRepository scheduleRepository) {
+        this.authRepository = authRepository;
+        this.notificationRepository = notificationRepository;
+        this.scheduleRepository = scheduleRepository;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setScheduleData(MutableLiveData<Schedule> scheduleData) {
+        this.scheduleData = scheduleData;
     }
 }
