@@ -11,6 +11,7 @@ import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.NotificationRepository;
 import com.example.bigowlapp.repository.ScheduleRepository;
+import com.google.firebase.Timestamp;
 
 import java.util.Objects;
 
@@ -74,7 +75,14 @@ public class ScheduleViewRespondViewModel extends ViewModel {
     }
 
     public boolean isOneMinuteAfterLastResponse() {
-        long userLastResponseTime = getUserScheduleResponse().getResponseTime().toDate().getTime();
+        Timestamp responseTimestamp = getUserScheduleResponse().getResponseTime();
+
+        // If there was no response yet, than we should allow response to go through
+        if (responseTimestamp == null) {
+            return true;
+        }
+
+        long userLastResponseTime = responseTimestamp.toDate().getTime();
         return now().toDate().getTime() >= (userLastResponseTime + ONE_MINUTE);
     }
 }
