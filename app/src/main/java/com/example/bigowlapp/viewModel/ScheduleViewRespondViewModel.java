@@ -78,7 +78,7 @@ public class ScheduleViewRespondViewModel extends ViewModel {
     public boolean isOneMinuteAfterLastResponse() {
         Timestamp responseTimestamp = getUserScheduleResponse().getResponseTime();
 
-        // If there was no response yet, than we should allow response to go through
+        // If there was no response yet, then we should allow response to go through
         if (responseTimestamp == null) {
             return true;
         }
