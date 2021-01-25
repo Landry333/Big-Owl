@@ -3,10 +3,8 @@ package com.example.bigowlapp.activity;
 import android.content.Intent;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.model.Notification;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
-import com.example.bigowlapp.model.SupervisionRequest;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
@@ -24,7 +22,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,10 +37,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static com.google.firebase.Timestamp.now;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -98,15 +93,14 @@ public class ScheduleViewRespondActivityTest {
         testScheduleMemberList.add(0, testCurrentUser.getUId());
         testSchedule = new Schedule();
         testSchedule.setuId("schedule001");
-        testSchedule.setGroupSupervisorUId(testSupervisor.getUId());
-        testSchedule.setStartTime(Timestamp.now());
-        testSchedule.setEndTime(Timestamp.now());
-        testSchedule.setLocation(new GeoPoint(0, 0));
-        testSchedule.setGroupSupervisorUId(testSupervisor.getUId());
-        testSchedule.setMembers(testScheduleMembersMap);
         testSchedule.setTitle("testSchedule001");
         testSchedule.setEvent("testEvent001");
-        testSchedule.setMemberList(testScheduleMemberList);
+        testSchedule.setGroupUId("testGroup001");
+        testSchedule.setGroupSupervisorUId(testSupervisor.getUId());
+        testSchedule.setStartTime(Timestamp.now());
+        testSchedule.setEndTime(new Timestamp(Timestamp.now().getSeconds() + 600000, 0));
+        testSchedule.setLocation(new GeoPoint(0, 0));
+        testSchedule.setUserScheduleResponseMap(testScheduleMembersMap);
         Intent testIntent = new Intent();
         testIntent.putExtra("scheduleUId", testSchedule.getuId());
         testIntent.putExtra("groupName", "test group");
@@ -119,14 +113,13 @@ public class ScheduleViewRespondActivityTest {
         when(mockAuthRepository.getCurrentUser()).thenReturn(testFirebaseCurrentUser);
         when(mockAuthRepository.getCurrentUser().getUid()).thenReturn(testCurrentUser.getUId());
         when(mockNotificationRepository.addDocument(any())).thenReturn(null);
-        // doNothing().when(mockScheduleRepository).updateScheduleMemberResponse(anyString(), anyString(), any());
         when(mockScheduleRepository.updateScheduleMemberResponse(
                 anyString(),
                 anyString(),
                 any(UserScheduleResponse.class)
         )).thenAnswer(a -> {
             testScheduleMembersMap.put(testCurrentUser.getUId(), mockScheduleViewRespondViewModel.getCurrentUserNewResponse());
-            testSchedule.setMembers(testScheduleMembersMap);
+            testSchedule.setUserScheduleResponseMap(testScheduleMembersMap);
             testScheduleData.postValue(testSchedule);
             return null;
         });
