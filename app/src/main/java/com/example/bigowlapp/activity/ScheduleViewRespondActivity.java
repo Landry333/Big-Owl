@@ -12,6 +12,7 @@ import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.ViewModelProvider;
 
 public class ScheduleViewRespondActivity extends BigOwlActivity {
@@ -95,5 +96,17 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
             btnAccept.setVisibility(View.GONE);
             btnReject.setVisibility(View.GONE);
         }
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setScheduleViewRespondViewModel(ScheduleViewRespondViewModel scheduleViewRespondViewModel) {
+        this.scheduleViewRespondViewModel = scheduleViewRespondViewModel;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setScheduleIntentData(String scheduleUId, String groupName, String supervisorName) {
+        this.scheduleUId = scheduleUId;
+        this.groupName = groupName;
+        this.supervisorName = supervisorName;
     }
 }
