@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bigowlapp">
 
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
@@ -10,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.SetScheduleActivity" />
         <activity android:name=".activity.ScheduleViewRespondActivity" />
         <activity android:name=".activity.EditProfileActivity" />
         <activity android:name=".activity.HomePageActivity" />
@@ -26,7 +30,6 @@
         <activity android:name=".activity.SendingRequestToSuperviseActivity" />
         <activity android:name=".activity.ListOfScheduleActivity" />
         <activity android:name=".activity.AddUsersActivity" />
-        <activity android:name=".fragments.UsersFragment" />
         <activity
             android:name=".activity.WelcomePageActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -36,11 +39,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
-
-    <uses-permission android:name="android.permission.SEND_SMS" />
-
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
 </manifest>
