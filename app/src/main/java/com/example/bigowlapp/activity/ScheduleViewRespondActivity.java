@@ -1,5 +1,6 @@
 package com.example.bigowlapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,10 +12,9 @@ import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-public class ScheduleViewRespondActivity extends AppCompatActivity {
+public class ScheduleViewRespondActivity extends BigOwlActivity {
 
     private String scheduleUId, groupName, supervisorName;
     private ScheduleViewRespondViewModel scheduleViewRespondViewModel;
@@ -22,10 +22,15 @@ public class ScheduleViewRespondActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        scheduleUId = getIntent().getStringExtra("scheduleUId");
-        groupName = getIntent().getStringExtra("groupName");
-        supervisorName = getIntent().getStringExtra("supervisorName");
-        setContentView(R.layout.activity_schedule_response);
+        Intent intent = getIntent();
+        scheduleUId = intent.getStringExtra("scheduleUId");
+        groupName = intent.getStringExtra("groupName");
+        supervisorName = intent.getStringExtra("supervisorName");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         if (scheduleViewRespondViewModel == null) {
             scheduleViewRespondViewModel = new ViewModelProvider(this).get(ScheduleViewRespondViewModel.class);
@@ -57,6 +62,11 @@ public class ScheduleViewRespondActivity extends AppCompatActivity {
 
         Button btnReject = findViewById(R.id.button_reject);
         btnReject.setOnClickListener(v -> userClickRespondButton(Response.REJECT));
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.activity_schedule_response;
     }
 
     private void userClickRespondButton(Response response) {
