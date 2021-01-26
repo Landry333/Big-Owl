@@ -1,5 +1,10 @@
 package com.example.bigowlapp.viewModel;
 
+import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.ScheduleRequest;
@@ -10,11 +15,6 @@ import com.example.bigowlapp.repository.ScheduleRepository;
 import com.google.firebase.Timestamp;
 
 import java.util.Objects;
-
-import androidx.annotation.VisibleForTesting;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import static com.google.firebase.Timestamp.now;
 
@@ -85,6 +85,10 @@ public class ScheduleViewRespondViewModel extends ViewModel {
 
         long userLastResponseTime = responseTimestamp.toDate().getTime();
         return now().toDate().getTime() >= (userLastResponseTime + ONE_MINUTE);
+    }
+
+    public boolean isCurrentUserSet() {
+        return authRepository.getCurrentUser() != null;
     }
 
     public ScheduleViewRespondViewModel(AuthRepository authRepository, NotificationRepository notificationRepository, ScheduleRepository scheduleRepository) {
