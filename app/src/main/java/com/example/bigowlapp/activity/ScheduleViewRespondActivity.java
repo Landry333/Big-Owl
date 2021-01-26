@@ -112,10 +112,4 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
         this.scheduleViewRespondViewModel = scheduleViewRespondViewModel;
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public void setScheduleIntentData(String scheduleUId, String groupName, String supervisorName) {
-        this.scheduleUId = scheduleUId;
-        this.groupName = groupName;
-        this.supervisorName = supervisorName;
-    }
 }
