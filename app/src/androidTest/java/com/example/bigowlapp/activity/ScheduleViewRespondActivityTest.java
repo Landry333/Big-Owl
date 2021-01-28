@@ -16,7 +16,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.GeoPoint;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -28,8 +27,10 @@ import java.util.Map;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.MutableLiveData;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -39,16 +40,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(AndroidJUnit4.class)
+@LargeTest
 public class ScheduleViewRespondActivityTest {
-
-    @Rule
-    public ActivityScenarioRule<ScheduleViewRespondActivity> activityRule = new ActivityScenarioRule<>(ScheduleViewRespondActivity.class);
 
     @Mock
     private ScheduleViewRespondViewModel mockScheduleViewRespondViewModel;
@@ -65,7 +65,8 @@ public class ScheduleViewRespondActivityTest {
     @Mock
     private FirebaseUser testFirebaseCurrentUser;
 
-    Schedule testSchedule;
+    private ActivityScenario<ScheduleViewRespondActivity> activityScenario;
+    private Schedule testSchedule;
 
     @Before
     public void setUp() {
@@ -101,7 +102,7 @@ public class ScheduleViewRespondActivityTest {
         testSchedule.setEndTime(new Timestamp(Timestamp.now().getSeconds() + 600000, 0));
         testSchedule.setLocation(new GeoPoint(0, 0));
         testSchedule.setUserScheduleResponseMap(testScheduleMembersMap);
-        Intent testIntent = new Intent();
+        Intent testIntent = new Intent(ApplicationProvider.getApplicationContext(), ScheduleViewRespondActivity.class);
         testIntent.putExtra("scheduleUId", testSchedule.getuId());
         testIntent.putExtra("groupName", "test group");
         testIntent.putExtra("supervisorName", testSupervisor.getFullName());
@@ -113,27 +114,25 @@ public class ScheduleViewRespondActivityTest {
         when(mockAuthRepository.getCurrentUser()).thenReturn(testFirebaseCurrentUser);
         when(mockAuthRepository.getCurrentUser().getUid()).thenReturn(testCurrentUser.getUId());
         when(mockNotificationRepository.addDocument(any())).thenReturn(null);
-        when(mockScheduleRepository.updateScheduleMemberResponse(
-                anyString(),
-                anyString(),
-                any(UserScheduleResponse.class)
-        )).thenAnswer(a -> {
+        when(mockScheduleViewRespondViewModel.isCurrentUserSet()).thenReturn(true);
+        when(mockScheduleViewRespondViewModel.getCurrentScheduleData(anyString())).thenReturn(testScheduleData);
+        when(mockScheduleViewRespondViewModel.isCurrentUserInSchedule()).thenReturn(true);
+        when(mockScheduleViewRespondViewModel.isOneMinuteAfterLastResponse()).thenReturn(true);
+        when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.NEUTRAL, null));
+        doAnswer(a -> {
             testScheduleMembersMap.put(testCurrentUser.getUId(), mockScheduleViewRespondViewModel.getCurrentUserNewResponse());
-            testSchedule.setUserScheduleResponseMap(testScheduleMembersMap);
+            testSchedule.getUserScheduleResponseMap().put(testCurrentUser.getUId(), mockScheduleViewRespondViewModel.getCurrentUserNewResponse());
             testScheduleData.postValue(testSchedule);
             return null;
-        });
-        when(mockScheduleRepository.getDocumentByUId(testSchedule.getuId(), Schedule.class)).thenReturn(testScheduleData);
-        when(mockScheduleViewRespondViewModel.isCurrentUserInSchedule()).thenReturn(true);
-        when(mockScheduleViewRespondViewModel.getCurrentScheduleData(anyString())).thenReturn(testScheduleData);
-        when(mockScheduleViewRespondViewModel.isOneMinuteAfterLastResponse()).thenReturn(true);
+        }).when(mockScheduleViewRespondViewModel).respondSchedule(any(), any());
 
-        activityRule.getScenario().moveToState(Lifecycle.State.CREATED);
-        activityRule.getScenario().onActivity(activity -> {
+        activityScenario = ActivityScenario.launch(testIntent);
+
+        activityScenario.moveToState(Lifecycle.State.CREATED);
+        activityScenario.onActivity(activity -> {
             activity.setScheduleViewRespondViewModel(mockScheduleViewRespondViewModel);
-            activity.setScheduleIntentData(testSchedule.getuId(), "test group", testSupervisor.getFullName());
         });
-        activityRule.getScenario().moveToState(Lifecycle.State.RESUMED);
+        activityScenario.moveToState(Lifecycle.State.RESUMED);
     }
 
     @Test
@@ -156,6 +155,7 @@ public class ScheduleViewRespondActivityTest {
 
     @Test
     public void respondScheduleTest() {
+        // accept schedule
         onView(withId(R.id.button_accept)).perform(click());
         verify(mockScheduleViewRespondViewModel, times(1)).isOneMinuteAfterLastResponse();
         verify(mockScheduleViewRespondViewModel, times(1)).respondSchedule(testSchedule.getuId(), Response.ACCEPT);
@@ -169,13 +169,17 @@ public class ScheduleViewRespondActivityTest {
         onView(withId(R.id.button_accept)).check(doesNotExist());
         onView(withId(R.id.button_reject)).check(matches(isDisplayed()));
 
+        // reject schedule
+        when(mockScheduleViewRespondViewModel.getCurrentUserNewResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, Timestamp.now()));
+        when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, Timestamp.now()));
+
         onView(withId(R.id.button_reject)).perform(click());
         verify(mockScheduleRepository, times(1)).updateScheduleMemberResponse(
                 testSchedule.getuId(),
                 mockAuthRepository.getCurrentUser().getUid(),
                 mockScheduleViewRespondViewModel.getCurrentUserNewResponse()
         );
-        verify(mockScheduleViewRespondViewModel, times(1)).notifySupervisorScheduleResponse();
+        verify(mockScheduleViewRespondViewModel, times(2)).notifySupervisorScheduleResponse();
         onView(withId(R.id.linear_layout_response)).check(matches(isDisplayed()));
         onView(withId(R.id.button_accept)).check(matches(isDisplayed()));
         onView(withId(R.id.button_reject)).check(doesNotExist());
