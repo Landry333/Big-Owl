@@ -37,17 +37,26 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
             scheduleViewRespondViewModel = new ViewModelProvider(this).get(ScheduleViewRespondViewModel.class);
         }
 
+        subscribeToData();
+    }
+
+    private void subscribeToData() {
+        if (!scheduleViewRespondViewModel.isCurrentUserSet()) {
+            return;
+        }
+
         scheduleViewRespondViewModel.getCurrentScheduleData(scheduleUId).observe(this, schedule -> {
             if (!scheduleViewRespondViewModel.isCurrentUserInSchedule()) {
                 return;
             }
+
             ((TextView) findViewById(R.id.text_view_group_uid)).setText(groupName);
             ((TextView) findViewById(R.id.text_view_group_supervisor_name)).setText(supervisorName);
             ((TextView) findViewById(R.id.text_view_schedule_start_time)).setText(schedule.getStartTime().toDate().toString());
             ((TextView) findViewById(R.id.text_view_schedule_end_time)).setText(schedule.getEndTime().toDate().toString());
 
             UserScheduleResponse userScheduleResponse = scheduleViewRespondViewModel.getUserScheduleResponse();
-            if (userScheduleResponse.getResponse() != Response.NEUTRAL) {
+            if (userScheduleResponse != null && userScheduleResponse.getResponse() != Response.NEUTRAL) {
                 ((TextView) findViewById(R.id.text_view_schedule_user_response_text))
                         .setText(userScheduleResponse.getResponse() == Response.ACCEPT ? "Accepted" : "Rejected");
                 ((TextView) findViewById(R.id.text_view_schedule_user_response_time))
@@ -73,7 +82,6 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
     private void userClickRespondButton(Response response) {
         if (scheduleViewRespondViewModel.isOneMinuteAfterLastResponse()) {
             scheduleViewRespondViewModel.respondSchedule(scheduleUId, response);
-            scheduleViewRespondViewModel.notifySupervisorScheduleResponse();
         } else
             Toast.makeText(this,
                     "User can only respond to a schedule 1 minute after last response",
