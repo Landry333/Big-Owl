@@ -1,10 +1,5 @@
 package com.example.bigowlapp.viewModel;
 
-import androidx.annotation.VisibleForTesting;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.ScheduleRequest;
@@ -15,6 +10,11 @@ import com.example.bigowlapp.repository.ScheduleRepository;
 import com.google.firebase.Timestamp;
 
 import java.util.Objects;
+
+import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import static com.google.firebase.Timestamp.now;
 
@@ -35,13 +35,13 @@ public class ScheduleViewRespondViewModel extends ViewModel {
     }
 
     public void respondSchedule(String scheduleId, Response response) {
-        if (isCurrentUserInSchedule()) {
             currentUserNewResponse = getUserScheduleResponse();
             currentUserNewResponse.setResponse(response);
             currentUserNewResponse.setResponseTime(now());
             scheduleRepository.updateScheduleMemberResponse(scheduleId, authRepository.getCurrentUser().getUid(), currentUserNewResponse);
             scheduleData.setValue(scheduleData.getValue());
-        }
+
+            notifySupervisorScheduleResponse();
     }
 
     public UserScheduleResponse getUserScheduleResponse() {
@@ -87,11 +87,19 @@ public class ScheduleViewRespondViewModel extends ViewModel {
         return now().toDate().getTime() >= (userLastResponseTime + ONE_MINUTE);
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public ScheduleViewRespondViewModel(AuthRepository authRepository, NotificationRepository notificationRepository, ScheduleRepository scheduleRepository) {
         this.authRepository = authRepository;
         this.notificationRepository = notificationRepository;
         this.scheduleRepository = scheduleRepository;
+    }
+
+    public boolean isCurrentUserSet() {
+        return authRepository.getCurrentUser() != null;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public UserScheduleResponse getCurrentUserNewResponse() {
+        return currentUserNewResponse;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
