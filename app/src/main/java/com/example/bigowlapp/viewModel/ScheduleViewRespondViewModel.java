@@ -8,6 +8,7 @@ import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.ScheduleRequest;
 import com.example.bigowlapp.model.UserScheduleResponse;
+import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.Timestamp;
 
 import java.util.Objects;
@@ -84,5 +85,10 @@ public class ScheduleViewRespondViewModel extends BaseViewModel {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setScheduleData(MutableLiveData<Schedule> scheduleData) {
         this.scheduleData = scheduleData;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public ScheduleViewRespondViewModel(RepositoryFacade repositoryFacade) {
+        this.repositoryFacade = repositoryFacade;
     }
 }
