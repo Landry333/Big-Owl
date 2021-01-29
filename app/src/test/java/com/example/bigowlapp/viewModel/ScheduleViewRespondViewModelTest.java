@@ -155,11 +155,6 @@ public class ScheduleViewRespondViewModelTest {
         assertFalse(target);
     }
 
-    @Test
-    public void getCurrentUserNewResponseTest() {
-
-    }
-
     private Schedule createFakeSchedule() {
         Map<String, UserScheduleResponse> userScheduleResponseMap = new HashMap<>();
         userScheduleResponseMap.put(testUser.getUId(), new UserScheduleResponse(Response.NEUTRAL, null));
