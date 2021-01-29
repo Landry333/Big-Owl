@@ -9,7 +9,6 @@ import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.NotificationRepository;
-import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,6 +37,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -58,9 +58,6 @@ public class ScheduleViewRespondActivityTest {
 
     @Mock
     private NotificationRepository mockNotificationRepository;
-
-    @Mock
-    private ScheduleRepository mockScheduleRepository;
 
     @Mock
     private FirebaseUser testFirebaseCurrentUser;
@@ -145,9 +142,8 @@ public class ScheduleViewRespondActivityTest {
         onView(withId(R.id.text_view_schedule_start_time)).check(matches(isDisplayed()));
         onView(withId(R.id.text_view_schedule_end_time)).check(matches(isDisplayed()));
         onView(withId(R.id.view_divider_below_schedule)).check(matches(isDisplayed()));
-        onView(withId(R.id.linear_layout_response)).check(doesNotExist());
-        onView(withId(R.id.line_below_response)).check(doesNotExist());
-
+        onView(withId(R.id.linear_layout_response)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.line_below_response)).check(matches(not(isDisplayed())));
         verify(mockScheduleViewRespondViewModel, times(1)).getUserScheduleResponse();
         onView(withId(R.id.button_accept)).check(matches(isDisplayed()));
         onView(withId(R.id.button_reject)).check(matches(isDisplayed()));
@@ -156,14 +152,11 @@ public class ScheduleViewRespondActivityTest {
     @Test
     public void respondScheduleTest() {
         // accept schedule
+        when(mockScheduleViewRespondViewModel.getCurrentUserNewResponse()).thenReturn(new UserScheduleResponse(Response.ACCEPT, Timestamp.now()));
+        when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.ACCEPT, Timestamp.now()));
         onView(withId(R.id.button_accept)).perform(click());
         verify(mockScheduleViewRespondViewModel, times(1)).isOneMinuteAfterLastResponse();
         verify(mockScheduleViewRespondViewModel, times(1)).respondSchedule(testSchedule.getuId(), Response.ACCEPT);
-        verify(mockScheduleRepository, times(1)).updateScheduleMemberResponse(
-                testSchedule.getuId(),
-                mockAuthRepository.getCurrentUser().getUid(),
-                mockScheduleViewRespondViewModel.getCurrentUserNewResponse()
-        );
         verify(mockScheduleViewRespondViewModel, times(1)).notifySupervisorScheduleResponse();
         onView(withId(R.id.linear_layout_response)).check(matches(isDisplayed()));
         onView(withId(R.id.button_accept)).check(doesNotExist());
@@ -172,13 +165,7 @@ public class ScheduleViewRespondActivityTest {
         // reject schedule
         when(mockScheduleViewRespondViewModel.getCurrentUserNewResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, Timestamp.now()));
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, Timestamp.now()));
-
         onView(withId(R.id.button_reject)).perform(click());
-        verify(mockScheduleRepository, times(1)).updateScheduleMemberResponse(
-                testSchedule.getuId(),
-                mockAuthRepository.getCurrentUser().getUid(),
-                mockScheduleViewRespondViewModel.getCurrentUserNewResponse()
-        );
         verify(mockScheduleViewRespondViewModel, times(2)).notifySupervisorScheduleResponse();
         onView(withId(R.id.linear_layout_response)).check(matches(isDisplayed()));
         onView(withId(R.id.button_accept)).check(matches(isDisplayed()));

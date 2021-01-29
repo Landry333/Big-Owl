@@ -35,7 +35,6 @@ public class ScheduleViewRespondViewModel extends ViewModel {
     }
 
     public void respondSchedule(String scheduleId, Response response) {
-        if (isCurrentUserInSchedule()) {
             currentUserNewResponse = getUserScheduleResponse();
             currentUserNewResponse.setResponse(response);
             currentUserNewResponse.setResponseTime(now());
@@ -43,7 +42,6 @@ public class ScheduleViewRespondViewModel extends ViewModel {
             scheduleData.setValue(scheduleData.getValue());
 
             notifySupervisorScheduleResponse();
-        }
     }
 
     public UserScheduleResponse getUserScheduleResponse() {
