@@ -1,5 +1,6 @@
 package com.example.bigowlapp.viewModel;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -7,6 +8,7 @@ import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.ScheduleRequest;
 import com.example.bigowlapp.model.UserScheduleResponse;
+import com.google.firebase.Timestamp;
 
 import java.util.Objects;
 
@@ -24,13 +26,13 @@ public class ScheduleViewRespondViewModel extends BaseViewModel {
     }
 
     public void respondSchedule(String scheduleId, Response response) {
-        if (isCurrentUserInSchedule()) {
-            currentUserNewResponse = getUserScheduleResponse();
-            currentUserNewResponse.setResponse(response);
-            currentUserNewResponse.setResponseTime(now());
-            repositoryFacade.getScheduleRepository().updateScheduleMemberResponse(scheduleId, getCurrentUserUid(), currentUserNewResponse);
-            scheduleData.setValue(scheduleData.getValue());
-        }
+        currentUserNewResponse = getUserScheduleResponse();
+        currentUserNewResponse.setResponse(response);
+        currentUserNewResponse.setResponseTime(now());
+        repositoryFacade.getScheduleRepository().updateScheduleMemberResponse(scheduleId, getCurrentUserUid(), currentUserNewResponse);
+        scheduleData.setValue(scheduleData.getValue());
+
+        notifySupervisorScheduleResponse();
     }
 
     public UserScheduleResponse getUserScheduleResponse() {
@@ -65,7 +67,22 @@ public class ScheduleViewRespondViewModel extends BaseViewModel {
     }
 
     public boolean isOneMinuteAfterLastResponse() {
-        long userLastResponseTime = getUserScheduleResponse().getResponseTime().toDate().getTime();
+        Timestamp responseTimestamp = getUserScheduleResponse().getResponseTime();
+        // If there was no response yet, then we should allow response to go through
+        if (responseTimestamp == null) {
+            return true;
+        }
+        long userLastResponseTime = responseTimestamp.toDate().getTime();
         return now().toDate().getTime() >= (userLastResponseTime + ONE_MINUTE);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public UserScheduleResponse getCurrentUserNewResponse() {
+        return currentUserNewResponse;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setScheduleData(MutableLiveData<Schedule> scheduleData) {
+        this.scheduleData = scheduleData;
     }
 }

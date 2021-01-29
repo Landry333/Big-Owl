@@ -24,7 +24,7 @@ public class ScheduleRepository extends Repository<Schedule> {
     public LiveDataWithStatus<List<Schedule>> getListSchedulesFromGroupForUser(String groupID, String userID) {
         LiveDataWithStatus<List<Schedule>> listOfTData = new LiveDataWithStatus<>();
         collectionReference.whereEqualTo("groupUId", groupID)
-                .whereArrayContains("membersList", userID)
+                .whereArrayContains("memberList", userID)
                 .orderBy("startTime", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
