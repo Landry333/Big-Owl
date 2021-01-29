@@ -24,25 +24,4 @@ public class RepositoryFacadeTest {
         // Check that getInstance always gives the same object as this is a singleton
         assertEquals(firstRepositoryFacade, secondRepositoryFacade);
     }
-
-    @Test
-    public void getAuthRepository() throws Exception {
-        // TODO: Figure out how to mock a Firebase instance (applies to all the getters)
-    }
-
-    @Test
-    public void getUserRepository() {
-    }
-
-    @Test
-    public void getScheduleRepository() {
-    }
-
-    @Test
-    public void getGroupRepository() {
-    }
-
-    @Test
-    public void getNotificationRepository() {
-    }
 }

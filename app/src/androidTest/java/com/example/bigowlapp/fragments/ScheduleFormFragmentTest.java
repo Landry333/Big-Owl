@@ -139,12 +139,6 @@ public class ScheduleFormFragmentTest {
     }
 
     @Test
-    public void exampleTest() {
-        // TODO: Remove this
-        SystemClock.sleep(30000);
-    }
-
-    @Test
     public void shouldDisplayErrorsIfNoFilledEntries() {
         // click on setSchedule without any form data filled
         confirmSetSchedule.perform(click());

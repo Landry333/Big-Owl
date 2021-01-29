@@ -1,7 +1,5 @@
 package com.example.bigowlapp.repository;
 
-import androidx.annotation.VisibleForTesting;
-
 /**
  * Description: A class that contains all the end points (repository) in the system
  * Purpose: For classes that need the end points (repository)
@@ -56,32 +54,6 @@ public class RepositoryFacade {
         if (notificationRepository == null) {
             notificationRepository = new NotificationRepository();
         }
-        return notificationRepository;
-    }
-
-    // These methods may be used for tests
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public AuthRepository testOnlyGetAuthRepository() {
-        return authRepository;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public UserRepository testOnlyGetUserRepository() {
-        return userRepository;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public ScheduleRepository testOnlyGetScheduleRepository() {
-        return scheduleRepository;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public GroupRepository testOnlyGetGroupRepository() {
-        return groupRepository;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public NotificationRepository testOnlyGetNotificationRepository() {
         return notificationRepository;
     }
 }
