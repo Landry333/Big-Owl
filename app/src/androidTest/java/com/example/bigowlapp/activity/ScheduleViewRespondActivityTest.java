@@ -33,7 +33,6 @@ import androidx.test.filters.LargeTest;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -120,6 +119,7 @@ public class ScheduleViewRespondActivityTest {
             testScheduleMembersMap.put(testCurrentUser.getUId(), mockScheduleViewRespondViewModel.getCurrentUserNewResponse());
             testSchedule.getUserScheduleResponseMap().put(testCurrentUser.getUId(), mockScheduleViewRespondViewModel.getCurrentUserNewResponse());
             testScheduleData.postValue(testSchedule);
+            mockScheduleViewRespondViewModel.notifySupervisorScheduleResponse();
             return null;
         }).when(mockScheduleViewRespondViewModel).respondSchedule(any(), any());
 
@@ -159,7 +159,7 @@ public class ScheduleViewRespondActivityTest {
         verify(mockScheduleViewRespondViewModel, times(1)).respondSchedule(testSchedule.getuId(), Response.ACCEPT);
         verify(mockScheduleViewRespondViewModel, times(1)).notifySupervisorScheduleResponse();
         onView(withId(R.id.linear_layout_response)).check(matches(isDisplayed()));
-        onView(withId(R.id.button_accept)).check(doesNotExist());
+        onView(withId(R.id.button_accept)).check(matches(not(isDisplayed())));
         onView(withId(R.id.button_reject)).check(matches(isDisplayed()));
 
         // reject schedule
@@ -169,6 +169,6 @@ public class ScheduleViewRespondActivityTest {
         verify(mockScheduleViewRespondViewModel, times(2)).notifySupervisorScheduleResponse();
         onView(withId(R.id.linear_layout_response)).check(matches(isDisplayed()));
         onView(withId(R.id.button_accept)).check(matches(isDisplayed()));
-        onView(withId(R.id.button_reject)).check(doesNotExist());
+        onView(withId(R.id.button_reject)).check(matches(not(isDisplayed())));
     }
 }
