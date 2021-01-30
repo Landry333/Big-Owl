@@ -50,7 +50,7 @@ public class NotificationRepository extends Repository<Notification> {
                             listOfTData.setValue(null);
                         }
                     } else {
-                        Log.e(getClassName(), "Error getting documents: " +
+                        Log.e(tClass.getSimpleName(), "Error getting documents: " +
                                 task.getException());
                     }
                 });

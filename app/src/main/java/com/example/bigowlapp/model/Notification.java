@@ -1,41 +1,32 @@
 package com.example.bigowlapp.model;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
-public class Notification {
+public class Notification extends Model {
 
-    @DocumentId
-    private String uId;
     private String type;
     private Timestamp time;
 
     public Notification() {
+        super();
     }
 
     public Notification(String type) {
+        super();
         this.type = type;
     }
 
     public Notification(String uId, String type) {
-        this.uId = uId;
+        super(uId);
         this.type = type;
     }
 
     public Notification(String uId, String type, Timestamp time) {
-        this.uId = uId;
+        super(uId);
         this.type = type;
         this.time = time;
-    }
-
-    public String getuId() {
-        return uId;
-    }
-
-    public void setuId(String uId) {
-        this.uId = uId;
     }
 
     public String getType() {

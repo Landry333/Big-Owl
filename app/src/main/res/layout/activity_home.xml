@@ -99,19 +99,13 @@
                         android:id="@+id/btn_logout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/log_out"/>
+                        android:text="@string/log_out" />
                 </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:gravity="center">
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
                     android:gravity="center">
 
                     <Button
@@ -119,13 +113,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/set_schedule" />
-
                 </TableRow>
 
-
-            </TableRow>
-
-        </TableLayout>
+            </TableLayout>
 
             <TableLayout
                 android:id="@+id/profile_table"

@@ -1,31 +1,21 @@
 package com.example.bigowlapp.viewModel;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.AuthRepository;
-import com.example.bigowlapp.repository.GroupRepository;
-import com.example.bigowlapp.repository.UserRepository;
 
 import java.util.List;
 import java.util.Objects;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
-public class MonitoringGroupPageViewModel extends ViewModel {
-
-    private final AuthRepository authRepository;
-    private final GroupRepository groupRepository;
-    private final UserRepository userRepository;
+public class MonitoringGroupPageViewModel extends BaseViewModel {
 
     private MutableLiveData<Group> selectedGroup;
     private MutableLiveData<List<User>> usersInGroup;
 
     public MonitoringGroupPageViewModel() {
-        authRepository = new AuthRepository();
-        groupRepository = new GroupRepository();
-        userRepository = new UserRepository();
+        // used implicitly when ViewModel constructed using ViewModelProvider
     }
 
     public LiveData<Group> getGroup() {
@@ -45,22 +35,21 @@ public class MonitoringGroupPageViewModel extends ViewModel {
     }
 
     private void loadGroup() {
-        String userId = authRepository.getCurrentUser().getUid();
-        selectedGroup = groupRepository.getDocumentByAttribute("monitoringUserId", userId, Group.class);
+        String userId = getCurrentUserUid();
+        selectedGroup = repositoryFacade.getGroupRepository()
+                .getDocumentByAttribute("monitoringUserId", userId, Group.class);
     }
 
     private void loadAllUsersInGroup(Group group) {
-        usersInGroup = userRepository.getDocumentsByListOfUId(group.getSupervisedUserId(), User.class);
+        usersInGroup = repositoryFacade.getUserRepository()
+                .getDocumentsByListOfUid(group.getSupervisedUserId(), User.class);
     }
 
     public void removeUserFromGroup(User userToBeRemoved) {
         Group groupWithRemovedUser = getGroup().getValue();
-        Objects.requireNonNull(groupWithRemovedUser).getSupervisedUserId().remove(userToBeRemoved.getUId());
+        Objects.requireNonNull(groupWithRemovedUser).getSupervisedUserId().remove(userToBeRemoved.getUid());
 
-        groupRepository.updateDocument(groupWithRemovedUser.getuId(), groupWithRemovedUser);
-    }
-
-    public boolean isCurrentUserSet() {
-        return authRepository.getCurrentUser() != null;
+        repositoryFacade.getGroupRepository()
+                .updateDocument(groupWithRemovedUser.getUid(), groupWithRemovedUser);
     }
 }

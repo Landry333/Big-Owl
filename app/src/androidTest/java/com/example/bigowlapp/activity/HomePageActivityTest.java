@@ -2,6 +2,7 @@ package com.example.bigowlapp.activity;
 
 import android.os.SystemClock;
 
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 
@@ -13,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -34,14 +34,14 @@ public class HomePageActivityTest {
     private HomePageViewModel homePageViewModel;
 
     private User testUser;
-    private MutableLiveData<User> testUserData;
+    private LiveDataWithStatus<User> testUserData;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         testUser = new User("abc123", "test user", "abc", "+123", "test@mail.com", null);
-        testUserData = new MutableLiveData<>();
+        testUserData = new LiveDataWithStatus<>();
 
         when(homePageViewModel.isCurrentUserSet()).thenReturn(true);
         when(homePageViewModel.getCurrentUserData()).thenReturn(testUserData);

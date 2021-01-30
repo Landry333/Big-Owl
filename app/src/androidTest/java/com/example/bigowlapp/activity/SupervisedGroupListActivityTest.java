@@ -1,7 +1,13 @@
 package com.example.bigowlapp.activity;
 
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.MutableLiveData;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
@@ -17,11 +23,6 @@ import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.MutableLiveData;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -44,16 +45,12 @@ public class SupervisedGroupListActivityTest {
 
     @Mock
     private SupervisedGroupListViewModel supervisedGroupListViewModel;
-
     @Mock
     private AuthRepository authRepository;
-
     @Mock
     private GroupRepository groupRepository;
-
     @Mock
     private UserRepository userRepository;
-
     @Mock
     private FirebaseUser testFirebaseUser;
 
@@ -77,7 +74,7 @@ public class SupervisedGroupListActivityTest {
                     "group00".concat(String.valueOf(i)).concat("@mail.com"),
                     null
             );
-            MutableLiveData<User> groupSupervisorData = new MutableLiveData<>(groupSupervisor);
+            LiveDataWithStatus<User> groupSupervisorData = new LiveDataWithStatus<>(groupSupervisor);
 
             List<String> groupSupervisedUserId = new ArrayList<>();
             for (int j = 1; j < (int) ((Math.random() * 2) + 1); j++) {
@@ -89,16 +86,16 @@ public class SupervisedGroupListActivityTest {
             Group newGroup = new Group(
                     "group00".concat(String.valueOf(i)),
                     "groupName00".concat(String.valueOf(i)),
-                    groupSupervisor.getUId(),
+                    groupSupervisor.getUid(),
                     groupSupervisedUserId
             );
             testUserSupervisedGroupList.add(newGroup);
 
-            when(userRepository.getDocumentByUId(groupSupervisor.getUId(), User.class))
+            when(userRepository.getDocumentByUid(groupSupervisor.getUid(), User.class))
                     .thenReturn(groupSupervisorData);
-            when(supervisedGroupListViewModel.getSupervisor(groupSupervisor.getUId())).thenReturn(groupSupervisorData);
+            when(supervisedGroupListViewModel.getSupervisor(groupSupervisor.getUid())).thenReturn(groupSupervisorData);
         }
-        MutableLiveData<List<Group>> testUserSupervisedGroupListData = new MutableLiveData<>(testUserSupervisedGroupList);
+        LiveDataWithStatus<List<Group>> testUserSupervisedGroupListData = new LiveDataWithStatus<>(testUserSupervisedGroupList);
         testUserSupervisedGroupListData.postValue(testUserSupervisedGroupList);
 
         when(testFirebaseUser.getUid()).thenReturn("abc123");

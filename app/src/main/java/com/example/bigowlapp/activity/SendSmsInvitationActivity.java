@@ -3,10 +3,8 @@ package com.example.bigowlapp.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -46,20 +44,13 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
     protected void initialize() {
 
         try {
-            send.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (checkSelfPermission(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
-
-                            beginSendingProcess();
-                        } else {
-                            requestPermissions(new String[]{Manifest.permission.SEND_SMS}, 1);
-                        }
-                    } else beginSendingProcess();
-
+            send.setOnClickListener(view -> {
+                if (checkSelfPermission(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+                    beginSendingProcess();
+                } else {
+                    requestPermissions(new String[]{Manifest.permission.SEND_SMS}, 1);
                 }
+
             });
 
         } catch (Exception e) {

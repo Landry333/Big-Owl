@@ -1,5 +1,9 @@
 package com.example.bigowlapp.viewModel;
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.LiveData;
+
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.ScheduleRequest;
@@ -7,6 +11,7 @@ import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.NotificationRepository;
+import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.ScheduleRepository;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,10 +26,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -42,12 +43,14 @@ public class ScheduleViewRespondViewModelTest {
     public static long ONE_SECOND = 1000;
 
     private ScheduleViewRespondViewModel scheduleViewRespondViewModel;
-    private MutableLiveData<Schedule> testScheduleData;
+    private LiveDataWithStatus<Schedule> testScheduleData;
     private User testUser;
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
+    @Mock
+    private RepositoryFacade mockRepositoryFacade;
     @Mock
     private AuthRepository mockAuthRepository;
     @Mock
@@ -61,15 +64,18 @@ public class ScheduleViewRespondViewModelTest {
     public void setUp() {
         // setup fake data
         testUser = new User("abc123", "first", "last", "+911", "test@mail.com", "url");
-        testScheduleData = new MutableLiveData<>(createFakeSchedule());
+        testScheduleData = new LiveDataWithStatus<>(createFakeSchedule());
 
         // setup mock responses
+        when(mockRepositoryFacade.getAuthRepository()).thenReturn(mockAuthRepository);
+        when(mockRepositoryFacade.getScheduleRepository()).thenReturn(mockScheduleRepository);
+        when(mockRepositoryFacade.getNotificationRepository()).thenReturn(mockNotificationRepository);
         when(mockAuthRepository.getCurrentUser()).thenReturn(mockTestFirebaseUser);
         when(mockTestFirebaseUser.getUid()).thenReturn("abc123");
-        when(mockScheduleRepository.getDocumentByUId(anyString(), eq(Schedule.class))).thenReturn(testScheduleData);
+        when(mockScheduleRepository.getDocumentByUid(anyString(), eq(Schedule.class))).thenReturn(testScheduleData);
 
         // setup viewModel to be tested
-        scheduleViewRespondViewModel = new ScheduleViewRespondViewModel(mockAuthRepository, mockNotificationRepository, mockScheduleRepository);
+        scheduleViewRespondViewModel = new ScheduleViewRespondViewModel(mockRepositoryFacade);
         scheduleViewRespondViewModel.setScheduleData(testScheduleData);
     }
 
@@ -79,37 +85,37 @@ public class ScheduleViewRespondViewModelTest {
 
         // case where user did not respond yet
         UserScheduleResponse neutralResponse = new UserScheduleResponse(Response.NEUTRAL, null);
-        userScheduleResponseMap.put(testUser.getUId(), neutralResponse);
+        userScheduleResponseMap.put(testUser.getUid(), neutralResponse);
         assertTrue(scheduleViewRespondViewModel.isOneMinuteAfterLastResponse());
 
         // case where the response is greater than a minute before
         Date lateTime = new Date();
         lateTime.setTime(lateTime.getTime() - 300 * ONE_SECOND);
         UserScheduleResponse oldResponse = new UserScheduleResponse(Response.ACCEPT, new Timestamp(lateTime));
-        userScheduleResponseMap.put(testUser.getUId(), oldResponse);
+        userScheduleResponseMap.put(testUser.getUid(), oldResponse);
         assertTrue(scheduleViewRespondViewModel.isOneMinuteAfterLastResponse());
 
         // case where the response is less than a minute before
         Date earlyTime = new Date();
         earlyTime.setTime(earlyTime.getTime() - 30 * ONE_SECOND);
         UserScheduleResponse quickResponse = new UserScheduleResponse(Response.REJECT, new Timestamp(earlyTime));
-        userScheduleResponseMap.put(testUser.getUId(), quickResponse);
+        userScheduleResponseMap.put(testUser.getUid(), quickResponse);
         assertFalse(scheduleViewRespondViewModel.isOneMinuteAfterLastResponse());
 
         // case where the response is slightly more than a minute
         Date closeTime = new Date();
         closeTime.setTime(closeTime.getTime() - 61 * ONE_SECOND);
         UserScheduleResponse oneMinuteResponse = new UserScheduleResponse(Response.ACCEPT, new Timestamp(closeTime));
-        userScheduleResponseMap.put(testUser.getUId(), oneMinuteResponse);
+        userScheduleResponseMap.put(testUser.getUid(), oneMinuteResponse);
         assertTrue(scheduleViewRespondViewModel.isOneMinuteAfterLastResponse());
     }
 
     @Test
     public void respondScheduleTest() {
-        scheduleViewRespondViewModel.respondSchedule(testScheduleData.getValue().getuId(), Response.ACCEPT);
+        scheduleViewRespondViewModel.respondSchedule(testScheduleData.getValue().getUid(), Response.ACCEPT);
         Response targetNewResponse = scheduleViewRespondViewModel.getUserScheduleResponse().getResponse();
         assertEquals(Response.ACCEPT, targetNewResponse);
-        scheduleViewRespondViewModel.respondSchedule(testScheduleData.getValue().getuId(), Response.REJECT);
+        scheduleViewRespondViewModel.respondSchedule(testScheduleData.getValue().getUid(), Response.REJECT);
         targetNewResponse = scheduleViewRespondViewModel.getUserScheduleResponse().getResponse();
         assertEquals(Response.REJECT, targetNewResponse);
     }
@@ -127,19 +133,19 @@ public class ScheduleViewRespondViewModelTest {
 
     @Test
     public void getCurrentScheduleDataTest() {
-        scheduleViewRespondViewModel = new ScheduleViewRespondViewModel(null, null, mockScheduleRepository);
-        LiveData<Schedule> target = scheduleViewRespondViewModel.getCurrentScheduleData(testScheduleData.getValue().getuId());
-        verify(mockScheduleRepository).getDocumentByUId(anyString(), eq(Schedule.class));
+        scheduleViewRespondViewModel = new ScheduleViewRespondViewModel(mockRepositoryFacade);
+        LiveData<Schedule> target = scheduleViewRespondViewModel.getCurrentScheduleData(testScheduleData.getValue().getUid());
+        verify(mockScheduleRepository).getDocumentByUid(anyString(), eq(Schedule.class));
         assertEquals(testScheduleData, target);
 
-        LiveData<Schedule> target2 = scheduleViewRespondViewModel.getCurrentScheduleData(testScheduleData.getValue().getuId());
-        verify(mockScheduleRepository, times(1)).getDocumentByUId(anyString(), eq(Schedule.class));
+        LiveData<Schedule> target2 = scheduleViewRespondViewModel.getCurrentScheduleData(testScheduleData.getValue().getUid());
+        verify(mockScheduleRepository, times(1)).getDocumentByUid(anyString(), eq(Schedule.class));
         assertEquals(testScheduleData, target2);
     }
 
     @Test
     public void notifySupervisorScheduleResponseTest() {
-        when(mockAuthRepository.getCurrentUser().getUid()).thenReturn(testUser.getUId());
+        when(mockAuthRepository.getCurrentUser().getUid()).thenReturn(testUser.getUid());
         scheduleViewRespondViewModel.notifySupervisorScheduleResponse();
         verify(mockNotificationRepository, times(1)).addDocument(any(ScheduleRequest.class));
     }
@@ -157,9 +163,9 @@ public class ScheduleViewRespondViewModelTest {
 
     private Schedule createFakeSchedule() {
         Map<String, UserScheduleResponse> userScheduleResponseMap = new HashMap<>();
-        userScheduleResponseMap.put(testUser.getUId(), new UserScheduleResponse(Response.NEUTRAL, null));
+        userScheduleResponseMap.put(testUser.getUid(), new UserScheduleResponse(Response.NEUTRAL, null));
         Schedule fakeSchedule = Schedule.getPrototypeSchedule();
-        fakeSchedule.setuId("test001");
+        fakeSchedule.setUid("test001");
         fakeSchedule.setGroupUId("testGroup001");
         fakeSchedule.setGroupSupervisorUId("fakeSupervisor001");
         fakeSchedule.setUserScheduleResponseMap(userScheduleResponseMap);

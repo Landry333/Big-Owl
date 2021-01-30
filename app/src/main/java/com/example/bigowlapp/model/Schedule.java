@@ -1,7 +1,6 @@
 package com.example.bigowlapp.model;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.google.firebase.firestore.PropertyName;
@@ -12,10 +11,8 @@ import java.util.Map;
 
 
 @IgnoreExtraProperties
-public class Schedule {
+public class Schedule extends Model {
 
-    @DocumentId
-    private String uId;
     private String title;
     private String event;
     private String groupUId;
@@ -41,15 +38,7 @@ public class Schedule {
     }
 
     public Schedule() {
-        // Necessary for Firebase data mapping to model object
-    }
-
-    public String getuId() {
-        return uId;
-    }
-
-    public void setuId(String uId) {
-        this.uId = uId;
+        super();
     }
 
     public String getTitle() {

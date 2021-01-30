@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -110,8 +111,8 @@ public class ScheduleFormFragment extends Fragment
             editEndTime.setText(timeFormatter(endDateTime));
 
             if (schedule.getStartTime().compareTo(schedule.getEndTime()) >= 0) {
-                editStartDate.setTextColor(Color.RED);
-                editStartTime.setTextColor(Color.RED);
+                editStartDate.setTextColor(getResources().getColor(R.color.error, null));
+                editStartTime.setTextColor(getResources().getColor(R.color.error, null));
             } else {
                 editStartDate.setTextColor(Color.BLACK);
                 editStartTime.setTextColor(Color.BLACK);
@@ -213,7 +214,7 @@ public class ScheduleFormFragment extends Fragment
 
             usersListView.setOnClickListener(view ->
                     getParentFragmentManager().beginTransaction()
-                            .replace(R.id.schedule_form_container,
+                            .replace(((ViewGroup) getView().getParent()).getId(),
                                     new UserFragment(this,
                                             setScheduleViewModel
                                                     .getListOfUserInGroupData().getValue(),
@@ -239,7 +240,7 @@ public class ScheduleFormFragment extends Fragment
         selectUserButton.setEnabled(false);
         selectUserButton.setOnClickListener(view ->
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.schedule_form_container,
+                        .replace(((ViewGroup) getView().getParent()).getId(),
                                 new UserFragment(this,
                                         setScheduleViewModel.getListOfUserInGroupData().getValue(),
                                         setScheduleViewModel.getListOfSelectedUsersData().getValue()))
@@ -268,13 +269,13 @@ public class ScheduleFormFragment extends Fragment
             }
 
             if (scheduleToAdd.getMemberList() == null || scheduleToAdd.getMemberList().isEmpty()) {
-                selectUserButton.setError("Please select at lease one user");
+                selectUserButton.setError("Please select at least one user");
                 hasError = true;
             }
 
             if (scheduleToAdd.getStartTime().compareTo(scheduleToAdd.getEndTime()) >= 0) {
-                editStartDate.setTextColor(Color.RED);
-                editStartTime.setTextColor(Color.RED);
+                editStartDate.setTextColor(getResources().getColor(R.color.error, null));
+                editStartTime.setTextColor(getResources().getColor(R.color.error, null));
                 hasError = true;
             }
 
@@ -293,10 +294,6 @@ public class ScheduleFormFragment extends Fragment
             getActivity().finish();
         });
     }
-
-    //===========================================================================================
-    // Time & Date
-    //===========================================================================================
 
     private void setupDateTimeButtons() {
         editStartDate.setOnClickListener(view ->
@@ -389,5 +386,25 @@ public class ScheduleFormFragment extends Fragment
     @Override
     public void userFragmentOnSubmitClicked(List<User> selectedUsers) {
         setScheduleViewModel.updateSelectedUsers(selectedUsers);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setSetScheduleViewModel(SetScheduleViewModel setScheduleViewModel) {
+        this.setScheduleViewModel = setScheduleViewModel;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public Button getGroupButton() {
+        return groupButton;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public Button getSelectUserButton() {
+        return selectUserButton;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public Button getEditLocation() {
+        return editLocation;
     }
 }

@@ -2,6 +2,13 @@ package com.example.bigowlapp.activity;
 
 import android.content.Intent;
 
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.MutableLiveData;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
+
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
@@ -23,13 +30,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.MutableLiveData;
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.core.app.ApplicationProvider;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.filters.LargeTest;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -84,31 +84,31 @@ public class ScheduleViewRespondActivityTest {
                 null);
 
         Map<String, UserScheduleResponse> testScheduleMembersMap = new HashMap<>();
-        testScheduleMembersMap.put(testCurrentUser.getUId(),
+        testScheduleMembersMap.put(testCurrentUser.getUid(),
                 new UserScheduleResponse(Response.NEUTRAL, null));
         List<String> testScheduleMemberList = new ArrayList<>();
-        testScheduleMemberList.add(0, testCurrentUser.getUId());
+        testScheduleMemberList.add(0, testCurrentUser.getUid());
         testSchedule = new Schedule();
-        testSchedule.setuId("schedule001");
+        testSchedule.setUid("schedule001");
         testSchedule.setTitle("testSchedule001");
         testSchedule.setEvent("testEvent001");
         testSchedule.setGroupUId("testGroup001");
-        testSchedule.setGroupSupervisorUId(testSupervisor.getUId());
+        testSchedule.setGroupSupervisorUId(testSupervisor.getUid());
         testSchedule.setStartTime(Timestamp.now());
         testSchedule.setEndTime(new Timestamp(Timestamp.now().getSeconds() + 600000, 0));
         testSchedule.setLocation(new GeoPoint(0, 0));
         testSchedule.setUserScheduleResponseMap(testScheduleMembersMap);
         Intent testIntent = new Intent(ApplicationProvider.getApplicationContext(), ScheduleViewRespondActivity.class);
-        testIntent.putExtra("scheduleUId", testSchedule.getuId());
+        testIntent.putExtra("scheduleUId", testSchedule.getUid());
         testIntent.putExtra("groupName", "test group");
         testIntent.putExtra("supervisorName", testSupervisor.getFullName());
 
         MutableLiveData<Schedule> testScheduleData = new MutableLiveData<>(testSchedule);
         testScheduleData.postValue(testSchedule);
 
-        when(testFirebaseCurrentUser.getUid()).thenReturn(testCurrentUser.getUId());
+        when(testFirebaseCurrentUser.getUid()).thenReturn(testCurrentUser.getUid());
         when(mockAuthRepository.getCurrentUser()).thenReturn(testFirebaseCurrentUser);
-        when(mockAuthRepository.getCurrentUser().getUid()).thenReturn(testCurrentUser.getUId());
+        when(mockAuthRepository.getCurrentUser().getUid()).thenReturn(testCurrentUser.getUid());
         when(mockNotificationRepository.addDocument(any())).thenReturn(null);
         when(mockScheduleViewRespondViewModel.isCurrentUserSet()).thenReturn(true);
         when(mockScheduleViewRespondViewModel.getCurrentScheduleData(anyString())).thenReturn(testScheduleData);
@@ -116,8 +116,8 @@ public class ScheduleViewRespondActivityTest {
         when(mockScheduleViewRespondViewModel.isOneMinuteAfterLastResponse()).thenReturn(true);
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.NEUTRAL, null));
         doAnswer(a -> {
-            testScheduleMembersMap.put(testCurrentUser.getUId(), mockScheduleViewRespondViewModel.getCurrentUserNewResponse());
-            testSchedule.getUserScheduleResponseMap().put(testCurrentUser.getUId(), mockScheduleViewRespondViewModel.getCurrentUserNewResponse());
+            testScheduleMembersMap.put(testCurrentUser.getUid(), mockScheduleViewRespondViewModel.getCurrentUserNewResponse());
+            testSchedule.getUserScheduleResponseMap().put(testCurrentUser.getUid(), mockScheduleViewRespondViewModel.getCurrentUserNewResponse());
             testScheduleData.postValue(testSchedule);
             mockScheduleViewRespondViewModel.notifySupervisorScheduleResponse();
             return null;
@@ -134,7 +134,7 @@ public class ScheduleViewRespondActivityTest {
 
     @Test
     public void scheduleWithNoRespondedBeforeTest() {
-        verify(mockScheduleViewRespondViewModel, times(1)).getCurrentScheduleData(testSchedule.getuId());
+        verify(mockScheduleViewRespondViewModel, times(1)).getCurrentScheduleData(testSchedule.getUid());
         verify(mockScheduleViewRespondViewModel, times(1)).isCurrentUserInSchedule();
         onView(withId(R.id.linear_layout_schedule_view)).check(matches(isDisplayed()));
         onView(withId(R.id.text_view_group_uid)).check(matches(isDisplayed()));
@@ -156,7 +156,7 @@ public class ScheduleViewRespondActivityTest {
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.ACCEPT, Timestamp.now()));
         onView(withId(R.id.button_accept)).perform(click());
         verify(mockScheduleViewRespondViewModel, times(1)).isOneMinuteAfterLastResponse();
-        verify(mockScheduleViewRespondViewModel, times(1)).respondSchedule(testSchedule.getuId(), Response.ACCEPT);
+        verify(mockScheduleViewRespondViewModel, times(1)).respondSchedule(testSchedule.getUid(), Response.ACCEPT);
         verify(mockScheduleViewRespondViewModel, times(1)).notifySupervisorScheduleResponse();
         onView(withId(R.id.linear_layout_response)).check(matches(isDisplayed()));
         onView(withId(R.id.button_accept)).check(matches(not(isDisplayed())));

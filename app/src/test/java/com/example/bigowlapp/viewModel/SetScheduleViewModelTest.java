@@ -4,11 +4,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
+import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.repository.UserRepository;
 import com.google.firebase.Timestamp;
@@ -40,11 +42,13 @@ import static org.mockito.Mockito.when;
 public class SetScheduleViewModelTest {
 
     private SetScheduleViewModel setScheduleViewModel;
-    private MutableLiveData<Schedule> testScheduleData;
+    private LiveDataWithStatus<Schedule> testScheduleData;
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
+    @Mock
+    private RepositoryFacade repositoryFacade;
     @Mock
     private AuthRepository authRepository;
     @Mock
@@ -58,8 +62,13 @@ public class SetScheduleViewModelTest {
 
     @Before
     public void setUp() throws Exception {
-        setScheduleViewModel = new SetScheduleViewModel(authRepository, scheduleRepository,
-                groupRepository, userRepository);
+        when(repositoryFacade.getAuthRepository()).thenReturn(authRepository);
+        when(repositoryFacade.getScheduleRepository()).thenReturn(scheduleRepository);
+        when(repositoryFacade.getGroupRepository()).thenReturn(groupRepository);
+        when(repositoryFacade.getUserRepository()).thenReturn(userRepository);
+
+        setScheduleViewModel = new SetScheduleViewModel(repositoryFacade);
+
         when(authRepository.getCurrentUser()).thenReturn(testFirebaseUser);
         when(testFirebaseUser.getUid()).thenReturn("123");
     }
@@ -71,17 +80,17 @@ public class SetScheduleViewModelTest {
     @Test
     public void addSchedule() {
         Schedule schedule = Schedule.getPrototypeSchedule();
-        schedule.setuId("Testing");
+        schedule.setUid("Testing");
         schedule.setMemberList(Arrays.asList("joe", "doe", "john"));
 
-        testScheduleData = new MutableLiveData<>(schedule);
+        testScheduleData = new LiveDataWithStatus<>(schedule);
         setScheduleViewModel.setNewScheduleData(testScheduleData);
         when(scheduleRepository.addDocument(schedule)).thenReturn(testScheduleData);
 
         Schedule returnedSchedule = setScheduleViewModel.addSchedule().getValue();
 
         verify(scheduleRepository).addDocument(schedule);
-        assertEquals(schedule.getuId(), returnedSchedule.getuId());
+        assertEquals(schedule.getUid(), returnedSchedule.getUid());
         assertEquals(schedule.getMemberList(), returnedSchedule.getMemberList());
         assertEquals(schedule.getMemberList().size(), returnedSchedule.getUserScheduleResponseMap().size());
         assertEquals(Response.NEUTRAL, returnedSchedule.getUserScheduleResponseMap().get("joe").getResponse());
@@ -95,7 +104,7 @@ public class SetScheduleViewModelTest {
     @Test
     public void getListOfGroup() {
         setScheduleViewModel.setListOfGroupData(null);
-        when(groupRepository.getListOfDocumentByAttribute("monitoringUserId", "123", Group.class)).thenReturn(new MutableLiveData<>());
+        when(groupRepository.getListOfDocumentByAttribute("monitoringUserId", "123", Group.class)).thenReturn(new LiveDataWithStatus<>());
         assertNotNull(setScheduleViewModel.getListOfGroup());
         assertNotNull(setScheduleViewModel.getListOfGroup());
         verify(groupRepository, times(1)).getListOfDocumentByAttribute("monitoringUserId", "123", Group.class);
@@ -111,14 +120,14 @@ public class SetScheduleViewModelTest {
     @Test
     public void updateScheduleGroup() {
         Group group = new Group();
-        group.setuId("GroupId");
+        group.setUid("GroupId");
         group.setMonitoringUserId("MonitoringId");
 
         setScheduleViewModel.updateScheduleGroup(group);
 
         Schedule returnedSchedule = setScheduleViewModel.getNewScheduleData().getValue();
 
-        assertEquals(group.getuId(), returnedSchedule.getGroupUId());
+        assertEquals(group.getUid(), returnedSchedule.getGroupUId());
         assertEquals(group.getMonitoringUserId(), returnedSchedule.getGroupSupervisorUId());
         assertEquals(new ArrayList<>(), returnedSchedule.getMemberList());
         assertEquals(group, setScheduleViewModel.getSelectedGroup());
@@ -145,7 +154,7 @@ public class SetScheduleViewModelTest {
         List<String> userIdsList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             User user = new User();
-            user.setUId(Integer.toString(i));
+            user.setUid(Integer.toString(i));
             userList.add(user);
             userIdsList.add(Integer.toString(i));
         }
@@ -173,7 +182,7 @@ public class SetScheduleViewModelTest {
         List<String> userIdsList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             User user = new User();
-            user.setUId(Integer.toString(i));
+            user.setUid(Integer.toString(i));
             userList.add(user);
             userIdsList.add(Integer.toString(i));
         }
@@ -193,9 +202,9 @@ public class SetScheduleViewModelTest {
 
         // case where data was not loaded yet
         setScheduleViewModel.setPreviousSelectedGroup(null);
-        when(userRepository.getDocumentsByListOfUId(userIdsList, User.class)).thenReturn(new MutableLiveData<>(userList));
+        when(userRepository.getDocumentsByListOfUid(userIdsList, User.class)).thenReturn(new LiveDataWithStatus<>(userList));
         scheduleUserList = setScheduleViewModel.getListOfUsersFromGroup(group).getValue();
-        verify(userRepository).getDocumentsByListOfUId(userIdsList, User.class);
+        verify(userRepository).getDocumentsByListOfUid(userIdsList, User.class);
         assertEquals(userList, scheduleUserList);
 
         // case where the group is empty
