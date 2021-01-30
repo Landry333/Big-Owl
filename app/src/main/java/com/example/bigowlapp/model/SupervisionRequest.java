@@ -11,7 +11,7 @@ public class SupervisionRequest extends Notification implements Constants {
     private String receiverUId;
     private String groupUId;
     private Response response;
-    // TODO: remove timeSent,as it is redundant since 'time' is in base Notification class
+    // TODO: remove timeSent, as it is redundant since 'time' is in base Notification class
     private Timestamp timeSent;
     private Timestamp timeResponse;
 
