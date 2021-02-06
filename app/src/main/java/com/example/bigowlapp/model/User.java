@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+import java.util.List;
+
 
 @IgnoreExtraProperties
 public class User extends Model implements Parcelable {
@@ -17,6 +19,7 @@ public class User extends Model implements Parcelable {
     private String phoneNumber;
     private String email;
     private String profileImage;
+    private List<String> memberGroupList;
 
     // TODO: Create a builder (possibly for all models)
 
@@ -31,13 +34,14 @@ public class User extends Model implements Parcelable {
         this.email = email;
     }
 
-    public User(String uid, String firstName, String lastName, String phoneNumber, String email, String profileImage) {
+    public User(String uid, String firstName, String lastName, String phoneNumber, String email, String profileImage, List<String> memberGroupList) {
         super(uid);
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.profileImage = profileImage;
+        this.memberGroupList = memberGroupList;
     }
 
     protected User(Parcel in) {
@@ -47,6 +51,7 @@ public class User extends Model implements Parcelable {
         phoneNumber = in.readString();
         email = in.readString();
         profileImage = in.readString();
+        memberGroupList = in.createStringArrayList();
     }
 
     @Override
@@ -57,6 +62,7 @@ public class User extends Model implements Parcelable {
         dest.writeString(phoneNumber);
         dest.writeString(email);
         dest.writeString(profileImage);
+        dest.writeStringList(memberGroupList);
     }
 
     @Override
@@ -114,6 +120,14 @@ public class User extends Model implements Parcelable {
 
     public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public List<String> getMemberGroupList() {
+        return memberGroupList;
+    }
+
+    public void setMemberGroupList(List<String> memberGroupList) {
+        this.memberGroupList = memberGroupList;
     }
 
     @Exclude
