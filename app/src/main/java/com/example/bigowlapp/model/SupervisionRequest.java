@@ -16,8 +16,7 @@ public class SupervisionRequest extends Notification implements Constants {
     private Timestamp timeResponse;
 
     public SupervisionRequest() {
-        super();
-        this.setType(Constants.SUPERVISION_TYPE);
+        super(Constants.SUPERVISION_TYPE);
     }
 
     public SupervisionRequest(String uId) {

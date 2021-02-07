@@ -33,7 +33,7 @@ public class Notification extends Model {
         return type;
     }
 
-    public void setType(String type) {
+    private void setType(String type) {
         this.type = type;
     }
 

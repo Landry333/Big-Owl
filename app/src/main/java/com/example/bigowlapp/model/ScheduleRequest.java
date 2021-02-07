@@ -15,8 +15,7 @@ public class ScheduleRequest extends Notification {
     private UserScheduleResponse senderResponse;
 
     public ScheduleRequest() {
-        super();
-        this.setType(Constants.SCHEDULE_TYPE);
+        super(Constants.SCHEDULE_TYPE);
     }
 
     public String getSenderUId() {
