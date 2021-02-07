@@ -61,13 +61,17 @@ public class NotificationRepository extends Repository<Notification> {
     protected List<Notification> extractListOfDataToModel(QuerySnapshot results, Class<? extends Notification> tClass) {
         List<Notification> notificationsFromDb = new ArrayList<>();
         for (QueryDocumentSnapshot doc : results) {
-            String type = doc.toObject(Notification.class).getType();
-            Notification t = doc.toObject(this.getClassFromType(type));
+            Notification.Type type = doc.toObject(Notification.class).getType();
+            Notification t = doc.toObject(type.typeClass);
             notificationsFromDb.add(t);
         }
         return notificationsFromDb;
     }
 
+    /**
+     * @deprecated This would be unnecessary since the Notification.Type enum can do this more smartly
+     */
+    @Deprecated
     Class<? extends Notification> getClassFromType(String type) {
         switch (String.valueOf(type)) {
             case Constants.SUPERVISION_TYPE:

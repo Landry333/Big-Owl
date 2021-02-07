@@ -1,6 +1,5 @@
 package com.example.bigowlapp.model;
 
-import com.example.bigowlapp.utils.Constants;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
@@ -15,7 +14,7 @@ public class ScheduleRequest extends Notification {
     private UserScheduleResponse senderResponse;
 
     public ScheduleRequest() {
-        super(Constants.SCHEDULE_TYPE);
+        super(Type.SCHEDULE_REQUEST);
     }
 
     public String getSenderUId() {
