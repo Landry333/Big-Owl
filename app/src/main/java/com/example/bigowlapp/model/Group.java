@@ -11,12 +11,12 @@ import java.util.List;
 public class Group extends Model {
 
     private String name;
-    private String monitoringUserId;
-    private List<String> supervisedUserId;
+    private String supervisorId;
+    private List<String> memberIdList;
 
     public Group() {
         super();
-        supervisedUserId = new ArrayList<>();
+        memberIdList = new ArrayList<>();
     }
 
     public Group(String uid, String name) {
@@ -24,11 +24,11 @@ public class Group extends Model {
         this.name = name;
     }
 
-    public Group(String uid, String name, String monitoringUserId, List<String> supervisedUserId) {
+    public Group(String uid, String name, String supervisorId, List<String> memberIdList) {
         super(uid);
         this.name = name;
-        this.monitoringUserId = monitoringUserId;
-        this.supervisedUserId = supervisedUserId;
+        this.supervisorId = supervisorId;
+        this.memberIdList = memberIdList;
     }
 
     public String getName() {
@@ -39,20 +39,20 @@ public class Group extends Model {
         this.name = name;
     }
 
-    public String getMonitoringUserId() {
-        return monitoringUserId;
+    public String getSupervisorId() {
+        return supervisorId;
     }
 
-    public void setMonitoringUserId(String monitoringUserId) {
-        this.monitoringUserId = monitoringUserId;
+    public void setSupervisorId(String supervisorId) {
+        this.supervisorId = supervisorId;
     }
 
-    public List<String> getSupervisedUserId() {
-        return (supervisedUserId == null) ? new ArrayList<>() : supervisedUserId;
+    public List<String> getMemberIdList() {
+        return (memberIdList == null) ? new ArrayList<>() : memberIdList;
     }
 
-    public void setSupervisedUserId(List<String> supervisedUserId) {
-        this.supervisedUserId = supervisedUserId;
+    public void setMemberIdList(List<String> memberIdList) {
+        this.memberIdList = memberIdList;
     }
 
 }

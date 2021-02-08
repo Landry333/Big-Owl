@@ -127,7 +127,7 @@ public class SupervisedGroupListActivityTest {
             onView(allOf(withId(R.id.text_view_group_name), withText(testUserSupervisedGroupList.get(i).getName())))
                     .check(matches(isDisplayed()));
             // check if the supervisors full names are matched and displayed
-            String supervisorFullName = supervisedGroupListViewModel.getSupervisor(testUserSupervisedGroupList.get(i).getMonitoringUserId()).getValue().getFullName();
+            String supervisorFullName = supervisedGroupListViewModel.getSupervisor(testUserSupervisedGroupList.get(i).getSupervisorId()).getValue().getFullName();
             onView(allOf(withId(R.id.text_view_group_supervisor), withText(supervisorFullName))).check(matches(isDisplayed()));
         }
     }

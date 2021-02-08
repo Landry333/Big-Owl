@@ -42,12 +42,12 @@ public class MonitoringGroupPageViewModel extends BaseViewModel {
 
     private void loadAllUsersInGroup(Group group) {
         usersInGroup = repositoryFacade.getUserRepository()
-                .getDocumentsByListOfUid(group.getSupervisedUserId(), User.class);
+                .getDocumentsByListOfUid(group.getMemberIdList(), User.class);
     }
 
     public void removeUserFromGroup(User userToBeRemoved) {
         Group groupWithRemovedUser = getGroup().getValue();
-        Objects.requireNonNull(groupWithRemovedUser).getSupervisedUserId().remove(userToBeRemoved.getUid());
+        Objects.requireNonNull(groupWithRemovedUser).getMemberIdList().remove(userToBeRemoved.getUid());
 
         repositoryFacade.getGroupRepository()
                 .updateDocument(groupWithRemovedUser.getUid(), groupWithRemovedUser);

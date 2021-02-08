@@ -121,14 +121,14 @@ public class SetScheduleViewModelTest {
     public void updateScheduleGroup() {
         Group group = new Group();
         group.setUid("GroupId");
-        group.setMonitoringUserId("MonitoringId");
+        group.setSupervisorId("MonitoringId");
 
         setScheduleViewModel.updateScheduleGroup(group);
 
         Schedule returnedSchedule = setScheduleViewModel.getNewScheduleData().getValue();
 
         assertEquals(group.getUid(), returnedSchedule.getGroupUid());
-        assertEquals(group.getMonitoringUserId(), returnedSchedule.getGroupSupervisorUid());
+        assertEquals(group.getSupervisorId(), returnedSchedule.getGroupSupervisorUid());
         assertEquals(new ArrayList<>(), returnedSchedule.getMemberList());
         assertEquals(group, setScheduleViewModel.getSelectedGroup());
         assertEquals(new ArrayList<>(), setScheduleViewModel.getSelectedUsers());
@@ -188,7 +188,7 @@ public class SetScheduleViewModelTest {
         }
 
         Group group = new Group();
-        group.setSupervisedUserId(userIdsList);
+        group.setMemberIdList(userIdsList);
 
         // case where same group already loaded is set
         setScheduleViewModel.setListOfUserInGroupData(new MutableLiveData<>(userList));
@@ -209,7 +209,7 @@ public class SetScheduleViewModelTest {
 
         // case where the group is empty
         setScheduleViewModel.setPreviousSelectedGroup(null);
-        group.setSupervisedUserId(new ArrayList<>());
+        group.setMemberIdList(new ArrayList<>());
         scheduleUserList = setScheduleViewModel.getListOfUsersFromGroup(group).getValue();
         assertEquals(new ArrayList<>(), scheduleUserList);
     }

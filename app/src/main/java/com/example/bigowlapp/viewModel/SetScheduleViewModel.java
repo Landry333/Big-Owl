@@ -83,7 +83,7 @@ public class SetScheduleViewModel extends BaseViewModel {
     public void updateScheduleGroup(Group group) {
         this.selectedGroup = group;
         this.newScheduleData.getValue().setGroupUid(group.getUid());
-        this.newScheduleData.getValue().setGroupSupervisorUid(group.getMonitoringUserId());
+        this.newScheduleData.getValue().setGroupSupervisorUid(group.getSupervisorId());
 
         this.selectedUsers = new ArrayList<>();
         this.newScheduleData.getValue().setMemberList(new ArrayList<>());
@@ -149,11 +149,11 @@ public class SetScheduleViewModel extends BaseViewModel {
             return new MutableLiveData<>(listOfUserInGroupData.getValue());
         }
         previousSelectedGroup = group;
-        if (group == null || group.getSupervisedUserId().isEmpty()) {
+        if (group == null || group.getMemberIdList().isEmpty()) {
             return new MutableLiveData<>(new ArrayList<>());
         }
         return repositoryFacade.getUserRepository()
-                .getDocumentsByListOfUid(group.getSupervisedUserId(), User.class);
+                .getDocumentsByListOfUid(group.getMemberIdList(), User.class);
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
