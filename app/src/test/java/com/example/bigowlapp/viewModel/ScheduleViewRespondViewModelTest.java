@@ -166,8 +166,8 @@ public class ScheduleViewRespondViewModelTest {
         userScheduleResponseMap.put(testUser.getUid(), new UserScheduleResponse(Response.NEUTRAL, null));
         Schedule fakeSchedule = Schedule.getPrototypeSchedule();
         fakeSchedule.setUid("test001");
-        fakeSchedule.setGroupUId("testGroup001");
-        fakeSchedule.setGroupSupervisorUId("fakeSupervisor001");
+        fakeSchedule.setGroupUid("testGroup001");
+        fakeSchedule.setGroupSupervisorUid("fakeSupervisor001");
         fakeSchedule.setUserScheduleResponseMap(userScheduleResponseMap);
         return fakeSchedule;
     }

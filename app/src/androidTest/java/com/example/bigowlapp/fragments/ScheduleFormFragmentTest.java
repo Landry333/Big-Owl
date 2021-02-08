@@ -165,7 +165,7 @@ public class ScheduleFormFragmentTest {
         when(mockSetScheduleViewModel.getSelectedGroup()).thenReturn(fakeListOfGroup.get(0));
         onView(withText("group_name")).perform(click());
         groupData.postValue(fakeListOfGroup.get(0));
-        fakeSchedule.setGroupUId(fakeSelectedGroup.getUid());
+        fakeSchedule.setGroupUid(fakeSelectedGroup.getUid());
         verify(mockSetScheduleViewModel).updateScheduleGroup(fakeListOfGroup.get(0));
         listOfUsersData.postValue(fakeListOfUsers);
 

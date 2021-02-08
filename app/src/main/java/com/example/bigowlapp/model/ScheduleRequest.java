@@ -6,9 +6,9 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class ScheduleRequest extends Notification {
-    private String senderUId;
-    private String receiverUId;
-    private String groupUId;
+    private String senderUid;
+    private String receiverUid;
+    private String groupUid;
     private Timestamp timeRead;
     private UserScheduleResponse senderResponse;
 
@@ -17,28 +17,28 @@ public class ScheduleRequest extends Notification {
         this.setType(Constants.SCHEDULE_TYPE);
     }
 
-    public String getSenderUId() {
-        return senderUId;
+    public String getSenderUid() {
+        return senderUid;
     }
 
-    public void setSenderUId(String senderUId) {
-        this.senderUId = senderUId;
+    public void setSenderUid(String senderUid) {
+        this.senderUid = senderUid;
     }
 
-    public String getReceiverUId() {
-        return receiverUId;
+    public String getReceiverUid() {
+        return receiverUid;
     }
 
-    public void setReceiverUId(String receiverUId) {
-        this.receiverUId = receiverUId;
+    public void setReceiverUid(String receiverUid) {
+        this.receiverUid = receiverUid;
     }
 
-    public String getGroupUId() {
-        return groupUId;
+    public String getGroupUid() {
+        return groupUid;
     }
 
-    public void setGroupUId(String groupUId) {
-        this.groupUId = groupUId;
+    public void setGroupUid(String groupUid) {
+        this.groupUid = groupUid;
     }
 
     public Timestamp getTimeRead() {

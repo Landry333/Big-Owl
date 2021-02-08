@@ -24,8 +24,8 @@ public class Group extends Model {
         this.name = name;
     }
 
-    public Group(String uId, String name, String monitoringUserId, List<String> supervisedUserId) {
-        super(uId);
+    public Group(String uid, String name, String monitoringUserId, List<String> supervisedUserId) {
+        super(uid);
         this.name = name;
         this.monitoringUserId = monitoringUserId;
         this.supervisedUserId = supervisedUserId;

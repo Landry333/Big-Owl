@@ -55,8 +55,8 @@ public class SetScheduleViewModel extends BaseViewModel {
         Schedule schedule = newScheduleData.getValue();
         Map<String, UserScheduleResponse> userResponseMap =
                 schedule.getMemberList().stream().collect(Collectors.toMap(
-                        memberUId -> memberUId,
-                        memberUId -> new UserScheduleResponse(Response.NEUTRAL, null))
+                        memberUid -> memberUid,
+                        memberUid -> new UserScheduleResponse(Response.NEUTRAL, null))
                 );
         schedule.setUserScheduleResponseMap(userResponseMap);
         return repositoryFacade.getScheduleRepository().addDocument(schedule);
@@ -82,8 +82,8 @@ public class SetScheduleViewModel extends BaseViewModel {
 
     public void updateScheduleGroup(Group group) {
         this.selectedGroup = group;
-        this.newScheduleData.getValue().setGroupUId(group.getUid());
-        this.newScheduleData.getValue().setGroupSupervisorUId(group.getMonitoringUserId());
+        this.newScheduleData.getValue().setGroupUid(group.getUid());
+        this.newScheduleData.getValue().setGroupSupervisorUid(group.getMonitoringUserId());
 
         this.selectedUsers = new ArrayList<>();
         this.newScheduleData.getValue().setMemberList(new ArrayList<>());

@@ -94,14 +94,14 @@ public class ScheduleViewRespondActivityTest {
         testSchedule.setUid("schedule001");
         testSchedule.setTitle("testSchedule001");
         testSchedule.setEvent("testEvent001");
-        testSchedule.setGroupUId("testGroup001");
-        testSchedule.setGroupSupervisorUId(testSupervisor.getUid());
+        testSchedule.setGroupUid("testGroup001");
+        testSchedule.setGroupSupervisorUid(testSupervisor.getUid());
         testSchedule.setStartTime(Timestamp.now());
         testSchedule.setEndTime(new Timestamp(Timestamp.now().getSeconds() + 600000, 0));
         testSchedule.setLocation(new GeoPoint(0, 0));
         testSchedule.setUserScheduleResponseMap(testScheduleMembersMap);
         Intent testIntent = new Intent(ApplicationProvider.getApplicationContext(), ScheduleViewRespondActivity.class);
-        testIntent.putExtra("scheduleUId", testSchedule.getUid());
+        testIntent.putExtra("scheduleUid", testSchedule.getUid());
         testIntent.putExtra("groupName", "test group");
         testIntent.putExtra("supervisorName", testSupervisor.getFullName());
 

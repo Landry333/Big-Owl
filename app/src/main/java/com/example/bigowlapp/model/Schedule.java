@@ -15,8 +15,8 @@ public class Schedule extends Model {
 
     private String title;
     private String event;
-    private String groupUId;
-    private String groupSupervisorUId;
+    private String groupUid;
+    private String groupSupervisorUid;
     private List<String> memberList;
     private Timestamp startTime;
     private Timestamp endTime;
@@ -57,20 +57,20 @@ public class Schedule extends Model {
         this.event = event;
     }
 
-    public String getGroupUId() {
-        return groupUId;
+    public String getGroupUid() {
+        return groupUid;
     }
 
-    public void setGroupUId(String groupUId) {
-        this.groupUId = groupUId;
+    public void setGroupUid(String groupUid) {
+        this.groupUid = groupUid;
     }
 
-    public String getGroupSupervisorUId() {
-        return groupSupervisorUId;
+    public String getGroupSupervisorUid() {
+        return groupSupervisorUid;
     }
 
-    public void setGroupSupervisorUId(String groupSupervisorUId) {
-        this.groupSupervisorUId = groupSupervisorUId;
+    public void setGroupSupervisorUid(String groupSupervisorUid) {
+        this.groupSupervisorUid = groupSupervisorUid;
     }
 
     public List<String> getMemberList() {

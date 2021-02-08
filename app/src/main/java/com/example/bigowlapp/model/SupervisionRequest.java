@@ -7,9 +7,9 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class SupervisionRequest extends Notification implements Constants {
 
-    private String senderUId;
-    private String receiverUId;
-    private String groupUId;
+    private String senderUid;
+    private String receiverUid;
+    private String groupUid;
     private Response response;
     private Timestamp timeResponse;
 
@@ -18,43 +18,43 @@ public class SupervisionRequest extends Notification implements Constants {
         this.setType(Constants.SUPERVISION_TYPE);
     }
 
-    public SupervisionRequest(String uId) {
-        super(uId, SUPERVISION_TYPE);
+    public SupervisionRequest(String uid) {
+        super(uid, SUPERVISION_TYPE);
     }
 
-    public SupervisionRequest(String uId, Timestamp time, String senderUId,
-                              String receiverUId, String groupUId, Response response,
+    public SupervisionRequest(String uid, Timestamp time, String senderUid,
+                              String receiverUid, String groupUid, Response response,
                               Timestamp timeResponse) {
-        super(uId, SUPERVISION_TYPE, time);
-        this.senderUId = senderUId;
-        this.receiverUId = receiverUId;
-        this.groupUId = groupUId;
+        super(uid, SUPERVISION_TYPE, time);
+        this.senderUid = senderUid;
+        this.receiverUid = receiverUid;
+        this.groupUid = groupUid;
         this.response = response;
         this.timeResponse = timeResponse;
     }
 
-    public String getSenderUId() {
-        return senderUId;
+    public String getSenderUid() {
+        return senderUid;
     }
 
-    public void setSenderUId(String senderUId) {
-        this.senderUId = senderUId;
+    public void setSenderUid(String senderUid) {
+        this.senderUid = senderUid;
     }
 
-    public String getReceiverUId() {
-        return receiverUId;
+    public String getReceiverUid() {
+        return receiverUid;
     }
 
-    public void setReceiverUId(String receiverUId) {
-        this.receiverUId = receiverUId;
+    public void setReceiverUid(String receiverUid) {
+        this.receiverUid = receiverUid;
     }
 
-    public String getGroupUId() {
-        return groupUId;
+    public String getGroupUid() {
+        return groupUid;
     }
 
-    public void setGroupUId(String groupUId) {
-        this.groupUId = groupUId;
+    public void setGroupUid(String groupUid) {
+        this.groupUid = groupUid;
     }
 
     public Response getResponse() {

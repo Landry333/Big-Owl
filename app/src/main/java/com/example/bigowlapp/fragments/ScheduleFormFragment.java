@@ -263,7 +263,7 @@ public class ScheduleFormFragment extends Fragment
                 hasError = true;
             }
 
-            if (scheduleToAdd.getGroupUId() == null) {
+            if (scheduleToAdd.getGroupUid() == null) {
                 groupButton.setError("Please select a group");
                 hasError = true;
             }

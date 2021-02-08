@@ -127,8 +127,8 @@ public class SetScheduleViewModelTest {
 
         Schedule returnedSchedule = setScheduleViewModel.getNewScheduleData().getValue();
 
-        assertEquals(group.getUid(), returnedSchedule.getGroupUId());
-        assertEquals(group.getMonitoringUserId(), returnedSchedule.getGroupSupervisorUId());
+        assertEquals(group.getUid(), returnedSchedule.getGroupUid());
+        assertEquals(group.getMonitoringUserId(), returnedSchedule.getGroupSupervisorUid());
         assertEquals(new ArrayList<>(), returnedSchedule.getMemberList());
         assertEquals(group, setScheduleViewModel.getSelectedGroup());
         assertEquals(new ArrayList<>(), setScheduleViewModel.getSelectedUsers());
