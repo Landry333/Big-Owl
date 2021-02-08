@@ -11,8 +11,6 @@ public class SupervisionRequest extends Notification implements Constants {
     private String receiverUId;
     private String groupUId;
     private Response response;
-    // TODO: remove timeSent,as it is redundant since 'time' is in base Notification class
-    private Timestamp timeSent;
     private Timestamp timeResponse;
 
     public SupervisionRequest() {
@@ -26,13 +24,12 @@ public class SupervisionRequest extends Notification implements Constants {
 
     public SupervisionRequest(String uId, Timestamp time, String senderUId,
                               String receiverUId, String groupUId, Response response,
-                              Timestamp timeSent, Timestamp timeResponse) {
+                              Timestamp timeResponse) {
         super(uId, SUPERVISION_TYPE, time);
         this.senderUId = senderUId;
         this.receiverUId = receiverUId;
         this.groupUId = groupUId;
         this.response = response;
-        this.timeSent = timeSent;
         this.timeResponse = timeResponse;
     }
 
@@ -66,14 +63,6 @@ public class SupervisionRequest extends Notification implements Constants {
 
     public void setResponse(Response response) {
         this.response = response;
-    }
-
-    public Timestamp getTimeSent() {
-        return timeSent;
-    }
-
-    public void setTimeSent(Timestamp timeSent) {
-        this.timeSent = timeSent;
     }
 
     public Timestamp getTimeResponse() {

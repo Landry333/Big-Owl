@@ -10,8 +10,6 @@ public class ScheduleRequest extends Notification {
     private String receiverUId;
     private String groupUId;
     private Timestamp timeRead;
-    // TODO: remove timeSend,as it is redundant since 'time' is in base Notification class
-    private Timestamp timeSend;
     private UserScheduleResponse senderResponse;
 
     public ScheduleRequest() {
@@ -49,14 +47,6 @@ public class ScheduleRequest extends Notification {
 
     public void setTimeRead(Timestamp timeRead) {
         this.timeRead = timeRead;
-    }
-
-    public Timestamp getTimeSend() {
-        return timeSend;
-    }
-
-    public void setTimeSend(Timestamp timeSend) {
-        this.timeSend = timeSend;
     }
 
     public UserScheduleResponse getSenderResponse() {

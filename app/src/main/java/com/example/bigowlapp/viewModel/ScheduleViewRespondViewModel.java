@@ -61,7 +61,6 @@ public class ScheduleViewRespondViewModel extends BaseViewModel {
         newNotification.setGroupUId(scheduleData.getValue().getGroupUId());
         newNotification.setType("memberResponseSchedule");
         newNotification.setTimeRead(null);
-        newNotification.setTimeSend(now());
         newNotification.setTime(now());
         newNotification.setSenderResponse(currentUserNewResponse);
         repositoryFacade.getNotificationRepository().addDocument(newNotification);
