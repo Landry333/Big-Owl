@@ -105,14 +105,10 @@ public class Schedule extends Model {
         this.location = location;
     }
 
-    // TODO: Temp fix since db still has old field name
-    @PropertyName("members")
     public Map<String, UserScheduleResponse> getUserScheduleResponseMap() {
         return userScheduleResponseMap;
     }
 
-    // TODO: Temp fix since db still has old field name
-    @PropertyName("members")
     public void setUserScheduleResponseMap(Map<String, UserScheduleResponse> userScheduleResponseMap) {
         this.userScheduleResponseMap = userScheduleResponseMap;
     }
