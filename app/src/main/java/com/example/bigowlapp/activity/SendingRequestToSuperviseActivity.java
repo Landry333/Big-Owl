@@ -17,6 +17,7 @@ import com.google.firebase.Timestamp;
 
 import java.util.List;
 
+// TODO: Should be using a viewmodel
 public class SendingRequestToSuperviseActivity extends AppCompatActivity {
     String otherUserID;
     String currentUserID;
