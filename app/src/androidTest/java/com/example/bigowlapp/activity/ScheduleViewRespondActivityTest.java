@@ -74,6 +74,7 @@ public class ScheduleViewRespondActivityTest {
                 "001",
                 "+1234567890",
                 "testSupervisor@mail.com",
+                null,
                 null);
         User testCurrentUser = new User(
                 "testCurrentUser001",
@@ -81,6 +82,7 @@ public class ScheduleViewRespondActivityTest {
                 "currentUser",
                 "+1111111111",
                 "testCurrentUser@mail.com",
+                null,
                 null);
 
         Map<String, UserScheduleResponse> testScheduleMembersMap = new HashMap<>();

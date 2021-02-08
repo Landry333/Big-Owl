@@ -63,7 +63,7 @@ public class ScheduleViewRespondViewModelTest {
     @Before
     public void setUp() {
         // setup fake data
-        testUser = new User("abc123", "first", "last", "+911", "test@mail.com", "url");
+        testUser = new User("abc123", "first", "last", "+911", "test@mail.com", "url", null);
         testScheduleData = new LiveDataWithStatus<>(createFakeSchedule());
 
         // setup mock responses

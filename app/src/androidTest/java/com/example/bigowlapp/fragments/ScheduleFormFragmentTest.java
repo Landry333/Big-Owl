@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
@@ -51,6 +52,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(AndroidJUnit4.class)
+@LargeTest
 public class ScheduleFormFragmentTest {
 
     private FragmentScenario<ScheduleFormFragment> fragmentScenario;
