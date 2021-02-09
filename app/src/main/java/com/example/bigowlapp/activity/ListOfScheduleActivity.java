@@ -58,7 +58,7 @@ public class ListOfScheduleActivity extends BigOwlActivity {
 
                     scheduleListView.setOnItemClickListener((arg0, v, position, arg3) -> {
                         Intent intent = new Intent(getBaseContext(), ScheduleViewRespondActivity.class);
-                        intent.putExtra("scheduleUId", schedules.get(position).getUid());
+                        intent.putExtra("scheduleUid", schedules.get(position).getUid());
                         intent.putExtra("groupID", groupID);
                         intent.putExtra("groupName", groupName);
                         intent.putExtra("supervisorName", supervisorName);

@@ -5,40 +5,38 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class ScheduleRequest extends Notification {
-    private String senderUId;
-    private String receiverUId;
-    private String groupUId;
+    private String senderUid;
+    private String receiverUid;
+    private String groupUid;
     private Timestamp timeRead;
-    // TODO: remove timeSend,as it is redundant since 'time' is in base Notification class
-    private Timestamp timeSend;
     private UserScheduleResponse senderResponse;
 
     public ScheduleRequest() {
         super(Type.SCHEDULE_REQUEST);
     }
 
-    public String getSenderUId() {
-        return senderUId;
+    public String getSenderUid() {
+        return senderUid;
     }
 
-    public void setSenderUId(String senderUId) {
-        this.senderUId = senderUId;
+    public void setSenderUid(String senderUid) {
+        this.senderUid = senderUid;
     }
 
-    public String getReceiverUId() {
-        return receiverUId;
+    public String getReceiverUid() {
+        return receiverUid;
     }
 
-    public void setReceiverUId(String receiverUId) {
-        this.receiverUId = receiverUId;
+    public void setReceiverUid(String receiverUid) {
+        this.receiverUid = receiverUid;
     }
 
-    public String getGroupUId() {
-        return groupUId;
+    public String getGroupUid() {
+        return groupUid;
     }
 
-    public void setGroupUId(String groupUId) {
-        this.groupUId = groupUId;
+    public void setGroupUid(String groupUid) {
+        this.groupUid = groupUid;
     }
 
     public Timestamp getTimeRead() {
@@ -47,14 +45,6 @@ public class ScheduleRequest extends Notification {
 
     public void setTimeRead(Timestamp timeRead) {
         this.timeRead = timeRead;
-    }
-
-    public Timestamp getTimeSend() {
-        return timeSend;
-    }
-
-    public void setTimeSend(Timestamp timeSend) {
-        this.timeSend = timeSend;
     }
 
     public UserScheduleResponse getSenderResponse() {

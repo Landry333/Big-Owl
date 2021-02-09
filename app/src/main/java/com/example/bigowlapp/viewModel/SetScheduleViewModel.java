@@ -55,8 +55,8 @@ public class SetScheduleViewModel extends BaseViewModel {
         Schedule schedule = newScheduleData.getValue();
         Map<String, UserScheduleResponse> userResponseMap =
                 schedule.getMemberList().stream().collect(Collectors.toMap(
-                        memberUId -> memberUId,
-                        memberUId -> new UserScheduleResponse(Response.NEUTRAL, null))
+                        memberUid -> memberUid,
+                        memberUid -> new UserScheduleResponse(Response.NEUTRAL, null))
                 );
         schedule.setUserScheduleResponseMap(userResponseMap);
         return repositoryFacade.getScheduleRepository().addDocument(schedule);
@@ -73,7 +73,7 @@ public class SetScheduleViewModel extends BaseViewModel {
     private void loadListOfGroup() {
         String userId = getCurrentUserUid();
         listOfGroupData = repositoryFacade.getGroupRepository()
-                .getListOfDocumentByAttribute("monitoringUserId", userId, Group.class);
+                .getListOfDocumentByAttribute("supervisorId", userId, Group.class);
     }
 
     public void updateScheduleTitle(String title) {
@@ -82,8 +82,8 @@ public class SetScheduleViewModel extends BaseViewModel {
 
     public void updateScheduleGroup(Group group) {
         this.selectedGroup = group;
-        this.newScheduleData.getValue().setGroupUId(group.getUid());
-        this.newScheduleData.getValue().setGroupSupervisorUId(group.getMonitoringUserId());
+        this.newScheduleData.getValue().setGroupUid(group.getUid());
+        this.newScheduleData.getValue().setGroupSupervisorUid(group.getSupervisorId());
 
         this.selectedUsers = new ArrayList<>();
         this.newScheduleData.getValue().setMemberList(new ArrayList<>());
@@ -149,11 +149,11 @@ public class SetScheduleViewModel extends BaseViewModel {
             return new MutableLiveData<>(listOfUserInGroupData.getValue());
         }
         previousSelectedGroup = group;
-        if (group == null || group.getSupervisedUserId().isEmpty()) {
+        if (group == null || group.getMemberIdList().isEmpty()) {
             return new MutableLiveData<>(new ArrayList<>());
         }
         return repositoryFacade.getUserRepository()
-                .getDocumentsByListOfUid(group.getSupervisedUserId(), User.class);
+                .getListOfDocumentByArrayContains("memberGroupIdList", group.getUid(), User.class);
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

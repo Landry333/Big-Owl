@@ -17,14 +17,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class ScheduleViewRespondActivity extends BigOwlActivity {
 
-    private String scheduleUId, groupName, supervisorName;
+    private String scheduleUid, groupName, supervisorName;
     private ScheduleViewRespondViewModel scheduleViewRespondViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        scheduleUId = intent.getStringExtra("scheduleUId");
+        scheduleUid = intent.getStringExtra("scheduleUid");
         groupName = intent.getStringExtra("groupName");
         supervisorName = intent.getStringExtra("supervisorName");
     }
@@ -45,7 +45,7 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
             return;
         }
 
-        scheduleViewRespondViewModel.getCurrentScheduleData(scheduleUId).observe(this, schedule -> {
+        scheduleViewRespondViewModel.getCurrentScheduleData(scheduleUid).observe(this, schedule -> {
             if (!scheduleViewRespondViewModel.isCurrentUserInSchedule()) {
                 return;
             }
@@ -81,7 +81,7 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
 
     private void userClickRespondButton(Response response) {
         if (scheduleViewRespondViewModel.isOneMinuteAfterLastResponse()) {
-            scheduleViewRespondViewModel.respondSchedule(scheduleUId, response);
+            scheduleViewRespondViewModel.respondSchedule(scheduleUid, response);
         } else
             Toast.makeText(this,
                     "User can only respond to a schedule 1 minute after last response",

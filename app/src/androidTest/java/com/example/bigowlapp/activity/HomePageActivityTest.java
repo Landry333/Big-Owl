@@ -2,6 +2,11 @@ package com.example.bigowlapp.activity;
 
 import android.os.SystemClock;
 
+import androidx.lifecycle.Lifecycle;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
+
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
@@ -13,10 +18,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import androidx.lifecycle.Lifecycle;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.when;
 
 
 @RunWith(AndroidJUnit4.class)
+@LargeTest
 public class HomePageActivityTest {
 
     @Rule
@@ -40,7 +42,7 @@ public class HomePageActivityTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        testUser = new User("abc123", "test user", "abc", "+123", "test@mail.com", null);
+        testUser = new User("abc123", "test user", "abc", "+123", "test@mail.com", null, null);
         testUserData = new LiveDataWithStatus<>();
 
         when(homePageViewModel.isCurrentUserSet()).thenReturn(true);

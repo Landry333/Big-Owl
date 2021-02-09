@@ -17,13 +17,13 @@ public class ScheduleRepository extends Repository<Schedule> {
         super("schedules");
     }
 
-    public Task<Void> updateScheduleMemberResponse(String scheduleId, String userUId, UserScheduleResponse currentUserScheduleResponse) {
-        return collectionReference.document(scheduleId).update("members.".concat(userUId), currentUserScheduleResponse);
+    public Task<Void> updateScheduleMemberResponse(String scheduleId, String userUid, UserScheduleResponse currentUserScheduleResponse) {
+        return collectionReference.document(scheduleId).update("members.".concat(userUid), currentUserScheduleResponse);
     }
 
     public LiveDataWithStatus<List<Schedule>> getListSchedulesFromGroupForUser(String groupID, String userID) {
         LiveDataWithStatus<List<Schedule>> listOfTData = new LiveDataWithStatus<>();
-        collectionReference.whereEqualTo("groupUId", groupID)
+        collectionReference.whereEqualTo("groupUid", groupID)
                 .whereArrayContains("memberList", userID)
                 .orderBy("startTime", Query.Direction.ASCENDING)
                 .get()

@@ -6,40 +6,38 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class SupervisionRequest extends Notification {
 
-    private String senderUId;
-    private String receiverUId;
-    private String groupUId;
+    private String senderUid;
+    private String receiverUid;
+    private String groupUid;
     private Response response;
-    // TODO: remove timeSent,as it is redundant since 'time' is in base Notification class
-    private Timestamp timeSent;
     private Timestamp timeResponse;
 
     public SupervisionRequest() {
         super(Type.SUPERVISION_REQUEST);
     }
 
-    public String getSenderUId() {
-        return senderUId;
+    public String getSenderUid() {
+        return senderUid;
     }
 
-    public void setSenderUId(String senderUId) {
-        this.senderUId = senderUId;
+    public void setSenderUid(String senderUid) {
+        this.senderUid = senderUid;
     }
 
-    public String getReceiverUId() {
-        return receiverUId;
+    public String getReceiverUid() {
+        return receiverUid;
     }
 
-    public void setReceiverUId(String receiverUId) {
-        this.receiverUId = receiverUId;
+    public void setReceiverUid(String receiverUid) {
+        this.receiverUid = receiverUid;
     }
 
-    public String getGroupUId() {
-        return groupUId;
+    public String getGroupUid() {
+        return groupUid;
     }
 
-    public void setGroupUId(String groupUId) {
-        this.groupUId = groupUId;
+    public void setGroupUid(String groupUid) {
+        this.groupUid = groupUid;
     }
 
     public Response getResponse() {
@@ -48,14 +46,6 @@ public class SupervisionRequest extends Notification {
 
     public void setResponse(Response response) {
         this.response = response;
-    }
-
-    public Timestamp getTimeSent() {
-        return timeSent;
-    }
-
-    public void setTimeSent(Timestamp timeSent) {
-        this.timeSent = timeSent;
     }
 
     public Timestamp getTimeResponse() {

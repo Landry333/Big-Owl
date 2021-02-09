@@ -51,7 +51,7 @@ public class EditProfileViewModelTest {
         when(repositoryFacade.getAuthRepository()).thenReturn(authRepository);
         when(repositoryFacade.getUserRepository()).thenReturn(userRepository);
 
-        testUser = new User("abc123", "first", "last", "+911", "test@mail.com", "url");
+        testUser = new User("abc123", "first", "last", "+911", "test@mail.com", "url", null);
         testUserData = new LiveDataWithStatus<>(testUser);
 
         when(authRepository.getCurrentUser()).thenReturn(testFirebaseUser);

@@ -29,7 +29,7 @@ public class SupervisedGroupListViewModel extends BaseViewModel {
 
     private void loadListOfDocumentByArrayContains() {
         groupLiveData = repositoryFacade.getGroupRepository()
-                .getListOfDocumentByArrayContains("supervisedUserId",
+                .getListOfDocumentByArrayContains("memberIdList",
                         getCurrentUserUid(), Group.class);
     }
 
