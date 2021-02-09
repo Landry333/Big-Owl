@@ -1,6 +1,10 @@
 package com.example.bigowlapp.activity;
 
-import android.os.SystemClock;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.MutableLiveData;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
@@ -12,12 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.MutableLiveData;
-import androidx.test.espresso.Espresso;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -34,6 +32,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
+@LargeTest
 public class EditProfileViewTest {
 
     @Rule
@@ -54,6 +53,7 @@ public class EditProfileViewTest {
                 "BeforeEditLastName",
                 "+1234567890",
                 "tester@mail.com",
+                null,
                 null);
         MutableLiveData<User> testUserData = new MutableLiveData<>();
 

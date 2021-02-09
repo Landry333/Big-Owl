@@ -63,7 +63,7 @@ public class ScheduleViewRespondViewModelTest {
     @Before
     public void setUp() {
         // setup fake data
-        testUser = new User("abc123", "first", "last", "+911", "test@mail.com", "url");
+        testUser = new User("abc123", "first", "last", "+911", "test@mail.com", "url", null);
         testScheduleData = new LiveDataWithStatus<>(createFakeSchedule());
 
         // setup mock responses
@@ -166,8 +166,8 @@ public class ScheduleViewRespondViewModelTest {
         userScheduleResponseMap.put(testUser.getUid(), new UserScheduleResponse(Response.NEUTRAL, null));
         Schedule fakeSchedule = Schedule.getPrototypeSchedule();
         fakeSchedule.setUid("test001");
-        fakeSchedule.setGroupUId("testGroup001");
-        fakeSchedule.setGroupSupervisorUId("fakeSupervisor001");
+        fakeSchedule.setGroupUid("testGroup001");
+        fakeSchedule.setGroupSupervisorUid("fakeSupervisor001");
         fakeSchedule.setUserScheduleResponseMap(userScheduleResponseMap);
         return fakeSchedule;
     }

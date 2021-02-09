@@ -3,6 +3,7 @@ package com.example.bigowlapp.activity;
 import androidx.fragment.app.Fragment;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 
 import com.example.bigowlapp.fragments.ScheduleFormFragment;
 
@@ -16,6 +17,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
+@LargeTest
 public class SetScheduleActivityTest {
 
     @Rule

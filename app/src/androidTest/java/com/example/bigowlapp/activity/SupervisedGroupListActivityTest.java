@@ -4,6 +4,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
@@ -38,6 +39,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(AndroidJUnit4.class)
+@LargeTest
 public class SupervisedGroupListActivityTest {
 
     @Rule
@@ -60,7 +62,7 @@ public class SupervisedGroupListActivityTest {
     public void setUp() throws Exception {
         initMocks(this);
 
-        User testUser = new User("abc123", "first", "last", "+911", "test@mail.com", null);
+        User testUser = new User("abc123", "first", "last", "+911", "test@mail.com", null, null);
         MutableLiveData<User> testUserData = new MutableLiveData<>(testUser);
         testUserData.postValue(testUser);
 
@@ -72,6 +74,7 @@ public class SupervisedGroupListActivityTest {
                     "group00".concat(String.valueOf(i)).concat("lName"),
                     "+12300".concat(String.valueOf(i)),
                     "group00".concat(String.valueOf(i)).concat("@mail.com"),
+                    null,
                     null
             );
             LiveDataWithStatus<User> groupSupervisorData = new LiveDataWithStatus<>(groupSupervisor);
@@ -124,7 +127,7 @@ public class SupervisedGroupListActivityTest {
             onView(allOf(withId(R.id.text_view_group_name), withText(testUserSupervisedGroupList.get(i).getName())))
                     .check(matches(isDisplayed()));
             // check if the supervisors full names are matched and displayed
-            String supervisorFullName = supervisedGroupListViewModel.getSupervisor(testUserSupervisedGroupList.get(i).getMonitoringUserId()).getValue().getFullName();
+            String supervisorFullName = supervisedGroupListViewModel.getSupervisor(testUserSupervisedGroupList.get(i).getSupervisorId()).getValue().getFullName();
             onView(allOf(withId(R.id.text_view_group_supervisor), withText(supervisorFullName))).check(matches(isDisplayed()));
         }
     }

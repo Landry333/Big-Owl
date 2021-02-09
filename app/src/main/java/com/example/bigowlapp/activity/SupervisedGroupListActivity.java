@@ -86,7 +86,7 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
 
             // TODO: find a better way to do below without looping query in viewModel
             supervisedGroupListViewModel.getSupervisor(
-                    group.getMonitoringUserId()).observe((LifecycleOwner) parent.getContext(),
+                    group.getSupervisorId()).observe((LifecycleOwner) parent.getContext(),
                     supervisor -> {
                         groupSupervisor.setText(supervisor.getFullName());
                         supervisorNameList.add(supervisor.getFullName());
