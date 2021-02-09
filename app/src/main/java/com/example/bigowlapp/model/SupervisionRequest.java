@@ -1,11 +1,10 @@
 package com.example.bigowlapp.model;
 
-import com.example.bigowlapp.utils.Constants;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
-public class SupervisionRequest extends Notification implements Constants {
+public class SupervisionRequest extends Notification {
 
     private String senderUId;
     private String receiverUId;

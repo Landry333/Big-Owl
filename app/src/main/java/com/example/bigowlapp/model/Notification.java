@@ -31,21 +31,11 @@ public class Notification extends Model {
         this.type = type;
     }
 
-    public Notification(String uId, Type type) {
-        super(uId);
-        this.type = type;
-    }
-
-    public Notification(String uId, Type type, Timestamp time) {
-        super(uId);
-        this.type = type;
-        this.time = time;
-    }
-
     public Type getType() {
         return type;
     }
 
+    // This private setter is necessary for Firebase data to model mapping
     private void setType(Type type) {
         this.type = type;
     }
