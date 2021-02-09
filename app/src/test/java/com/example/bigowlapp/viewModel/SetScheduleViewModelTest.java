@@ -202,9 +202,9 @@ public class SetScheduleViewModelTest {
 
         // case where data was not loaded yet
         setScheduleViewModel.setPreviousSelectedGroup(null);
-        when(userRepository.getDocumentsByListOfUid(userIdsList, User.class)).thenReturn(new LiveDataWithStatus<>(userList));
+        when(userRepository.getListOfDocumentByArrayContains("memberGroupIdList", group.getUid(), User.class)).thenReturn(new LiveDataWithStatus<>(userList));
         scheduleUserList = setScheduleViewModel.getListOfUsersFromGroup(group).getValue();
-        verify(userRepository).getDocumentsByListOfUid(userIdsList, User.class);
+        verify(userRepository).getListOfDocumentByArrayContains("memberGroupIdList", group.getUid(), User.class);
         assertEquals(userList, scheduleUserList);
 
         // case where the group is empty
