@@ -18,7 +18,7 @@ public class ScheduleRepository extends Repository<Schedule> {
     }
 
     public Task<Void> updateScheduleMemberResponse(String scheduleId, String userUid, UserScheduleResponse currentUserScheduleResponse) {
-        return collectionReference.document(scheduleId).update("members.".concat(userUid), currentUserScheduleResponse);
+        return collectionReference.document(scheduleId).update("userScheduleResponseMap.".concat(userUid), currentUserScheduleResponse);
     }
 
     public LiveDataWithStatus<List<Schedule>> getListSchedulesFromGroupForUser(String groupID, String userID) {
