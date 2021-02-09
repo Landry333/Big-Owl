@@ -3,7 +3,6 @@ package com.example.bigowlapp.model;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.IgnoreExtraProperties;
-import com.google.firebase.firestore.PropertyName;
 
 import java.util.Calendar;
 import java.util.List;
