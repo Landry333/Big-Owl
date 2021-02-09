@@ -19,7 +19,7 @@ public class User extends Model implements Parcelable {
     private String phoneNumber;
     private String email;
     private String profileImage;
-    private List<String> memberGroupList;
+    private List<String> memberGroupIdList;
 
     // TODO: Create a builder (possibly for all models)
 
@@ -34,14 +34,14 @@ public class User extends Model implements Parcelable {
         this.email = email;
     }
 
-    public User(String uid, String firstName, String lastName, String phoneNumber, String email, String profileImage, List<String> memberGroupList) {
+    public User(String uid, String firstName, String lastName, String phoneNumber, String email, String profileImage, List<String> memberGroupIdList) {
         super(uid);
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.profileImage = profileImage;
-        this.memberGroupList = memberGroupList;
+        this.memberGroupIdList = memberGroupIdList;
     }
 
     protected User(Parcel in) {
@@ -51,7 +51,7 @@ public class User extends Model implements Parcelable {
         phoneNumber = in.readString();
         email = in.readString();
         profileImage = in.readString();
-        memberGroupList = in.createStringArrayList();
+        memberGroupIdList = in.createStringArrayList();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class User extends Model implements Parcelable {
         dest.writeString(phoneNumber);
         dest.writeString(email);
         dest.writeString(profileImage);
-        dest.writeStringList(memberGroupList);
+        dest.writeStringList(memberGroupIdList);
     }
 
     @Override
@@ -122,12 +122,12 @@ public class User extends Model implements Parcelable {
         this.profileImage = profileImage;
     }
 
-    public List<String> getMemberGroupList() {
-        return memberGroupList;
+    public List<String> getMemberGroupIdList() {
+        return memberGroupIdList;
     }
 
-    public void setMemberGroupList(List<String> memberGroupList) {
-        this.memberGroupList = memberGroupList;
+    public void setMemberGroupIdList(List<String> memberGroupIdList) {
+        this.memberGroupIdList = memberGroupIdList;
     }
 
     @Exclude
