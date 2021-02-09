@@ -73,7 +73,7 @@ public class SetScheduleViewModel extends BaseViewModel {
     private void loadListOfGroup() {
         String userId = getCurrentUserUid();
         listOfGroupData = repositoryFacade.getGroupRepository()
-                .getListOfDocumentByAttribute("monitoringUserId", userId, Group.class);
+                .getListOfDocumentByAttribute("supervisorId", userId, Group.class);
     }
 
     public void updateScheduleTitle(String title) {

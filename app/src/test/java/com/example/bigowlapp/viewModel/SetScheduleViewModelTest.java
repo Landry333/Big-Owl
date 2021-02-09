@@ -104,10 +104,10 @@ public class SetScheduleViewModelTest {
     @Test
     public void getListOfGroup() {
         setScheduleViewModel.setListOfGroupData(null);
-        when(groupRepository.getListOfDocumentByAttribute("monitoringUserId", "123", Group.class)).thenReturn(new LiveDataWithStatus<>());
+        when(groupRepository.getListOfDocumentByAttribute("supervisorId", "123", Group.class)).thenReturn(new LiveDataWithStatus<>());
         assertNotNull(setScheduleViewModel.getListOfGroup());
         assertNotNull(setScheduleViewModel.getListOfGroup());
-        verify(groupRepository, times(1)).getListOfDocumentByAttribute("monitoringUserId", "123", Group.class);
+        verify(groupRepository, times(1)).getListOfDocumentByAttribute("supervisorId", "123", Group.class);
     }
 
     @Test

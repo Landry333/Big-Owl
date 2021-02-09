@@ -37,7 +37,7 @@ public class MonitoringGroupPageViewModel extends BaseViewModel {
     private void loadGroup() {
         String userId = getCurrentUserUid();
         selectedGroup = repositoryFacade.getGroupRepository()
-                .getDocumentByAttribute("monitoringUserId", userId, Group.class);
+                .getDocumentByAttribute("supervisorId", userId, Group.class);
     }
 
     private void loadAllUsersInGroup(Group group) {
