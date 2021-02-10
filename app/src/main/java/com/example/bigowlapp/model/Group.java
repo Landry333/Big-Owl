@@ -1,8 +1,6 @@
 package com.example.bigowlapp.model;
 
 
-import com.google.firebase.firestore.DocumentId;
-import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 import java.util.ArrayList;
@@ -10,31 +8,27 @@ import java.util.List;
 
 // Exclude uneeded data from documents
 @IgnoreExtraProperties
-public class Group {
+public class Group extends Model {
 
-    @DocumentId
-    private String uId;
     private String name;
-    private String monitoringUserId;
-    private List<String> supervisedUserId;
+    private String supervisorId;
+    private List<String> memberIdList;
 
     public Group() {
-        supervisedUserId = new ArrayList<>();
+        super();
+        memberIdList = new ArrayList<>();
     }
 
-    public Group(String uId, String name, String monitoringUserId, List<String> supervisedUserId) {
-        this.uId = uId;
+    public Group(String uid, String name) {
+        super(uid);
         this.name = name;
-        this.monitoringUserId = monitoringUserId;
-        this.supervisedUserId = supervisedUserId;
     }
 
-    public String getuId() {
-        return uId;
-    }
-
-    public void setuId(String uId) {
-        this.uId = uId;
+    public Group(String uid, String name, String supervisorId, List<String> memberIdList) {
+        super(uid);
+        this.name = name;
+        this.supervisorId = supervisorId;
+        this.memberIdList = memberIdList;
     }
 
     public String getName() {
@@ -45,20 +39,20 @@ public class Group {
         this.name = name;
     }
 
-    public String getMonitoringUserId() {
-        return monitoringUserId;
+    public String getSupervisorId() {
+        return supervisorId;
     }
 
-    public void setMonitoringUserId(String monitoringUserId) {
-        this.monitoringUserId = monitoringUserId;
+    public void setSupervisorId(String supervisorId) {
+        this.supervisorId = supervisorId;
     }
 
-    public List<String> getSupervisedUserId() {
-        return (supervisedUserId == null) ? new ArrayList<>() : supervisedUserId;
+    public List<String> getMemberIdList() {
+        return (memberIdList == null) ? new ArrayList<>() : memberIdList;
     }
 
-    public void setSupervisedUserId(List<String> supervisedUserId) {
-        this.supervisedUserId = supervisedUserId;
+    public void setMemberIdList(List<String> memberIdList) {
+        this.memberIdList = memberIdList;
     }
 
 }

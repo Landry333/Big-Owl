@@ -4,6 +4,12 @@ import android.os.SystemClock;
 import android.view.View;
 import android.widget.ListView;
 
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.MutableLiveData;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
+
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
@@ -21,12 +27,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.MutableLiveData;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.filters.LargeTest;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -72,6 +72,7 @@ public class MonitoringGroupPageActivityTest {
                     "#".concat(String.valueOf(i)),
                     null,
                     null,
+                    null,
                     null);
             testUserList.add(testUser);
             supervisedUsersIDs.add(String.valueOf(i));
@@ -98,7 +99,7 @@ public class MonitoringGroupPageActivityTest {
         testGroupData.postValue(testMonitoringGroup);
         testUserListData.postValue(testUserList);
 
-        SystemClock.sleep(3000);
+        SystemClock.sleep(500);
 
         assertEquals(testMonitoringGroup, currentActivity.getmGroupPageViewModel().getGroup().getValue());
         assertEquals(testUserList,
@@ -106,8 +107,6 @@ public class MonitoringGroupPageActivityTest {
                         .getmGroupPageViewModel()
                         .getUsersFromGroup(currentActivity.getmGroupPageViewModel().getGroup().getValue())
                         .getValue());
-
-        SystemClock.sleep(3000);
 
         int randomIndex = (int) (Math.random() * testUserList.size());
         onData(anything())
@@ -118,16 +117,10 @@ public class MonitoringGroupPageActivityTest {
 
         int testUserListAfterUserRemovedSize = testUserList.size() - 1;
 
-        SystemClock.sleep(3000);
-
         onView(allOf(withText("Remove"), isDisplayed()))
                 .perform(click());
 
-        SystemClock.sleep(3000);
-
         assertEquals(testUserListAfterUserRemovedSize, testUserList.size());
-
-        SystemClock.sleep(3000);
     }
 
     public static Matcher<View> withListSize(final int size) {

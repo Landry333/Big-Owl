@@ -3,7 +3,9 @@ package com.example.bigowlapp.activity;
 import android.app.Activity;
 import android.app.Instrumentation;
 
-import androidx.test.rule.ActivityTestRule;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 
 import com.example.bigowlapp.R;
 
@@ -11,6 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -18,17 +21,20 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertNotNull;
 
+@RunWith(AndroidJUnit4.class)
+@LargeTest
 public class InvitationConfirmationActivityTest {
 
     @Rule
-    public ActivityTestRule<InvitationConfirmationActivity> invitationConfirmationActivityTestRule = new ActivityTestRule<InvitationConfirmationActivity>(InvitationConfirmationActivity.class);
+    public ActivityScenarioRule<InvitationConfirmationActivity> invitationConfirmationActivityTestRule = new ActivityScenarioRule<InvitationConfirmationActivity>(InvitationConfirmationActivity.class);
     private InvitationConfirmationActivity invitationConfirmActivity = null;
     Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(HomePageActivity.class.getName(), null, false);
 
     @Before
     public void setUp() throws Exception {
-
-        invitationConfirmActivity = invitationConfirmationActivityTestRule.getActivity();
+        invitationConfirmationActivityTestRule.getScenario().onActivity(activity -> {
+            invitationConfirmActivity = activity;
+        });
     }
 
     @Test

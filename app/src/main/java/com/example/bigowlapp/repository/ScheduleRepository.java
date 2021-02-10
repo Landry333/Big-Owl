@@ -1,9 +1,6 @@
 package com.example.bigowlapp.repository;
 
-import android.util.Log;
-
-import androidx.lifecycle.MutableLiveData;
-
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.google.android.gms.tasks.Task;
@@ -20,27 +17,26 @@ public class ScheduleRepository extends Repository<Schedule> {
         super("schedules");
     }
 
-    public Task<Void> updateScheduleMemberResponse(String scheduleId, String userUId, UserScheduleResponse currentUserScheduleResponse) {
-        return collectionReference.document(scheduleId).update("members.".concat(userUId), currentUserScheduleResponse);
+    public Task<Void> updateScheduleMemberResponse(String scheduleId, String userUid, UserScheduleResponse currentUserScheduleResponse) {
+        return collectionReference.document(scheduleId).update("members.".concat(userUid), currentUserScheduleResponse);
     }
 
-    public MutableLiveData<List<Schedule>> getListSchedulesFromGroupForUser(String groupID, String userID) {
-        MutableLiveData<List<Schedule>> listOfTData = new MutableLiveData<>();
-        collectionReference.whereEqualTo("groupUId", groupID)
-                .whereArrayContains("membersList", userID)
+    public LiveDataWithStatus<List<Schedule>> getListSchedulesFromGroupForUser(String groupID, String userID) {
+        LiveDataWithStatus<List<Schedule>> listOfTData = new LiveDataWithStatus<>();
+        collectionReference.whereEqualTo("groupUid", groupID)
+                .whereArrayContains("memberList", userID)
                 .orderBy("startTime", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            listOfTData.setValue(this.extractListOfDataToModel(task.getResult(), Schedule.class));
+                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), Schedule.class));
                         } else {
-                            listOfTData.setValue(null);
+                            listOfTData.setError(getDocumentNotFoundException(Schedule.class));
                         }
                     } else {
-                        Log.e(getClassName(), "Error getting documents: " +
-                                task.getException());
+                        listOfTData.setError(task.getException());
                     }
                 });
         return listOfTData;

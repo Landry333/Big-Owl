@@ -1,10 +1,8 @@
 package com.example.bigowlapp.model;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.IgnoreExtraProperties;
-import com.google.firebase.firestore.PropertyName;
 
 import java.util.Calendar;
 import java.util.List;
@@ -12,14 +10,12 @@ import java.util.Map;
 
 
 @IgnoreExtraProperties
-public class Schedule {
+public class Schedule extends Model {
 
-    @DocumentId
-    private String uId;
     private String title;
     private String event;
-    private String groupUId;
-    private String groupSupervisorUId;
+    private String groupUid;
+    private String groupSupervisorUid;
     private List<String> memberList;
     private Timestamp startTime;
     private Timestamp endTime;
@@ -41,15 +37,7 @@ public class Schedule {
     }
 
     public Schedule() {
-        // Necessary for Firebase data mapping to model object
-    }
-
-    public String getuId() {
-        return uId;
-    }
-
-    public void setuId(String uId) {
-        this.uId = uId;
+        super();
     }
 
     public String getTitle() {
@@ -68,20 +56,20 @@ public class Schedule {
         this.event = event;
     }
 
-    public String getGroupUId() {
-        return groupUId;
+    public String getGroupUid() {
+        return groupUid;
     }
 
-    public void setGroupUId(String groupUId) {
-        this.groupUId = groupUId;
+    public void setGroupUid(String groupUid) {
+        this.groupUid = groupUid;
     }
 
-    public String getGroupSupervisorUId() {
-        return groupSupervisorUId;
+    public String getGroupSupervisorUid() {
+        return groupSupervisorUid;
     }
 
-    public void setGroupSupervisorUId(String groupSupervisorUId) {
-        this.groupSupervisorUId = groupSupervisorUId;
+    public void setGroupSupervisorUid(String groupSupervisorUid) {
+        this.groupSupervisorUid = groupSupervisorUid;
     }
 
     public List<String> getMemberList() {
@@ -116,14 +104,10 @@ public class Schedule {
         this.location = location;
     }
 
-    // TODO: Temp fix since db still has old field name
-    @PropertyName("members")
     public Map<String, UserScheduleResponse> getUserScheduleResponseMap() {
         return userScheduleResponseMap;
     }
 
-    // TODO: Temp fix since db still has old field name
-    @PropertyName("members")
     public void setUserScheduleResponseMap(Map<String, UserScheduleResponse> userScheduleResponseMap) {
         this.userScheduleResponseMap = userScheduleResponseMap;
     }
