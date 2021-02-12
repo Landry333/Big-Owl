@@ -14,6 +14,8 @@ import java.util.List;
 
 public class NotificationRepository extends Repository<Notification> {
 
+    private static final String TYPE = "type";
+
     // TODO: Dependency Injection Implementation for Firestore
     public NotificationRepository() {
         super("notifications");
@@ -23,7 +25,7 @@ public class NotificationRepository extends Repository<Notification> {
                                                                                             Class<? extends SupervisionRequest> tClass) {
         MutableLiveData<List<SupervisionRequest>> listOfTData = new MutableLiveData<>();
         collectionReference.whereEqualTo(attribute, attrValue)
-                .whereEqualTo("type", Notification.Type.SUPERVISION_REQUEST)
+                .whereEqualTo(TYPE, Notification.Type.SUPERVISION_REQUEST)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

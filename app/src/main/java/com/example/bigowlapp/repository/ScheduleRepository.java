@@ -12,13 +12,15 @@ import java.util.List;
 
 public class ScheduleRepository extends Repository<Schedule> {
 
+    private static final String USER_SCHEDULE_RESPONSE_MAP = "userScheduleResponseMap";
+
     // TODO: Add dependency injection
     public ScheduleRepository() {
         super("schedules");
     }
 
     public Task<Void> updateScheduleMemberResponse(String scheduleId, String userUid, UserScheduleResponse currentUserScheduleResponse) {
-        return collectionReference.document(scheduleId).update("userScheduleResponseMap.".concat(userUid), currentUserScheduleResponse);
+        return collectionReference.document(scheduleId).update((USER_SCHEDULE_RESPONSE_MAP + ".").concat(userUid), currentUserScheduleResponse);
     }
 
     public LiveDataWithStatus<List<Schedule>> getListSchedulesFromGroupForUser(String groupID, String userID) {
