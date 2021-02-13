@@ -4,12 +4,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
 
-public class SmsListener extends BroadcastReceiver {
+public class SmsListenerThenSender extends BroadcastReceiver {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+    private String smsNumber;
+    private String smsMessage;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -30,11 +33,29 @@ public class SmsListener extends BroadcastReceiver {
                 }
                 String sender = messages[0].getOriginatingAddress();
                 String message = sb.toString();
-                //Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-                Toast.makeText(context, "RECEIVED MESSAGE 1111", Toast.LENGTH_SHORT).show();
+
+                smsNumber = "+14388313579"; //number of the monitoring user initiating the authentication
+                smsMessage = "The authentication code is 123456";//response from supervised user with authentication code
+
+                if(sender.equals(smsNumber)){
+                    Toast.makeText(context, "Received BigOwl authentication SMS from: "+sender, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                    try{
+                        sendSMS(context);
+                    }
+                    catch (Exception e){
+                        // Todo: Add a warning system for failed authentication process
+                    }
+                }
                 // prevent any other broadcast receivers from receiving broadcast
                 // abortBroadcast();
             }
         }
     }
+    private void sendSMS(Context context) {
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(smsNumber, null, smsMessage, null, null);
+        Toast.makeText(context, "SMS SENT", Toast.LENGTH_SHORT).show();
+    }
+
 }

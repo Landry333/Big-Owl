@@ -1,10 +1,13 @@
 package com.example.bigowlapp.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
@@ -31,21 +35,38 @@ public class HomePageActivity extends BigOwlActivity {
     ImageView imgUserAvatar;
     TextView textEmail, textFirstName, textLastName, textPhone;
     private HomePageViewModel homePageViewModel;
+    String deviceID;
+    String phoneNumber;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initialize();
 
-        // RECEIVE SMS permission for the text sms authentication system
+        // RECEIVE SMS and SEND SMS permissions for the text sms authentication system
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 checkSelfPermission(Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED){
             requestPermissions(new String[] {Manifest.permission.RECEIVE_SMS}, 1000);
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.SEND_SMS}, 100);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, 10);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                checkSelfPermission(Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_PHONE_NUMBERS}, 1);
+        }
+
     }
 
 
-    @Override // This is solely for the RECEIVE SMS permission for the text sms authentication system
+
+    @Override // This is solely for the SEND SMS and the RECEIVE SMS permission for the text sms authentication system
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
         if(requestCode == 1000){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
@@ -56,14 +77,53 @@ public class HomePageActivity extends BigOwlActivity {
                 finish();
             }
         }
+        if(requestCode == 100){
+            if(grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this, "SEND SMS Permission GRANTED", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(this, "SEND SMS Permission DENIED", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+        if(requestCode == 10){
+            if(grantResults[2] == PackageManager.PERMISSION_GRANTED){
+                //TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                //deviceID = telephonyManager.getDeviceId();
+                //deviceID ="deviceID";
+                Toast.makeText(this, "DeviceID is: "+ deviceID, Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(this, "DeviceID Permission DENIED", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+        if(requestCode == 1){
+            if(grantResults[3] == PackageManager.PERMISSION_GRANTED){
+                //TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                //deviceID = telephonyManager.getDeviceId();
+                //deviceID ="deviceID";
+                Toast.makeText(this, "Phone number Read Permission GRANTED", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(this, "Phone number Read Permission DENIED", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+
     }
 
+    @SuppressLint("MissingPermission")
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStart() {
         super.onStart();
         if (homePageViewModel == null) {
             homePageViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
         }
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        deviceID = telephonyManager.getImei();
+        phoneNumber = telephonyManager.getLine1Number();
         subscribeToData();
     }
 
@@ -125,8 +185,8 @@ public class HomePageActivity extends BigOwlActivity {
 
             homePageViewModel.getCurrentUserData().observe(this, user -> {
                 textEmail.setText(user.getEmail());
-                textFirstName.setText(user.getFirstName());
-                textLastName.setText(user.getLastName());
+                textFirstName.setText(user.getFirstName()+" "+phoneNumber);
+                textLastName.setText(user.getLastName()+" "+deviceID);
                 textPhone.setText(user.getPhoneNumber());
 
                 Picasso.get()
