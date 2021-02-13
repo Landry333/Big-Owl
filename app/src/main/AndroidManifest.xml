@@ -2,8 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bigowlapp">
 
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
 
     <application
         android:allowBackup="true"
@@ -13,6 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.SetScheduleActivity" />
+        <activity android:name=".activity.ScheduleViewRespondActivity" />
         <activity android:name=".activity.EditProfileActivity" />
         <activity android:name=".activity.HomePageActivity" />
         <activity android:name=".activity.InvitationConfirmationActivity" />
@@ -26,8 +34,8 @@
         <activity android:name=".activity.SupervisedGroupListActivity" />
         <activity android:name=".activity.SupervisedGroupPageActivity" />
         <activity android:name=".activity.SendingRequestToSuperviseActivity" />
-        <activity android:name=".activity.AddUsers" />
-        <activity android:name=".fragments.UsersFragment" />
+        <activity android:name=".activity.ListOfScheduleActivity" />
+        <activity android:name=".activity.AddUsersActivity" />
         <activity
             android:name=".activity.WelcomePageActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -44,14 +52,5 @@
         </receiver>
 
     </application>
-
-    <uses-permission android:name="android.permission.SEND_SMS" />
-
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-
-    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
-
 
 </manifest>

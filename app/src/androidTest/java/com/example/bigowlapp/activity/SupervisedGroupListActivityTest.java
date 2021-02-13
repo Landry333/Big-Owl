@@ -1,7 +1,14 @@
 package com.example.bigowlapp.activity;
 
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.MutableLiveData;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
+
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
@@ -18,11 +25,6 @@ import org.mockito.Mock;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.MutableLiveData;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -37,6 +39,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(AndroidJUnit4.class)
+@LargeTest
 public class SupervisedGroupListActivityTest {
 
     @Rule
@@ -44,16 +47,12 @@ public class SupervisedGroupListActivityTest {
 
     @Mock
     private SupervisedGroupListViewModel supervisedGroupListViewModel;
-
     @Mock
     private AuthRepository authRepository;
-
     @Mock
     private GroupRepository groupRepository;
-
     @Mock
     private UserRepository userRepository;
-
     @Mock
     private FirebaseUser testFirebaseUser;
 
@@ -63,7 +62,7 @@ public class SupervisedGroupListActivityTest {
     public void setUp() throws Exception {
         initMocks(this);
 
-        User testUser = new User("abc123", "first", "last", "+911", "test@mail.com", null);
+        User testUser = new User("abc123", "first", "last", "+911", "test@mail.com", null, null);
         MutableLiveData<User> testUserData = new MutableLiveData<>(testUser);
         testUserData.postValue(testUser);
 
@@ -75,9 +74,10 @@ public class SupervisedGroupListActivityTest {
                     "group00".concat(String.valueOf(i)).concat("lName"),
                     "+12300".concat(String.valueOf(i)),
                     "group00".concat(String.valueOf(i)).concat("@mail.com"),
+                    null,
                     null
             );
-            MutableLiveData<User> groupSupervisorData = new MutableLiveData<>(groupSupervisor);
+            LiveDataWithStatus<User> groupSupervisorData = new LiveDataWithStatus<>(groupSupervisor);
 
             List<String> groupSupervisedUserId = new ArrayList<>();
             for (int j = 1; j < (int) ((Math.random() * 2) + 1); j++) {
@@ -89,16 +89,16 @@ public class SupervisedGroupListActivityTest {
             Group newGroup = new Group(
                     "group00".concat(String.valueOf(i)),
                     "groupName00".concat(String.valueOf(i)),
-                    groupSupervisor.getUId(),
+                    groupSupervisor.getUid(),
                     groupSupervisedUserId
             );
             testUserSupervisedGroupList.add(newGroup);
 
-            when(userRepository.getDocumentByUId(groupSupervisor.getUId(), User.class))
+            when(userRepository.getDocumentByUid(groupSupervisor.getUid(), User.class))
                     .thenReturn(groupSupervisorData);
-            when(supervisedGroupListViewModel.getSupervisor(groupSupervisor.getUId())).thenReturn(groupSupervisorData);
+            when(supervisedGroupListViewModel.getSupervisor(groupSupervisor.getUid())).thenReturn(groupSupervisorData);
         }
-        MutableLiveData<List<Group>> testUserSupervisedGroupListData = new MutableLiveData<>(testUserSupervisedGroupList);
+        LiveDataWithStatus<List<Group>> testUserSupervisedGroupListData = new LiveDataWithStatus<>(testUserSupervisedGroupList);
         testUserSupervisedGroupListData.postValue(testUserSupervisedGroupList);
 
         when(testFirebaseUser.getUid()).thenReturn("abc123");
@@ -127,7 +127,7 @@ public class SupervisedGroupListActivityTest {
             onView(allOf(withId(R.id.text_view_group_name), withText(testUserSupervisedGroupList.get(i).getName())))
                     .check(matches(isDisplayed()));
             // check if the supervisors full names are matched and displayed
-            String supervisorFullName = supervisedGroupListViewModel.getSupervisor(testUserSupervisedGroupList.get(i).getMonitoringUserId()).getValue().getFullName();
+            String supervisorFullName = supervisedGroupListViewModel.getSupervisor(testUserSupervisedGroupList.get(i).getSupervisorId()).getValue().getFullName();
             onView(allOf(withId(R.id.text_view_group_supervisor), withText(supervisorFullName))).check(matches(isDisplayed()));
         }
     }

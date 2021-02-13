@@ -22,6 +22,7 @@ import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.VisibleForTesting;
@@ -29,11 +30,24 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.bigowlapp.R;
+import com.example.bigowlapp.model.LiveDataWithStatus;
+import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.viewModel.HomePageViewModel;
+import com.squareup.picasso.Picasso;
+
 public class HomePageActivity extends BigOwlActivity {
-    Button btnLogOut, btnAddUsers, btnMonitoringGroup, btnSupervisedGroup;
-    ScrollView scrollView;
-    ImageView imgUserAvatar;
-    TextView textEmail, textFirstName, textLastName, textPhone;
+    private Button btnLogOut;
+    private Button btnAddUsers;
+    private Button btnMonitoringGroup;
+    private Button btnSupervisedGroup;
+    private Button btnSetSchedule;
+    private ScrollView scrollView;
+    private ImageView imgUserAvatar;
+    private TextView textEmail;
+    private TextView textFirstName;
+    private TextView textLastName;
+    private TextView textPhone;
     private HomePageViewModel homePageViewModel;
     String deviceID;
     String phoneNumber;
@@ -134,15 +148,22 @@ public class HomePageActivity extends BigOwlActivity {
         btnLogOut = findViewById(R.id.btn_logout);
 
         btnLogOut.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
+            homePageViewModel.signOut();
             Intent i = new Intent(HomePageActivity.this, LoginPageActivity.class);
+            startActivity(i);
+        });
+
+        btnSetSchedule = findViewById(R.id.btn_set_schedule);
+
+        btnSetSchedule.setOnClickListener(v -> {
+            Intent i = new Intent(HomePageActivity.this, SetScheduleActivity.class);
             startActivity(i);
         });
 
         btnAddUsers = findViewById(R.id.btn_add_users);
 
         btnAddUsers.setOnClickListener(v -> {
-            Intent i = new Intent(HomePageActivity.this, AddUsers.class);
+            Intent i = new Intent(HomePageActivity.this, AddUsersActivity.class);
             startActivity(i);
         });
 
@@ -183,7 +204,14 @@ public class HomePageActivity extends BigOwlActivity {
             textLastName = findViewById(R.id.user_last_name);
             textPhone = findViewById(R.id.user_phone_number);
 
-            homePageViewModel.getCurrentUserData().observe(this, user -> {
+            LiveDataWithStatus<User> currentUserData = homePageViewModel.getCurrentUserData();
+            currentUserData.observe(this, user -> {
+                if (currentUserData.hasError()) {
+                    Toast.makeText(getBaseContext(), currentUserData.getError().getMessage(), Toast.LENGTH_LONG).show();
+                    // TODO: Handle this failure (exist page, modify page, or set up page for error case)
+                    return;
+                }
+
                 textEmail.setText(user.getEmail());
                 textFirstName.setText(user.getFirstName()+" "+phoneNumber);
                 textLastName.setText(user.getLastName()+" "+deviceID);

@@ -9,21 +9,24 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.bigowlapp.R;
-import com.example.bigowlapp.model.Group;
-import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
-
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.bigowlapp.R;
+import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class SupervisedGroupListActivity extends BigOwlActivity {
     private ListView supervisedGroupsListView;
     private SupervisedGroupListViewModel supervisedGroupListViewModel;
+    private String supervisorName;
+    private List<String> supervisorNameList = new ArrayList<String>();
 
     @Override
     protected void onStart() {
@@ -42,7 +45,13 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
                                 if (supervisedGroups != null) {
                                     supervisedGroupsListView = findViewById(R.id.supervised_groups);
                                     supervisedGroupsListView.setAdapter(new SupervisedGroupAdaptor(getBaseContext(), new ArrayList<>(supervisedGroups)));
-                                    supervisedGroupsListView.setOnItemClickListener((arg0, v, position, arg3) -> startActivity(new Intent(getBaseContext(), SupervisedGroupPageActivity.class)));
+                                    supervisedGroupsListView.setOnItemClickListener((arg0, v, position, arg3) -> {
+                                        Intent intent = new Intent(getBaseContext(), SupervisedGroupPageActivity.class);
+                                        intent.putExtra("groupID", supervisedGroups.get(position).getUid());
+                                        intent.putExtra("groupName", supervisedGroups.get(position).getName());
+                                        intent.putExtra("supervisorName", supervisorNameList.get(position));
+                                        startActivity(intent);
+                                    });
                                 } else
                                     this.noGroupAlert().show();
                             }));
@@ -77,9 +86,11 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
 
             // TODO: find a better way to do below without looping query in viewModel
             supervisedGroupListViewModel.getSupervisor(
-                    group.getMonitoringUserId()).observe((LifecycleOwner) parent.getContext(),
-                    supervisor -> groupSupervisor.setText(
-                            supervisor.getFullName()));
+                    group.getSupervisorId()).observe((LifecycleOwner) parent.getContext(),
+                    supervisor -> {
+                        groupSupervisor.setText(supervisor.getFullName());
+                        supervisorNameList.add(supervisor.getFullName());
+                    });
             // Return the completed view to render on screen
             return convertView;
         }

@@ -1,10 +1,11 @@
 package com.example.bigowlapp.repository;
 
-import android.util.Log;
-
-import androidx.lifecycle.MutableLiveData;
+import androidx.annotation.VisibleForTesting;
 
 import com.example.bigowlapp.database.Firestore;
+import com.example.bigowlapp.model.LiveDataWithStatus;
+import com.example.bigowlapp.model.Model;
+import com.example.bigowlapp.repository.exception.DocumentNotFoundException;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
@@ -15,49 +16,51 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class Repository<T> {
+public abstract class Repository<T extends Model> {
 
-    private final FirebaseFirestore mFirebaseFirestore;
+    protected final FirebaseFirestore mFirebaseFirestore;
     protected final CollectionReference collectionReference;
 
-    public Repository(String collectionName) {
+    protected Repository(String collectionName) {
         mFirebaseFirestore = Firestore.getDatabase();
         collectionReference = mFirebaseFirestore.collection(collectionName);
+    }
+
+    // TODO: Remove or Modify when dependency injection implemented
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public Repository(FirebaseFirestore mFirebaseFirestore, CollectionReference collectionReference) {
+        this.mFirebaseFirestore = mFirebaseFirestore;
+        this.collectionReference = collectionReference;
     }
 
     //===========================================================================================
     // Adding Document
     //===========================================================================================
 
-    public MutableLiveData<T> addDocument(T documentData) {
-        MutableLiveData<T> tData = new MutableLiveData<>();
-        tData.setValue(documentData);
+    public LiveDataWithStatus<T> addDocument(T documentData) {
+        LiveDataWithStatus<T> tData = new LiveDataWithStatus<>();
         collectionReference
                 .add(documentData)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.d(getClassName(), "Document added successfully.");
+                        tData.setSuccess(documentData);
                     } else {
-                        Log.e(getClassName(), "Error adding document: " +
-                                task.getException());
+                        tData.setError(task.getException());
                     }
                 });
         return tData;
     }
 
-    public MutableLiveData<T> addDocument(String docUId, T documentData) {
-        MutableLiveData<T> tData = new MutableLiveData<>();
-        tData.setValue(documentData);
-        collectionReference.document(docUId)
+    public LiveDataWithStatus<T> addDocument(String docUid, T documentData) {
+        LiveDataWithStatus<T> tData = new LiveDataWithStatus<>();
+        collectionReference.document(docUid)
                 .set(documentData)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.d(getClassName(), "Document added successfully.");
+                        tData.setSuccess(documentData);
                     } else {
-                        Log.e(getClassName(), "Error adding document: " +
-                                task.getException());
+                        tData.setError(task.getException());
                     }
                 });
         return tData;
@@ -67,100 +70,65 @@ public abstract class Repository<T> {
     // Remove Document
     //===========================================================================================
 
-    // TODO: Check for Asynchronous boolean value
-    public boolean removeDocument(String docUId) {
-        // We are using AtomicBoolean because the lambda function is asynchronous.
-        // Thus we need an atomic variable, so we can set the boolean value in the lambda function.
-        AtomicBoolean isSuccessful = new AtomicBoolean();
-        collectionReference.document(docUId)
+    public LiveDataWithStatus<T> removeDocument(String docUid) {
+        LiveDataWithStatus<T> tData = new LiveDataWithStatus<>();
+        collectionReference.document(docUid)
                 .delete()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.d(getClassName(), "Document removed successfully.");
-                        isSuccessful.set(true);
+                        tData.setSuccess(null);
                     } else {
-                        Log.e(getClassName(), "Error removing document: " +
-                                task.getException());
-                        isSuccessful.set(false);
+                        tData.setError(task.getException());
                     }
                 });
-        return isSuccessful.get();
+        return tData;
     }
 
     //===========================================================================================
     // Updating Document
     //===========================================================================================
 
-    public MutableLiveData<T> updateDocument(String docUId, T documentData) {
-        MutableLiveData<T> tData = new MutableLiveData<>();
-        tData.setValue(documentData);
-        collectionReference.document(docUId)
+    public LiveDataWithStatus<T> updateDocument(String docUid, T documentData) {
+        LiveDataWithStatus<T> tData = new LiveDataWithStatus<>();
+        collectionReference.document(docUid)
                 .set(documentData, SetOptions.merge())
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.d(getClassName(), "Document added successfully.");
+                        tData.setSuccess(documentData);
                     } else {
-                        Log.e(getClassName(), "Error updating document: " +
-                                task.getException());
+                        tData.setError(task.getException());
                     }
                 });
         return tData;
     }
 
     //===========================================================================================
-    // Fetching a Documents
+    // Fetching a Document
     //===========================================================================================
 
-    public MutableLiveData<T> getDocumentByUId(String UId, Class<? extends T> tClass) {
-        MutableLiveData<T> tData = new MutableLiveData<>();
-        collectionReference.document(UId)
+    public LiveDataWithStatus<T> getDocumentByUid(String docUid, Class<? extends T> tClass) {
+        LiveDataWithStatus<T> tData = new LiveDataWithStatus<>();
+        collectionReference.document(docUid)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot tDoc = task.getResult();
                         if (tDoc != null && tDoc.exists()) {
                             T t = tDoc.toObject(tClass);
-                            tData.setValue(t);
+                            tData.setSuccess(t);
                         } else {
-                            tData.setValue(null);
+                            tData.setError(getDocumentNotFoundException(tClass));
                         }
                     } else {
-                        Log.e(getClassName(), "Error getting documents: " +
-                                task.getException());
+                        tData.setError(task.getException());
                     }
                 });
         return tData;
     }
 
-    // TODO: bug where can only handle 10 items in the list, should allow any size list
-    public MutableLiveData<List<T>> getDocumentsByListOfUId(List<String> uIdList, Class<? extends T> tClass) {
-        MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
-        collectionReference.whereIn(FieldPath.documentId(), uIdList)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot tDocs = task.getResult();
-                        if (tDocs != null && !tDocs.isEmpty()) {
-                            List<T> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                T t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
-                        } else {
-                            listOfTData.setValue(null);
-                        }
-                    } else {
-                        Log.e(getClassName(), "Error getting documents: " +
-                                task.getException());
-                    }
-                });
-        return listOfTData;
-    }
-
-    public MutableLiveData<T> getDocumentByAttribute(String attribute, String attrValue,
-                                                     Class<? extends T> tClass) {
-        MutableLiveData<T> tData = new MutableLiveData<>();
+    public LiveDataWithStatus<T> getDocumentByAttribute(String attribute, String attrValue,
+                                                        Class<? extends T> tClass) {
+        LiveDataWithStatus<T> tData = new LiveDataWithStatus<>();
         collectionReference.whereEqualTo(attribute, attrValue)
                 .limit(1)
                 .get()
@@ -169,13 +137,12 @@ public abstract class Repository<T> {
                         QuerySnapshot tDoc = task.getResult();
                         if (tDoc != null && !tDoc.isEmpty()) {
                             T t = tDoc.getDocuments().get(0).toObject(tClass);
-                            tData.setValue(t);
+                            tData.setSuccess(t);
                         } else {
-                            tData.setValue(null);
+                            tData.setError(getDocumentNotFoundException(tClass));
                         }
                     } else {
-                        Log.e(getClassName(), "Error getting documents: " +
-                                task.getException());
+                        tData.setError(task.getException());
                     }
                 });
         return tData;
@@ -185,85 +152,102 @@ public abstract class Repository<T> {
     // Fetching a list of Documents
     //===========================================================================================
 
-    public MutableLiveData<List<T>> getListOfDocumentByAttribute(String attribute, String attrValue,
-                                                                 Class<? extends T> tClass) {
-        MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
+    public LiveDataWithStatus<List<T>> getListOfDocumentByAttribute(String attribute, String attrValue,
+                                                                    Class<? extends T> tClass) {
+        LiveDataWithStatus<List<T>> listOfTData = new LiveDataWithStatus<>();
         collectionReference.whereEqualTo(attribute, attrValue)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            List<T> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                T t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
+                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), tClass));
                         } else {
-                            listOfTData.setValue(null);
+                            listOfTData.setError(getDocumentNotFoundException(tClass));
                         }
                     } else {
-                        Log.e(getClassName(), "Error getting documents: " +
-                                task.getException());
+                        listOfTData.setError(task.getException());
                     }
                 });
         return listOfTData;
     }
 
-    public MutableLiveData<List<T>> getListOfDocumentByArrayContains(String attribute, String attrValue,
-                                                                 Class<? extends T> tClass) {
-        MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
+    public LiveDataWithStatus<List<T>> getListOfDocumentByArrayContains(String attribute, String attrValue,
+                                                                        Class<? extends T> tClass) {
+        LiveDataWithStatus<List<T>> listOfTData = new LiveDataWithStatus<>();
         collectionReference.whereArrayContains(attribute, attrValue)
                 .get()
                 .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                     QuerySnapshot tDocs = task.getResult();
+                    if (task.isSuccessful()) {
+                        QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            List<T> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                T t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
+                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), tClass));
                         } else {
-                            listOfTData.setValue(null);
+                            listOfTData.setError(getDocumentNotFoundException(tClass));
                         }
 
-                    }
-                    else{
-                        Log.e(getClassName(), "Error getting documents: " +
-                                task.getException());
+                    } else {
+                        listOfTData.setError(task.getException());
                     }
                 });
         return listOfTData;
     }
 
-    public MutableLiveData<List<T>> getAllDocumentsFromCollection(Class<? extends T> tClass) {
-        MutableLiveData<List<T>> listOfTData = new MutableLiveData<>();
+    public LiveDataWithStatus<List<T>> getAllDocumentsFromCollection(Class<? extends T> tClass) {
+        LiveDataWithStatus<List<T>> listOfTData = new LiveDataWithStatus<>();
         collectionReference.get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            List<T> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                T t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
+                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), tClass));
                         } else {
-                            listOfTData.setValue(null);
+                            listOfTData.setError(getDocumentNotFoundException(tClass));
                         }
                     } else {
-                        Log.e(getClassName(), "Error getting documents: " +
-                                task.getException());
+                        listOfTData.setError(task.getException());
                     }
                 });
         return listOfTData;
     }
 
-    String getClassName() {
-        return this.getClass().toString();
+    // TODO: bug where can only handle 10 items in the list, should allow any size list
+    public LiveDataWithStatus<List<T>> getDocumentsByListOfUid(List<String> docUidList,
+                                                               Class<? extends T> tClass) {
+        LiveDataWithStatus<List<T>> listOfTData = new LiveDataWithStatus<>();
+        collectionReference.whereIn(FieldPath.documentId(), docUidList)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot tDocs = task.getResult();
+                        if (tDocs != null && !tDocs.isEmpty()) {
+                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), tClass));
+                        } else {
+                            listOfTData.setError(getDocumentNotFoundException(tClass));
+                        }
+                    } else {
+                        listOfTData.setError(task.getException());
+                    }
+                });
+        return listOfTData;
+    }
+
+    protected List<T> extractListOfDataToModel(QuerySnapshot results, Class<? extends T> tClass) {
+        List<T> listOfT = new ArrayList<>();
+        for (QueryDocumentSnapshot doc : results) {
+            T t = doc.toObject(tClass);
+            listOfT.add(t);
+        }
+        return listOfT;
+    }
+
+    /**
+     * An exception that indicates that a document in the database either does not exist in the remote database
+     *
+     * @param tClass indicates the type of data that could not be found using class name
+     * @return the exception with a message indicating the document could not be found
+     */
+    protected DocumentNotFoundException getDocumentNotFoundException(Class<? extends T> tClass) {
+        return new DocumentNotFoundException("The " + tClass.getSimpleName() + " does not exist!");
     }
 }

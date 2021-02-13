@@ -17,6 +17,7 @@ import com.google.firebase.Timestamp;
 
 import java.util.List;
 
+// TODO: Should be using a viewmodel
 public class SendingRequestToSuperviseActivity extends AppCompatActivity {
     String otherUserID;
     String currentUserID;
@@ -31,7 +32,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
     String canNotSend = "Can not send ";
     String sendNewRequest = "Send a new request";
     private Button supRequestBtn;
-    private AuthRepository authRepository = new AuthRepository();
+    private final AuthRepository authRepository = new AuthRepository();
     String requestUID;
     private TextView noteTv;
     private TextView resultNoteTv;
@@ -50,7 +51,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sending_request_to_supervise);
         otherUser = getIntent().getParcelableExtra("user");
         assert otherUser != null;
-        otherUserID = otherUser.getUId();
+        otherUserID = otherUser.getUid();
         supRequestBtn = findViewById(R.id.SupRequest);
         currentUserID = authRepository.getCurrentUser().getUid();
         noteTv = findViewById(R.id.note);
@@ -76,20 +77,17 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
 
     private void doRequest() {
         SupervisionRequest supervisionRequest = new SupervisionRequest();
-        supervisionRequest.setReceiverUId(otherUserID);
-        supervisionRequest.setSenderUId(currentUserID);
+        supervisionRequest.setReceiverUid(otherUserID);
+        supervisionRequest.setSenderUid(currentUserID);
         supervisionRequest.setResponse(SupervisionRequest.Response.NEUTRAL);
-        supervisionRequest.setGroupUId(""); // TODO think about creating and setting group IDs
-        supervisionRequest.setTimeSent(Timestamp.now());
+        supervisionRequest.setGroupUid(""); // TODO think about creating and setting group IDs
         supervisionRequest.setTime(Timestamp.now());
 
         if (!aRequestAlready) {
             notificationRepository.addDocument(supervisionRequest);
-        }
-        else if (shouldCancelRequest) {
+        } else if (shouldCancelRequest) {
             notificationRepository.removeDocument(requestUID);
-        }
-        else if(shouldSendAnOtherRequest){
+        } else if (shouldSendAnOtherRequest) {
             notificationRepository.removeDocument(requestUID);
             notificationRepository.addDocument(supervisionRequest);
         }
@@ -103,41 +101,39 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         // in repository until one is found
         supRequestBtn.setText(supBtnSend); // Default setText
         resultNoteTv.setText(noRequest);
-        LiveData<List<SupervisionRequest>> senderRequestsData = notificationRepository.getListOfSupervisionRequestByAttribute("senderUId", currentUserID, SupervisionRequest.class);
+        LiveData<List<SupervisionRequest>> senderRequestsData = notificationRepository.getListOfSupervisionRequestByAttribute("senderUid", currentUserID, SupervisionRequest.class);
         senderRequestsData.observe(this, senderRequests -> {
-            if (senderRequests != null) {
-                for (SupervisionRequest senderRequest : senderRequests) {
-                    if (aRequestAlready) {
-                        break;
-                    } else if (senderRequest.getReceiverUId().equals(otherUser.getUId())) {
+            if (senderRequests == null)
+                return;
+            for (SupervisionRequest senderRequest : senderRequests) {
+                if (aRequestAlready) {
+                    break;
+                } else if (senderRequest.getReceiverUid().equals(otherUser.getUid())) {
 
-                        if (senderRequest.getResponse().equals(SupervisionRequest.Response.ACCEPT)) {
-                            supRequestBtn.setText(supBtnAlready);
-                            supRequestBtn.setClickable(false);
-                            aRequestAlready = true;
-                            resultNoteTv.setText(superviseAlready);
-                        } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.NEUTRAL)) {
-                            supRequestBtn.setText(supBtnCancel);
-                            supRequestBtn.setClickable(true);
-                            //Toast.makeText(ViewAnotherUserActivity.this,
-                            // "You currently have a pending request to supervise this user",
-                            //Toast.LENGTH_SHORT).show();
-                            resultNoteTv.setText(canCancel);
-                            aRequestAlready = true;
-                            shouldCancelRequest = true;
-                            requestUID = senderRequest.getuId();
-                        } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.REJECT)) {
-                            supRequestBtn.setText(sendNewRequest);
-                            supRequestBtn.setClickable(true);
-                            resultNoteTv.setText(requestRejected);
-                            aRequestAlready = true;
-                            shouldSendAnOtherRequest = true;
-                            requestUID = senderRequest.getuId();
-                        }
-
+                    if (senderRequest.getResponse().equals(SupervisionRequest.Response.ACCEPT)) {
+                        supRequestBtn.setText(supBtnAlready);
+                        supRequestBtn.setClickable(false);
+                        aRequestAlready = true;
+                        resultNoteTv.setText(superviseAlready);
+                    } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.NEUTRAL)) {
+                        supRequestBtn.setText(supBtnCancel);
+                        supRequestBtn.setClickable(true);
+                        resultNoteTv.setText(canCancel);
+                        aRequestAlready = true;
+                        shouldCancelRequest = true;
+                        requestUID = senderRequest.getUid();
+                    } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.REJECT)) {
+                        supRequestBtn.setText(sendNewRequest);
+                        supRequestBtn.setClickable(true);
+                        resultNoteTv.setText(requestRejected);
+                        aRequestAlready = true;
+                        shouldSendAnOtherRequest = true;
+                        requestUID = senderRequest.getUid();
                     }
+
                 }
             }
+
         });
     }
 }

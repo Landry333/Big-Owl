@@ -67,7 +67,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
 
         mGroupPageViewModel.getGroup().observe(this, group -> {
             // TODO: better error or allow view page when accessing group with no users
-            if (group == null || group.getSupervisedUserId() == null || group.getSupervisedUserId().isEmpty()) {
+            if (group == null || group.getMemberIdList() == null || group.getMemberIdList().isEmpty()) {
                 this.noGroupAlert().show();
                 return;
             }
