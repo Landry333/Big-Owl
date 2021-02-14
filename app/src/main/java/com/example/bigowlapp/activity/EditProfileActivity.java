@@ -50,10 +50,11 @@ public class EditProfileActivity extends BigOwlActivity {
             if (!editUserFirstName.getText().toString().isEmpty() &&
                     !editUserLastName.getText().toString().isEmpty() &&
                     !editPhoneNumber.getText().toString().isEmpty()) {
+
                 editProfileViewModel.editUserProfile(
                         editUserFirstName.getText().toString(),
                         editUserLastName.getText().toString(),
-                        editPhoneNumber.getText().toString(),
+                        editPhoneNumber.getText().toString().replaceAll("[^+0-9]", ""),
                         editImageURL.getText().toString()
                 );
 
