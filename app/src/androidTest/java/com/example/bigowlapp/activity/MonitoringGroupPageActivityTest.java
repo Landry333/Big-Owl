@@ -1,23 +1,12 @@
 package com.example.bigowlapp.activity;
 
 import android.os.SystemClock;
-import android.view.View;
-import android.widget.ListView;
-
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.MutableLiveData;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.filters.LargeTest;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.MonitoringGroupPageViewModel;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,6 +16,13 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.MutableLiveData;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -39,6 +35,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -95,6 +93,16 @@ public class MonitoringGroupPageActivityTest {
     }
 
     @Test
+    public void noMonitoringGroupTest() {
+        testGroupData.postValue(null);
+        SystemClock.sleep(1000);
+
+        AlertDialog dialog = currentActivity.getAlertDialog();
+        assertNotNull(dialog);
+        assertTrue(dialog.isShowing());
+    }
+
+    @Test
     public void removeOneUserFromMonitoringGroupTest() {
         testGroupData.postValue(testMonitoringGroup);
         testUserListData.postValue(testUserList);
@@ -121,19 +129,5 @@ public class MonitoringGroupPageActivityTest {
                 .perform(click());
 
         assertEquals(testUserListAfterUserRemovedSize, testUserList.size());
-    }
-
-    public static Matcher<View> withListSize(final int size) {
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public boolean matchesSafely(final View view) {
-                return ((ListView) view).getCount() == size;
-            }
-
-            @Override
-            public void describeTo(final Description description) {
-                description.appendText("ListView should have " + size + " items");
-            }
-        };
     }
 }

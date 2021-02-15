@@ -32,6 +32,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
     private TextView groupName;
     private List<User> mUsers, mUsersShow;
     private User contextMenuSelectedUser;
+    private AlertDialog noGroupAlertDialog;
 
     private MonitoringGroupPageViewModel mGroupPageViewModel;
 
@@ -66,20 +67,23 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
         }
 
         mGroupPageViewModel.getGroup().observe(this, group -> {
-            // TODO: better error or allow view page when accessing group with no users
             if (group == null || group.getMemberIdList() == null || group.getMemberIdList().isEmpty()) {
-                this.noGroupAlert().show();
-                return;
+                this.noGroupAlertDialog = new AlertDialog.Builder(MonitoringGroupPageActivity.this)
+                        .setTitle("No monitoring group found")
+                        .setMessage("Required to be the Monitor of a group before accessing this list")
+                        .setPositiveButton("Ok", (dialogInterface, which) -> MonitoringGroupPageActivity.super.onBackPressed())
+                        .setCancelable(false)
+                        .create();
+                this.noGroupAlertDialog.show();
+            } else {
+                groupName.setText(group.getName());
+                mGroupPageViewModel.getUsersFromGroup(group).observe(this, users -> {
+                    mUsers = users;
+                    mUsersShow = mUsers;
+                    resetUsersListViewAdapter();
+                    registerForContextMenu(usersListView);
+                });
             }
-
-            groupName.setText(group.getName());
-
-            mGroupPageViewModel.getUsersFromGroup(group).observe(this, users -> {
-                mUsers = users;
-                mUsersShow = mUsers;
-                resetUsersListViewAdapter();
-                registerForContextMenu(usersListView);
-            });
         });
     }
 
@@ -92,6 +96,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
         searchUsers.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             }
 
             @Override
@@ -145,26 +150,22 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
         }).collect(Collectors.toList());
     }
 
-    private AlertDialog noGroupAlert() {
-        return new AlertDialog.Builder(MonitoringGroupPageActivity.this)
-                .setTitle("No monitoring group found")
-                .setMessage("Required to be the Monitor of a group before accessing this list")
-                .setPositiveButton("Ok", (dialogInterface, which) -> MonitoringGroupPageActivity.super.onBackPressed())
-                .setCancelable(false)
-                .create();
-    }
-
     private void resetUsersListViewAdapter() {
         usersListView.setAdapter(new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow));
     }
 
-    @VisibleForTesting
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setmGroupPageViewModel(MonitoringGroupPageViewModel mGroupPageViewModel) {
         this.mGroupPageViewModel = mGroupPageViewModel;
     }
 
-    @VisibleForTesting
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public MonitoringGroupPageViewModel getmGroupPageViewModel() {
         return this.mGroupPageViewModel;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public AlertDialog getAlertDialog() {
+        return this.noGroupAlertDialog;
     }
 }
