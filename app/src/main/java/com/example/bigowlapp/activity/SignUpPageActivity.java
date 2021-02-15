@@ -63,8 +63,8 @@ public class SignUpPageActivity extends AppCompatActivity {
                 this.userPhone.requestFocus();
             } else {
                 //String userPhone2 = userPhone.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");  //Format to be used?
-                String userPhone2 = userPhone.replaceAll("[^+0-9]", "");
-                signUpViewModel.createUser(email, pass, userPhone2, firstName, lastName)
+                String formattedPhone = userPhone.replaceAll("[^+0-9]", "");
+                signUpViewModel.createUser(email, pass, formattedPhone, firstName, lastName)
                         .addOnSuccessListener(isSuccessful -> {
                             Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
