@@ -19,6 +19,7 @@ import com.example.bigowlapp.viewModel.MonitoringGroupPageViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import androidx.annotation.VisibleForTesting;
@@ -101,7 +102,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchUsers(charSequence.toString().toLowerCase());
+                searchUsers(charSequence.toString().toLowerCase(Locale.getDefault()));
                 resetUsersListViewAdapter();
             }
 
@@ -140,9 +141,9 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
 
     protected void searchUsers(String s) {
         mUsersShow = mUsers.stream().filter(u -> {
-            boolean containInFirstName = u.getFirstName().toLowerCase().contains(s);
-            boolean containInLastName = u.getLastName().toLowerCase().contains(s);
-            boolean containInFullName = u.getFullName().toLowerCase().contains(s);
+            boolean containInFirstName = u.getFirstName().toLowerCase(Locale.getDefault()).contains(s);
+            boolean containInLastName = u.getLastName().toLowerCase(Locale.getDefault()).contains(s);
+            boolean containInFullName = u.getFullName().toLowerCase(Locale.getDefault()).contains(s);
             return (containInFirstName || containInLastName || containInFullName);
         }).collect(Collectors.toList());
     }
