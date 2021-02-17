@@ -67,7 +67,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
         }
 
         mGroupPageViewModel.getGroup().observe(this, group -> {
-            if (group == null || group.getMemberIdList() == null || group.getMemberIdList().isEmpty()) {
+            if (group == null) {
                 this.noGroupAlertDialog = new AlertDialog.Builder(MonitoringGroupPageActivity.this)
                         .setTitle("No monitoring group found")
                         .setMessage("Required to be the Monitor of a group before accessing this list")
@@ -129,28 +129,25 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
         String[] menuItems = getResources().getStringArray(R.array.context_menu);
         String menuItemName = menuItems[menuItemIndex];
 
-        switch (menuItemName) {
-            case "View Profile":
-                break;
-            case "Remove": {
-                mGroupPageViewModel.removeUserFromGroup(contextMenuSelectedUser);
-                mUsers.remove(contextMenuSelectedUser);
-                resetUsersListViewAdapter();
-            }
+        if ("Remove".equals(menuItemName)) {
+            mGroupPageViewModel.removeUserFromGroup(contextMenuSelectedUser);
+            mUsers.remove(contextMenuSelectedUser);
+            resetUsersListViewAdapter();
         }
 
         return true;
     }
 
-    private void searchUsers(String s) {
+    protected void searchUsers(String s) {
         mUsersShow = mUsers.stream().filter(u -> {
             boolean containInFirstName = u.getFirstName().toLowerCase().contains(s);
             boolean containInLastName = u.getLastName().toLowerCase().contains(s);
-            return (containInFirstName || containInLastName);
+            boolean containInFullName = u.getFullName().toLowerCase().contains(s);
+            return (containInFirstName || containInLastName || containInFullName);
         }).collect(Collectors.toList());
     }
 
-    private void resetUsersListViewAdapter() {
+    protected void resetUsersListViewAdapter() {
         usersListView.setAdapter(new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow));
     }
 
@@ -167,5 +164,15 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public AlertDialog getAlertDialog() {
         return this.noGroupAlertDialog;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public List<User> getmUsersShow() {
+        return this.mUsersShow;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public ListView getUsersListView() {
+        return usersListView;
     }
 }
