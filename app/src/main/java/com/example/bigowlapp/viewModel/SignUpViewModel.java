@@ -39,7 +39,7 @@ public class SignUpViewModel extends BaseViewModel {
         // add a default group when the user registers to a system where the user is the supervisor
         taskAddUser.addOnSuccessListener(isSuccess -> {
             Group group = new Group();
-            group.setMonitoringUserId(getCurrentUserUid());
+            group.setSupervisorId(getCurrentUserUid());
             group.setName(getFullName(firstName, lastName) + "'s group " + "#" + randomNumberStringGenerator());
             repositoryFacade.getGroupRepository().addDocument(group);
         });

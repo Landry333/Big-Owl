@@ -18,13 +18,13 @@ public class Notification extends Model {
         this.type = type;
     }
 
-    public Notification(String uId, String type) {
-        super(uId);
+    public Notification(String uid, String type) {
+        super(uid);
         this.type = type;
     }
 
-    public Notification(String uId, String type, Timestamp time) {
-        super(uId);
+    public Notification(String uid, String type, Timestamp time) {
+        super(uid);
         this.type = type;
         this.time = time;
     }
