@@ -20,13 +20,19 @@ public class SignUpViewModel extends BaseViewModel {
     // TODO: Handle exceptions concerning the failure of the "user" database collection
     public Task<Void> createUser(String email, String password, String phoneNumber, String firstName, String lastName) {
 
-        // Check for phone number
-        // .............................................
-
+        // Check for phone number if it's in database and unique
+        Task<Void> taskIsPhoneNumberInDatabase =
+                repositoryFacade.getUserRepository().isPhoneNumberInDatabase(phoneNumber);
 
         // add user email and password to authentication database
-        Task<AuthResult> taskAuthSignUpResult = repositoryFacade.getAuthRepository()
-                .signUpUser(email, password);
+        Task<Void> taskAuthSignUpResult = taskIsPhoneNumberInDatabase.continueWithTask(task -> {
+            if (task.isSuccessful()) {
+                repositoryFacade.getAuthRepository().signUpUser(email, password);
+                return Tasks.forResult(null);
+            } else {
+                throw task.getException();
+            }
+        });
 
         // add basic user information to user document in firestore database
         Task<Void> taskAddUser = taskAuthSignUpResult.continueWithTask(task -> {
