@@ -29,7 +29,6 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
     private List<String> supervisorNameList = new ArrayList<String>();
     private AlertDialog noGroupAlert;
     private Intent intent;
-    private boolean allowStartActivity = true;
 
     @Override
     protected void onStart() {
@@ -53,8 +52,7 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
                                         intent.putExtra("groupID", supervisedGroups.get(position).getUid());
                                         intent.putExtra("groupName", supervisedGroups.get(position).getName());
                                         intent.putExtra("supervisorName", supervisorNameList.get(position));
-                                        if (allowStartActivity)
-                                            startActivity(intent);
+                                        startActivity(intent);
                                     });
                                 } else {
                                     this.noGroupAlert = new AlertDialog.Builder(SupervisedGroupListActivity.this)
@@ -120,11 +118,6 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public Intent getIntent() {
         return this.intent;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public void setAllowStartActivity(boolean allowStartActivity) {
-        this.allowStartActivity = allowStartActivity;
     }
 }
 
