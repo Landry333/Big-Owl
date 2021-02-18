@@ -116,7 +116,7 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public Intent getIntent() {
+    public Intent getIntentForTest() {
         return this.intent;
     }
 }
