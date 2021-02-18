@@ -1,5 +1,6 @@
 package com.example.bigowlapp.activity;
 
+import android.content.Intent;
 import android.os.SystemClock;
 
 import com.example.bigowlapp.R;
@@ -29,12 +30,15 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -148,5 +152,21 @@ public class SupervisedGroupListActivityTest {
             String supervisorFullName = supervisedGroupListViewModel.getSupervisor(testUserSupervisedGroupList.get(i).getSupervisorId()).getValue().getFullName();
             onView(allOf(withId(R.id.text_view_group_supervisor), withText(supervisorFullName))).check(matches(isDisplayed()));
         }
+    }
+
+    @Test
+    public void clickOnSupervisedGroupTest() {
+        Intent currentIntent = currentActivity.getIntent();
+        assertNull(currentIntent);
+        Group randomTestGroup = testUserSupervisedGroupList.get(((int) ((Math.random() * 4) + 4)));
+        onView(allOf(withId(R.id.text_view_group_name), withText(randomTestGroup.getName()))).perform(click());
+
+        Intent testIntent = new Intent(currentActivity, SupervisedGroupPageActivity.class);
+        testIntent.putExtra("groupID", randomTestGroup.getUid());
+        testIntent.putExtra("groupName", randomTestGroup.getName());
+
+        currentIntent = currentActivity.getIntent();
+        assertEquals(randomTestGroup.getUid(), currentIntent.getStringExtra("groupID"));
+        assertEquals(randomTestGroup.getName(), currentIntent.getStringExtra("groupName"));
     }
 }

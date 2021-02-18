@@ -114,5 +114,10 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
     public AlertDialog getNoGroupAlert() {
         return this.noGroupAlert;
     }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public Intent getIntent() {
+        return this.intent;
+    }
 }
 
