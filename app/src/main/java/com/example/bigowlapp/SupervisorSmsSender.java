@@ -1,29 +1,23 @@
 /*package com.example.bigowlapp;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
 
-
-public class SmsListenerThenSender extends BroadcastReceiver {
+public class SupervisorSmsSender extends BroadcastReceiver {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     private String smsNumber;
     private String smsMessage;
 
-    @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(SMS_RECEIVED)) {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
-                Toast.makeText(context, "RECEIVED NON EMPTY SMS", Toast.LENGTH_SHORT).show();
                 // get sms objects
                 Object[] pdus = (Object[]) bundle.get("pdus");
                 if (pdus.length == 0) {
@@ -38,17 +32,18 @@ public class SmsListenerThenSender extends BroadcastReceiver {
                 }
                 String sender = messages[0].getOriginatingAddress();
                 String message = sb.toString();
-                smsNumber = "+14388313578";
-                smsMessage = "what is the identification code?";
+
+                smsNumber = "+14388313579"; //number of the monitoring user initiating the authentication
+                smsMessage = "The authentication code is 123456";//response from supervised user with authentication code
 
                 if(sender.equals(smsNumber)){
-                    Toast.makeText(context, "RECEIVED MESSAGE FROM: "+sender, Toast.LENGTH_SHORT).show();
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Received BigOwl authentication SMS from: "+sender, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                     try{
                         sendSMS(context);
                     }
                     catch (Exception e){
-                        // Add a warning system for failed authentication process
+                        // Todo: Add a warning system for failed authentication process
                     }
                 }
                 // prevent any other broadcast receivers from receiving broadcast

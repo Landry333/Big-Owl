@@ -42,5 +42,25 @@ public class ScheduleRepository extends Repository<Schedule> {
         return listOfTData;
     }
 
+    public LiveDataWithStatus<List<Schedule>> getSchedulesBySupervisor(String supervisorId, String userID) {
+        LiveDataWithStatus<List<Schedule>> listOfTData = new LiveDataWithStatus<>();
+        collectionReference.whereEqualTo("groupSupervisorUid", supervisorId)
+                .whereArrayContains("memberList", userID)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot tDocs = task.getResult();
+                        if (tDocs != null && !tDocs.isEmpty()) {
+                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), Schedule.class));
+                        } else {
+                            listOfTData.setError(getDocumentNotFoundException(Schedule.class));
+                        }
+                    } else {
+                        listOfTData.setError(task.getException());
+                    }
+                });
+        return listOfTData;
+    }
+
 
 }

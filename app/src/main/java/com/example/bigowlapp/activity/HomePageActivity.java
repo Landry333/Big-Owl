@@ -81,45 +81,42 @@ public class HomePageActivity extends BigOwlActivity {
 
 
     @Override // This is solely for the SEND SMS and the RECEIVE SMS permission for the text sms authentication system
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
-        if(requestCode == 1000){
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1000) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "RECEIVE SMS Permission GRANTED", Toast.LENGTH_SHORT).show();
-            }
-            else{
+            } else {
                 Toast.makeText(this, "RECEIVE SMS Permission DENIED", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
-        if(requestCode == 100){
-            if(grantResults[1] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == 100) {
+            if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "SEND SMS Permission GRANTED", Toast.LENGTH_SHORT).show();
-            }
-            else{
+            } else {
                 Toast.makeText(this, "SEND SMS Permission DENIED", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
-        if(requestCode == 10){
-            if(grantResults[2] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == 10) {
+            if (grantResults[2] == PackageManager.PERMISSION_GRANTED) {
                 //TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                 //deviceID = telephonyManager.getDeviceId();
                 //deviceID ="deviceID";
-                Toast.makeText(this, "DeviceID is: "+ deviceID, Toast.LENGTH_SHORT).show();
-            }
-            else{
+                Toast.makeText(this, "DeviceID is: " + deviceID, Toast.LENGTH_SHORT).show();
+            } else {
                 Toast.makeText(this, "DeviceID Permission DENIED", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
-        if(requestCode == 1){
-            if(grantResults[3] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == 1) {
+            if (grantResults[3] == PackageManager.PERMISSION_GRANTED) {
                 //TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                 //deviceID = telephonyManager.getDeviceId();
                 //deviceID ="deviceID";
                 Toast.makeText(this, "Phone number Read Permission GRANTED", Toast.LENGTH_SHORT).show();
-            }
-            else{
+            } else {
                 Toast.makeText(this, "Phone number Read Permission DENIED", Toast.LENGTH_SHORT).show();
                 finish();
             }
