@@ -33,7 +33,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
     private TextView groupName;
     private List<User> mUsers, mUsersShow;
     private User contextMenuSelectedUser;
-    private AlertDialog noGroupAlertDialog;
+    private AlertDialog alertDialog;
 
     private MonitoringGroupPageViewModel mGroupPageViewModel;
 
@@ -69,13 +69,11 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
 
         mGroupPageViewModel.getGroup().observe(this, group -> {
             if (group == null) {
-                this.noGroupAlertDialog = new AlertDialog.Builder(MonitoringGroupPageActivity.this)
-                        .setTitle("No monitoring group found")
-                        .setMessage("Required to be the Monitor of a group before accessing this list")
-                        .setPositiveButton("Ok", (dialogInterface, which) -> MonitoringGroupPageActivity.super.onBackPressed())
-                        .setCancelable(false)
-                        .create();
-                this.noGroupAlertDialog.show();
+                createAlertDialog("No monitoring group found",
+                        "Required to be the Monitor of a group before accessing this list");
+            } else if (group.getMemberIdList() == null || group.getMemberIdList().isEmpty()) {
+                createAlertDialog("No supervised member(s) found",
+                        "Required to have supervised member(s) before accessing this list");
             } else {
                 groupName.setText(group.getName());
                 mGroupPageViewModel.getUsersFromGroup(group).observe(this, users -> {
@@ -148,6 +146,16 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
         }).collect(Collectors.toList());
     }
 
+    protected void createAlertDialog(String title, String message) {
+        this.alertDialog = new AlertDialog.Builder(MonitoringGroupPageActivity.this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("Ok", (dialogInterface, which) -> MonitoringGroupPageActivity.super.onBackPressed())
+                .setCancelable(false)
+                .create();
+        this.alertDialog.show();
+    }
+
     protected void resetUsersListViewAdapter() {
         usersListView.setAdapter(new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, mUsersShow));
     }
@@ -164,7 +172,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public AlertDialog getAlertDialog() {
-        return this.noGroupAlertDialog;
+        return this.alertDialog;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

@@ -106,7 +106,18 @@ public class MonitoringGroupPageActivityTest {
 
         AlertDialog dialog = currentActivity.getAlertDialog();
         assertNotNull(dialog);
-        assertTrue(dialog.isShowing());
+        onView(withText("No monitoring group found")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void noSupervisedMemberInGroupTest() {
+        testMonitoringGroup = new Group("abc123", "It's a group for testing", "0", null);
+        testGroupData.postValue(testMonitoringGroup);
+        SystemClock.sleep(1000);
+
+        AlertDialog dialog = currentActivity.getAlertDialog();
+        assertNotNull(dialog);
+        onView(withText("No supervised member(s) found")).check(matches(isDisplayed()));
     }
 
     @Test
