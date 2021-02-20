@@ -124,11 +124,9 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        int menuItemIndex = item.getItemId();
-        String[] menuItems = getResources().getStringArray(R.array.context_menu);
-        String menuItemName = menuItems[menuItemIndex];
+        String menuItemName = getResources().getStringArray(R.array.context_menu)[item.getItemId()];
 
-        if ("Remove".equals(menuItemName)) {
+        if (menuItemName.equals("Remove")) {
             mGroupPageViewModel.removeUserFromGroup(contextMenuSelectedUser);
             mUsers.remove(contextMenuSelectedUser);
             resetUsersListViewAdapter();
