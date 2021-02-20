@@ -31,7 +31,7 @@ public class NotificationActivity extends BigOwlActivity implements Notification
 
         authRepository = new AuthRepository();
         notificationRepository = new NotificationRepository();
-        notificationListData = notificationRepository.getListOfDocumentByAttribute("receiverUId", authRepository.getCurrentUser().getUid(), Notification.class);
+        notificationListData = notificationRepository.getListOfDocumentByAttribute("receiverUid", authRepository.getCurrentUser().getUid(), Notification.class);
 
         recyclerView.setHasFixedSize(true);
 

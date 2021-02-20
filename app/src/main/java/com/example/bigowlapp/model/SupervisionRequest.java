@@ -65,9 +65,9 @@ public class SupervisionRequest extends Notification {
     @Override
     public String toString() {
         return "SupervisionRequest{" +
-                "senderUId='" + senderUId + '\'' +
-                ", receiverUId='" + receiverUId + '\'' +
-                ", groupUId='" + groupUId + '\'' +
+                "senderUId='" + senderUid + '\'' +
+                ", receiverUId='" + receiverUid + '\'' +
+                ", groupUId='" + groupUid + '\'' +
                 ", response=" + response +
                 ", timeResponse=" + timeResponse +
                 '}';

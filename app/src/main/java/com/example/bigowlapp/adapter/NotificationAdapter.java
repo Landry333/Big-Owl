@@ -30,7 +30,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         if(!mNotificationTitles.isEmpty()) {
-            holder.nameTextView.setText(mNotificationTitles.get(position).getType());
+            holder.nameTextView.setText(mNotificationTitles.get(position).getType().toString());
             holder.timeTextView.setText(mNotificationTitles.get(position).getTime().toDate().toString());
         }
     }
