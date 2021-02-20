@@ -1,62 +1,83 @@
 package com.example.bigowlapp.model;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-@IgnoreExtraProperties
-public class Schedule {
 
-    @DocumentId
-    private String uId;
-    private String groupUId;
+@IgnoreExtraProperties
+public class Schedule extends Model {
+
+    private String title;
+    private String event;
+    private String groupUid;
+    private String groupSupervisorUid;
+    private List<String> memberList;
     private Timestamp startTime;
     private Timestamp endTime;
     private GeoPoint location;
-    private String groupSupervisorUId;
     private Map<String, UserScheduleResponse> userScheduleResponseMap;
-    private String title;
-    private String event;
-    private List<String> memberList;
 
-    public Map<String, UserScheduleResponse> getMembers() {
-        return userScheduleResponseMap;
-    }
+    public static Schedule getPrototypeSchedule() {
+        Schedule schedule = new Schedule();
+        schedule.title = "";
+        schedule.event = "";
 
-    public void setMembers(Map<String, UserScheduleResponse> userScheduleResponseMap) {
-        this.userScheduleResponseMap = userScheduleResponseMap;
-    }
+        Calendar currentTime = Calendar.getInstance();
+        Calendar oneHourLaterTime = Calendar.getInstance();
+        oneHourLaterTime.add(Calendar.HOUR_OF_DAY, 1);
 
-    public String getGroupSupervisorUId() {
-        return groupSupervisorUId;
-    }
-
-    public void setGroupSupervisorUId(String groupSupervisorUId) {
-        this.groupSupervisorUId = groupSupervisorUId;
+        schedule.startTime = new Timestamp(currentTime.getTime());
+        schedule.endTime = new Timestamp(oneHourLaterTime.getTime());
+        return schedule;
     }
 
     public Schedule() {
-        // Necessary for Firbase data mapping to model object
+        super();
     }
 
-    public String getuId() {
-        return uId;
+    public String getTitle() {
+        return title;
     }
 
-    public void setuId(String uId) {
-        this.uId = uId;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getGroupUId() {
-        return groupUId;
+    public String getEvent() {
+        return event;
     }
 
-    public void setGroupUId(String groupUId) {
-        this.groupUId = groupUId;
+    public void setEvent(String event) {
+        this.event = event;
+    }
+
+    public String getGroupUid() {
+        return groupUid;
+    }
+
+    public void setGroupUid(String groupUid) {
+        this.groupUid = groupUid;
+    }
+
+    public String getGroupSupervisorUid() {
+        return groupSupervisorUid;
+    }
+
+    public void setGroupSupervisorUid(String groupSupervisorUid) {
+        this.groupSupervisorUid = groupSupervisorUid;
+    }
+
+    public List<String> getMemberList() {
+        return memberList;
+    }
+
+    public void setMemberList(List<String> memberList) {
+        this.memberList = memberList;
     }
 
     public Timestamp getStartTime() {
@@ -83,27 +104,11 @@ public class Schedule {
         this.location = location;
     }
 
-    public String getTitle() {
-        return title;
+    public Map<String, UserScheduleResponse> getUserScheduleResponseMap() {
+        return userScheduleResponseMap;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getEvent() {
-        return event;
-    }
-
-    public void setEvent(String event) {
-        this.event = event;
-    }
-
-    public List<String> getMemberList() {
-        return memberList;
-    }
-
-    public void setMemberList(List<String> memberList) {
-        this.memberList = memberList;
+    public void setUserScheduleResponseMap(Map<String, UserScheduleResponse> userScheduleResponseMap) {
+        this.userScheduleResponseMap = userScheduleResponseMap;
     }
 }

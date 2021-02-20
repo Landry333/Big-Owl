@@ -1,7 +1,13 @@
 package com.example.bigowlapp.viewModel;
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
+import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.UserRepository;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -11,10 +17,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -29,31 +31,34 @@ import static org.mockito.Mockito.when;
 public class EditProfileViewModelTest {
 
     private EditProfileViewModel editProfileViewModel;
-    private MutableLiveData<User> testUserData;
+    private LiveDataWithStatus<User> testUserData;
     private User testUser;
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     @Mock
+    private RepositoryFacade repositoryFacade;
+    @Mock
     private UserRepository userRepository;
-
     @Mock
     private AuthRepository authRepository;
-
     @Mock
     private FirebaseUser testFirebaseUser;
 
     @Before
     public void setUp() {
-        testUser = new User("abc123", "first", "last", "+911", "test@mail.com", "url");
-        testUserData = new MutableLiveData<>(testUser);
+        when(repositoryFacade.getAuthRepository()).thenReturn(authRepository);
+        when(repositoryFacade.getUserRepository()).thenReturn(userRepository);
+
+        testUser = new User("abc123", "first", "last", "+911", "test@mail.com", "url", null);
+        testUserData = new LiveDataWithStatus<>(testUser);
 
         when(authRepository.getCurrentUser()).thenReturn(testFirebaseUser);
-        when(userRepository.getDocumentByUId(anyString(), eq(User.class))).thenReturn(testUserData);
+        when(userRepository.getDocumentByUid(anyString(), eq(User.class))).thenReturn(testUserData);
         when(testFirebaseUser.getUid()).thenReturn("abc123");
 
-        editProfileViewModel = new EditProfileViewModel(authRepository, userRepository, testUserData);
+        editProfileViewModel = new EditProfileViewModel(repositoryFacade, testUserData);
     }
 
     @Test
@@ -72,13 +77,13 @@ public class EditProfileViewModelTest {
 
     @Test
     public void getCurrentUserDataTest() {
-        editProfileViewModel = new EditProfileViewModel(authRepository, userRepository, null);
+        editProfileViewModel = new EditProfileViewModel(repositoryFacade, null);
         LiveData<User> target = editProfileViewModel.getCurrentUserData();
-        verify(userRepository).getDocumentByUId(anyString(), eq(User.class));
+        verify(userRepository).getDocumentByUid(anyString(), eq(User.class));
         assertEquals(testUserData, target);
 
         LiveData<User> target2 = editProfileViewModel.getCurrentUserData();
-        verify(userRepository, times(1)).getDocumentByUId(anyString(), eq(User.class));
+        verify(userRepository, times(1)).getDocumentByUid(anyString(), eq(User.class));
         assertEquals(testUserData, target2);
     }
 

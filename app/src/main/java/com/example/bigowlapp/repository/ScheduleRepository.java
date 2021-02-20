@@ -1,54 +1,44 @@
 package com.example.bigowlapp.repository;
 
-import android.util.Log;
-
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.List;
 
+
 public class ScheduleRepository extends Repository<Schedule> {
+
+    private static final String USER_SCHEDULE_RESPONSE_MAP = "userScheduleResponseMap";
 
     // TODO: Add dependency injection
     public ScheduleRepository() {
         super("schedules");
     }
 
-    public Task<Void> updateScheduleMemberResponse(String scheduleId, String userUId, UserScheduleResponse currentUserScheduleResponse) {
-        return collectionReference.document(scheduleId).update("members.".concat(userUId), currentUserScheduleResponse);
+    public Task<Void> updateScheduleMemberResponse(String scheduleId, String userUid, UserScheduleResponse currentUserScheduleResponse) {
+        return collectionReference.document(scheduleId).update((USER_SCHEDULE_RESPONSE_MAP + ".").concat(userUid), currentUserScheduleResponse);
     }
 
-    public MutableLiveData<List<Schedule>> getListSchedulesFromGroupForUser(String groupID, String userID) {
-        MutableLiveData<List<Schedule>> listOfTData = new MutableLiveData<>();
-        collectionReference.whereEqualTo("groupUId", groupID)
-                .whereArrayContains("membersList", userID)
+    public LiveDataWithStatus<List<Schedule>> getListSchedulesFromGroupForUser(String groupID, String userID) {
+        LiveDataWithStatus<List<Schedule>> listOfTData = new LiveDataWithStatus<>();
+        collectionReference.whereEqualTo("groupUid", groupID)
+                .whereArrayContains("memberList", userID)
                 .orderBy("startTime", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
                         if (tDocs != null && !tDocs.isEmpty()) {
-                            List<Schedule> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                Schedule t = doc.toObject(Schedule.class);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
+                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), Schedule.class));
                         } else {
-                            listOfTData.setValue(null);
+                            listOfTData.setError(getDocumentNotFoundException(Schedule.class));
                         }
                     } else {
-                        Log.e(getClassName(), "Error getting documents: " +
-                                task.getException());
+                        listOfTData.setError(task.getException());
                     }
                 });
         return listOfTData;

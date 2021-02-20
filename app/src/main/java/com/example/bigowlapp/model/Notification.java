@@ -1,42 +1,42 @@
 package com.example.bigowlapp.model;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
-public class Notification {
+public class Notification extends Model {
 
-    @DocumentId
-    private String uId;
-    private String type;
+    public enum Type {
+        NONE(Notification.class),
+        SUPERVISION_REQUEST(SupervisionRequest.class),
+        SCHEDULE_REQUEST(ScheduleRequest.class);
+
+        public final Class<? extends Notification> typeClass;
+
+        Type(Class<? extends Notification> typeClass) {
+            this.typeClass = typeClass;
+        }
+    }
+
+    private Type type;
     private Timestamp time;
 
     public Notification() {
+        super();
+        this.type = Type.NONE;
     }
 
-    public Notification(String uId, String type) {
-        this.uId = uId;
+    public Notification(Type type) {
+        super();
         this.type = type;
     }
 
-    public Notification(String uId, String type, Timestamp time) {
-        this.uId = uId;
-        this.type = type;
-        this.time = time;
-    }
-
-    public String getuId() { return uId; }
-
-    public void setuId(String uId) {
-        this.uId = uId;
-    }
-
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    // This private setter is necessary for Firebase data to model mapping
+    private void setType(Type type) {
         this.type = type;
     }
 

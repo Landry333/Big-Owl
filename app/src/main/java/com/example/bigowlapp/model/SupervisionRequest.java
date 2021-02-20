@@ -1,63 +1,43 @@
 package com.example.bigowlapp.model;
 
-import com.example.bigowlapp.utils.Constants;
 import com.google.firebase.Timestamp;
-import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
-public class SupervisionRequest extends Notification implements Constants {
+public class SupervisionRequest extends Notification {
 
-    private String senderUId;
-    private String receiverUId;
-    private String groupUId;
+    private String senderUid;
+    private String receiverUid;
+    private String groupUid;
     private Response response;
-    // TODO: remove timeSent,as it is redundant since 'time' is in base Notification class
-    private Timestamp timeSent;
     private Timestamp timeResponse;
 
     public SupervisionRequest() {
-        super();
-        this.setType(Constants.SUPERVISION_TYPE);
+        super(Type.SUPERVISION_REQUEST);
     }
 
-    public SupervisionRequest(String uId) {
-        super(uId, SUPERVISION_TYPE);
+    public String getSenderUid() {
+        return senderUid;
     }
 
-    public SupervisionRequest(String uId, Timestamp time, String senderUId,
-                              String receiverUId, String groupUId, Response response,
-                              Timestamp timeSent, Timestamp timeResponse) {
-        super(uId, SUPERVISION_TYPE, time);
-        this.senderUId = senderUId;
-        this.receiverUId = receiverUId;
-        this.groupUId = groupUId;
-        this.response = response;
-        this.timeSent = timeSent;
-        this.timeResponse = timeResponse;
+    public void setSenderUid(String senderUid) {
+        this.senderUid = senderUid;
     }
 
-    public String getSenderUId() {
-        return senderUId;
+    public String getReceiverUid() {
+        return receiverUid;
     }
 
-    public void setSenderUId(String senderUId) {
-        this.senderUId = senderUId;
+    public void setReceiverUid(String receiverUid) {
+        this.receiverUid = receiverUid;
     }
 
-    public String getReceiverUId() {
-        return receiverUId;
+    public String getGroupUid() {
+        return groupUid;
     }
 
-    public void setReceiverUId(String receiverUId) {
-        this.receiverUId = receiverUId;
-    }
-
-    public String getGroupUId() {
-        return groupUId;
-    }
-
-    public void setGroupUId(String groupUId) {
-        this.groupUId = groupUId;
+    public void setGroupUid(String groupUid) {
+        this.groupUid = groupUid;
     }
 
     public Response getResponse() {
@@ -66,14 +46,6 @@ public class SupervisionRequest extends Notification implements Constants {
 
     public void setResponse(Response response) {
         this.response = response;
-    }
-
-    public Timestamp getTimeSent() {
-        return timeSent;
-    }
-
-    public void setTimeSent(Timestamp timeSent) {
-        this.timeSent = timeSent;
     }
 
     public Timestamp getTimeResponse() {

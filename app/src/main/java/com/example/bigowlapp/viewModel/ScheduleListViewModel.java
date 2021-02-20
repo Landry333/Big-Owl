@@ -2,29 +2,16 @@ package com.example.bigowlapp.viewModel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.Schedule;
-import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.model.UserScheduleResponse;
-import com.example.bigowlapp.repository.AuthRepository;
-import com.example.bigowlapp.repository.GroupRepository;
-import com.example.bigowlapp.repository.NotificationRepository;
-import com.example.bigowlapp.repository.ScheduleRepository;
-import com.example.bigowlapp.repository.UserRepository;
 
 import java.util.List;
 
-public class ScheduleListViewModel extends ViewModel {
-
-    private final AuthRepository authRepository;
-    private final ScheduleRepository scheduleRepository;
+public class ScheduleListViewModel extends BaseViewModel {
     private MutableLiveData<List<Schedule>> scheduleData;
 
     public ScheduleListViewModel() {
-        authRepository = new AuthRepository();
-        scheduleRepository = new ScheduleRepository();
+        // used implicitly when ViewModel constructed using ViewModelProvider
     }
 
     public LiveData<List<Schedule>> getScheduleList(String groupID) {
@@ -35,6 +22,7 @@ public class ScheduleListViewModel extends ViewModel {
     }
 
     private void loadScheduleList(String groupID) {
-        scheduleData = scheduleRepository.getListSchedulesFromGroupForUser(groupID, authRepository.getCurrentUser().getUid());
+        scheduleData = repositoryFacade.getScheduleRepository()
+                .getListSchedulesFromGroupForUser(groupID, getCurrentUserUid());
     }
 }

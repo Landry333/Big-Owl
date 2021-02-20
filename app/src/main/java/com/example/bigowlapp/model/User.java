@@ -3,51 +3,66 @@ package com.example.bigowlapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.firestore.DocumentId;
-import com.google.firebase.firestore.IgnoreExtraProperties;
-
 import androidx.annotation.NonNull;
 
-@IgnoreExtraProperties
-public class User implements Parcelable {
+import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.IgnoreExtraProperties;
 
-    @DocumentId
-    private String uId;
+import java.util.List;
+
+
+@IgnoreExtraProperties
+public class User extends Model implements Parcelable {
+
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String email;
     private String profileImage;
+    private List<String> memberGroupIdList;
+
+    // TODO: Create a builder (possibly for all models)
 
     public User() {
+        super();
     }
 
-    public User(String uId, String firstName, String lastName, String phoneNumber, String email, String profileImage) {
-        this.uId = uId;
+    public User(String uid, String firstName, String lastName, String email) {
+        super(uid);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+
+    public User(String uid, String firstName, String lastName, String phoneNumber, String email, String profileImage, List<String> memberGroupIdList) {
+        super(uid);
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.profileImage = profileImage;
+        this.memberGroupIdList = memberGroupIdList;
     }
 
     protected User(Parcel in) {
-        uId = in.readString();
+        uid = in.readString();
         firstName = in.readString();
         lastName = in.readString();
         phoneNumber = in.readString();
         email = in.readString();
         profileImage = in.readString();
+        memberGroupIdList = in.createStringArrayList();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(uId);
+        dest.writeString(uid);
         dest.writeString(firstName);
         dest.writeString(lastName);
         dest.writeString(phoneNumber);
         dest.writeString(email);
         dest.writeString(profileImage);
+        dest.writeStringList(memberGroupIdList);
     }
 
     @Override
@@ -66,14 +81,6 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
-
-    public String getUId() {
-        return uId;
-    }
-
-    public void setUId(String uId) {
-        this.uId = uId;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -115,6 +122,15 @@ public class User implements Parcelable {
         this.profileImage = profileImage;
     }
 
+    public List<String> getMemberGroupIdList() {
+        return memberGroupIdList;
+    }
+
+    public void setMemberGroupIdList(List<String> memberGroupIdList) {
+        this.memberGroupIdList = memberGroupIdList;
+    }
+
+    @Exclude
     public String getFullName() {
         return firstName + " " + lastName;
     }

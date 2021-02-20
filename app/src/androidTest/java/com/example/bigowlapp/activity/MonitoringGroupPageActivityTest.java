@@ -1,17 +1,13 @@
 package com.example.bigowlapp.activity;
 
 import android.os.SystemClock;
-import android.view.View;
-import android.widget.ListView;
+import android.widget.ListAdapter;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.MonitoringGroupPageViewModel;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,7 +17,10 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -32,6 +31,7 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -39,6 +39,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -68,8 +71,9 @@ public class MonitoringGroupPageActivityTest {
         for (int i = 0; i < 6; i++) {
             User testUser = new User(
                     "00".concat(String.valueOf(i)),
-                    "Tester",
+                    "tester",
                     "#".concat(String.valueOf(i)),
+                    null,
                     null,
                     null,
                     null);
@@ -79,7 +83,9 @@ public class MonitoringGroupPageActivityTest {
         testMonitoringGroup = new Group("abc123", "It's a group for testing", "0", supervisedUsersIDs);
 
         testGroupData = new MutableLiveData<>();
+        testGroupData.postValue(testMonitoringGroup);
         testUserListData = new MutableLiveData<>();
+        testUserListData.postValue(testUserList);
 
         when(mockViewModel.isCurrentUserSet()).thenReturn(true);
         when(mockViewModel.getGroup()).thenReturn(testGroupData);
@@ -94,11 +100,55 @@ public class MonitoringGroupPageActivityTest {
     }
 
     @Test
-    public void removeOneUserFromMonitoringGroupTest() {
-        testGroupData.postValue(testMonitoringGroup);
-        testUserListData.postValue(testUserList);
+    public void noMonitoringGroupTest() {
+        testGroupData.postValue(null);
+        SystemClock.sleep(1000);
 
-        SystemClock.sleep(3000);
+        AlertDialog dialog = currentActivity.getAlertDialog();
+        assertNotNull(dialog);
+        onView(withText("No monitoring group found")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void noSupervisedMemberInGroupTest() {
+        testMonitoringGroup = new Group("abc123", "It's a group for testing", "0", null);
+        testGroupData.postValue(testMonitoringGroup);
+        SystemClock.sleep(1000);
+
+        AlertDialog dialog = currentActivity.getAlertDialog();
+        assertNotNull(dialog);
+        onView(withText("No supervised member(s) found")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void searchUserTest() {
+        User testUser = new User(
+                "005",
+                "tester",
+                "#5",
+                null,
+                null,
+                null,
+                null);
+        List<User> testUsersList2 = Stream.of(testUser).collect(Collectors.toList());
+
+        currentActivity.searchUsers("tester #5");
+        assertEquals(testUsersList2.get(0).getUid(),
+                currentActivity.getmUsersShow().get(0).getUid());
+    }
+
+    @Test
+    public void usersListViewAdapterTest() {
+        ListAdapter oldListViewAdapter = currentActivity.getUsersListView().getAdapter();
+        // searchUser(...) and resetUsersListViewAdapter()
+        onView(allOf(withId(R.id.monitoring_group_search_users), isDisplayed()))
+                .perform(replaceText("tester #5"));
+        assertNotEquals(oldListViewAdapter, currentActivity.getUsersListView().getAdapter());
+    }
+
+    @Test
+    public void removeOneUserFromMonitoringGroupTest() {
+        SystemClock.sleep(500);
 
         assertEquals(testMonitoringGroup, currentActivity.getmGroupPageViewModel().getGroup().getValue());
         assertEquals(testUserList,
@@ -106,8 +156,6 @@ public class MonitoringGroupPageActivityTest {
                         .getmGroupPageViewModel()
                         .getUsersFromGroup(currentActivity.getmGroupPageViewModel().getGroup().getValue())
                         .getValue());
-
-        SystemClock.sleep(3000);
 
         int randomIndex = (int) (Math.random() * testUserList.size());
         onData(anything())
@@ -118,29 +166,9 @@ public class MonitoringGroupPageActivityTest {
 
         int testUserListAfterUserRemovedSize = testUserList.size() - 1;
 
-        SystemClock.sleep(3000);
-
         onView(allOf(withText("Remove"), isDisplayed()))
                 .perform(click());
 
-        SystemClock.sleep(3000);
-
         assertEquals(testUserListAfterUserRemovedSize, testUserList.size());
-
-        SystemClock.sleep(3000);
-    }
-
-    public static Matcher<View> withListSize(final int size) {
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public boolean matchesSafely(final View view) {
-                return ((ListView) view).getCount() == size;
-            }
-
-            @Override
-            public void describeTo(final Description description) {
-                description.appendText("ListView should have " + size + " items");
-            }
-        };
     }
 }
