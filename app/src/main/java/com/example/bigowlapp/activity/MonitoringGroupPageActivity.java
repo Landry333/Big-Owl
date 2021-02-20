@@ -1,5 +1,6 @@
 package com.example.bigowlapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,7 +34,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
     private TextView groupName;
     private List<User> mUsers, mUsersShow;
     private User contextMenuSelectedUser;
-
+    private Button btnSetSchedule;
     private MonitoringGroupPageViewModel mGroupPageViewModel;
 
     @Override
@@ -56,6 +58,12 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
     }
 
     protected void initialize() {
+        btnSetSchedule = findViewById(R.id.btn_set_schedule);
+
+        btnSetSchedule.setOnClickListener(v -> {
+            Intent i = new Intent(MonitoringGroupPageActivity.this, SetScheduleActivity.class);
+            startActivity(i);
+        });
         mUsers = new ArrayList<>();
         setupSearchBar();
     }
