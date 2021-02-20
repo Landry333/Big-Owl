@@ -1,11 +1,10 @@
 package com.example.bigowlapp.model;
 
-import com.example.bigowlapp.utils.Constants;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
-public class SupervisionRequest extends Notification implements Constants {
+public class SupervisionRequest extends Notification {
 
     private String senderUid;
     private String receiverUid;
@@ -14,23 +13,7 @@ public class SupervisionRequest extends Notification implements Constants {
     private Timestamp timeResponse;
 
     public SupervisionRequest() {
-        super();
-        this.setType(Constants.SUPERVISION_TYPE);
-    }
-
-    public SupervisionRequest(String uid) {
-        super(uid, SUPERVISION_TYPE);
-    }
-
-    public SupervisionRequest(String uid, Timestamp time, String senderUid,
-                              String receiverUid, String groupUid, Response response,
-                              Timestamp timeResponse) {
-        super(uid, SUPERVISION_TYPE, time);
-        this.senderUid = senderUid;
-        this.receiverUid = receiverUid;
-        this.groupUid = groupUid;
-        this.response = response;
-        this.timeResponse = timeResponse;
+        super(Type.SUPERVISION_REQUEST);
     }
 
     public String getSenderUid() {
