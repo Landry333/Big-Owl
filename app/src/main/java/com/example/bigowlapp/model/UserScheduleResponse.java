@@ -12,8 +12,8 @@ public class UserScheduleResponse {
         private boolean authenticated =false;
         private boolean authAttempted_Method1 =false;  // Authentication with first method
         private boolean authAttempted_Method2 =false;  // Authentication with second method
-        private boolean located=false;
-        private String authenticationDeviceID;
+        private boolean scheduleLocated =false;
+        private String deviceIdNumber;
 
         public Attendance() {
         }
@@ -41,34 +41,35 @@ public class UserScheduleResponse {
             this.authAttempted_Method2 = authAttempted_Method2;
         }
 
-        public boolean isLocated() {
-            return located;
+        public boolean isScheduleLocated() {
+            return scheduleLocated;
         }
 
-        public void setLocated(boolean located) {
-            this.located = located;
+        public void setScheduleLocated(boolean scheduleLocated) {
+            this.scheduleLocated = scheduleLocated;
         }
 
-        public String getAuthenticationDeviceID() {
-            return authenticationDeviceID;
+        public String getDeviceIdNumber() {
+            return deviceIdNumber;
         }
 
-        public void setAuthenticationDeviceID(String authenticationDeviceID) {
-            this.authenticationDeviceID = authenticationDeviceID;
+        public void setDeviceIdNumber(String deviceIdNumber) {
+            this.deviceIdNumber = deviceIdNumber;
         }
 
         @Exclude
         public boolean didAttend(){
-            return authenticated&&isLocated();
+            return authenticated&& isScheduleLocated();
 
         }
     }
 
     public UserScheduleResponse() {
-
+        this.attendance = new Attendance();
     }
 
     public UserScheduleResponse(Response response, Timestamp responseTime) {
+        this();
         this.response = response;
         this.responseTime = responseTime;
     }
@@ -87,5 +88,13 @@ public class UserScheduleResponse {
 
     public void setResponseTime(Timestamp responseTime) {
         this.responseTime = responseTime;
+    }
+
+    public Attendance getAttendance() {
+        return attendance;
+    }
+
+    public void setAttendance(Attendance attendance) {
+        this.attendance = attendance;
     }
 }

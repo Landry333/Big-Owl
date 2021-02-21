@@ -15,6 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class DeviceIDNumberGetter extends AppCompatActivity {
+    
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
     String IDNumber = telephonyManager.getImei();

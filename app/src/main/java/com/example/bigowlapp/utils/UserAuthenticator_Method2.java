@@ -12,7 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
-import com.example.bigowlapp.DeviceIDNumberGetter;
+import com.example.bigowlapp.activity.AuthenticationActivity;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.Timestamp;
@@ -26,20 +26,30 @@ public class UserAuthenticator_Method2 extends BroadcastReceiver {
     private String smsNumber;
     private String smsMessage;
     private String smsSender;
+    private static final int THIRTY_MINUTES = 1800;
 
     RepositoryFacade repositoryFacade =  RepositoryFacade.getInstance();
     IsSmsSenderACurrentEventSupervisor isSmsSenderACurrentEventSupervisor = new IsSmsSenderACurrentEventSupervisor();
     //DeviceIDNumberGetter deviceIDNumberGetter = new DeviceIDNumberGetter();
     //UserAuthenticator_Method1 authenticator_1 = new UserAuthenticator_Method1();
 
-    //private String deviceID = deviceIDNumberGetter.getIDNumber();
+
+
     //private String deviceID = authenticator_1.getDeviceID();
 
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context context, Intent receiverIntent) {
         AlertDialog.Builder display = new AlertDialog.Builder(context);
 
-        if (intent.getAction().equals(SMS_RECEIVED)) {
-            Bundle bundle = intent.getExtras();
+        if (receiverIntent.getAction().equals(SMS_RECEIVED)) {
+            /*try{
+                DeviceIDNumberGetter deviceIDNumberGetter = new DeviceIDNumberGetter();
+                String deviceID = deviceIDNumberGetter.getIDNumber();
+                Toast.makeText(context, deviceID, Toast.LENGTH_SHORT).show();
+            }
+            catch(Exception e){
+                Log.e("exception", "the message", e);
+            }*/
+            Bundle bundle = receiverIntent.getExtras();
             if (bundle != null) {
                 // get sms objects
                 Toast.makeText(context, "RECEIVED NOT EMPTY TEXT SMS", Toast.LENGTH_SHORT).show();
@@ -62,7 +72,8 @@ public class UserAuthenticator_Method2 extends BroadcastReceiver {
 
                 Timestamp currentTime = new Timestamp(Calendar.getInstance().getTime());
 
-                isSmsSenderACurrentEventSupervisor.check()
+                //isSmsSenderACurrentEventSupervisor.check( smsSender)
+                isSmsSenderACurrentEventSupervisor.check( "+19876543210")
                         .addOnSuccessListener(schedulesList ->{
                             Toast.makeText(context, "STEP 1 PASSED", Toast.LENGTH_SHORT).show();
                             for (Schedule schedule : schedulesList) {
@@ -70,7 +81,7 @@ public class UserAuthenticator_Method2 extends BroadcastReceiver {
                                 //Log.e("CurrentTime",((Long)currentTime.getSeconds()).toString());
                                 Log.e("CurrentTime",currentTime.toString());
 
-                                if(Math.abs(schedule.getStartTime().getSeconds()-currentTime.getSeconds())<1800){
+                                if(Math.abs(schedule.getStartTime().getSeconds()-currentTime.getSeconds())< THIRTY_MINUTES){
                                     Toast.makeText(context, "STEP 2 PASSED", Toast.LENGTH_SHORT).show();
                                     break;
                                 }
@@ -81,6 +92,16 @@ public class UserAuthenticator_Method2 extends BroadcastReceiver {
                 });
                 //Toast.makeText(context, deviceID, Toast.LENGTH_SHORT).show();
                 //Toast.makeText(context, deviceIDNumberGetter.getIDNumber(), Toast.LENGTH_SHORT).show();
+                Intent nextScreenIntent = new Intent(context, AuthenticationActivity.class);
+                nextScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                try{
+                    context.startActivity(nextScreenIntent);
+                }
+                catch(Exception e){
+                    Log.e("exception", "the message", e);
+                }
+
+
 
 
 

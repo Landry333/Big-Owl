@@ -35,9 +35,8 @@ public class IsSmsSenderACurrentEventSupervisor extends AppCompatActivity {
 
     }
 
-    public Task<List<Schedule>> check() {
+    public Task<List<Schedule>> check(String phoneNumber) {
         RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
-        String phoneNumber = "+19876543210";
         String currentUserUid = repositoryFacade.getAuthRepository().getCurrentUser().getUid();
         Timestamp currentTime = new Timestamp(Calendar.getInstance().getTime());
 
