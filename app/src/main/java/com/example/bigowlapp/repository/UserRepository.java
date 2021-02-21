@@ -19,7 +19,11 @@ public class UserRepository extends Repository<User> {
                         .limit(1)
                         .get();
 
-        return taskGetPhoneNumber.continueWithTask(task -> {
+        return taskCheckIfPhoneNumberExists(taskGetPhoneNumber);
+    }
+
+    private Task<Void> taskCheckIfPhoneNumberExists(Task<QuerySnapshot> taskPrevious){
+        return taskPrevious.continueWithTask(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot tDoc = task.getResult();
                 if (tDoc != null && !tDoc.isEmpty()) {

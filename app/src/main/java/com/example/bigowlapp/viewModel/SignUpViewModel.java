@@ -43,7 +43,11 @@ public class SignUpViewModel extends BaseViewModel {
         });
 
         // add a default group when the user registers to a system where the user is the supervisor
-        return taskAddUser.continueWithTask(task -> {
+        return taskFinishByCreatingGroup(taskAddUser, firstName, lastName);
+    }
+
+    private Task<Void> taskFinishByCreatingGroup(Task<Void> taskPrevious, String firstName, String lastName) {
+        return taskPrevious.continueWithTask(task -> {
             if (task.isSuccessful()) {
                 return createGroupEntry(firstName, lastName);
             } else {
