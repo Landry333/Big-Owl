@@ -5,9 +5,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
+import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.service.LocationBroadcastReceiver;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
@@ -16,11 +18,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.GeoPoint;
 
-import java.util.UUID;
-
 public class ScheduledLocationTrackingManager {
 
-    private static final int DEFAULT_TRACKING_RADIUS_METERS = 3000;
+    private static final int DEFAULT_TRACKING_RADIUS_METERS = 150;
     private static final long DEFAULT_TRACKING_TIME_MILLISECONDS = 30 * Constants.MINUTE_TO_MILLISECONDS;
     // use 0 for instant response, and allow delay for better battery life
     private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS = 5 * Constants.MINUTE_TO_MILLISECONDS;
@@ -35,7 +35,7 @@ public class ScheduledLocationTrackingManager {
         geofencingClient = LocationServices.getGeofencingClient(context);
     }
 
-    public Task<Void> addNewLocationToTrack(GeoPoint locationCoords) {
+    public Task<Void> addNewScheduledLocationToTrack(Schedule scheduleWithLocationToTrack) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Handle missing permissions case
             // Consider calling ActivityCompat#requestPermissions
@@ -47,20 +47,27 @@ public class ScheduledLocationTrackingManager {
             return null;
         }
 
-        return geofencingClient.addGeofences(buildRequestToTrack(locationCoords), getGeofencePendingIntent());
+        return geofencingClient.addGeofences(
+                buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent());
     }
 
-    private GeofencingRequest buildRequestToTrack(GeoPoint locationCoords) {
+    private GeofencingRequest buildRequestToTrack(Schedule scheduleWithLocationToTrack) {
         return new GeofencingRequest.Builder()
                 .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER | GeofencingRequest.INITIAL_TRIGGER_EXIT)
-                .addGeofence(this.buildLocationToTrack(locationCoords))
+                .addGeofence(this.buildLocationToTrack(scheduleWithLocationToTrack))
                 .build();
     }
 
-    private Geofence buildLocationToTrack(GeoPoint locationCoords) {
+    private Geofence buildLocationToTrack(Schedule scheduleWithLocationToTrack) {
+        if (scheduleWithLocationToTrack.getUid() == null) {
+            Log.e("BigOwl", "Schedule Uid not found. Tracking a schedule requires uid!");
+            return null;
+        }
+
+        GeoPoint locationCoords = scheduleWithLocationToTrack.getLocation();
+
         return new Geofence.Builder()
-                // TODO: correctly setup ids, should probably correspond with a schedule
-                .setRequestId(UUID.randomUUID().toString())
+                .setRequestId(scheduleWithLocationToTrack.getUid())
                 .setCircularRegion(locationCoords.getLatitude(), locationCoords.getLongitude(),
                         DEFAULT_TRACKING_RADIUS_METERS)
                 .setExpirationDuration(DEFAULT_TRACKING_TIME_MILLISECONDS)

@@ -35,6 +35,7 @@ import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static android.app.Activity.RESULT_OK;
@@ -172,7 +173,8 @@ public class ScheduleFormFragment extends Fragment
         testOnlyLocationTrackCheckButton.setOnClickListener(v -> {
             ScheduledLocationTrackingManager locationTrackingManager = new ScheduledLocationTrackingManager(getActivity());
             Schedule schedule = setScheduleViewModel.getNewScheduleData().getValue();
-            locationTrackingManager.addNewLocationToTrack(schedule.getLocation())
+            schedule.setUid("TITLE='" + schedule.getTitle() + "'__" + UUID.randomUUID().toString());
+            locationTrackingManager.addNewScheduledLocationToTrack(schedule)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(getActivity(), "ADDED LOCATION TRACKING", Toast.LENGTH_LONG).show();
                     })
