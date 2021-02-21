@@ -58,7 +58,7 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
                                     this.noGroupAlert = new AlertDialog.Builder(SupervisedGroupListActivity.this)
                                             .setTitle("No supervised group found!")
                                             .setMessage("Required to be a supervised user of any group")
-                                            .setPositiveButton("Ok", (dialogInterface, which) -> SupervisedGroupListActivity.super.onBackPressed())
+                                            .setPositiveButton("Ok", (dialogInterface, which) -> onBackPressed())
                                             .setCancelable(false)
                                             .create();
                                     this.noGroupAlert.show();
