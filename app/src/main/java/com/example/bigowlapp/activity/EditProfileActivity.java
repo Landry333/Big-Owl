@@ -32,25 +32,28 @@ public class EditProfileActivity extends BigOwlActivity {
     }
 
     protected void initialize() {
+
+
+
         editButtonConfirm = findViewById(R.id.edit_button_confirm);
         editButtonConfirm.setOnClickListener(v -> {
+            String userPhone = editPhoneNumber.getText().toString();
+            String firstName = editUserFirstName.getText().toString();
+            String lastName = editUserLastName.getText().toString();
 
-            if (editUserFirstName.getText().toString().isEmpty()) {
+            if (firstName.isEmpty()) {
                 editUserFirstName.setError("Please enter a valid first name.");
                 editUserFirstName.requestFocus();
-            }
-            if (editUserLastName.getText().toString().isEmpty()) {
+            } else if (lastName.isEmpty()) {
                 editUserLastName.setError("Please enter a valid last name.");
                 editUserLastName.requestFocus();
-            }
-            if (editPhoneNumber.getText().toString().isEmpty()) {
+            } else if (userPhone.isEmpty()) {
                 editPhoneNumber.setError("Please enter a valid phone number.");
                 editPhoneNumber.requestFocus();
-            }
-            if (!editUserFirstName.getText().toString().isEmpty() &&
-                    !editUserLastName.getText().toString().isEmpty() &&
-                    !editPhoneNumber.getText().toString().isEmpty()) {
-
+            } else if ((userPhone.contains("+") && !userPhone.startsWith("+")) || !Character.isDigit(userPhone.charAt(userPhone.length() - 1))) {
+                editPhoneNumber.setError("please enter a correct phone format");
+                editPhoneNumber.requestFocus();
+            } else {
                 editProfileViewModel.editUserProfile(
                         editUserFirstName.getText().toString(),
                         editUserLastName.getText().toString(),

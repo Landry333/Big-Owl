@@ -61,8 +61,10 @@ public class SignUpPageActivity extends AppCompatActivity {
             } else if (userPhone.isEmpty()) {
                 this.userPhone.setError("please enter a phone number");
                 this.userPhone.requestFocus();
+            } else if ((userPhone.contains("+") && !userPhone.startsWith("+")) || !Character.isDigit(userPhone.charAt(userPhone.length()-1))) {
+                this.userPhone.setError("please enter a correct phone format");
+                this.userPhone.requestFocus();
             } else {
-                //String userPhone2 = userPhone.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");  //Format to be used?
                 String formattedPhone = userPhone.replaceAll("[^+0-9]", "");
                 signUpViewModel.createUser(email, pass, formattedPhone, firstName, lastName)
                         .addOnSuccessListener(isSuccessful -> {
