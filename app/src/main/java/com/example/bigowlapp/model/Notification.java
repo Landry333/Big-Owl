@@ -9,7 +9,8 @@ public class Notification extends Model {
     public enum Type {
         NONE(Notification.class),
         SUPERVISION_REQUEST(SupervisionRequest.class),
-        SCHEDULE_REQUEST(ScheduleRequest.class);
+        SCHEDULE_REQUEST(ScheduleRequest.class),
+        AUTH_ATTEMPTED_1_FAILURE(AuthAttempted1Failure.class);
 
         public final Class<? extends Notification> typeClass;
 

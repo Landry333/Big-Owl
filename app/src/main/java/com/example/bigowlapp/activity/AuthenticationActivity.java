@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.model.Attendance;
+import com.example.bigowlapp.model.AuthAttempted1Failure;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
@@ -85,7 +87,7 @@ public class AuthenticationActivity extends BigOwlActivity {
                 .observe(this,schedule -> {
                     UserScheduleResponse userScheduleResponse = schedule.getUserScheduleResponseMap()
                             .get(repositoryFacade.getAuthRepository().getCurrentUser().getUid());
-                    UserScheduleResponse.Attendance attendance = userScheduleResponse.getAttendance();
+                    Attendance attendance = userScheduleResponse.getAttendance();
                     boolean didAttend = attendance.didAttend();
                     boolean authAttempted_Method1 = attendance.isAuthAttempted_Method1();
                     if(!didAttend){
@@ -94,6 +96,7 @@ public class AuthenticationActivity extends BigOwlActivity {
                             attendance.setDeviceIdNumber(deviceIdNumber);
                             attendance.setAuthAttempted_Method1(true);
                             repositoryFacade.getScheduleRepository().addDocument(schedule);
+                            AuthAttempted1Failure authAttempted1Failure = new AuthAttempted1Failure();
                         }
                         else{
                             authenticationStatusDisplay.setText("Authentication Status: SUCCEEDED");
