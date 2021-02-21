@@ -1,7 +1,7 @@
 package com.example.bigowlapp.repository;
 
-import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.repository.exception.PhoneNumberTakenException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -23,7 +23,7 @@ public class UserRepository extends Repository<User> {
             if (task.isSuccessful()) {
                 QuerySnapshot tDoc = task.getResult();
                 if (tDoc != null && !tDoc.isEmpty()) {
-                    throw new Exception("Phone Number is already in the database.");
+                    throw new PhoneNumberTakenException();
                 } else {
                     return Tasks.forResult(null);
                 }

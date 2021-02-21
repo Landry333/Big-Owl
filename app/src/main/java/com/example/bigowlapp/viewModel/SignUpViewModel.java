@@ -43,15 +43,13 @@ public class SignUpViewModel extends BaseViewModel {
         });
 
         // add a default group when the user registers to a system where the user is the supervisor
-        Task<Void> taskCreateGroup = taskAddUser.continueWithTask(task -> {
+        return taskAddUser.continueWithTask(task -> {
             if (task.isSuccessful()) {
                 return createGroupEntry(firstName, lastName);
             } else {
                 throw task.getException();
             }
         });
-
-        return taskCreateGroup;
     }
 
     private Task<AuthResult> signUpUserInAuthRepo(String email, String password) {
