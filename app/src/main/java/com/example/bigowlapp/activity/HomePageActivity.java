@@ -27,6 +27,8 @@ import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 public class HomePageActivity extends BigOwlActivity {
     private final int LOCATION_PERMISSION_CODE = 1;
 
@@ -113,8 +115,23 @@ public class HomePageActivity extends BigOwlActivity {
             popup.show();
         });
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            requestLocationPermission();
+
+        // TODO: cleanup permissions request code
+
+        ArrayList<String> permissionsToAskFor = new ArrayList<>();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            permissionsToAskFor.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+
+            permissionsToAskFor.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+
+        if (!permissionsToAskFor.isEmpty()) {
+            requestLocationPermission(permissionsToAskFor);
         }
     }
 
@@ -181,17 +198,22 @@ public class HomePageActivity extends BigOwlActivity {
                 .create();
     }
 
-    private void requestLocationPermission() {
+    // TODO: Might be better to request these permission when the user accepts a schedule
+    private void requestLocationPermission(ArrayList<String> permissionsToAskFor) {
+
+        Runnable permissionRequest = () ->
+                ActivityCompat.requestPermissions(this, permissionsToAskFor.toArray(new String[0]), LOCATION_PERMISSION_CODE);
+
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
             new AlertDialog.Builder(this)
-                    .setTitle("Permission needed")
-                    .setMessage("Permission is required to detect location")
-                    .setPositiveButton("Ok", (dialogInterface, which) -> ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, LOCATION_PERMISSION_CODE))
+                    .setTitle("Location permission needed")
+                    .setMessage("Location detection is used to check whether you have arrived to a scheduled location")
+                    .setPositiveButton("Ok", (dialogInterface, which) -> permissionRequest.run())
                     .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                     .create().show();
 
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, LOCATION_PERMISSION_CODE);
+            permissionRequest.run();
         }
     }
 

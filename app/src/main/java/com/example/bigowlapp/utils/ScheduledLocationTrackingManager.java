@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class ScheduledLocationTrackingManager {
 
-    private static final int DEFAULT_TRACKING_RADIUS_METERS = 100;
+    private static final int DEFAULT_TRACKING_RADIUS_METERS = 200;
     private static final long DEFAULT_TRACKING_TIME_MILLISECONDS = 30 * Constants.MINUTE_TO_MILLISECONDS;
     // use 0 for instant response, and allow delay for better battery life
     private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS = 5 * Constants.MINUTE_TO_MILLISECONDS;
@@ -52,7 +52,7 @@ public class ScheduledLocationTrackingManager {
 
     private GeofencingRequest buildRequestToTrack(GeoPoint locationCoords) {
         return new GeofencingRequest.Builder()
-                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER | GeofencingRequest.INITIAL_TRIGGER_EXIT)
                 .addGeofence(this.buildLocationToTrack(locationCoords))
                 .build();
     }

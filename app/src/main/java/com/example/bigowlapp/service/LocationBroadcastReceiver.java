@@ -43,12 +43,14 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             // TODO: entering location case
             Toast.makeText(context, "PERSON HAS ENTERED LOCATION", Toast.LENGTH_LONG).show();
+            Log.e("BigOwl", "YOU ENTERED THE LOCATION");
 
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
 
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             // TODO: exiting location case
             Toast.makeText(context, "PERSON HAS EXITED LOCATION", Toast.LENGTH_LONG).show();
+            Log.e("BigOwl", "YOU EXITED THE LOCATION");
 
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
         } else {
