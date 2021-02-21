@@ -9,13 +9,19 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
+import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingEvent;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This BroadcastReceiver gets notified when the user exits/enters a location when location is being
- * tracked.
+ * tracked. This is a result of geofences added using
+ * {@link com.example.bigowlapp.utils.ScheduledLocationTrackingManager#addNewLocationToTrack(GeoPoint)}
  */
 public class LocationBroadcastReceiver extends BroadcastReceiver {
 
@@ -25,36 +31,47 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // When location changes occur, this will run and handle location info
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
         if (geofencingEvent.hasError()) {
-            String errorMessage = GeofenceStatusCodes
-                    .getStatusCodeString(geofencingEvent.getErrorCode());
+            String errorMessage = GeofenceStatusCodes.getStatusCodeString(geofencingEvent.getErrorCode());
             Log.e("BigOwl", errorMessage);
             return;
         }
 
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
-        Location location = geofencingEvent.getTriggeringLocation();
-
-        Log.e("BigOwl", "the location that has triggered this BR is " + location.toString());
+        Location currentUserLocation = geofencingEvent.getTriggeringLocation();
+        List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             // TODO: entering location case
             Toast.makeText(context, "PERSON HAS ENTERED LOCATION", Toast.LENGTH_LONG).show();
             Log.e("BigOwl", "YOU ENTERED THE LOCATION");
 
-            List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
+            // User was successfully detected in desired location, so no more tracking needed
+            this.removeLocationTracking(context, triggeringGeofences)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.e("BigOwl", "Entered LOCATION TRACKING SUCCESSFULLY REMOVED");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("BigOwl", "FAILED TO REMOVE LOCATIONS");
+                    });
 
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             // TODO: exiting location case
             Toast.makeText(context, "PERSON HAS EXITED LOCATION", Toast.LENGTH_LONG).show();
             Log.e("BigOwl", "YOU EXITED THE LOCATION");
 
-            List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
         } else {
             Log.e("BigOwl", "Location Detection has failed");
         }
+    }
+
+    private Task<Void> removeLocationTracking(Context context, List<Geofence> geofencesToRemove) {
+        GeofencingClient geofencingClient = LocationServices.getGeofencingClient(context);
+        List<String> geofenceIdList = geofencesToRemove.stream()
+                .map(Geofence::getRequestId)
+                .collect(Collectors.toList());
+        return geofencingClient.removeGeofences(geofenceIdList);
     }
 }

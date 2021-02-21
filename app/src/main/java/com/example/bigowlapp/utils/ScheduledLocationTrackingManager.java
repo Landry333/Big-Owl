@@ -20,14 +20,14 @@ import java.util.UUID;
 
 public class ScheduledLocationTrackingManager {
 
-    private static final int DEFAULT_TRACKING_RADIUS_METERS = 200;
+    private static final int DEFAULT_TRACKING_RADIUS_METERS = 3000;
     private static final long DEFAULT_TRACKING_TIME_MILLISECONDS = 30 * Constants.MINUTE_TO_MILLISECONDS;
     // use 0 for instant response, and allow delay for better battery life
     private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS = 5 * Constants.MINUTE_TO_MILLISECONDS;
     private static final int NO_NOTIFY_DELAY = 0;
 
-    private Context context;
-    private GeofencingClient geofencingClient;
+    private final Context context;
+    private final GeofencingClient geofencingClient;
     private PendingIntent geofencePendingIntent;
 
     public ScheduledLocationTrackingManager(Context context) {
@@ -64,8 +64,7 @@ public class ScheduledLocationTrackingManager {
                 .setCircularRegion(locationCoords.getLatitude(), locationCoords.getLongitude(),
                         DEFAULT_TRACKING_RADIUS_METERS)
                 .setExpirationDuration(DEFAULT_TRACKING_TIME_MILLISECONDS)
-                // TODO: probably should use a delay for battery life
-                .setNotificationResponsiveness(NO_NOTIFY_DELAY)
+                .setNotificationResponsiveness(DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
     }
