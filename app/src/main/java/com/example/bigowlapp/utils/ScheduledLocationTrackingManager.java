@@ -59,13 +59,14 @@ public class ScheduledLocationTrackingManager {
 
     private Geofence buildLocationToTrack(GeoPoint locationCoords) {
         return new Geofence.Builder()
-                // TODO: correctly setup ids, should correspond with a schedule
+                // TODO: correctly setup ids, should probably correspond with a schedule
                 .setRequestId(UUID.randomUUID().toString())
                 .setCircularRegion(locationCoords.getLatitude(), locationCoords.getLongitude(),
                         DEFAULT_TRACKING_RADIUS_METERS)
                 .setExpirationDuration(DEFAULT_TRACKING_TIME_MILLISECONDS)
+                // TODO: probably should use a delay for battery life
                 .setNotificationResponsiveness(NO_NOTIFY_DELAY)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
     }
 

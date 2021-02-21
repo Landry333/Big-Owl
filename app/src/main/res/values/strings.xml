@@ -61,4 +61,7 @@
     <string name="schedule_list">Schedules</string>
     <string name="schedule_title">Schedules title</string>
     <string name="schedule_start_time">Schedules Start time</string>
+
+    <!-- TODO: should be removed when everything implemented regarding location tracking -->
+    <string name="test_only_click_to_track_selected_location">[TEST ONLY] CLICK TO TRACK SELECTED LOCATION</string>
 </resources>

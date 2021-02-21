@@ -26,6 +26,7 @@ import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.Constants;
 import com.example.bigowlapp.utils.GroupRecyclerViewListener;
+import com.example.bigowlapp.utils.ScheduledLocationTrackingManager;
 import com.example.bigowlapp.utils.UserFragmentListener;
 import com.example.bigowlapp.viewModel.SetScheduleViewModel;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
@@ -45,6 +46,9 @@ public class ScheduleFormFragment extends Fragment
         TimePickerDialogFragment.TimePickedListener,
         GroupRecyclerViewListener,
         UserFragmentListener {
+
+    // TODO: should be removed when everything implemented regarding location tracking
+    private static final boolean ENABLE_TESTING_TOGGLE = true;
 
     private EditText editTitle;
     private Button groupButton;
@@ -154,6 +158,28 @@ public class ScheduleFormFragment extends Fragment
         setupSelectUserLayout();
         setupEditLocation();
         setupConfirmSetScheduleButton();
+
+        setupTestOnlyLocationMangerCheckButton(view);
+    }
+
+    // TODO: should be removed when everything implemented regarding location tracking
+    private void setupTestOnlyLocationMangerCheckButton(View view) {
+        if (!ENABLE_TESTING_TOGGLE) {
+            return;
+        }
+
+        Button testOnlyLocationTrackCheckButton = view.findViewById(R.id.test_only_location_track_check_button);
+        testOnlyLocationTrackCheckButton.setOnClickListener(v -> {
+            ScheduledLocationTrackingManager locationTrackingManager = new ScheduledLocationTrackingManager(getActivity());
+            Schedule schedule = setScheduleViewModel.getNewScheduleData().getValue();
+            locationTrackingManager.addNewLocationToTrack(schedule.getLocation())
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(getActivity(), "ADDED LOCATION TRACKING", Toast.LENGTH_LONG).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getActivity(), "FAILURE!!!!! TO ADD LOCATION TRACKING", Toast.LENGTH_LONG).show();
+                    });
+        });
     }
 
     private void setupTitle() {
