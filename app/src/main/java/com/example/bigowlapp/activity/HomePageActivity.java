@@ -146,8 +146,9 @@ public class HomePageActivity extends BigOwlActivity {
 
         btnLogOut.setOnClickListener(v -> {
             homePageViewModel.signOut();
-            Intent i = new Intent(HomePageActivity.this, LoginPageActivity.class);
-            startActivity(i);
+            Intent intent = new Intent(HomePageActivity.this, LoginPageActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
 
         btnSetSchedule = findViewById(R.id.btn_set_schedule);
