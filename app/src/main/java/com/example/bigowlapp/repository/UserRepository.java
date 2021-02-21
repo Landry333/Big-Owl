@@ -19,7 +19,7 @@ public class UserRepository extends Repository<User> {
                         .limit(1)
                         .get();
 
-        Task<Void> taskFinishedGetPhoneNumber = taskGetPhoneNumber.continueWithTask(task -> {
+        return taskGetPhoneNumber.continueWithTask(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot tDoc = task.getResult();
                 if (tDoc != null && !tDoc.isEmpty()) {
@@ -31,7 +31,5 @@ public class UserRepository extends Repository<User> {
                 throw task.getException();
             }
         });
-
-        return taskFinishedGetPhoneNumber;
     }
 }
