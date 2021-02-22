@@ -12,6 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.viewModel.SignUpViewModel;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 
 public class SignUpPageActivity extends AppCompatActivity {
     public EditText userEmail, userPassword, userPhone, userFirstName, userLastName;
@@ -44,6 +47,14 @@ public class SignUpPageActivity extends AppCompatActivity {
             String firstName = userFirstName.getText().toString();
             String lastName = userLastName.getText().toString();
 
+            String formatedPhone = null;
+            try {
+                formatedPhone = filteredNUmber(userPhone);
+            } catch (NumberParseException e) {
+                this.userPhone.setError(e.getMessage());
+                this.userPhone.requestFocus();
+                return;
+            }
 
             //Error handling
             if (firstName.isEmpty()) {
@@ -62,7 +73,7 @@ public class SignUpPageActivity extends AppCompatActivity {
                 this.userPhone.setError("please enter a phone number");
                 this.userPhone.requestFocus();
             } else {
-                signUpViewModel.createUser(email, pass, userPhone, firstName, lastName)
+                signUpViewModel.createUser(email, pass, formatedPhone, firstName, lastName)
                         .addOnSuccessListener(isSuccessful -> {
                             Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
@@ -74,5 +85,13 @@ public class SignUpPageActivity extends AppCompatActivity {
         tvSignIn.setOnClickListener(v -> {
             startActivity(new Intent(SignUpPageActivity.this, LoginPageActivity.class));
         });
+    }
+
+    public String filteredNUmber(String number) throws NumberParseException {
+        PhoneNumberUtil numbUtil = PhoneNumberUtil.getInstance();
+        Phonenumber.PhoneNumber phonenumber = numbUtil.parseAndKeepRawInput(number, getResources().getConfiguration().getLocales().get(0).getCountry());
+        String formattedNumber = numbUtil.format(phonenumber, PhoneNumberUtil.PhoneNumberFormat.E164);
+
+        return formattedNumber;
     }
 }
