@@ -1,7 +1,5 @@
 package com.example.bigowlapp.activity;
 
-import android.os.SystemClock;
-
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
