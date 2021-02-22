@@ -10,6 +10,7 @@ public class AuthAttempted1Failure extends Notification {
     private String receiverUid;
     private String groupUid;
     private Timestamp timeRead;
+    private String scheduleId;
 
     public AuthAttempted1Failure() {
         super(Type.AUTH_ATTEMPTED_1_FAILURE);
@@ -45,6 +46,14 @@ public class AuthAttempted1Failure extends Notification {
 
     public void setTimeRead(Timestamp timeRead) {
         this.timeRead = timeRead;
+    }
+
+    public String getScheduleId() {
+        return scheduleId;
+    }
+
+    public void setScheduleId(String scheduleId) {
+        this.scheduleId = scheduleId;
     }
 
 }

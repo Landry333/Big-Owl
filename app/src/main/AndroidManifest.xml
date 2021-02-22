@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.AuthenticationActivity"></activity>
+        <activity android:name=".activity.AuthenticationActivityMethod2"></activity>
+        <activity android:name=".activity.AuthenticationActivityMethod1" />
         <activity android:name=".activity.SetScheduleActivity" />
         <activity android:name=".activity.ScheduleViewRespondActivity" />
         <activity android:name=".activity.EditProfileActivity" />
@@ -45,7 +46,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".utils.UserAuthenticator_Method2">
+        <receiver android:name=".utils.SupervisorSmsReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>

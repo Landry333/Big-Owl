@@ -12,7 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
-import com.example.bigowlapp.activity.AuthenticationActivity;
+import com.example.bigowlapp.activity.AuthenticationActivityMethod2;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.Timestamp;
@@ -20,19 +20,19 @@ import com.google.firebase.Timestamp;
 import java.util.Calendar;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class UserAuthenticator_Method2 extends BroadcastReceiver {
+public class SupervisorSmsReceiver extends BroadcastReceiver {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     private String smsNumber;
     private String smsMessage;
     private String smsSender;
     private static final int THIRTY_MINUTES = 1800;
+    private String scheduleId;
 
-    RepositoryFacade repositoryFacade =  RepositoryFacade.getInstance();
+    RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
     IsSmsSenderACurrentEventSupervisor isSmsSenderACurrentEventSupervisor = new IsSmsSenderACurrentEventSupervisor();
     //DeviceIDNumberGetter deviceIDNumberGetter = new DeviceIDNumberGetter();
     //UserAuthenticator_Method1 authenticator_1 = new UserAuthenticator_Method1();
-
 
 
     //private String deviceID = authenticator_1.getDeviceID();
@@ -65,7 +65,8 @@ public class UserAuthenticator_Method2 extends BroadcastReceiver {
                     sb.append(messages[i].getMessageBody());
                 }
                 smsSender = messages[0].getOriginatingAddress();
-                String message = sb.toString();
+                scheduleId = sb.toString();
+                //String message = sb.toString();
                 /*if(isSmsSenderACurrentEventSupervisor.check())
                     Toast.makeText(context, "METHOD OK", Toast.LENGTH_SHORT).show();
                 else Toast.makeText(context, "METHOD FAILED", Toast.LENGTH_SHORT).show();*/
@@ -73,31 +74,42 @@ public class UserAuthenticator_Method2 extends BroadcastReceiver {
                 Timestamp currentTime = new Timestamp(Calendar.getInstance().getTime());
 
                 //isSmsSenderACurrentEventSupervisor.check( smsSender)
-                isSmsSenderACurrentEventSupervisor.check( "+19876543210")
-                        .addOnSuccessListener(schedulesList ->{
+                isSmsSenderACurrentEventSupervisor.check("+19876543210")
+                        .addOnSuccessListener(schedulesList -> {
                             Toast.makeText(context, "STEP 1 PASSED", Toast.LENGTH_SHORT).show();
                             for (Schedule schedule : schedulesList) {
                                 Log.e("StartTime", schedule.getStartTime().toString());
                                 //Log.e("CurrentTime",((Long)currentTime.getSeconds()).toString());
-                                Log.e("CurrentTime",currentTime.toString());
+                                Log.e("CurrentTime", currentTime.toString());
 
-                                if(Math.abs(schedule.getStartTime().getSeconds()-currentTime.getSeconds())< THIRTY_MINUTES){
-                                    Toast.makeText(context, "STEP 2 PASSED", Toast.LENGTH_SHORT).show();
+                                if (Math.abs(schedule.getStartTime().getSeconds() - currentTime.getSeconds()) < THIRTY_MINUTES) {
+
+                                    if(scheduleId.equalsIgnoreCase(schedule.getUid())){
+                                        Intent nextScreenIntent = new Intent(context, AuthenticationActivityMethod2.class);
+                                        nextScreenIntent.putExtra("scheduleId", scheduleId);
+                                        nextScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        try {
+                                            context.startActivity(nextScreenIntent);
+                                        } catch (Exception e) {
+                                            Log.e("exception", "the message", e);
+                                        }
+                                        Toast.makeText(context, "STEP 2 PASSED", Toast.LENGTH_SHORT).show();
+                                    }
                                     break;
                                 }
                             }
-                })
-                        .addOnFailureListener(error ->{
+                        })
+                        .addOnFailureListener(error -> {
                             Toast.makeText(context, "STEP 1 FAILED", Toast.LENGTH_SHORT).show();
-                });
+                        });
                 //Toast.makeText(context, deviceID, Toast.LENGTH_SHORT).show();
                 //Toast.makeText(context, deviceIDNumberGetter.getIDNumber(), Toast.LENGTH_SHORT).show();
-                Intent nextScreenIntent = new Intent(context, AuthenticationActivity.class);
+                Intent nextScreenIntent = new Intent(context, AuthenticationActivityMethod2.class);
+                nextScreenIntent.putExtra("scheduleId", smsNumber);
                 nextScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                try{
+                try {
                     context.startActivity(nextScreenIntent);
-                }
-                catch(Exception e){
+                } catch (Exception e) {
                     Log.e("exception", "the message", e);
                 }
 
