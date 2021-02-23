@@ -28,7 +28,7 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
     private String supervisorName;
     private List<String> supervisorNameList = new ArrayList<String>();
     private AlertDialog noGroupAlert;
-    private Intent intent;
+    private Intent intentToSupervisedGroup;
 
     @Override
     protected void onStart() {
@@ -48,11 +48,11 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
                                     supervisedGroupsListView = findViewById(R.id.supervised_groups);
                                     supervisedGroupsListView.setAdapter(new SupervisedGroupAdaptor(getBaseContext(), new ArrayList<>(supervisedGroups)));
                                     supervisedGroupsListView.setOnItemClickListener((arg0, v, position, arg3) -> {
-                                        intent = new Intent(getBaseContext(), SupervisedGroupPageActivity.class);
-                                        intent.putExtra("groupID", supervisedGroups.get(position).getUid());
-                                        intent.putExtra("groupName", supervisedGroups.get(position).getName());
-                                        intent.putExtra("supervisorName", supervisorNameList.get(position));
-                                        startActivity(intent);
+                                        intentToSupervisedGroup = new Intent(getBaseContext(), SupervisedGroupPageActivity.class);
+                                        intentToSupervisedGroup.putExtra("groupID", supervisedGroups.get(position).getUid());
+                                        intentToSupervisedGroup.putExtra("groupName", supervisedGroups.get(position).getName());
+                                        intentToSupervisedGroup.putExtra("supervisorName", supervisorNameList.get(position));
+                                        startActivity(intentToSupervisedGroup);
                                     });
                                 } else {
                                     this.noGroupAlert = new AlertDialog.Builder(SupervisedGroupListActivity.this)
@@ -116,8 +116,8 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public Intent getIntentForTest() {
-        return this.intent;
+    public Intent getIntentToSupervisedGroupForTest() {
+        return this.intentToSupervisedGroup;
     }
 }
 

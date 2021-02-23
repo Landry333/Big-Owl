@@ -156,7 +156,7 @@ public class SupervisedGroupListActivityTest {
 
     @Test
     public void clickOnSupervisedGroupTest() {
-        Intent currentIntent = currentActivity.getIntentForTest();
+        Intent currentIntent = currentActivity.getIntentToSupervisedGroupForTest();
         assertNull(currentIntent);
         Group randomTestGroup = testUserSupervisedGroupList.get((int) ((Math.random() * 3)));
         onView(allOf(withId(R.id.text_view_group_name), withText(randomTestGroup.getName()))).perform(click());
@@ -165,7 +165,7 @@ public class SupervisedGroupListActivityTest {
         testIntent.putExtra("groupID", randomTestGroup.getUid());
         testIntent.putExtra("groupName", randomTestGroup.getName());
 
-        currentIntent = currentActivity.getIntentForTest();
+        currentIntent = currentActivity.getIntentToSupervisedGroupForTest();
         assertEquals(randomTestGroup.getUid(), currentIntent.getStringExtra("groupID"));
         assertEquals(randomTestGroup.getName(), currentIntent.getStringExtra("groupName"));
     }
