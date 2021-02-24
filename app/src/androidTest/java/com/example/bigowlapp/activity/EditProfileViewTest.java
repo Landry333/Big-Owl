@@ -124,7 +124,6 @@ public class EditProfileViewTest {
         verify(mockEditProfileViewModel, never()).editUserProfile(
                 anyString(), anyString(), anyString(), anyString()
         );
-        assertEquals(Lifecycle.State.DESTROYED, activityRule.getScenario().getState());
     }
 
 }
