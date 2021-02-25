@@ -52,6 +52,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
         List<String> geofenceIdList = triggeringGeofences.stream()
                 .map(Geofence::getRequestId)
+                .distinct()
                 .collect(Collectors.toList());
 
         if (Constants.ENABLE_TESTING_TOGGLE) {
