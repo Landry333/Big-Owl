@@ -1,6 +1,5 @@
 package com.example.bigowlapp.utils;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.widget.Toast;
@@ -43,25 +42,20 @@ public class PermissionsHelper {
                 || ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED;
     }
 
-    public void requestLocationPermission(List<String> permissionsToAskFor) {
-
-        Runnable permissionRequest = () ->
-                ActivityCompat.requestPermissions(activity, permissionsToAskFor.toArray(new String[0]), MULTIPLE_PERMISSIONS_CODE);
-
-        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
-            new AlertDialog.Builder(activity)
-                    .setTitle("Location permission needed")
-                    .setMessage("Location detection is used to check whether you have arrived to a scheduled location")
-                    .setPositiveButton("Ok", (dialogInterface, which) -> permissionRequest.run())
-                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                    .create().show();
-
-        } else {
-            permissionRequest.run();
-        }
+    public void requestPermissions(List<String> permissionsToAskFor) {
+        ActivityCompat.requestPermissions(activity, permissionsToAskFor.toArray(new String[0]), MULTIPLE_PERMISSIONS_CODE);
     }
 
-    public void handleLocationPermissionResult(int[] grantResults) {
+    public void requestPermissions(List<String> permissionsToAskFor, String justification) {
+        new AlertDialog.Builder(activity)
+                .setTitle("Permission(s) needed")
+                .setMessage(justification)
+                .setPositiveButton("Ok", (dialogInterface, which) -> requestPermissions(permissionsToAskFor))
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .create().show();
+    }
+
+    public void handlePermissionResult(int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(activity, "Permission GRANTED", Toast.LENGTH_SHORT).show();
         } else {

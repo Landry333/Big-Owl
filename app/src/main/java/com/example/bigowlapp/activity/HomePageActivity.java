@@ -2,7 +2,6 @@ package com.example.bigowlapp.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -125,7 +124,8 @@ public class HomePageActivity extends BigOwlActivity implements ActivityCompat.O
                 Manifest.permission.ACCESS_FINE_LOCATION);
 
         if (!permissionsToAskFor.isEmpty()) {
-            permissionsHelper.requestLocationPermission(permissionsToAskFor);
+            String reason = "Location detection is used to check whether you have arrived to a scheduled location";
+            permissionsHelper.requestPermissions(permissionsToAskFor, reason);
         }
     }
 
@@ -196,10 +196,9 @@ public class HomePageActivity extends BigOwlActivity implements ActivityCompat.O
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PermissionsHelper.MULTIPLE_PERMISSIONS_CODE) {
-            permissionsHelper.handleLocationPermissionResult(grantResults);
+            permissionsHelper.handlePermissionResult(grantResults);
         }
     }
-
 
 
     @VisibleForTesting
