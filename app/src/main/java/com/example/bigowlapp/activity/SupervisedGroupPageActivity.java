@@ -1,42 +1,52 @@
 package com.example.bigowlapp.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.model.Group;
+
+import androidx.annotation.VisibleForTesting;
 
 public class SupervisedGroupPageActivity extends BigOwlActivity {
     private String groupID, groupName, supervisorName;
+    private Intent arrivingIntent;
+    private Intent intentToScheduleList;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        groupID = getIntent().getStringExtra("groupID");
-        groupName = getIntent().getStringExtra("groupName");
-        supervisorName = getIntent().getStringExtra("supervisorName");
+    protected void onStart() {
+        super.onStart();
+        if (arrivingIntent == null) {
+            arrivingIntent = getIntent();
+        }
+        groupID = arrivingIntent.getStringExtra("groupID");
+        groupName = arrivingIntent.getStringExtra("groupName");
+        supervisorName = arrivingIntent.getStringExtra("supervisorName");
         initialize();
     }
 
     private void initialize() {
-        TextView groupNameView  = findViewById(R.id.group_name_view);
+        TextView groupNameView = findViewById(R.id.group_name_view);
         groupNameView.setText(groupName);
 
         Button btnListSchedule;
         btnListSchedule = findViewById(R.id.btn_schedule_list);
         btnListSchedule.setOnClickListener(v -> {
-            Intent i = new Intent(com.example.bigowlapp.activity.SupervisedGroupPageActivity.this, ListOfScheduleActivity.class);
-            i.putExtra("groupID", groupID);
-            i.putExtra("groupName", groupName);
-            i.putExtra("supervisorName", supervisorName);
-            startActivity(i);
+            intentToScheduleList = new Intent(SupervisedGroupPageActivity.this, ListOfScheduleActivity.class);
+            intentToScheduleList.putExtra("groupID", groupID);
+            intentToScheduleList.putExtra("groupName", groupName);
+            intentToScheduleList.putExtra("supervisorName", supervisorName);
+            startActivity(intentToScheduleList);
         });
     }
 
     @Override
     public int getContentView() {
         return R.layout.activity_supervised_group_page;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public Intent getIntentToScheduleList() {
+        return intentToScheduleList;
     }
 }
