@@ -91,7 +91,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         return geofencingClient.removeGeofences(geofenceIdList);
     }
 
-    private void setUserLocatedStatus(List<String> scheduleUidList, Attendance.LocatedStatus locatedStatusToAdd) {
+    private void updateUserLocatedStatus(List<String> scheduleUidList, Attendance.LocatedStatus locatedStatusToAdd) {
         repositoryFacade.getScheduleRepository()
                 .getDocumentsByListOfUid(scheduleUidList, Schedule.class)
                 .observeForever(schedules -> {

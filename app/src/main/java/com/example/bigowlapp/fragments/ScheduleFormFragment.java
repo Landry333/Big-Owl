@@ -48,9 +48,6 @@ public class ScheduleFormFragment extends Fragment
         GroupRecyclerViewListener,
         UserFragmentListener {
 
-    // TODO: should be removed when everything implemented regarding location tracking
-    private static final boolean ENABLE_TESTING_TOGGLE = true;
-
     private EditText editTitle;
     private Button groupButton;
     private Button selectUserButton;
@@ -160,15 +157,13 @@ public class ScheduleFormFragment extends Fragment
         setupEditLocation();
         setupConfirmSetScheduleButton();
 
-        setupTestOnlyLocationMangerCheckButton(view);
+        if (Constants.ENABLE_TESTING_TOGGLE) {
+            setupTestOnlyLocationMangerCheckButton(view);
+        }
     }
 
     // TODO: should be removed when everything implemented regarding location tracking
     private void setupTestOnlyLocationMangerCheckButton(View view) {
-        if (!ENABLE_TESTING_TOGGLE) {
-            return;
-        }
-
         Button testOnlyLocationTrackCheckButton = view.findViewById(R.id.test_only_location_track_check_button);
         testOnlyLocationTrackCheckButton.setOnClickListener(v -> {
             ScheduledLocationTrackingManager locationTrackingManager = new ScheduledLocationTrackingManager(getActivity());
