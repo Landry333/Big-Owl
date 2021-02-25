@@ -11,7 +11,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This helper can be used when needing to handle calls for permissions
@@ -32,17 +34,10 @@ public class PermissionsHelper {
      * @return a filtered list where only the non-granted permissions remain
      */
     public List<String> checkForMissingPermissions(String... permissionsToCheck) {
-
-        ArrayList<String> missingPermissions = new ArrayList<>();
-
-        for (String permission : permissionsToCheck) {
-            if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED) {
-                missingPermissions.add(permission);
-            }
-        }
-
-        return missingPermissions;
+        return Arrays.stream(permissionsToCheck)
+                .filter(permission -> ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED)
+                .collect(Collectors.toList());
     }
 
     public void requestLocationPermission(List<String> permissionsToAskFor) {
