@@ -18,19 +18,18 @@ import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.utils.PermissionsHelper;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class HomePageActivity extends BigOwlActivity {
-    private final int LOCATION_PERMISSION_CODE = 1;
+public class HomePageActivity extends BigOwlActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     private Button btnLogOut;
     private Button btnAddUsers;
@@ -43,7 +42,9 @@ public class HomePageActivity extends BigOwlActivity {
     private TextView textFirstName;
     private TextView textLastName;
     private TextView textPhone;
+
     private HomePageViewModel homePageViewModel;
+    private PermissionsHelper permissionsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,22 +117,15 @@ public class HomePageActivity extends BigOwlActivity {
         });
 
 
+        // TODO: Might be better to request these permission when the user accepts a schedule
         // TODO: cleanup permissions request code
-
-        ArrayList<String> permissionsToAskFor = new ArrayList<>();
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            permissionsToAskFor.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
-        }
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-
-            permissionsToAskFor.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        }
+        this.permissionsHelper = new PermissionsHelper(this);
+        List<String> permissionsToAskFor = permissionsHelper.checkForMissingPermissions(
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION);
 
         if (!permissionsToAskFor.isEmpty()) {
-            requestLocationPermission(permissionsToAskFor);
+            permissionsHelper.requestLocationPermission(permissionsToAskFor);
         }
     }
 
@@ -198,40 +192,15 @@ public class HomePageActivity extends BigOwlActivity {
                 .create();
     }
 
-    // TODO: Might be better to request these permission when the user accepts a schedule
-    private void requestLocationPermission(ArrayList<String> permissionsToAskFor) {
-
-        Runnable permissionRequest = () ->
-                ActivityCompat.requestPermissions(this, permissionsToAskFor.toArray(new String[0]), LOCATION_PERMISSION_CODE);
-
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Location permission needed")
-                    .setMessage("Location detection is used to check whether you have arrived to a scheduled location")
-                    .setPositiveButton("Ok", (dialogInterface, which) -> permissionRequest.run())
-                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                    .create().show();
-
-        } else {
-            permissionRequest.run();
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_CODE) {
-            handleLocationPermissionResult(grantResults);
+        if (requestCode == PermissionsHelper.MULTIPLE_PERMISSIONS_CODE) {
+            permissionsHelper.handleLocationPermissionResult(grantResults);
         }
     }
 
-    private void handleLocationPermissionResult(int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
-        }
-    }
+
 
     @VisibleForTesting
     public HomePageViewModel getHomePageViewModel() {
