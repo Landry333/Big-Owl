@@ -1,5 +1,6 @@
 package com.example.bigowlapp.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -7,18 +8,24 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.UserScheduleResponse;
+import com.example.bigowlapp.utils.PermissionsHelper;
 import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
 
-import androidx.annotation.VisibleForTesting;
-import androidx.lifecycle.ViewModelProvider;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScheduleViewRespondActivity extends BigOwlActivity {
 
     private String scheduleUid, groupName, supervisorName;
     private ScheduleViewRespondViewModel scheduleViewRespondViewModel;
+    private PermissionsHelper permissionsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +75,27 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
         });
 
         Button btnAccept = findViewById(R.id.button_accept);
-        btnAccept.setOnClickListener(v -> userClickRespondButton(Response.ACCEPT));
+        btnAccept.setOnClickListener(v -> {
+            requestPermissionsIfMissing();
+            userClickRespondButton(Response.ACCEPT);
+        });
 
         Button btnReject = findViewById(R.id.button_reject);
         btnReject.setOnClickListener(v -> userClickRespondButton(Response.REJECT));
+    }
+
+    public void requestPermissionsIfMissing() {
+        this.permissionsHelper = new PermissionsHelper(this);
+
+        List<String> permissionsToCheck = new ArrayList<>();
+        permissionsToCheck.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            permissionsToCheck.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        }
+
+        String reason = "Location detection is required to check whether you have arrived to a scheduled location." +
+                "\n\nIf not provided, the system will assume you have not arrived to the location.";
+        permissionsHelper.requestMissingPermissions(permissionsToCheck, reason);
     }
 
     @Override
@@ -103,6 +127,14 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
         } else {
             btnAccept.setVisibility(View.GONE);
             btnReject.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PermissionsHelper.MULTIPLE_PERMISSIONS_CODE) {
+            permissionsHelper.handlePermissionResult(grantResults);
         }
     }
 

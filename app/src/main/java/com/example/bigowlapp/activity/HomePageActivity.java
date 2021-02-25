@@ -1,6 +1,5 @@
 package com.example.bigowlapp.activity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,24 +11,18 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.utils.PermissionsHelper;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
-import java.util.Arrays;
-import java.util.List;
-
-public class HomePageActivity extends BigOwlActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class HomePageActivity extends BigOwlActivity {
 
     private Button btnLogOut;
     private Button btnAddUsers;
@@ -44,7 +37,6 @@ public class HomePageActivity extends BigOwlActivity implements ActivityCompat.O
     private TextView textPhone;
 
     private HomePageViewModel homePageViewModel;
-    private PermissionsHelper permissionsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,18 +107,6 @@ public class HomePageActivity extends BigOwlActivity implements ActivityCompat.O
             }
             popup.show();
         });
-
-
-        // TODO: Might be better to request these permission when the user accepts a schedule
-        this.permissionsHelper = new PermissionsHelper(this);
-
-        List<String> permissionsToCheck = Arrays.asList(Manifest.permission.ACCESS_FINE_LOCATION);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-            permissionsToCheck.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
-        }
-
-        String reason = "Location detection is used to check whether you have arrived to a scheduled location";
-        permissionsHelper.requestMissingPermissions(permissionsToCheck, reason);
     }
 
     private void subscribeToData() {
@@ -191,15 +171,6 @@ public class HomePageActivity extends BigOwlActivity implements ActivityCompat.O
                 .setCancelable(false)
                 .create();
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PermissionsHelper.MULTIPLE_PERMISSIONS_CODE) {
-            permissionsHelper.handlePermissionResult(grantResults);
-        }
-    }
-
 
     @VisibleForTesting
     public HomePageViewModel getHomePageViewModel() {
