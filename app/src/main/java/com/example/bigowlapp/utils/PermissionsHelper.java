@@ -2,7 +2,6 @@ package com.example.bigowlapp.utils;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.widget.Toast;
 
@@ -10,7 +9,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,14 +28,19 @@ public class PermissionsHelper {
 
     /**
      * Checks if the provided permissions are granted and returns the non-granted permissions
+     *
      * @param permissionsToCheck the permissions that are to be verified
      * @return a filtered list where only the non-granted permissions remain
      */
     public List<String> checkForMissingPermissions(String... permissionsToCheck) {
         return Arrays.stream(permissionsToCheck)
-                .filter(permission -> ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED
-                        || ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED)
+                .filter(this::isMissingPermission)
                 .collect(Collectors.toList());
+    }
+
+    private boolean isMissingPermission(String permission) {
+        return ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED;
     }
 
     public void requestLocationPermission(List<String> permissionsToAskFor) {
