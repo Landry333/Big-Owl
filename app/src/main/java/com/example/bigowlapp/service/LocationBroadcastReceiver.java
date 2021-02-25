@@ -7,6 +7,9 @@ import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.bigowlapp.model.Attendance;
+import com.example.bigowlapp.model.Schedule;
+import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingClient;
@@ -14,6 +17,7 @@ import com.google.android.gms.location.GeofencingEvent;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,8 +28,11 @@ import java.util.stream.Collectors;
  */
 public class LocationBroadcastReceiver extends BroadcastReceiver {
 
+    RepositoryFacade repositoryFacade;
+
     public LocationBroadcastReceiver() {
         super();
+        repositoryFacade = RepositoryFacade.getInstance();
     }
 
     @Override
@@ -77,6 +84,23 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         List<String> geofenceIdList = geofencesToRemove.stream()
                 .map(Geofence::getRequestId)
                 .collect(Collectors.toList());
+
+        repositoryFacade.getScheduleRepository()
+                .getDocumentsByListOfUid(Arrays.asList("4laPgh1xNIy8CDpnohDV"), Schedule.class)
+                .observeForever(schedules -> {
+                    String userUid = repositoryFacade.getAuthRepository()
+                            .getCurrentUser().getUid();
+
+                    for (Schedule schedule : schedules) {
+                        schedule.getUserScheduleResponseMap().get(userUid)
+                                .getAttendance()
+                                .setScheduleLocated(Attendance.LocatedStatus.CORRECT_LOCATION);
+
+                        repositoryFacade.getScheduleRepository()
+                                .updateDocument(schedule.getUid(), schedule);
+                    }
+                });
+
         return geofencingClient.removeGeofences(geofenceIdList);
     }
 }
