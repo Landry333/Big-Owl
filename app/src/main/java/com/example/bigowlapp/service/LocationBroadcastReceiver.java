@@ -85,8 +85,15 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                 .map(Geofence::getRequestId)
                 .collect(Collectors.toList());
 
+        List<String> testOnlyIdList = Arrays.asList("4laPgh1xNIy8CDpnohDV");
+        setUserLocatedStatus(testOnlyIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
+
+        return geofencingClient.removeGeofences(geofenceIdList);
+    }
+
+    private void setUserLocatedStatus(List<String> scheduleUidList, Attendance.LocatedStatus locatedStatusToAdd) {
         repositoryFacade.getScheduleRepository()
-                .getDocumentsByListOfUid(Arrays.asList("4laPgh1xNIy8CDpnohDV"), Schedule.class)
+                .getDocumentsByListOfUid(scheduleUidList, Schedule.class)
                 .observeForever(schedules -> {
                     String userUid = repositoryFacade.getAuthRepository()
                             .getCurrentUser().getUid();
@@ -94,13 +101,11 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                     for (Schedule schedule : schedules) {
                         schedule.getUserScheduleResponseMap().get(userUid)
                                 .getAttendance()
-                                .setScheduleLocated(Attendance.LocatedStatus.CORRECT_LOCATION);
+                                .setScheduleLocated(locatedStatusToAdd);
 
                         repositoryFacade.getScheduleRepository()
                                 .updateDocument(schedule.getUid(), schedule);
                     }
                 });
-
-        return geofencingClient.removeGeofences(geofenceIdList);
     }
 }
