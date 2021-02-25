@@ -26,6 +26,7 @@ import com.example.bigowlapp.utils.PermissionsHelper;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class HomePageActivity extends BigOwlActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -117,16 +118,15 @@ public class HomePageActivity extends BigOwlActivity implements ActivityCompat.O
 
 
         // TODO: Might be better to request these permission when the user accepts a schedule
-        // TODO: cleanup permissions request code
         this.permissionsHelper = new PermissionsHelper(this);
-        List<String> permissionsToAskFor = permissionsHelper.checkForMissingPermissions(
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION);
 
-        if (!permissionsToAskFor.isEmpty()) {
-            String reason = "Location detection is used to check whether you have arrived to a scheduled location";
-            permissionsHelper.requestPermissions(permissionsToAskFor, reason);
+        List<String> permissionsToCheck = Arrays.asList(Manifest.permission.ACCESS_FINE_LOCATION);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            permissionsToCheck.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
         }
+
+        String reason = "Location detection is used to check whether you have arrived to a scheduled location";
+        permissionsHelper.requestMissingPermissions(permissionsToCheck, reason);
     }
 
     private void subscribeToData() {
