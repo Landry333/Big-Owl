@@ -62,9 +62,10 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         Log.e("BigOwl", "SCHEDULE IDS THAT TRIGGERED THIS ARE: " + geofenceIdList);
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-            // TODO: entering location case
-            Toast.makeText(context, "PERSON HAS ENTERED LOCATION", Toast.LENGTH_LONG).show();
-            Log.e("BigOwl", "YOU ENTERED THE LOCATION");
+            if (Constants.ENABLE_TESTING_TOGGLE) {
+                Toast.makeText(context, "YOU HAVE SUCCESSFULLY ARRIVED TO YOUR LOCATION!", Toast.LENGTH_LONG).show();
+                Log.e("BigOwl", "YOU ENTERED THE LOCATION");
+            }
 
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
 
@@ -78,9 +79,10 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                     });
 
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
-            // TODO: exiting location case
-            Toast.makeText(context, "PERSON HAS EXITED LOCATION", Toast.LENGTH_LONG).show();
-            Log.e("BigOwl", "YOU EXITED THE LOCATION");
+            if (Constants.ENABLE_TESTING_TOGGLE) {
+                Toast.makeText(context, "YOU HAVE YET TO ARRIVE TO THE NECESSARY LOCATION", Toast.LENGTH_LONG).show();
+                Log.e("BigOwl", "YOU EXITED THE LOCATION");
+            }
 
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION);
 

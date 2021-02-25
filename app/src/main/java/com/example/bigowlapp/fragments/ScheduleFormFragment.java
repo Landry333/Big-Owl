@@ -174,6 +174,8 @@ public class ScheduleFormFragment extends Fragment
                         Toast.makeText(getActivity(), "ADDED LOCATION TRACKING", Toast.LENGTH_LONG).show();
                     })
                     .addOnFailureListener(e -> {
+                        // TODO: this runs when the user has location services off
+                        Exception exception = e;
                         Toast.makeText(getActivity(), "FAILURE!!!!! TO ADD LOCATION TRACKING", Toast.LENGTH_LONG).show();
                     });
         });
