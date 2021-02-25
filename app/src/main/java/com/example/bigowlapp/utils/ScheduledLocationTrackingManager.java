@@ -77,7 +77,7 @@ public class ScheduledLocationTrackingManager {
                         DEFAULT_TRACKING_RADIUS_METERS)
                 .setExpirationDuration(DEFAULT_TRACKING_TIME_MILLISECONDS)
                 .setNotificationResponsiveness(DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
     }
 

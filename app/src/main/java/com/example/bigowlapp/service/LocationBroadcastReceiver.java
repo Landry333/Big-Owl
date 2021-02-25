@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.RepositoryFacade;
+import com.example.bigowlapp.utils.Constants;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingClient;
@@ -45,13 +46,17 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
             return;
         }
 
-        int geofenceTransition = geofencingEvent.getGeofenceTransition();
+        // valuable data from geofence result
         Location currentUserLocation = geofencingEvent.getTriggeringLocation();
+        int geofenceTransition = geofencingEvent.getGeofenceTransition();
         List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
-
         List<String> geofenceIdList = triggeringGeofences.stream()
                 .map(Geofence::getRequestId)
                 .collect(Collectors.toList());
+
+        if (Constants.ENABLE_TESTING_TOGGLE) {
+            geofenceIdList = Arrays.asList("4laPgh1xNIy8CDpnohDV");
+        }
 
         Log.e("BigOwl", "SCHEDULE IDS THAT TRIGGERED THIS ARE: " + geofenceIdList);
 
@@ -60,8 +65,10 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
             Toast.makeText(context, "PERSON HAS ENTERED LOCATION", Toast.LENGTH_LONG).show();
             Log.e("BigOwl", "YOU ENTERED THE LOCATION");
 
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
+
             // User was successfully detected in desired location, so no more tracking needed
-            this.removeLocationTracking(context, triggeringGeofences)
+            this.removeLocationTracking(context, geofenceIdList)
                     .addOnSuccessListener(aVoid -> {
                         Log.e("BigOwl", "Entered LOCATION TRACKING SUCCESSFULLY REMOVED");
                     })
@@ -74,21 +81,17 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
             Toast.makeText(context, "PERSON HAS EXITED LOCATION", Toast.LENGTH_LONG).show();
             Log.e("BigOwl", "YOU EXITED THE LOCATION");
 
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION);
+
         } else {
             Log.e("BigOwl", "Location Detection has failed");
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED);
         }
     }
 
-    private Task<Void> removeLocationTracking(Context context, List<Geofence> geofencesToRemove) {
+    private Task<Void> removeLocationTracking(Context context, List<String> geofencesToRemoveIdList) {
         GeofencingClient geofencingClient = LocationServices.getGeofencingClient(context);
-        List<String> geofenceIdList = geofencesToRemove.stream()
-                .map(Geofence::getRequestId)
-                .collect(Collectors.toList());
-
-        List<String> testOnlyIdList = Arrays.asList("4laPgh1xNIy8CDpnohDV");
-        setUserLocatedStatus(testOnlyIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
-
-        return geofencingClient.removeGeofences(geofenceIdList);
+        return geofencingClient.removeGeofences(geofencesToRemoveIdList);
     }
 
     private void updateUserLocatedStatus(List<String> scheduleUidList, Attendance.LocatedStatus locatedStatusToAdd) {
