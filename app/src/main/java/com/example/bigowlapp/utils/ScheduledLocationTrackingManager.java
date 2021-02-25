@@ -11,16 +11,19 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.service.LocationBroadcastReceiver;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.GeoPoint;
 
 public class ScheduledLocationTrackingManager {
 
-    private static final int DEFAULT_TRACKING_RADIUS_METERS = 150;
+    private static final int DEFAULT_TRACKING_RADIUS_METERS = 300;
     private static final long DEFAULT_TRACKING_TIME_MILLISECONDS = 30 * Constants.MINUTE_TO_MILLISECONDS;
     // use 0 for instant response, and allow delay for better battery life
     private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS = 5 * Constants.MINUTE_TO_MILLISECONDS;
@@ -28,11 +31,13 @@ public class ScheduledLocationTrackingManager {
 
     private final Context context;
     private final GeofencingClient geofencingClient;
+    private final FusedLocationProviderClient locationClient;
     private PendingIntent geofencePendingIntent;
 
     public ScheduledLocationTrackingManager(Context context) {
         this.context = context;
         geofencingClient = LocationServices.getGeofencingClient(context);
+        locationClient = LocationServices.getFusedLocationProviderClient(context);
     }
 
     public Task<Void> addNewScheduledLocationToTrack(Schedule scheduleWithLocationToTrack) {
@@ -48,7 +53,12 @@ public class ScheduledLocationTrackingManager {
         }
 
         return geofencingClient.addGeofences(
-                buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent());
+                buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent())
+                .onSuccessTask(addGeofenceTask -> {
+                    // Force a location calculation to update the current location
+                    return locationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null)
+                            .onSuccessTask(task -> Tasks.forResult(null));
+                });
     }
 
     private GeofencingRequest buildRequestToTrack(Schedule scheduleWithLocationToTrack) {
@@ -59,11 +69,6 @@ public class ScheduledLocationTrackingManager {
     }
 
     private Geofence buildLocationToTrack(Schedule scheduleWithLocationToTrack) {
-        if (scheduleWithLocationToTrack.getUid() == null) {
-            Log.e("BigOwl", "Schedule Uid not found. Tracking a schedule requires uid!");
-            return null;
-        }
-
         GeoPoint locationCoords = scheduleWithLocationToTrack.getLocation();
 
         return new Geofence.Builder()
@@ -72,7 +77,7 @@ public class ScheduledLocationTrackingManager {
                         DEFAULT_TRACKING_RADIUS_METERS)
                 .setExpirationDuration(DEFAULT_TRACKING_TIME_MILLISECONDS)
                 .setNotificationResponsiveness(DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                 .build();
     }
 
