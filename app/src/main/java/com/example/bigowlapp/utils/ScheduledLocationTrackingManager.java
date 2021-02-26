@@ -45,12 +45,17 @@ public class ScheduledLocationTrackingManager {
             return Tasks.forException(new SecurityException("Requires " + Manifest.permission.ACCESS_FINE_LOCATION + " permission."));
         }
 
-        return geofencingClient.addGeofences(
-                buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent())
-                .onSuccessTask(addGeofenceTask -> {
-                    // Force a location calculation to update the current location
-                    return locationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null)
-                            .onSuccessTask(task -> Tasks.forResult(null));
+        return locationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null)
+                .continueWithTask(locTask -> {
+                    if (locTask.isSuccessful()) {
+                        Log.e("BigOwl", "location calc successful.");
+                    } else {
+                        Log.e("BigOwl", "location calc FAIL.");
+                    }
+
+                    return geofencingClient.addGeofences(
+                            buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent())
+                            .onSuccessTask(addGeofenceTask -> Tasks.forResult(null));
                 });
     }
 

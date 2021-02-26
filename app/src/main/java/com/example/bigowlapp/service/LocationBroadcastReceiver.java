@@ -18,7 +18,7 @@ import com.google.android.gms.location.GeofencingEvent;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,12 +54,9 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                 .map(Geofence::getRequestId)
                 .distinct()
                 .collect(Collectors.toList());
-
-        if (Constants.ENABLE_TESTING_TOGGLE) {
-            geofenceIdList = Arrays.asList("4laPgh1xNIy8CDpnohDV");
-        }
-
         Log.e("BigOwl", "SCHEDULE IDS THAT TRIGGERED THIS ARE: " + geofenceIdList);
+        List<String> testOnlyIdList = Collections.singletonList("4laPgh1xNIy8CDpnohDV");
+
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             if (Constants.ENABLE_TESTING_TOGGLE) {
@@ -67,7 +64,11 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                 Log.e("BigOwl", "YOU ENTERED THE LOCATION");
             }
 
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
+            if (Constants.ENABLE_TESTING_TOGGLE) {
+                this.updateUserLocatedStatus(testOnlyIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
+            } else {
+                this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
+            }
 
             // User was successfully detected in desired location, so no more tracking needed
             this.removeLocationTracking(context, geofenceIdList)
@@ -84,11 +85,19 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                 Log.e("BigOwl", "YOU EXITED THE LOCATION");
             }
 
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION);
+            if (Constants.ENABLE_TESTING_TOGGLE) {
+                this.updateUserLocatedStatus(testOnlyIdList, Attendance.LocatedStatus.WRONG_LOCATION);
+            } else {
+                this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION);
+            }
 
         } else {
             Log.e("BigOwl", "Location Detection has failed");
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED);
+            if (Constants.ENABLE_TESTING_TOGGLE) {
+                this.updateUserLocatedStatus(testOnlyIdList, Attendance.LocatedStatus.NOT_DETECTED);
+            } else {
+                this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED);
+            }
         }
     }
 
