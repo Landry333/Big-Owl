@@ -9,6 +9,11 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Run the location/Geofencing code
-        // Note: In the intent, the id of the schedule should be present
+        // Intent should have
+        /*
+          intent.putExtra("Uid", schedule.getUid());
+          intent.putExtra("Latitude", schedule.getLocation().getLatitude());
+          intent.putExtra("Longitude", schedule.getLocation().getLongitude());
+         */
     }
 }

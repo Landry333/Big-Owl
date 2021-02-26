@@ -49,10 +49,7 @@ public class HomePageActivity extends BigOwlActivity {
         if (homePageViewModel == null) {
             homePageViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
         }
-
-        AlarmBroadcastReceiverManager alarmBroadcastReceiverManager = new AlarmBroadcastReceiverManager(this);
-        alarmBroadcastReceiverManager.getSchedulesForUser(homePageViewModel.getCurrentUserUid());
-
+        initAlarmManager();
         subscribeToData();
     }
 
@@ -147,6 +144,12 @@ public class HomePageActivity extends BigOwlActivity {
             this.noSignedInAlert().show();
         }
          */
+    }
+
+    private void initAlarmManager() {
+        AlarmBroadcastReceiverManager alarmBroadcastReceiverManager
+                = new AlarmBroadcastReceiverManager(this);
+        alarmBroadcastReceiverManager.setAlarm(homePageViewModel.getCurrentUserUid());
     }
 
     @Override

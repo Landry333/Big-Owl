@@ -47,8 +47,8 @@ public class ScheduleRepository extends Repository<Schedule> {
 
     public Task<QuerySnapshot> getTaskListSchedulesForUser(String userID) {
         return collectionReference.whereArrayContains("memberList", userID)
-                .whereGreaterThanOrEqualTo("endTime", Timestamp.now())
-                .orderBy("endTime", Query.Direction.ASCENDING)
+                .whereGreaterThanOrEqualTo("startTime", Timestamp.now())
+                .orderBy("startTime", Query.Direction.ASCENDING)
                 .get();
     }
 }
