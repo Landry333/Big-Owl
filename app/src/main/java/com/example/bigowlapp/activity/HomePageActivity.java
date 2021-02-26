@@ -17,9 +17,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bigowlapp.CurrentUserNotificationsListener;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
-import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 
@@ -30,11 +30,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.viewModel.HomePageViewModel;
-import com.squareup.picasso.Picasso;
 
 public class HomePageActivity extends BigOwlActivity {
     private Button btnLogOut;
@@ -51,6 +48,7 @@ public class HomePageActivity extends BigOwlActivity {
     private HomePageViewModel homePageViewModel;
     String deviceID;
     String phoneNumber;
+    private CurrentUserNotificationsListener authListener = new CurrentUserNotificationsListener();
 
 
     @Override
@@ -129,6 +127,7 @@ public class HomePageActivity extends BigOwlActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        //AuthListener.listen(this);
         if (homePageViewModel == null) {
             homePageViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
         }
@@ -137,6 +136,7 @@ public class HomePageActivity extends BigOwlActivity {
         phoneNumber = telephonyManager.getLine1Number();
         subscribeToData();
     }
+
 
     protected void initialize() {
         scrollView = findViewById(R.id.scroll_view);

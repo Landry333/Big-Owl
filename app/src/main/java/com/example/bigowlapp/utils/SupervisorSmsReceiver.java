@@ -102,17 +102,6 @@ public class SupervisorSmsReceiver extends BroadcastReceiver {
                         .addOnFailureListener(error -> {
                             Toast.makeText(context, "STEP 1 FAILED", Toast.LENGTH_SHORT).show();
                         });
-                //Toast.makeText(context, deviceID, Toast.LENGTH_SHORT).show();
-                //Toast.makeText(context, deviceIDNumberGetter.getIDNumber(), Toast.LENGTH_SHORT).show();
-                Intent nextScreenIntent = new Intent(context, AuthenticationActivityMethod2.class);
-                nextScreenIntent.putExtra("scheduleId", smsNumber);
-                nextScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                try {
-                    context.startActivity(nextScreenIntent);
-                } catch (Exception e) {
-                    Log.e("exception", "the message", e);
-                }
-
 
 
 
