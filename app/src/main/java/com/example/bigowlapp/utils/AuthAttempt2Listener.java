@@ -1,4 +1,4 @@
-package com.example.bigowlapp;
+package com.example.bigowlapp.utils;
 
 
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.example.bigowlapp.model.LiveDataWithStatus;
+import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.ScheduleRepository;
@@ -17,12 +19,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class CurrentUserNotificationsListener {
+public class AuthAttempt2Listener {
 
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-    private String smsNumber;
-    private String smsMessage;
+    //private String smsNumber;
+    //private String smsMessage;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private final AuthRepository authRepository = new AuthRepository();
@@ -31,20 +33,20 @@ public class CurrentUserNotificationsListener {
     private ScheduleRepository scheduleRepository = new ScheduleRepository();
 
     //scheduleRepository.get
-    public CurrentUserNotificationsListener() {
+    public AuthAttempt2Listener() {
 
     }
 
     public void listen(Context context) {
-
+        //final Notification[] document = new Notification[1];
+        //final Document[] doc = new Document[1];
         db.collection("notifications")
-                .whereEqualTo("receiverUid", repositoryFacade.getAuthRepository().getCurrentUser().getUid())
+                //.whereEqualTo("receiverUid", repositoryFacade.getAuthRepository().getCurrentUser().getUid())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot snapshots,
                                         @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
-                            System.err.println("Listen failed: " + e);
                             Toast.makeText(context, "Listen failed: ", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -52,19 +54,36 @@ public class CurrentUserNotificationsListener {
                         for (DocumentChange dc : snapshots.getDocumentChanges()) {
                             switch (dc.getType()) {
                                 case ADDED:
-                                    System.out.println("New city: " + dc.getDocument().getData());
-                                    Log.e("ADDED", dc.getDocument().getData().toString());
-                                    Toast.makeText(context, "ADDED", Toast.LENGTH_SHORT).show();
+                                    //doc[0] = dc.getDocument().toObject(Document.class);
+                                    //Log.e("ADDED", dc.getDocument().getData().toString());
+                                    //document[0] = dc.getDocument().toObject(Notification.class);
+                                    // Toast.makeText(context, "ADDED", Toast.LENGTH_SHORT).show();
+
+                                    if(dc.getDocument().get("type").toString().equalsIgnoreCase("AUTH_ATTEMPTED_1_FAILURE")&&
+                                            dc.getDocument().get("receiverUid").toString().equalsIgnoreCase(repositoryFacade.getAuthRepository().getCurrentUser().getUid())){
+                                        String senderPhoneNum = repositoryFacade.getUserRepository()
+                                                .getDocumentByUid(dc.getDocument().get("receiverUid")
+                                                .toString(), User.class)
+                                                .getValue()
+                                                .getPhoneNumber();
+
+                                        String scheduleId = dc.getDocument().get("scheduleId").toString();
+                                        sendSMS(context,senderPhoneNum,scheduleId);
+                                    }
                                     break;
                                 case MODIFIED:
-                                    System.out.println("Modified city: " + dc.getDocument().getData());
+
                                     Log.e("MODIFIED", dc.getDocument().getData().toString());
-                                    Toast.makeText(context, "MODIFIED", Toast.LENGTH_SHORT).show();
+                                    //document[0] = dc.getDocument();
+                                    //document[0] = (Notification) dc.getDocument().getData();
+                                    Log.e("MODIFIED 2 doc", dc.getDocument().get("type").toString());
+                                    Toast.makeText(context, dc.getDocument().get("type").toString(), Toast.LENGTH_SHORT).show();
                                     break;
                                 case REMOVED:
-                                    System.out.println("Removed city: " + dc.getDocument().getData());
+                                    //doc[0] = dc.getDocument().toObject(Document.class);
                                     Log.e("REMOVED", dc.getDocument().getData().toString());
-                                    Toast.makeText(context, "REMOVED", Toast.LENGTH_SHORT).show();
+                                    // document[0] = dc.getDocument().toObject(Notification.class);
+                                    //Toast.makeText(context, "REMOVED", Toast.LENGTH_SHORT).show();
                                     break;
                                 default:
                                     break;
@@ -72,6 +91,7 @@ public class CurrentUserNotificationsListener {
                         }
                     }
                 });
+
 
         //public void listen() {
         //super.onStart();
@@ -100,7 +120,7 @@ public class CurrentUserNotificationsListener {
     //DocumentReference docRef = db.collection("cities").document("SF");
     //docRef.addSnapshotListener(new EventListener<DocumentSnapshot>()
 
-    private void sendSMS(Context context) {
+    private void sendSMS(Context context, String smsNumber, String smsMessage) {
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(smsNumber, null, smsMessage, null, null);
         Toast.makeText(context, "SMS SENT", Toast.LENGTH_SHORT).show();

@@ -17,7 +17,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bigowlapp.CurrentUserNotificationsListener;
+import com.example.bigowlapp.utils.AuthAttempt2Listener;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
@@ -48,7 +48,7 @@ public class HomePageActivity extends BigOwlActivity {
     private HomePageViewModel homePageViewModel;
     String deviceID;
     String phoneNumber;
-    private CurrentUserNotificationsListener authListener = new CurrentUserNotificationsListener();
+    private AuthAttempt2Listener authListener = new AuthAttempt2Listener();
 
 
     @Override
