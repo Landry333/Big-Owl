@@ -1,5 +1,7 @@
 package com.example.bigowlapp.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -289,9 +291,24 @@ public class ScheduleFormFragment extends Fragment
                 return;
             }
 
-            setScheduleViewModel.addSchedule();
-            Toast.makeText(getContext(), "Schedule added successfully", Toast.LENGTH_LONG).show();
-            getActivity().finish();
+            AlertDialog.Builder scheduleConfirmation = new AlertDialog.Builder(getContext());
+            scheduleConfirmation.setTitle("New Schedule details");
+            scheduleConfirmation.setMessage("Please confirm the new Schedule info:" + scheduleToAdd.toString());
+            scheduleConfirmation.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    setScheduleViewModel.addSchedule();
+                    Toast.makeText(getContext(), "Schedule added successfully", Toast.LENGTH_LONG).show();
+                    getActivity().finish();
+                }
+            });
+
+            scheduleConfirmation.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            scheduleConfirmation.show();
         });
     }
 

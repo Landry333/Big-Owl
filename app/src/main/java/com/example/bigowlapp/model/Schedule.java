@@ -111,4 +111,8 @@ public class Schedule extends Model {
     public void setUserScheduleResponseMap(Map<String, UserScheduleResponse> userScheduleResponseMap) {
         this.userScheduleResponseMap = userScheduleResponseMap;
     }
+
+    public String toString(){
+        return ("\n\nTitle: "+ getTitle() + "\n\nMembers: " + getMemberList() + "\n\nStart Time: " + getStartTime() + "\n\nEnd Time: " + getEndTime() + "\n\nLocation: " + getLocation());
+    }
 }
