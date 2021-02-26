@@ -1,10 +1,7 @@
 package com.example.bigowlapp.activity;
 
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.MutableLiveData;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.filters.LargeTest;
+import android.content.Intent;
+import android.os.SystemClock;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
@@ -25,12 +22,24 @@ import org.mockito.Mock;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.MutableLiveData;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
+
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -57,6 +66,8 @@ public class SupervisedGroupListActivityTest {
     private FirebaseUser testFirebaseUser;
 
     private List<Group> testUserSupervisedGroupList;
+    private LiveDataWithStatus<List<Group>> testUserSupervisedGroupListData;
+    private SupervisedGroupListActivity currentActivity;
 
     @Before
     public void setUp() throws Exception {
@@ -98,7 +109,7 @@ public class SupervisedGroupListActivityTest {
                     .thenReturn(groupSupervisorData);
             when(supervisedGroupListViewModel.getSupervisor(groupSupervisor.getUid())).thenReturn(groupSupervisorData);
         }
-        LiveDataWithStatus<List<Group>> testUserSupervisedGroupListData = new LiveDataWithStatus<>(testUserSupervisedGroupList);
+        testUserSupervisedGroupListData = new LiveDataWithStatus<>(testUserSupervisedGroupList);
         testUserSupervisedGroupListData.postValue(testUserSupervisedGroupList);
 
         when(testFirebaseUser.getUid()).thenReturn("abc123");
@@ -112,9 +123,20 @@ public class SupervisedGroupListActivityTest {
 
         activityRule.getScenario().moveToState(Lifecycle.State.CREATED);
         activityRule.getScenario().onActivity(activity -> {
+            currentActivity = activity;
             activity.setSupervisedGroupListViewModel(supervisedGroupListViewModel);
         });
         activityRule.getScenario().moveToState(Lifecycle.State.RESUMED);
+    }
+
+    @Test
+    public void noSupervisedGroupTest() {
+        testUserSupervisedGroupListData.postValue(null);
+        SystemClock.sleep(2000);
+
+        AlertDialog dialog = currentActivity.getNoGroupAlert();
+        assertNotNull(dialog);
+        assertTrue(dialog.isShowing());
     }
 
     @Test
@@ -130,5 +152,21 @@ public class SupervisedGroupListActivityTest {
             String supervisorFullName = supervisedGroupListViewModel.getSupervisor(testUserSupervisedGroupList.get(i).getSupervisorId()).getValue().getFullName();
             onView(allOf(withId(R.id.text_view_group_supervisor), withText(supervisorFullName))).check(matches(isDisplayed()));
         }
+    }
+
+    @Test
+    public void clickOnSupervisedGroupTest() {
+        Intent currentIntent = currentActivity.getIntentToSupervisedGroupForTest();
+        assertNull(currentIntent);
+        Group randomTestGroup = testUserSupervisedGroupList.get((int) ((Math.random() * 3)));
+        onView(allOf(withId(R.id.text_view_group_name), withText(randomTestGroup.getName()))).perform(click());
+
+        Intent testIntent = new Intent(currentActivity, SupervisedGroupPageActivity.class);
+        testIntent.putExtra("groupID", randomTestGroup.getUid());
+        testIntent.putExtra("groupName", randomTestGroup.getName());
+
+        currentIntent = currentActivity.getIntentToSupervisedGroupForTest();
+        assertEquals(randomTestGroup.getUid(), currentIntent.getStringExtra("groupID"));
+        assertEquals(randomTestGroup.getName(), currentIntent.getStringExtra("groupName"));
     }
 }

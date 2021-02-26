@@ -9,12 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
@@ -22,11 +16,19 @@ import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
+
 public class SupervisedGroupListActivity extends BigOwlActivity {
     private ListView supervisedGroupsListView;
     private SupervisedGroupListViewModel supervisedGroupListViewModel;
     private String supervisorName;
     private List<String> supervisorNameList = new ArrayList<String>();
+    private AlertDialog noGroupAlert;
+    private Intent intentToSupervisedGroup;
 
     @Override
     protected void onStart() {
@@ -46,14 +48,21 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
                                     supervisedGroupsListView = findViewById(R.id.supervised_groups);
                                     supervisedGroupsListView.setAdapter(new SupervisedGroupAdaptor(getBaseContext(), new ArrayList<>(supervisedGroups)));
                                     supervisedGroupsListView.setOnItemClickListener((arg0, v, position, arg3) -> {
-                                        Intent intent = new Intent(getBaseContext(), SupervisedGroupPageActivity.class);
-                                        intent.putExtra("groupID", supervisedGroups.get(position).getUid());
-                                        intent.putExtra("groupName", supervisedGroups.get(position).getName());
-                                        intent.putExtra("supervisorName", supervisorNameList.get(position));
-                                        startActivity(intent);
+                                        intentToSupervisedGroup = new Intent(getBaseContext(), SupervisedGroupPageActivity.class);
+                                        intentToSupervisedGroup.putExtra("groupID", supervisedGroups.get(position).getUid());
+                                        intentToSupervisedGroup.putExtra("groupName", supervisedGroups.get(position).getName());
+                                        intentToSupervisedGroup.putExtra("supervisorName", supervisorNameList.get(position));
+                                        startActivity(intentToSupervisedGroup);
                                     });
-                                } else
-                                    this.noGroupAlert().show();
+                                } else {
+                                    this.noGroupAlert = new AlertDialog.Builder(SupervisedGroupListActivity.this)
+                                            .setTitle("No supervised group found!")
+                                            .setMessage("Required to be a supervised user of any group")
+                                            .setPositiveButton("Ok", (dialogInterface, which) -> onBackPressed())
+                                            .setCancelable(false)
+                                            .create();
+                                    this.noGroupAlert.show();
+                                }
                             }));
         } catch (
                 Exception e) {
@@ -96,18 +105,19 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
         }
     }
 
-    private AlertDialog noGroupAlert() {
-        return new AlertDialog.Builder(SupervisedGroupListActivity.this)
-                .setTitle("No supervised group found!")
-                .setMessage("Required to be a supervised user of any group")
-                .setPositiveButton("Ok", (dialogInterface, which) -> SupervisedGroupListActivity.super.onBackPressed())
-                .setCancelable(false)
-                .create();
-    }
-
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setSupervisedGroupListViewModel(SupervisedGroupListViewModel supervisedGroupListViewModel) {
         this.supervisedGroupListViewModel = supervisedGroupListViewModel;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public AlertDialog getNoGroupAlert() {
+        return this.noGroupAlert;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public Intent getIntentToSupervisedGroupForTest() {
+        return this.intentToSupervisedGroup;
     }
 }
 
