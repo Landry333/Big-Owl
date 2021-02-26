@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.utils.AlarmBroadcastReceiverManager;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -48,6 +49,10 @@ public class HomePageActivity extends BigOwlActivity {
         if (homePageViewModel == null) {
             homePageViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
         }
+
+        AlarmBroadcastReceiverManager alarmBroadcastReceiverManager = new AlarmBroadcastReceiverManager(this);
+        alarmBroadcastReceiverManager.getSchedulesForUser(homePageViewModel.getCurrentUserUid());
+
         subscribeToData();
     }
 

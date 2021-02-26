@@ -44,9 +44,8 @@ public class ScheduleRepository extends Repository<Schedule> {
         return listOfTData;
     }
 
-    public Task<QuerySnapshot> getTaskListSchedulesFromGroupForUser(String groupID, String userID) {
-        return collectionReference.whereEqualTo("groupUid", groupID)
-                .whereArrayContains("memberList", userID)
+    public Task<QuerySnapshot> getTaskListSchedulesForUser(String userID) {
+        return collectionReference.whereArrayContains("memberList", userID)
                 .orderBy("startTime", Query.Direction.ASCENDING)
                 .get();
     }
