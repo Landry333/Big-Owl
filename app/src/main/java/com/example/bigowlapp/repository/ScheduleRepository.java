@@ -4,6 +4,7 @@ import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -46,7 +47,8 @@ public class ScheduleRepository extends Repository<Schedule> {
 
     public Task<QuerySnapshot> getTaskListSchedulesForUser(String userID) {
         return collectionReference.whereArrayContains("memberList", userID)
-                .orderBy("startTime", Query.Direction.ASCENDING)
+                .whereGreaterThanOrEqualTo("endTime", Timestamp.now())
+                .orderBy("endTime", Query.Direction.ASCENDING)
                 .get();
     }
 }
