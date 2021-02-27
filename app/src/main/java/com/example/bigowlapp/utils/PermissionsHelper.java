@@ -47,6 +47,12 @@ public class PermissionsHelper {
         this.requestMissingPermissions(permissionsToCheck, REQUEST_DEFAULT);
     }
 
+    /**
+     * Used to check for missing permissions and request for those that are missing.
+     *
+     * @param permissionsToCheck the permissions that are to be verified
+     * @param requestCode        alter how the permission result is handled using a REQUEST
+     */
     public void requestMissingPermissions(List<String> permissionsToCheck, int requestCode) {
         List<String> permissionsToAskFor = this.checkForMissingPermissions(permissionsToCheck);
 
@@ -65,6 +71,13 @@ public class PermissionsHelper {
         this.requestMissingPermissions(permissionsToCheck, justification, REQUEST_DEFAULT);
     }
 
+    /**
+     * Checks for and requests the permission, but also provides a reason the permissions are needed
+     *
+     * @param permissionsToCheck the permissions that are to be verified
+     * @param justification      the reasons these permissions will be needed
+     * @param requestCode        alter how the permission result is handled using a REQUEST
+     */
     public void requestMissingPermissions(List<String> permissionsToCheck, CharSequence justification, int requestCode) {
         List<String> permissionsToAskFor = this.checkForMissingPermissions(permissionsToCheck);
 
@@ -72,7 +85,6 @@ public class PermissionsHelper {
             this.requestPermissions(permissionsToAskFor, justification, requestCode);
         }
     }
-
 
     /**
      * Will request background permissions with a justification if it is missing.
@@ -85,7 +97,7 @@ public class PermissionsHelper {
 
     /**
      * Use in 'Activity.onRequestPermissionsResult' to handle what happens when a user
-     * accepts or rejects a set of requested permissions
+     * accepts or rejects a set of requested permissions.
      *
      * @param grantResults the permission result from 'Activity.onRequestPermissionsResult'
      */
@@ -97,7 +109,7 @@ public class PermissionsHelper {
         }
     }
 
-    public void handleDefaultPermissionResult(int[] grantResults) {
+    private void handleDefaultPermissionResult(int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(activity, "Permission(s) GRANTED", Toast.LENGTH_SHORT).show();
         } else {
@@ -106,7 +118,7 @@ public class PermissionsHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    public void handleBackgroundLocationPermissionResult(int[] grantResults) {
+    private void handleBackgroundLocationPermissionResult(int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             requestBackgroundLocationPermissions();
         } else {
@@ -131,19 +143,19 @@ public class PermissionsHelper {
                 || ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED;
     }
 
-    public void requestPermissions(List<String> permissionsToAskFor) {
+    private void requestPermissions(List<String> permissionsToAskFor) {
         requestPermissions(permissionsToAskFor, REQUEST_DEFAULT);
     }
 
-    public void requestPermissions(List<String> permissionsToAskFor, int requestCode) {
+    private void requestPermissions(List<String> permissionsToAskFor, int requestCode) {
         ActivityCompat.requestPermissions(activity, permissionsToAskFor.toArray(new String[0]), requestCode);
     }
 
-    public void requestPermissions(List<String> permissionsToAskFor, CharSequence justification) {
+    private void requestPermissions(List<String> permissionsToAskFor, CharSequence justification) {
         requestPermissions(permissionsToAskFor, justification, REQUEST_DEFAULT);
     }
 
-    public void requestPermissions(List<String> permissionsToAskFor, CharSequence justification, int requestCode) {
+    private void requestPermissions(List<String> permissionsToAskFor, CharSequence justification, int requestCode) {
         new AlertDialog.Builder(activity)
                 .setTitle("Permission(s) needed")
                 .setMessage(justification)
