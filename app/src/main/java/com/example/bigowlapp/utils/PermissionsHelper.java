@@ -20,8 +20,15 @@ import java.util.stream.Collectors;
  * without bloating an Android UI class, and to reduced repeated code.
  */
 public class PermissionsHelper {
-    public static final int MULTIPLE_PERMISSIONS_CODE = 1;
-    public static final int LOCATION_PERMISSION_CODE = 2;
+    /**
+     * Default request code to use for any simple permissions request.
+     */
+    public static final int REQUEST_DEFAULT = 1;
+
+    /**
+     * Use if Background Location permissions must also be requested after this permission request.
+     */
+    public static final int REQUEST_ALSO_REQUEST_BACKGROUND_LOCATION = 2;
 
     private final Activity activity;
 
@@ -79,7 +86,7 @@ public class PermissionsHelper {
      * @param grantResults the permission result from 'Activity.onRequestPermissionsResult'
      */
     public void handlePermissionResult(int requestCode, int[] grantResults) {
-        if (requestCode == LOCATION_PERMISSION_CODE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (requestCode == REQUEST_ALSO_REQUEST_BACKGROUND_LOCATION && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             handleBackgroundLocationPermissionResult(grantResults);
         } else {
             handleDefaultPermissionResult(grantResults);
@@ -123,7 +130,7 @@ public class PermissionsHelper {
     }
 
     public void requestPermissions(List<String> permissionsToAskFor) {
-        ActivityCompat.requestPermissions(activity, permissionsToAskFor.toArray(new String[0]), MULTIPLE_PERMISSIONS_CODE);
+        ActivityCompat.requestPermissions(activity, permissionsToAskFor.toArray(new String[0]), REQUEST_DEFAULT);
     }
 
     public void requestPermissions(List<String> permissionsToAskFor, int requestCode) {

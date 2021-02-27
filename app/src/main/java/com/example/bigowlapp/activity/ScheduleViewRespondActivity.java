@@ -99,7 +99,7 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
 
         String reason = "Location detection is required to check whether you have arrived to a scheduled location." +
                 "\n\nIf not provided, the system will assume you have not arrived to the location.";
-        permissionsHelper.requestMissingPermissions(permissionsToCheck, reason, PermissionsHelper.LOCATION_PERMISSION_CODE);
+        permissionsHelper.requestMissingPermissions(permissionsToCheck, reason, PermissionsHelper.REQUEST_ALSO_REQUEST_BACKGROUND_LOCATION);
     }
 
     @Override
