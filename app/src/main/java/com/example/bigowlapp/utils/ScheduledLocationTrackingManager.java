@@ -46,15 +46,16 @@ public class ScheduledLocationTrackingManager {
 
         return locationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null)
                 .continueWithTask(locTask -> {
-                    if (locTask.isSuccessful()) {
-                        Log.e("BigOwl", "location calc successful.");
-                    } else {
-                        Log.e("BigOwl", "location calc FAIL.");
+                    if (Constants.ENABLE_TESTING_TOGGLE) {
+                        if (locTask.isSuccessful()) {
+                            Log.e("BigOwl", "location calc successful.");
+                        } else {
+                            Log.e("BigOwl", "location calc FAIL.");
+                        }
                     }
 
                     return geofencingClient.addGeofences(
-                            buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent())
-                            .onSuccessTask(addGeofenceTask -> Tasks.forResult(null));
+                            buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent());
                 });
     }
 
