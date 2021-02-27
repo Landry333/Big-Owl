@@ -88,16 +88,17 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
     public void requestPermissionsIfMissing() {
         this.permissionsHelper = new PermissionsHelper(this);
 
-        List<String> permissionsToCheck = new ArrayList<>();
-        permissionsToCheck.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        String reason = "Location detection is required to check whether you have arrived to a scheduled location." +
+                "\n\nIf not provided, the system will assume you have not arrived to the location.";
+        permissionsHelper.requestMissingPermissions(
+                Collections.singletonList(Manifest.permission.ACCESS_FINE_LOCATION),
+                reason,
+                PermissionsHelper.REQUEST_ALSO_REQUEST_BACKGROUND_LOCATION);
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q &&
                 !permissionsHelper.isMissingPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
             permissionsHelper.requestBackgroundLocationPermissions();
         }
-
-        String reason = "Location detection is required to check whether you have arrived to a scheduled location." +
-                "\n\nIf not provided, the system will assume you have not arrived to the location.";
-        permissionsHelper.requestMissingPermissions(permissionsToCheck, reason, PermissionsHelper.REQUEST_ALSO_REQUEST_BACKGROUND_LOCATION);
     }
 
     @Override

@@ -61,6 +61,10 @@
     <string name="schedule_list">Schedules</string>
     <string name="schedule_title">Schedules title</string>
     <string name="schedule_start_time">Schedules Start time</string>
+    <string name="background_location_justification">
+        Location access must be set to <b>Allow all the time</b> for background location access.\n\n
+        Your location will be verified at the scheduled time without having to worry the app being open.
+    </string>
 
     <!-- TODO: should be removed when everything implemented regarding location tracking -->
     <string name="test_only_click_to_track_selected_location">[TEST ONLY] CLICK TO TRACK SELECTED LOCATION</string>

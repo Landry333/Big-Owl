@@ -11,6 +11,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.bigowlapp.R;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,12 +60,12 @@ public class PermissionsHelper {
     }
 
     /**
-     * Checks for and requests the mission, but also provides a reason the permissions are needed
+     * Checks for and requests the permission, but also provides a reason the permissions are needed
      *
      * @param permissionsToCheck the permissions that are to be verified
      * @param justification      the reasons these permissions will be needed
      */
-    public void requestMissingPermissions(List<String> permissionsToCheck, String justification) {
+    public void requestMissingPermissions(List<String> permissionsToCheck, CharSequence justification) {
         List<String> permissionsToAskFor = this.checkForMissingPermissions(permissionsToCheck);
 
         if (!permissionsToAskFor.isEmpty()) {
@@ -71,7 +73,7 @@ public class PermissionsHelper {
         }
     }
 
-    public void requestMissingPermissions(List<String> permissionsToCheck, String justification, int requestCode) {
+    public void requestMissingPermissions(List<String> permissionsToCheck, CharSequence justification, int requestCode) {
         List<String> permissionsToAskFor = this.checkForMissingPermissions(permissionsToCheck);
 
         if (!permissionsToAskFor.isEmpty()) {
@@ -85,9 +87,8 @@ public class PermissionsHelper {
      */
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public void requestBackgroundLocationPermissions() {
-        String reason = "This application tracks the location automatically at the scheduled time in the background so no manual check-in is needed.\n\n" +
-                "In order to make this possible, you must allow location access 'all the time'";
-        this.requestMissingPermissions(Collections.singletonList(Manifest.permission.ACCESS_BACKGROUND_LOCATION), reason);
+        CharSequence justification = activity.getResources().getText(R.string.background_location_justification);
+        this.requestMissingPermissions(Collections.singletonList(Manifest.permission.ACCESS_BACKGROUND_LOCATION), justification);
     }
 
     /**
@@ -146,7 +147,7 @@ public class PermissionsHelper {
         ActivityCompat.requestPermissions(activity, permissionsToAskFor.toArray(new String[0]), requestCode);
     }
 
-    public void requestPermissions(List<String> permissionsToAskFor, String justification) {
+    public void requestPermissions(List<String> permissionsToAskFor, CharSequence justification) {
         new AlertDialog.Builder(activity)
                 .setTitle("Permission(s) needed")
                 .setMessage(justification)
@@ -155,7 +156,7 @@ public class PermissionsHelper {
                 .create().show();
     }
 
-    public void requestPermissions(List<String> permissionsToAskFor, String justification, int requestCode) {
+    public void requestPermissions(List<String> permissionsToAskFor, CharSequence justification, int requestCode) {
         new AlertDialog.Builder(activity)
                 .setTitle("Permission(s) needed")
                 .setMessage(justification)
