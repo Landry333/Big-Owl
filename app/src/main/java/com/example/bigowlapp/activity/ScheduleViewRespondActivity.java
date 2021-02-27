@@ -19,6 +19,7 @@ import com.example.bigowlapp.utils.PermissionsHelper;
 import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ScheduleViewRespondActivity extends BigOwlActivity {
@@ -89,13 +90,16 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
 
         List<String> permissionsToCheck = new ArrayList<>();
         permissionsToCheck.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-            permissionsToCheck.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q &&
+                !permissionsHelper.isMissingPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            String reason = "This application tracks the location automatically at the scheduled time in the background so no manual check-in is needed.\n\n" +
+                    "In order to make this possible, you must allow location access 'all the time'";
+            permissionsHelper.requestMissingPermissions(Collections.singletonList(Manifest.permission.ACCESS_BACKGROUND_LOCATION), reason);
         }
 
         String reason = "Location detection is required to check whether you have arrived to a scheduled location." +
                 "\n\nIf not provided, the system will assume you have not arrived to the location.";
-        permissionsHelper.requestMissingPermissions(permissionsToCheck, reason);
+        permissionsHelper.requestMissingPermissions(permissionsToCheck, reason, PermissionsHelper.LOCATION_PERMISSION_CODE);
     }
 
     @Override
@@ -133,9 +137,7 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PermissionsHelper.MULTIPLE_PERMISSIONS_CODE) {
-            permissionsHelper.handlePermissionResult(grantResults);
-        }
+        permissionsHelper.handlePermissionResult(requestCode, grantResults);
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

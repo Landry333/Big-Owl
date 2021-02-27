@@ -1,13 +1,17 @@
 package com.example.bigowlapp.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +21,7 @@ import java.util.stream.Collectors;
  */
 public class PermissionsHelper {
     public static final int MULTIPLE_PERMISSIONS_CODE = 1;
+    public static final int LOCATION_PERMISSION_CODE = 2;
 
     private final Activity activity;
 
@@ -26,6 +31,7 @@ public class PermissionsHelper {
 
     /**
      * Used to check for missing permissions and request for those that are missing
+     *
      * @param permissionsToCheck the permissions that are to be verified
      */
     public void requestMissingPermissions(List<String> permissionsToCheck) {
@@ -36,10 +42,19 @@ public class PermissionsHelper {
         }
     }
 
+    public void requestMissingPermissions(List<String> permissionsToCheck, int requestCode) {
+        List<String> permissionsToAskFor = this.checkForMissingPermissions(permissionsToCheck);
+
+        if (!permissionsToAskFor.isEmpty()) {
+            this.requestPermissions(permissionsToAskFor, requestCode);
+        }
+    }
+
     /**
      * Checks for and requests the mission, but also provides a reason the permissions are needed
+     *
      * @param permissionsToCheck the permissions that are to be verified
-     * @param justification the reasons these permissions will be needed
+     * @param justification      the reasons these permissions will be needed
      */
     public void requestMissingPermissions(List<String> permissionsToCheck, String justification) {
         List<String> permissionsToAskFor = this.checkForMissingPermissions(permissionsToCheck);
@@ -49,14 +64,42 @@ public class PermissionsHelper {
         }
     }
 
+    public void requestMissingPermissions(List<String> permissionsToCheck, String justification, int requestCode) {
+        List<String> permissionsToAskFor = this.checkForMissingPermissions(permissionsToCheck);
+
+        if (!permissionsToAskFor.isEmpty()) {
+            this.requestPermissions(permissionsToAskFor, justification, requestCode);
+        }
+    }
+
     /**
      * Use in 'Activity.onRequestPermissionsResult' to handle what happens when a user
      * accepts or rejects a set of requested permissions
+     *
      * @param grantResults the permission result from 'Activity.onRequestPermissionsResult'
      */
-    public void handlePermissionResult(int[] grantResults) {
+    public void handlePermissionResult(int requestCode, int[] grantResults) {
+        if (requestCode == LOCATION_PERMISSION_CODE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            handleBackgroundLocationPermissionResult(grantResults);
+        } else {
+            handleDefaultPermissionResult(grantResults);
+        }
+    }
+
+    public void handleDefaultPermissionResult(int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(activity, "Permission(s) GRANTED", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(activity, "Permission(s) DENIED", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public void handleBackgroundLocationPermissionResult(int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            String reason = "This application tracks the location automatically at the scheduled time in the background so no manual check-in is needed.\n\n" +
+                    "In order to make this possible, you must allow location access 'all the time'";
+            this.requestMissingPermissions(Collections.singletonList(Manifest.permission.ACCESS_BACKGROUND_LOCATION), reason);
         } else {
             Toast.makeText(activity, "Permission(s) DENIED", Toast.LENGTH_SHORT).show();
         }
@@ -83,11 +126,24 @@ public class PermissionsHelper {
         ActivityCompat.requestPermissions(activity, permissionsToAskFor.toArray(new String[0]), MULTIPLE_PERMISSIONS_CODE);
     }
 
+    public void requestPermissions(List<String> permissionsToAskFor, int requestCode) {
+        ActivityCompat.requestPermissions(activity, permissionsToAskFor.toArray(new String[0]), requestCode);
+    }
+
     public void requestPermissions(List<String> permissionsToAskFor, String justification) {
         new AlertDialog.Builder(activity)
                 .setTitle("Permission(s) needed")
                 .setMessage(justification)
                 .setPositiveButton("Ok", (dialogInterface, which) -> requestPermissions(permissionsToAskFor))
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .create().show();
+    }
+
+    public void requestPermissions(List<String> permissionsToAskFor, String justification, int requestCode) {
+        new AlertDialog.Builder(activity)
+                .setTitle("Permission(s) needed")
+                .setMessage(justification)
+                .setPositiveButton("Ok", (dialogInterface, which) -> requestPermissions(permissionsToAskFor, requestCode))
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                 .create().show();
     }
