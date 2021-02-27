@@ -92,9 +92,7 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
         permissionsToCheck.add(Manifest.permission.ACCESS_FINE_LOCATION);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q &&
                 !permissionsHelper.isMissingPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
-            String reason = "This application tracks the location automatically at the scheduled time in the background so no manual check-in is needed.\n\n" +
-                    "In order to make this possible, you must allow location access 'all the time'";
-            permissionsHelper.requestMissingPermissions(Collections.singletonList(Manifest.permission.ACCESS_BACKGROUND_LOCATION), reason);
+            permissionsHelper.requestBackgroundLocationPermissions();
         }
 
         String reason = "Location detection is required to check whether you have arrived to a scheduled location." +

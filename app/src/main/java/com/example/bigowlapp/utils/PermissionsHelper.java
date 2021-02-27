@@ -79,6 +79,17 @@ public class PermissionsHelper {
         }
     }
 
+
+    /**
+     * Will request background permissions with a justification if it is missing.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public void requestBackgroundLocationPermissions() {
+        String reason = "This application tracks the location automatically at the scheduled time in the background so no manual check-in is needed.\n\n" +
+                "In order to make this possible, you must allow location access 'all the time'";
+        this.requestMissingPermissions(Collections.singletonList(Manifest.permission.ACCESS_BACKGROUND_LOCATION), reason);
+    }
+
     /**
      * Use in 'Activity.onRequestPermissionsResult' to handle what happens when a user
      * accepts or rejects a set of requested permissions
@@ -104,9 +115,7 @@ public class PermissionsHelper {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public void handleBackgroundLocationPermissionResult(int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            String reason = "This application tracks the location automatically at the scheduled time in the background so no manual check-in is needed.\n\n" +
-                    "In order to make this possible, you must allow location access 'all the time'";
-            this.requestMissingPermissions(Collections.singletonList(Manifest.permission.ACCESS_BACKGROUND_LOCATION), reason);
+            requestBackgroundLocationPermissions();
         } else {
             Toast.makeText(activity, "Permission(s) DENIED", Toast.LENGTH_SHORT).show();
         }
