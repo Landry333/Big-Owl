@@ -143,16 +143,8 @@ public class PermissionsHelper {
                 || ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED;
     }
 
-    private void requestPermissions(List<String> permissionsToAskFor) {
-        requestPermissions(permissionsToAskFor, REQUEST_DEFAULT);
-    }
-
     private void requestPermissions(List<String> permissionsToAskFor, int requestCode) {
         ActivityCompat.requestPermissions(activity, permissionsToAskFor.toArray(new String[0]), requestCode);
-    }
-
-    private void requestPermissions(List<String> permissionsToAskFor, CharSequence justification) {
-        requestPermissions(permissionsToAskFor, justification, REQUEST_DEFAULT);
     }
 
     private void requestPermissions(List<String> permissionsToAskFor, CharSequence justification, int requestCode) {

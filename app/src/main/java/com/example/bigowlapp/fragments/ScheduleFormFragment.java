@@ -163,6 +163,7 @@ public class ScheduleFormFragment extends Fragment
     }
 
     // TODO: should be removed when everything implemented regarding location tracking
+    //       Make sure to remove related XML cod as well.
     private void setupTestOnlyLocationMangerCheckButton(View view) {
         Button testOnlyLocationTrackCheckButton = view.findViewById(R.id.test_only_location_track_check_button);
         testOnlyLocationTrackCheckButton.setOnClickListener(v -> {
