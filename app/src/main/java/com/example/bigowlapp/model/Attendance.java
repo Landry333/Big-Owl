@@ -10,12 +10,13 @@ public class Attendance {
     }
 
     private boolean authenticated = false;
-    private boolean authAttempted_Method1 = false;  // Authentication with first method
-    private boolean authAttempted_Method2 = false;  // Authentication with second method
+    private boolean authAttemptedMethod1 = false;  // Authentication with first method
+    private boolean authAttemptedMethod2 = false;  // Authentication with second method
     private LocatedStatus scheduleLocated = LocatedStatus.NOT_DETECTED;
     private String deviceIdNumber;
 
     public Attendance() {
+        // public no-argument constructor necessary for Firebase data mapping
     }
 
     public boolean isAuthenticated() {
@@ -26,20 +27,20 @@ public class Attendance {
         this.authenticated = authenticated;
     }
 
-    public boolean isAuthAttempted_Method1() {
-        return authAttempted_Method1;
+    public boolean isAuthAttemptedMethod1() {
+        return authAttemptedMethod1;
     }
 
-    public void setAuthAttempted_Method1(boolean authAttempted_Method1) {
-        this.authAttempted_Method1 = authAttempted_Method1;
+    public void setAuthAttemptedMethod1(boolean authAttemptedMethod1) {
+        this.authAttemptedMethod1 = authAttemptedMethod1;
     }
 
-    public boolean isAuthAttempted_Method2() {
-        return authAttempted_Method2;
+    public boolean isAuthAttemptedMethod2() {
+        return authAttemptedMethod2;
     }
 
-    public void setAuthAttempted_Method2(boolean authAttempted_Method2) {
-        this.authAttempted_Method2 = authAttempted_Method2;
+    public void setAuthAttemptedMethod2(boolean authAttemptedMethod2) {
+        this.authAttemptedMethod2 = authAttemptedMethod2;
     }
 
     public LocatedStatus getScheduleLocated() {
