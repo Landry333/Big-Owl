@@ -170,14 +170,13 @@ public class ScheduleFormFragment extends Fragment
             Schedule schedule = setScheduleViewModel.getNewScheduleData().getValue();
             schedule.setUid("TITLE='" + schedule.getTitle() + "'__" + UUID.randomUUID().toString());
             locationTrackingManager.addNewScheduledLocationToTrack(schedule)
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(getActivity(), "ADDED LOCATION TRACKING", Toast.LENGTH_LONG).show();
-                    })
-                    .addOnFailureListener(e -> {
-                        // TODO: this runs when the user has location services off or
-                        //       location permissions denied
-                        Toast.makeText(getActivity(), "FAILURE!!!!! TO ADD LOCATION TRACKING", Toast.LENGTH_LONG).show();
-                    });
+                    .addOnSuccessListener(aVoid ->
+                            Toast.makeText(getActivity(), "ADDED LOCATION TRACKING", Toast.LENGTH_LONG).show())
+                    .addOnFailureListener(e ->
+                            // TODO: this runs when the user has location services off or
+                            //       location permissions denied
+                            Toast.makeText(getActivity(), "FAILURE!!!!! TO ADD LOCATION TRACKING", Toast.LENGTH_LONG).show()
+                    );
         });
     }
 

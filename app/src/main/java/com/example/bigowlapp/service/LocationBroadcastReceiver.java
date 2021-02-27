@@ -91,8 +91,8 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
             }
 
         } else {
-            Log.e(TAG, "Location Detection has failed");
             if (Constants.ENABLE_TESTING_TOGGLE) {
+                Log.e(TAG, "Location Detection has failed");
                 this.updateUserLocatedStatus(testOnlyIdList, Attendance.LocatedStatus.NOT_DETECTED);
             } else {
                 this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED);

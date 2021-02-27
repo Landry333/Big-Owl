@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.service.LocationBroadcastReceiver;
@@ -27,7 +27,6 @@ public class ScheduledLocationTrackingManager {
     private static final long DEFAULT_TRACKING_TIME_MILLISECONDS = 30 * Constants.MINUTE_TO_MILLISECONDS;
     // use 0 for instant response, and allow delay for better battery life
     private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS = 5 * Constants.MINUTE_TO_MILLISECONDS;
-    private static final int NO_NOTIFY_DELAY = 0;
 
     private final Context context;
     private final GeofencingClient geofencingClient;
@@ -41,7 +40,7 @@ public class ScheduledLocationTrackingManager {
     }
 
     public Task<Void> addNewScheduledLocationToTrack(Schedule scheduleWithLocationToTrack) {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return Tasks.forException(new SecurityException("Requires " + Manifest.permission.ACCESS_FINE_LOCATION + " permission."));
         }
 

@@ -53,9 +53,9 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class ScheduleViewRespondActivityTest {
 
     @Rule
-    public final GrantPermissionRule permissionRule = GrantPermissionRule
-            .grant(Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+    public final GrantPermissionRule permissionRule = GrantPermissionRule.grant(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION);
 
     @Mock
     private ScheduleViewRespondViewModel mockScheduleViewRespondViewModel;
@@ -136,9 +136,8 @@ public class ScheduleViewRespondActivityTest {
         activityScenario = ActivityScenario.launch(testIntent);
 
         activityScenario.moveToState(Lifecycle.State.CREATED);
-        activityScenario.onActivity(activity -> {
-            activity.setScheduleViewRespondViewModel(mockScheduleViewRespondViewModel);
-        });
+        activityScenario.onActivity(activity ->
+                activity.setScheduleViewRespondViewModel(mockScheduleViewRespondViewModel));
         activityScenario.moveToState(Lifecycle.State.RESUMED);
     }
 
