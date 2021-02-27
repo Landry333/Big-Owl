@@ -18,9 +18,7 @@ import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.utils.PermissionsHelper;
 import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class ScheduleViewRespondActivity extends BigOwlActivity {
 
@@ -77,7 +75,7 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
 
         Button btnAccept = findViewById(R.id.button_accept);
         btnAccept.setOnClickListener(v -> {
-            requestPermissionsIfMissing();
+            requestLocationPermissions();
             userClickRespondButton(Response.ACCEPT);
         });
 
@@ -85,7 +83,7 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
         btnReject.setOnClickListener(v -> userClickRespondButton(Response.REJECT));
     }
 
-    public void requestPermissionsIfMissing() {
+    public void requestLocationPermissions() {
         this.permissionsHelper = new PermissionsHelper(this);
 
         String reason = "Location detection is required to check whether you have arrived to a scheduled location." +
