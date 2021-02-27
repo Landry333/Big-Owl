@@ -44,11 +44,7 @@ public class PermissionsHelper {
      * @param permissionsToCheck the permissions that are to be verified
      */
     public void requestMissingPermissions(List<String> permissionsToCheck) {
-        List<String> permissionsToAskFor = this.checkForMissingPermissions(permissionsToCheck);
-
-        if (!permissionsToAskFor.isEmpty()) {
-            this.requestPermissions(permissionsToAskFor);
-        }
+        this.requestMissingPermissions(permissionsToCheck, REQUEST_DEFAULT);
     }
 
     public void requestMissingPermissions(List<String> permissionsToCheck, int requestCode) {
@@ -66,11 +62,7 @@ public class PermissionsHelper {
      * @param justification      the reasons these permissions will be needed
      */
     public void requestMissingPermissions(List<String> permissionsToCheck, CharSequence justification) {
-        List<String> permissionsToAskFor = this.checkForMissingPermissions(permissionsToCheck);
-
-        if (!permissionsToAskFor.isEmpty()) {
-            this.requestPermissions(permissionsToAskFor, justification);
-        }
+        this.requestMissingPermissions(permissionsToCheck, justification, REQUEST_DEFAULT);
     }
 
     public void requestMissingPermissions(List<String> permissionsToCheck, CharSequence justification, int requestCode) {
@@ -140,7 +132,7 @@ public class PermissionsHelper {
     }
 
     public void requestPermissions(List<String> permissionsToAskFor) {
-        ActivityCompat.requestPermissions(activity, permissionsToAskFor.toArray(new String[0]), REQUEST_DEFAULT);
+        requestPermissions(permissionsToAskFor, REQUEST_DEFAULT);
     }
 
     public void requestPermissions(List<String> permissionsToAskFor, int requestCode) {
@@ -148,12 +140,7 @@ public class PermissionsHelper {
     }
 
     public void requestPermissions(List<String> permissionsToAskFor, CharSequence justification) {
-        new AlertDialog.Builder(activity)
-                .setTitle("Permission(s) needed")
-                .setMessage(justification)
-                .setPositiveButton("Ok", (dialogInterface, which) -> requestPermissions(permissionsToAskFor))
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .create().show();
+        requestPermissions(permissionsToAskFor, justification, REQUEST_DEFAULT);
     }
 
     public void requestPermissions(List<String> permissionsToAskFor, CharSequence justification, int requestCode) {
