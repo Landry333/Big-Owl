@@ -3,7 +3,6 @@ package com.example.bigowlapp.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,6 +27,7 @@ import java.util.stream.Collectors;
  * {@link com.example.bigowlapp.utils.ScheduledLocationTrackingManager}
  */
 public class LocationBroadcastReceiver extends BroadcastReceiver {
+    private static final String TAG = LocationBroadcastReceiver.class.getName();
 
     RepositoryFacade repositoryFacade;
 
@@ -42,26 +42,27 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
         if (geofencingEvent.hasError()) {
             String errorMessage = GeofenceStatusCodes.getStatusCodeString(geofencingEvent.getErrorCode());
-            Log.e("BigOwl", errorMessage);
+            Log.e(TAG, errorMessage);
             return;
         }
 
         // valuable data from geofence result
-        Location currentUserLocation = geofencingEvent.getTriggeringLocation();
+        // TODO: if not needed remove, else uncomment for users current location
+        //  Location currentUserLocation = geofencingEvent.getTriggeringLocation();
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
         List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
         List<String> geofenceIdList = triggeringGeofences.stream()
                 .map(Geofence::getRequestId)
                 .distinct()
                 .collect(Collectors.toList());
-        Log.e("BigOwl", "SCHEDULE IDS THAT TRIGGERED THIS ARE: " + geofenceIdList);
+        Log.e(TAG, "SCHEDULE IDS THAT TRIGGERED THIS ARE: " + geofenceIdList);
         List<String> testOnlyIdList = Collections.singletonList("4laPgh1xNIy8CDpnohDV");
 
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             if (Constants.ENABLE_TESTING_TOGGLE) {
                 Toast.makeText(context, "YOU HAVE SUCCESSFULLY ARRIVED TO YOUR LOCATION!", Toast.LENGTH_LONG).show();
-                Log.e("BigOwl", "YOU ENTERED THE LOCATION");
+                Log.e(TAG, "YOU ENTERED THE LOCATION");
             }
 
             if (Constants.ENABLE_TESTING_TOGGLE) {
@@ -72,17 +73,15 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
             // User was successfully detected in desired location, so no more tracking needed
             this.removeLocationTracking(context, geofenceIdList)
-                    .addOnSuccessListener(aVoid -> {
-                        Log.e("BigOwl", "Entered LOCATION TRACKING SUCCESSFULLY REMOVED");
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.e("BigOwl", "FAILED TO REMOVE LOCATIONS");
-                    });
+                    .addOnSuccessListener(aVoid ->
+                            Log.e(TAG, "Entered LOCATION TRACKING SUCCESSFULLY REMOVED"))
+                    .addOnFailureListener(e ->
+                            Log.e(TAG, "FAILED TO REMOVE LOCATIONS"));
 
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             if (Constants.ENABLE_TESTING_TOGGLE) {
                 Toast.makeText(context, "YOU HAVE YET TO ARRIVE TO THE NECESSARY LOCATION", Toast.LENGTH_LONG).show();
-                Log.e("BigOwl", "YOU EXITED THE LOCATION");
+                Log.e(TAG, "YOU EXITED THE LOCATION");
             }
 
             if (Constants.ENABLE_TESTING_TOGGLE) {
@@ -92,7 +91,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
             }
 
         } else {
-            Log.e("BigOwl", "Location Detection has failed");
+            Log.e(TAG, "Location Detection has failed");
             if (Constants.ENABLE_TESTING_TOGGLE) {
                 this.updateUserLocatedStatus(testOnlyIdList, Attendance.LocatedStatus.NOT_DETECTED);
             } else {
