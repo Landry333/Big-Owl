@@ -20,7 +20,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Schedule activatedSchedule = getSchedule(intent);
+        // Execute Schedule activatedSchedule = getSchedule(intent); to get the schedule
         // Run the location/Geofencing code
         // activatedSchedule should only have UID, LONGITUDE, LATITUDE
     }
