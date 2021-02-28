@@ -56,9 +56,7 @@ public class AlarmBroadcastReceiverManager {
                         alarmManager.set(AlarmManager.RTC_WAKEUP,
                                 schedule.getStartTime().toDate().getTime(), pendingIntent);
                     }
-                }).addOnFailureListener(error -> {
-            Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
-        });
+                }).addOnFailureListener(error -> Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     /**
