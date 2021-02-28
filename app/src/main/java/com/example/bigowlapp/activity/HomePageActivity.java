@@ -36,6 +36,7 @@ public class HomePageActivity extends BigOwlActivity {
     private TextView textLastName;
     private TextView textPhone;
     private HomePageViewModel homePageViewModel;
+    private AlarmBroadcastReceiverManager alarmBroadcastReceiverManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,6 @@ public class HomePageActivity extends BigOwlActivity {
         if (homePageViewModel == null) {
             homePageViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
         }
-        initAlarmManager();
         subscribeToData();
     }
 
@@ -138,6 +138,7 @@ public class HomePageActivity extends BigOwlActivity {
                         .into(imgUserAvatar);
             });
             scrollView.setVisibility(View.VISIBLE);
+            initAlarmManager();
         }
         /*  TODO: find a way to uncomment out below lines and allow HomePageActivityTest to pass
         else {
@@ -150,8 +151,9 @@ public class HomePageActivity extends BigOwlActivity {
      * Initializes the AlarmManager to set alarms for the user's schedules that he has to attend to.
      */
     private void initAlarmManager() {
-        AlarmBroadcastReceiverManager alarmBroadcastReceiverManager
-                = new AlarmBroadcastReceiverManager(this);
+        if (alarmBroadcastReceiverManager == null) {
+            alarmBroadcastReceiverManager = new AlarmBroadcastReceiverManager(this);
+        }
         alarmBroadcastReceiverManager.setAlarms(homePageViewModel.getCurrentUserUid());
     }
 
@@ -163,7 +165,6 @@ public class HomePageActivity extends BigOwlActivity {
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getTitle().equals("Edit Profile")) {
-            finish();
             startActivity(new Intent(this, EditProfileActivity.class));
         }
         return super.onMenuItemClick(item);
@@ -191,4 +192,8 @@ public class HomePageActivity extends BigOwlActivity {
         this.homePageViewModel = homePageViewModel;
     }
 
+    @VisibleForTesting
+    public void setAlarmBroadcastReceiverManager(AlarmBroadcastReceiverManager alarmBroadcastReceiverManager) {
+        this.alarmBroadcastReceiverManager = alarmBroadcastReceiverManager;
+    }
 }
