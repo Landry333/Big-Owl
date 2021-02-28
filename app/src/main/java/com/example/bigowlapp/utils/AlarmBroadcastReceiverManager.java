@@ -38,6 +38,7 @@ public class AlarmBroadcastReceiverManager {
 
     /**
      * Sets the alarm(s) for the BroadcastReceiver given the schedules that the user has
+     *
      * @param userID The Id of the user
      */
     public void setAlarms(String userID) {
@@ -62,6 +63,7 @@ public class AlarmBroadcastReceiverManager {
 
     /**
      * Obtains the list of schedules for the user, and filters in schedules that have been accepted
+     *
      * @param userID The Id of the user
      * @return A Task that contains a list of schedule for the user that hasn't been attended
      */

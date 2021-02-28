@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.bigowlapp.model.Schedule;
-import com.example.bigowlapp.utils.IntentConstants;
 import com.google.firebase.firestore.GeoPoint;
 
 import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LATITUDE;
@@ -27,11 +26,11 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     }
 
     private Schedule getSchedule(Intent intent) {
-        double DEFAULT_VALUE_LAT_LNG = 0.0;
+        double defaultValueLatLng = 0.0;
         Schedule schedule = new Schedule();
         schedule.setUid(intent.getStringExtra(EXTRA_UID));
-        GeoPoint geoPoint = new GeoPoint(intent.getDoubleExtra(EXTRA_LATITUDE, DEFAULT_VALUE_LAT_LNG),
-                intent.getDoubleExtra(EXTRA_LONGITUDE, DEFAULT_VALUE_LAT_LNG));
+        GeoPoint geoPoint = new GeoPoint(intent.getDoubleExtra(EXTRA_LATITUDE, defaultValueLatLng),
+                intent.getDoubleExtra(EXTRA_LONGITUDE, defaultValueLatLng));
         schedule.setLocation(geoPoint);
         return schedule;
     }
