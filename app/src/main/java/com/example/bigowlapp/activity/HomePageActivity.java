@@ -146,6 +146,9 @@ public class HomePageActivity extends BigOwlActivity {
          */
     }
 
+    /**
+     * Initializes the AlarmManager to set alarms for the user's schedules that he has to attend to.
+     */
     private void initAlarmManager() {
         AlarmBroadcastReceiverManager alarmBroadcastReceiverManager
                 = new AlarmBroadcastReceiverManager(this);
