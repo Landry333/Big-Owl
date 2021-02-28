@@ -19,8 +19,6 @@ import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
  */
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
-    private final double DEFAULT_VALUE = 0.0;
-
     @Override
     public void onReceive(Context context, Intent intent) {
         Schedule activatedSchedule = getSchedule(intent);
@@ -29,10 +27,11 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     }
 
     private Schedule getSchedule(Intent intent) {
+        double DEFAULT_VALUE_LAT_LNG = 0.0;
         Schedule schedule = new Schedule();
         schedule.setUid(intent.getStringExtra(EXTRA_UID));
-        GeoPoint geoPoint = new GeoPoint(intent.getDoubleExtra(EXTRA_LATITUDE, DEFAULT_VALUE),
-                intent.getDoubleExtra(EXTRA_LONGITUDE, DEFAULT_VALUE));
+        GeoPoint geoPoint = new GeoPoint(intent.getDoubleExtra(EXTRA_LATITUDE, DEFAULT_VALUE_LAT_LNG),
+                intent.getDoubleExtra(EXTRA_LONGITUDE, DEFAULT_VALUE_LAT_LNG));
         schedule.setLocation(geoPoint);
         return schedule;
     }

@@ -31,8 +31,6 @@ public class AlarmBroadcastReceiverManager {
     private final Context context;
     private final ScheduleRepository scheduleRepository;
 
-    private final int REQUEST_CODE = 0;
-
     public AlarmBroadcastReceiverManager(Context context) {
         this.context = context;
         scheduleRepository = new ScheduleRepository();
@@ -43,6 +41,7 @@ public class AlarmBroadcastReceiverManager {
      * @param userID The Id of the user
      */
     public void setAlarms(String userID) {
+        int REQUEST_CODE = 0;
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         getSchedulesForUser(userID)
                 .addOnSuccessListener(scheduleList -> {
