@@ -14,9 +14,9 @@ import java.util.List;
 public class ScheduleRepository extends Repository<Schedule> {
 
     private static final String USER_SCHEDULE_RESPONSE_MAP = "userScheduleResponseMap";
-    private final String START_TIME = "startTime";
-    private final String MEMBER_LIST = "memberList";
-    private final String GROUP_ID = "groupUid";
+    private static final String START_TIME = "startTime";
+    private static final String MEMBER_LIST = "memberList";
+    private static final String GROUP_ID = "groupUid";
 
     // TODO: Add dependency injection
     public ScheduleRepository() {
