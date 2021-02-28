@@ -42,7 +42,7 @@ public class AlarmBroadcastReceiverManager {
      * @param userID The Id of the user
      */
     public void setAlarms(String userID) {
-        int REQUEST_CODE = 0;
+        int requestCode = 0;
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         getSchedulesForUser(userID)
                 .addOnSuccessListener(scheduleList -> {
@@ -52,7 +52,7 @@ public class AlarmBroadcastReceiverManager {
                         intent.putExtra(EXTRA_LATITUDE, schedule.getLocation().getLatitude());
                         intent.putExtra(EXTRA_LONGITUDE, schedule.getLocation().getLongitude());
                         PendingIntent pendingIntent = PendingIntent
-                                .getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                .getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                         alarmManager.set(AlarmManager.RTC_WAKEUP,
                                 schedule.getStartTime().toDate().getTime(), pendingIntent);
                     }
