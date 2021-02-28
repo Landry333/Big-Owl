@@ -5,7 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.bigowlapp.model.Schedule;
+import com.example.bigowlapp.utils.IntentConstants;
 import com.google.firebase.firestore.GeoPoint;
+
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LATITUDE;
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LONGITUDE;
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
 
 /**
  * The purpose of this BroadcastReceiver is to execute code after the time activation of an alarm.
@@ -14,9 +19,6 @@ import com.google.firebase.firestore.GeoPoint;
  */
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
-    private final String EXTRA_UID = "Uid";
-    private final String EXTRA_LATITUDE = "Latitude";
-    private final String EXTRA_LONGITUDE = "Longitude";
     private final double DEFAULT_VALUE = 0.0;
 
     @Override

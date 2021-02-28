@@ -17,6 +17,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LATITUDE;
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LONGITUDE;
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
+
 /**
  * The purpose of this class is to set/define alarms that the app will set.
  * After the time activation of an alarm, code will be executed from
@@ -27,9 +31,6 @@ public class AlarmBroadcastReceiverManager {
     private final Context context;
     private final ScheduleRepository scheduleRepository;
 
-    private final String EXTRA_UID = "Uid";
-    private final String EXTRA_LATITUDE = "Latitude";
-    private final String EXTRA_LONGITUDE = "Longitude";
     private final int REQUEST_CODE = 0;
 
     public AlarmBroadcastReceiverManager(Context context) {
