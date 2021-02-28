@@ -85,9 +85,7 @@ public class EditProfileActivity extends BigOwlActivity {
         });
 
         editButtonCancel = findViewById(R.id.edit_button_cancel);
-        editButtonCancel.setOnClickListener(v -> {
-            finish();
-        });
+        editButtonCancel.setOnClickListener(v -> finish());
     }
 
     private void subscribeToData() {
