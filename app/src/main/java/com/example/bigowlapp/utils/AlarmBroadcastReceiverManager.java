@@ -17,17 +17,26 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The purpose of this class is to set/define alarms that the app will set.
+ * After the time activation of an alarm, code will be executed from
+ * {@link com.example.bigowlapp.service.AlarmBroadcastReceiver}
+ */
 public class AlarmBroadcastReceiverManager {
 
     private final Context context;
-    private ScheduleRepository scheduleRepository;
+    private final ScheduleRepository scheduleRepository;
 
     public AlarmBroadcastReceiverManager(Context context) {
         this.context = context;
         scheduleRepository = new ScheduleRepository();
     }
 
-    public void setAlarm(String userID) {
+    /**
+     * Sets the alarm(s) for the BroadcastReceiver given the schedules that the user has
+     * @param userID The Id of the user
+     */
+    public void setAlarms(String userID) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         getSchedulesForUser(userID)
                 .addOnSuccessListener(scheduleList -> {
@@ -46,6 +55,11 @@ public class AlarmBroadcastReceiverManager {
         });
     }
 
+    /**
+     * Obtains the list of schedules for the user, and filters in schedules that have been accepted
+     * @param userID The Id of the user
+     * @return A Task that contains a list of schedule for the user that hasn't been attended
+     */
     private Task<List<Schedule>> getSchedulesForUser(String userID) {
         return scheduleRepository.getTaskListSchedulesForUser(userID)
                 .continueWithTask(task -> {
@@ -54,7 +68,8 @@ public class AlarmBroadcastReceiverManager {
                         List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
                         List<Schedule> acceptedScheduleList = new ArrayList<>();
                         for (Schedule schedule : scheduleList) {
-                            if (schedule.getUserScheduleResponseMap().get(userID).getResponse() == Response.ACCEPT) {
+                            if (schedule.getUserScheduleResponseMap()
+                                    .get(userID).getResponse() == Response.ACCEPT) {
                                 acceptedScheduleList.add(schedule);
                             }
                         }

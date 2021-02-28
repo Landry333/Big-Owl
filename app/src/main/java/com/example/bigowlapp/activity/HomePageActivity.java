@@ -149,7 +149,7 @@ public class HomePageActivity extends BigOwlActivity {
     private void initAlarmManager() {
         AlarmBroadcastReceiverManager alarmBroadcastReceiverManager
                 = new AlarmBroadcastReceiverManager(this);
-        alarmBroadcastReceiverManager.setAlarm(homePageViewModel.getCurrentUserUid());
+        alarmBroadcastReceiverManager.setAlarms(homePageViewModel.getCurrentUserUid());
     }
 
     @Override

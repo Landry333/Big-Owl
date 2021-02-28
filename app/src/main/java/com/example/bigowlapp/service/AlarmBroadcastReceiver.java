@@ -4,6 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+/**
+ * The purpose of this BroadcastReceiver is to execute code after the time activation of an alarm.
+ * The alarms are set/defined in
+ * {@link com.example.bigowlapp.utils.AlarmBroadcastReceiverManager}
+ */
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
     @Override

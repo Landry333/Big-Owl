@@ -45,6 +45,12 @@ public class ScheduleRepository extends Repository<Schedule> {
         return listOfTData;
     }
 
+    /**
+     * Queries the list of schedules for the user in which all schedules have a startTime greater than
+     * the date today. The list of schedules are ordered by startTime in ascending order.
+     * @param userID The id of the user
+     * @return A Task that contains the QuerySnapshot of the list of schedule for the given user
+     */
     public Task<QuerySnapshot> getTaskListSchedulesForUser(String userID) {
         return collectionReference.whereArrayContains("memberList", userID)
                 .whereGreaterThanOrEqualTo("startTime", Timestamp.now())
