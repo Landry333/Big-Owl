@@ -27,9 +27,9 @@ public class AlarmBroadcastReceiverManager {
     private final Context context;
     private final ScheduleRepository scheduleRepository;
 
-    private final String INTENT_UID = "Uid";
-    private final String INTENT_LATITUDE = "Latitude";
-    private final String INTENT_LONGITUDE = "Longitude";
+    private final String EXTRA_UID = "Uid";
+    private final String EXTRA_LATITUDE = "Latitude";
+    private final String EXTRA_LONGITUDE = "Longitude";
     private final int REQUEST_CODE = 0;
 
     public AlarmBroadcastReceiverManager(Context context) {
@@ -47,9 +47,9 @@ public class AlarmBroadcastReceiverManager {
                 .addOnSuccessListener(scheduleList -> {
                     for (Schedule schedule : scheduleList) {
                         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-                        intent.putExtra(INTENT_UID, schedule.getUid());
-                        intent.putExtra(INTENT_LATITUDE, schedule.getLocation().getLatitude());
-                        intent.putExtra(INTENT_LONGITUDE, schedule.getLocation().getLongitude());
+                        intent.putExtra(EXTRA_UID, schedule.getUid());
+                        intent.putExtra(EXTRA_LATITUDE, schedule.getLocation().getLatitude());
+                        intent.putExtra(EXTRA_LONGITUDE, schedule.getLocation().getLongitude());
                         PendingIntent pendingIntent = PendingIntent
                                 .getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                         alarmManager.set(AlarmManager.RTC_WAKEUP,
