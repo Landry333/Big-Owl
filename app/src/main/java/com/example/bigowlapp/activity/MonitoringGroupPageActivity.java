@@ -1,6 +1,5 @@
 package com.example.bigowlapp.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -60,12 +59,6 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
     }
 
     protected void initialize() {
-        btnSetSchedule = findViewById(R.id.btn_set_schedule);
-
-        btnSetSchedule.setOnClickListener(v -> {
-            Intent i = new Intent(MonitoringGroupPageActivity.this, SetScheduleActivity.class);
-            startActivity(i);
-        });
         mUsers = new ArrayList<>();
         setupSearchBar();
     }
