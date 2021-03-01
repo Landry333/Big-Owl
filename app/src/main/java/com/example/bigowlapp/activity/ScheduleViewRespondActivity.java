@@ -1,6 +1,5 @@
 package com.example.bigowlapp.activity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,8 +16,6 @@ import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.utils.PermissionsHelper;
 import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
-
-import java.util.Collections;
 
 public class ScheduleViewRespondActivity extends BigOwlActivity {
 
@@ -85,18 +82,7 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
 
     public void requestLocationPermissions() {
         this.permissionsHelper = new PermissionsHelper(this);
-
-        String reason = "Location detection is required to check whether you have arrived to a scheduled location." +
-                "\n\nIf not provided, the system will assume you have not arrived to the location.";
-        permissionsHelper.requestMissingPermissions(
-                Collections.singletonList(Manifest.permission.ACCESS_FINE_LOCATION),
-                reason,
-                PermissionsHelper.REQUEST_ALSO_REQUEST_BACKGROUND_LOCATION);
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q &&
-                !permissionsHelper.isMissingPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
-            permissionsHelper.requestBackgroundLocationPermissions();
-        }
+        permissionsHelper.requestLocationAndBackgroundLocationPermissions();
     }
 
     @Override

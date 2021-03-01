@@ -87,6 +87,24 @@ public class PermissionsHelper {
     }
 
     /**
+     * Simple method that can be used to ask for FINE_LOCATION andBACKGROUND_LOCATION and handles
+     * all possible scenarios regarding location/background location request
+     */
+    public void requestLocationAndBackgroundLocationPermissions() {
+        String reason = "Location detection is required to check whether you have arrived to a scheduled location." +
+                "\n\nIf not provided, the system will assume you have not arrived to the location.";
+        this.requestMissingPermissions(
+                Collections.singletonList(Manifest.permission.ACCESS_FINE_LOCATION),
+                reason,
+                PermissionsHelper.REQUEST_ALSO_REQUEST_BACKGROUND_LOCATION);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q &&
+                !this.isMissingPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            this.requestBackgroundLocationPermissions();
+        }
+    }
+
+    /**
      * Will request background permissions with a justification if it is missing.
      */
     @RequiresApi(api = Build.VERSION_CODES.Q)
