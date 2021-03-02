@@ -94,15 +94,4 @@ public class SignUpViewModel extends BaseViewModel {
         int randomNumber = (int) ((random.nextDouble() * (max - min + 1)) + min);
         return String.format(Locale.getDefault(), "%04d", randomNumber);
     }
-
-    public boolean isPhoneNumberUnique(String phoneNumber) {
-        LiveDataWithStatus<User> liveDataWithStatus =
-                repositoryFacade.getUserRepository()
-                        .getDocumentByAttribute("phoneNumber", phoneNumber, User.class);
-
-        return liveDataWithStatus.getValue() != null
-                || liveDataWithStatus.getValue().getPhoneNumber() != null;
-
-    }
-
 }
