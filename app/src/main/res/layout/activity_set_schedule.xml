@@ -11,10 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-<androidx.fragment.app.FragmentContainerView
-    android:id="@+id/schedule_form_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.SetScheduleActivity"/>
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/schedule_form_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.SetScheduleActivity"/>
 
 </LinearLayout>

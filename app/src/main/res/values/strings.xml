@@ -68,4 +68,6 @@
     <string name="schedule_start_time">Schedules Start time</string>
     <string name="search_users2">Search an user to supervise</string>
     <string name="btn_notifications">Notifications</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

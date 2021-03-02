@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.SupervisionResponseActivity"></activity>
         <activity android:name=".activity.SetScheduleActivity" />
         <activity android:name=".activity.ScheduleViewRespondActivity" />
         <activity android:name=".activity.EditProfileActivity" />
@@ -30,7 +31,6 @@
         <activity android:name=".activity.SendingRequestToSuperviseActivity" />
         <activity android:name=".activity.ListOfScheduleActivity" />
         <activity android:name=".activity.AddUsersActivity" />
-        <activity android:name=".fragments.UsersFragment" />
         <activity android:name=".activity.NotificationActivity" />
         <activity
             android:name=".activity.WelcomePageActivity"
