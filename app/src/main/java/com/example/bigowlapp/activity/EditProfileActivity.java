@@ -65,15 +65,15 @@ public class EditProfileActivity extends BigOwlActivity {
             editUserLastName.requestFocus();
         }
 
-        String formatedPhone = phoneNumberFormatter(userPhone);
+        String formattedPhone = phoneNumberFormatter(userPhone);
 
-        if (!firstName.isEmpty() && !lastName.isEmpty() && formatedPhone != null) {
-            editProfileViewModel.isPhoneNumberTaken(formatedPhone)
+        if (!firstName.isEmpty() && !lastName.isEmpty() && formattedPhone != null) {
+            editProfileViewModel.isPhoneNumberTaken(formattedPhone)
                     .addOnSuccessListener(isSuccessful -> {
                         editProfileViewModel.editUserProfile(
                                 firstName,
                                 editUserLastName.getText().toString(),
-                                formatedPhone,
+                                formattedPhone,
                                 editImageURL.getText().toString()
                         );
                         startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
@@ -86,14 +86,14 @@ public class EditProfileActivity extends BigOwlActivity {
     }
 
     private String phoneNumberFormatter(String userPhone) {
-        String formatedPhone = null;
+        String formattedPhone = null;
         try {
-            formatedPhone = filteredNUmber(userPhone);
+            formattedPhone = filteredNUmber(userPhone);
         } catch (NumberParseException | EmptyFieldException e) {
             editPhoneNumber.setError(e.getMessage());
             editPhoneNumber.requestFocus();
         }
-        return formatedPhone;
+        return formattedPhone;
     }
 
     private void subscribeToData() {
