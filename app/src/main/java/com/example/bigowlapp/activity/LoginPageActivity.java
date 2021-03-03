@@ -98,7 +98,7 @@ public class LoginPageActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        authListener.listen(this);
+        //authListener.listen(this);
         try {
             super.onStart();
             logInViewModel.addAuthStateListenerToDatabase(mAuthStateListener);

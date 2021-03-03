@@ -47,7 +47,7 @@ public class HomePageActivity extends BigOwlActivity {
     private HomePageViewModel homePageViewModel;
     String deviceID;
     String phoneNumber;
-    private AuthAttempt2Listener authListener = new AuthAttempt2Listener();
+    private Button btnTestAuth1;
 
 
     @Override
@@ -126,7 +126,6 @@ public class HomePageActivity extends BigOwlActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        //AuthListener.listen(this);
         if (homePageViewModel == null) {
             homePageViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
         }
@@ -168,6 +167,13 @@ public class HomePageActivity extends BigOwlActivity {
 
         btnSupervisedGroup.setOnClickListener(v -> {
             Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
+            startActivity(i);
+        });
+
+        btnTestAuth1 = findViewById(R.id.btn_test_auth1);
+
+        btnTestAuth1.setOnClickListener(v -> {
+            Intent i = new Intent(HomePageActivity.this, AuthenticationByPhoneNumberActivity.class);
             startActivity(i);
         });
 
