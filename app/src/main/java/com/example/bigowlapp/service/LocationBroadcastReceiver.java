@@ -55,8 +55,14 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                 .map(Geofence::getRequestId)
                 .distinct()
                 .collect(Collectors.toList());
-        Log.e(TAG, "SCHEDULE IDS THAT TRIGGERED THIS ARE: " + geofenceIdList);
-        List<String> testOnlyIdList = Collections.singletonList("4laPgh1xNIy8CDpnohDV");
+
+
+        // TODO: Make sure to remove this code block when full implementation is done
+        List<String> testOnlyIdList = null;
+        if (Constants.ENABLE_TESTING_TOGGLE) {
+            Log.e(TAG, "SCHEDULE IDS THAT TRIGGERED THIS ARE: " + geofenceIdList);
+            testOnlyIdList = Collections.singletonList("4laPgh1xNIy8CDpnohDV");
+        }
 
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
