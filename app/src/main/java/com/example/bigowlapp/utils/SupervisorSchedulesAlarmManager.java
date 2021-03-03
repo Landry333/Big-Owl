@@ -26,12 +26,12 @@ import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
  * After the time activation of an alarm, code will be executed from
  * {@link com.example.bigowlapp.service.AlarmBroadcastReceiver}
  */
-public class AlarmBroadcastReceiverManager {
+public class SupervisorSchedulesAlarmManager {
 
     private final Context context;
     private final ScheduleRepository scheduleRepository;
 
-    public AlarmBroadcastReceiverManager(Context context) {
+    public SupervisorSchedulesAlarmManager(Context context) {
         this.context = context;
         scheduleRepository = new ScheduleRepository();
     }
@@ -49,8 +49,8 @@ public class AlarmBroadcastReceiverManager {
                     for (Schedule schedule : scheduleList) {
                         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
                         intent.putExtra(EXTRA_UID, schedule.getUid());
-                        intent.putExtra(EXTRA_LATITUDE, schedule.getLocation().getLatitude());
-                        intent.putExtra(EXTRA_LONGITUDE, schedule.getLocation().getLongitude());
+                        //intent.putExtra(EXTRA_LATITUDE, schedule.getLocation().getLatitude());
+                        //intent.putExtra(EXTRA_LONGITUDE, schedule.getLocation().getLongitude());
                         PendingIntent pendingIntent = PendingIntent
                                 .getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                         alarmManager.set(AlarmManager.RTC_WAKEUP,
@@ -73,8 +73,9 @@ public class AlarmBroadcastReceiverManager {
                         List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
                         List<Schedule> acceptedScheduleList = new ArrayList<>();
                         for (Schedule schedule : scheduleList) {
-                            if (schedule.getUserScheduleResponseMap()
-                                    .get(userID).getResponse() == Response.ACCEPT) {
+                            if (schedule.getGroupSupervisorUid().equalsIgnoreCase(userID)){
+                            /*if (schedule.getUserScheduleResponseMap()
+                                    .get(userID).getResponse() == Response.ACCEPT) {*/
                                 acceptedScheduleList.add(schedule);
                             }
                         }
