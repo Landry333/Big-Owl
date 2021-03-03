@@ -91,11 +91,10 @@ public class PermissionsHelper {
      * all possible scenarios regarding location/background location request
      */
     public void requestLocationAndBackgroundLocationPermissions() {
-        String reason = "Location detection is required to check whether you have arrived to a scheduled location." +
-                "\n\nIf not provided, the system will assume you have not arrived to the location.";
+        CharSequence justification = activity.getResources().getText(R.string.general_location_justification);
         this.requestMissingPermissions(
                 Collections.singletonList(Manifest.permission.ACCESS_FINE_LOCATION),
-                reason,
+                justification,
                 PermissionsHelper.REQUEST_ALSO_REQUEST_BACKGROUND_LOCATION);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q &&
