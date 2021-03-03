@@ -104,7 +104,7 @@ public class AuthenticationActivityMethod1 extends BigOwlActivity {
 
 
                     }
-                    attendance.setAuthAttempted_Method1(true);
+                    attendance.setAuthAttemptedUserMobileNumber(true);
                     Timestamp currentTime = new Timestamp(Calendar.getInstance().getTime());
                     attendance.setAuthenticationTime(currentTime);
                     repositoryFacade.getScheduleRepository().addDocument(schedule);

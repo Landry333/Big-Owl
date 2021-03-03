@@ -11,8 +11,8 @@ public class Attendance {
     }
 
     private boolean authenticated = false;
-    private boolean authAttempted_Method1 = false;  // Attempted authentication with first method
-    private boolean authAttempted_Method2 = false;  // Attempted authentication with second method
+    private boolean authAttemptedUserMobileNumber = false;  // if authentication has been attempted at first using the UserMobileNumber
+    private boolean authAttemptedPhoneUid = false;  // if authentication has been attempted secondly using the PhoneUid
     private LocatedStatus scheduleLocated = LocatedStatus.NOT_DETECTED;
     private String deviceIdNumber;
     private Timestamp authenticationTime;
@@ -28,20 +28,20 @@ public class Attendance {
         this.authenticated = authenticated;
     }
 
-    public boolean isAuthAttempted_Method1() {
-        return authAttempted_Method1;
+    public boolean isAuthAttemptedUserMobileNumber() {
+        return authAttemptedUserMobileNumber;
     }
 
-    public void setAuthAttempted_Method1(boolean authAttempted_Method1) {
-        this.authAttempted_Method1 = authAttempted_Method1;
+    public void setAuthAttemptedUserMobileNumber(boolean authAttemptedUserMobileNumber) {
+        this.authAttemptedUserMobileNumber = authAttemptedUserMobileNumber;
     }
 
-    public boolean isAuthAttempted_Method2() {
-        return authAttempted_Method2;
+    public boolean isAuthAttemptedPhoneUid() {
+        return authAttemptedPhoneUid;
     }
 
-    public void setAuthAttempted_Method2(boolean authAttempted_Method2) {
-        this.authAttempted_Method2 = authAttempted_Method2;
+    public void setAuthAttemptedPhoneUid(boolean authAttemptedPhoneUid) {
+        this.authAttemptedPhoneUid = authAttemptedPhoneUid;
     }
 
     public LocatedStatus getScheduleLocated() {
