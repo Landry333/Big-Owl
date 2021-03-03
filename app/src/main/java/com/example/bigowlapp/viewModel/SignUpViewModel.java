@@ -68,7 +68,7 @@ public class SignUpViewModel extends BaseViewModel {
         user.setPhoneNumber(phoneNumber);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        // TODO: Can't capture error b/c it's a livedata call; need to change repo structure
+        // TODO: Cannot capture error b/c it's a livedata call; need to change repo structure
         repositoryFacade.getUserRepository().addDocument(uid, user);
         return Tasks.forResult(null);
     }
