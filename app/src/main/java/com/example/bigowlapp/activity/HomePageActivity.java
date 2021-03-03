@@ -19,7 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.utils.AlarmBroadcastReceiverManager;
+import com.example.bigowlapp.utils.SupervisorSchedulesAlarmManager;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -35,7 +35,7 @@ public class HomePageActivity extends BigOwlActivity {
     private TextView textLastName;
     private TextView textPhone;
     private HomePageViewModel homePageViewModel;
-    private AlarmBroadcastReceiverManager alarmBroadcastReceiverManager;
+    private SupervisorSchedulesAlarmManager supervisorSchedulesAlarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,10 +143,10 @@ public class HomePageActivity extends BigOwlActivity {
      * Initializes the AlarmManager to set alarms for the user's schedules that he has to attend to.
      */
     private void initAlarmManager() {
-        if (alarmBroadcastReceiverManager == null) {
-            alarmBroadcastReceiverManager = new AlarmBroadcastReceiverManager(this);
+        if (supervisorSchedulesAlarmManager == null) {
+            supervisorSchedulesAlarmManager = new SupervisorSchedulesAlarmManager(this);
         }
-        alarmBroadcastReceiverManager.setAlarms(homePageViewModel.getCurrentUserUid());
+        supervisorSchedulesAlarmManager.setAlarms(homePageViewModel.getCurrentUserUid());
     }
 
     @Override
@@ -185,7 +185,7 @@ public class HomePageActivity extends BigOwlActivity {
     }
 
     @VisibleForTesting
-    public void setAlarmBroadcastReceiverManager(AlarmBroadcastReceiverManager alarmBroadcastReceiverManager) {
-        this.alarmBroadcastReceiverManager = alarmBroadcastReceiverManager;
+    public void setSupervisorSchedulesAlarmManager(SupervisorSchedulesAlarmManager supervisorSchedulesAlarmManager) {
+        this.supervisorSchedulesAlarmManager = supervisorSchedulesAlarmManager;
     }
 }
