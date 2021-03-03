@@ -1,31 +1,26 @@
-package com.example.bigowlapp.activity;
+package com.example.bigowlapp.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.adapter.NotificationAdapter;
 import com.example.bigowlapp.model.Notification;
+import com.example.bigowlapp.model.SupervisionRequest;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.NotificationRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NotificationListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class NotificationListFragment extends Fragment implements NotificationAdapter.OnNotificationListener{
+public class NotificationListFragment extends Fragment implements NotificationAdapter.OnNotificationListener {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -78,8 +73,14 @@ public class NotificationListFragment extends Fragment implements NotificationAd
 
     @Override
     public void onNotificationClick(int position) {
-        if(notificationListData.getValue().get(position).getType() == Notification.Type.SCHEDULE_REQUEST){
+        Notification selectedNotification = notificationListData.getValue().get(position);
 
+        if (selectedNotification.getType() == Notification.Type.SUPERVISION_REQUEST) {
+            getParentFragmentManager().beginTransaction()
+                    .replace(((ViewGroup) getView().getParent()).getId(),
+                            new SupervisionResponseFragment((SupervisionRequest) selectedNotification))
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 }
