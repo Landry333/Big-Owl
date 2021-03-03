@@ -10,6 +10,7 @@ import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.repository.exception.EmptyFieldException;
 import com.example.bigowlapp.viewModel.EditProfileViewModel;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -51,22 +52,6 @@ public class EditProfileActivity extends BigOwlActivity {
     }
 
     private void onClickConfirmButton() {
-        String newPhoneNumber = phoneNumberFormatter(editPhoneNumber.getText().toString());
-        String oldPhoneNumber = Objects.requireNonNull(editProfileViewModel.getCurrentUserData().getValue()).getPhoneNumber();
-        if(newPhoneNumber != null && !newPhoneNumber.equals(oldPhoneNumber)){
-            editProfileViewModel.isPhoneNumberTaken(newPhoneNumber)
-                    .addOnSuccessListener(isSuccessful -> {
-                        changeValidEntries();
-                    })
-                    .addOnFailureListener(exception -> {
-                        Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
-        } else {
-            changeValidEntries();
-        }
-    }
-
-    private void changeValidEntries() {
         String userPhone = editPhoneNumber.getText().toString();
         String firstName = editUserFirstName.getText().toString();
         String lastName = editUserLastName.getText().toString();
@@ -79,23 +64,24 @@ public class EditProfileActivity extends BigOwlActivity {
             editUserLastName.setError("Please enter a valid last name.");
             editUserLastName.requestFocus();
         }
-        if (userPhone.isEmpty()) {
-            editPhoneNumber.setError("Please enter a valid phone number.");
-            editPhoneNumber.requestFocus();
-        }
 
         String formatedPhone = phoneNumberFormatter(userPhone);
 
-        if (!firstName.isEmpty() && !lastName.isEmpty() && !userPhone.isEmpty() && formatedPhone != null) {
-            editProfileViewModel.editUserProfile(
-                    firstName,
-                    editUserLastName.getText().toString(),
-                    formatedPhone,
-                    editImageURL.getText().toString()
-            );
-
-            startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
-            finish();
+        if (!firstName.isEmpty() && !lastName.isEmpty() && formatedPhone != null) {
+            editProfileViewModel.isPhoneNumberTaken(formatedPhone)
+                    .addOnSuccessListener(isSuccessful -> {
+                        editProfileViewModel.editUserProfile(
+                                firstName,
+                                editUserLastName.getText().toString(),
+                                formatedPhone,
+                                editImageURL.getText().toString()
+                        );
+                        startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
+                        finish();
+                    })
+                    .addOnFailureListener(exception -> {
+                        Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
         }
     }
 
@@ -103,14 +89,9 @@ public class EditProfileActivity extends BigOwlActivity {
         String formatedPhone = null;
         try {
             formatedPhone = filteredNUmber(userPhone);
-        } catch (NumberParseException e) {
-            if (userPhone.isEmpty()) {
-                editPhoneNumber.setError("Please enter a valid phone number.");
-                editPhoneNumber.requestFocus();
-            } else {
-                editPhoneNumber.setError(e.getMessage());
-                editPhoneNumber.requestFocus();
-            }
+        } catch (NumberParseException | EmptyFieldException e) {
+            editPhoneNumber.setError(e.getMessage());
+            editPhoneNumber.requestFocus();
         }
         return formatedPhone;
     }
@@ -141,13 +122,13 @@ public class EditProfileActivity extends BigOwlActivity {
         this.editProfileViewModel = editProfileViewModel;
     }
 
-    public String filteredNUmber(String number) throws NumberParseException {
+    public String filteredNUmber(String number) throws NumberParseException, EmptyFieldException {
+        if (number == null || number.isEmpty()) {
+            throw new EmptyFieldException("Please enter a valid phone number.");
+        }
         PhoneNumberUtil numbUtil = PhoneNumberUtil.getInstance();
         Phonenumber.PhoneNumber phonenumber = numbUtil.parseAndKeepRawInput(number, getResources().getConfiguration().getLocales().get(0).getCountry());
-
-        String formattedNumber = numbUtil.format(phonenumber, PhoneNumberUtil.PhoneNumberFormat.E164);
-
-        return formattedNumber;
+        return numbUtil.format(phonenumber, PhoneNumberUtil.PhoneNumberFormat.E164);
     }
 
 }
