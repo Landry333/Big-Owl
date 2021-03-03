@@ -1,7 +1,6 @@
 package com.example.bigowlapp.viewModel;
 
 import com.example.bigowlapp.model.Group;
-import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;

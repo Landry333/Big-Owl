@@ -40,9 +40,7 @@ public class EditProfileActivity extends BigOwlActivity {
 
     protected void initialize() {
         editButtonConfirm = findViewById(R.id.edit_button_confirm);
-        editButtonConfirm.setOnClickListener(v -> {
-            onClickConfirmButton();
-        });
+        editButtonConfirm.setOnClickListener(v -> onClickConfirmButton());
 
         editButtonCancel = findViewById(R.id.edit_button_cancel);
         editButtonCancel.setOnClickListener(v -> {
@@ -72,12 +70,8 @@ public class EditProfileActivity extends BigOwlActivity {
         if (!firstName.isEmpty() && !lastName.isEmpty() && formattedPhone != null) {
             if (!formattedPhone.equals(oldPhoneNumber)) {
                 editProfileViewModel.isPhoneNumberTaken(formattedPhone)
-                        .addOnSuccessListener(isSuccessful -> {
-                            onFinishConfirmation(firstName, lastName, formattedPhone, imageUrl);
-                        })
-                        .addOnFailureListener(exception -> {
-                            Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();
-                        });
+                        .addOnSuccessListener(isSuccessful -> onFinishConfirmation(firstName, lastName, formattedPhone, imageUrl))
+                        .addOnFailureListener(exception -> Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show());
             } else {
                 onFinishConfirmation(firstName, lastName, formattedPhone, imageUrl);
             }
