@@ -14,21 +14,18 @@ import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 
 public class SupervisedGroupListActivity extends BigOwlActivity {
     private ListView supervisedGroupsListView;
     private SupervisedGroupListViewModel supervisedGroupListViewModel;
-    private String supervisorName;
-    private List<String> supervisorNameList = new ArrayList<String>();
     private AlertDialog noGroupAlert;
     private Intent intentToSupervisedGroup;
+    private Boolean allowIntentForTest = true;
 
     @Override
     protected void onStart() {
@@ -51,8 +48,9 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
                                         intentToSupervisedGroup = new Intent(getBaseContext(), SupervisedGroupPageActivity.class);
                                         intentToSupervisedGroup.putExtra("groupID", supervisedGroups.get(position).getUid());
                                         intentToSupervisedGroup.putExtra("groupName", supervisedGroups.get(position).getName());
-                                        intentToSupervisedGroup.putExtra("supervisorName", supervisorNameList.get(position));
-                                        startActivity(intentToSupervisedGroup);
+                                        intentToSupervisedGroup.putExtra("supervisorId", supervisedGroups.get(position).getSupervisorId());
+                                        if (allowIntentForTest)
+                                            startActivity(intentToSupervisedGroup);
                                     });
                                 } else {
                                     this.noGroupAlert = new AlertDialog.Builder(SupervisedGroupListActivity.this)
@@ -89,17 +87,8 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
                         .inflate(R.layout.fragment_supervised_group_list_item, parent, false);
             }
             TextView groupName = convertView.findViewById(R.id.text_view_group_name);
-            TextView groupSupervisor = convertView.findViewById(R.id.text_view_group_supervisor);
 
             groupName.setText(group.getName());
-
-            // TODO: find a better way to do below without looping query in viewModel
-            supervisedGroupListViewModel.getSupervisor(
-                    group.getSupervisorId()).observe((LifecycleOwner) parent.getContext(),
-                    supervisor -> {
-                        groupSupervisor.setText(supervisor.getFullName());
-                        supervisorNameList.add(supervisor.getFullName());
-                    });
             // Return the completed view to render on screen
             return convertView;
         }
@@ -118,6 +107,11 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public Intent getIntentToSupervisedGroupForTest() {
         return this.intentToSupervisedGroup;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setAllowIntentForTest(Boolean allowIntentForTest) {
+        this.allowIntentForTest = allowIntentForTest;
     }
 }
 

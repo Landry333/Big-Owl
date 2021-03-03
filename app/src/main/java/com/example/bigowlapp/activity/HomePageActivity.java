@@ -28,7 +28,6 @@ public class HomePageActivity extends BigOwlActivity {
     private Button btnAddUsers;
     private Button btnMonitoringGroup;
     private Button btnSupervisedGroup;
-    private Button btnSetSchedule;
     private ScrollView scrollView;
     private ImageView imgUserAvatar;
     private TextView textEmail;
@@ -64,13 +63,6 @@ public class HomePageActivity extends BigOwlActivity {
             Intent intent = new Intent(HomePageActivity.this, LoginPageActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-        });
-
-        btnSetSchedule = findViewById(R.id.btn_set_schedule);
-
-        btnSetSchedule.setOnClickListener(v -> {
-            Intent i = new Intent(HomePageActivity.this, SetScheduleActivity.class);
-            startActivity(i);
         });
 
         btnAddUsers = findViewById(R.id.btn_add_users);
