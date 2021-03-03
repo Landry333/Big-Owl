@@ -4,7 +4,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
-public class AuthAttempted1Failure extends Notification {
+public class AuthByPhoneNumberFailure extends Notification {
 
     private String senderUid;
     private String receiverUid;
@@ -12,8 +12,8 @@ public class AuthAttempted1Failure extends Notification {
     private Timestamp timeRead;
     private String scheduleId;
 
-    public AuthAttempted1Failure() {
-        super(Type.AUTH_ATTEMPTED_1_FAILURE);
+    public AuthByPhoneNumberFailure() {
+        super(Type.AUTH_BY_PHONE_NUMBER_FAILURE);
     }
 
     public String getSenderUid() {

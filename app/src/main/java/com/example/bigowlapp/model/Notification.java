@@ -10,7 +10,7 @@ public class Notification extends Model {
         NONE(Notification.class),
         SUPERVISION_REQUEST(SupervisionRequest.class),
         SCHEDULE_REQUEST(ScheduleRequest.class),
-        AUTH_ATTEMPTED_1_FAILURE(AuthAttempted1Failure.class);
+        AUTH_BY_PHONE_NUMBER_FAILURE(AuthByPhoneNumberFailure.class);
 
         public final Class<? extends Notification> typeClass;
 

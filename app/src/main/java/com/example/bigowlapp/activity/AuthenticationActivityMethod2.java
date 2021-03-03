@@ -18,9 +18,6 @@ import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
-import com.google.firebase.Timestamp;
-
-import java.util.Calendar;
 
 public class AuthenticationActivityMethod2 extends BigOwlActivity {
 
@@ -46,7 +43,7 @@ public class AuthenticationActivityMethod2 extends BigOwlActivity {
 
     @Override
     protected int getContentView() {
-        return R.layout.activity_authentication_method1;
+        return R.layout.activity_authentication_by_phone_number;
     }
 
     @Override
