@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,6 +35,7 @@ import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -164,12 +166,10 @@ public class ScheduleFormFragment extends Fragment
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // Nothing needs to be checked before the title's change
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 // Nothing needs to be checked after the title's change
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 setScheduleViewModel.updateScheduleTitle(s.toString());
@@ -291,24 +291,7 @@ public class ScheduleFormFragment extends Fragment
                 return;
             }
 
-            AlertDialog.Builder scheduleConfirmation = new AlertDialog.Builder(getContext());
-            scheduleConfirmation.setTitle("New Schedule details");
-            scheduleConfirmation.setMessage("Please confirm the new Schedule info:" + scheduleToAdd.toString());
-            scheduleConfirmation.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    setScheduleViewModel.addSchedule();
-                    Toast.makeText(getContext(), "Schedule added successfully", Toast.LENGTH_LONG).show();
-                    getActivity().finish();
-                }
-            });
-
-            scheduleConfirmation.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-            scheduleConfirmation.show();
+            confirmationScreen(scheduleToAdd);
         });
     }
 
@@ -424,4 +407,49 @@ public class ScheduleFormFragment extends Fragment
     public Button getEditLocation() {
         return editLocation;
     }
+
+    public void confirmationScreen (Schedule schedule){
+        Group group = setScheduleViewModel.getSelectedGroupData().getValue();
+        List<User> userList = setScheduleViewModel.getListOfSelectedUsersData().getValue();
+        CarmenFeature location = setScheduleViewModel.getSelectedLocationData().getValue();
+
+        AlertDialog.Builder scheduleConfirmation = new AlertDialog.Builder(getContext());
+        scheduleConfirmation.setTitle("New Schedule details");
+        scheduleConfirmation.setMessage(confirmationString(group, userList, schedule, location));
+        scheduleConfirmation.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                setScheduleViewModel.addSchedule();
+                Toast.makeText(getContext(), "Schedule added successfully", Toast.LENGTH_LONG).show();
+                getActivity().finish();
+            }
+        });
+
+        scheduleConfirmation.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        scheduleConfirmation.show();
+    }
+
+    public String confirmationString (Group group, List<User> userList, Schedule schedule, CarmenFeature location){
+        String title = schedule.getTitle();
+        String groupName = group.getName();
+        StringBuilder selectedMembers = new StringBuilder();
+
+        for (User user : userList) {
+            selectedMembers.append(user.getFullName()).append("\n");
+        }
+
+        String startDate = dateFormatter(startDateTime);
+        String startTime = timeFormatter(startDateTime);
+        String endDate = dateFormatter(endDateTime);
+        String endTime = timeFormatter(endDateTime);
+
+        String selectedlocation = (location.placeName() == null) ? location.address() : location.placeName();
+
+        return ("Please confirm the new Schedule info: \n\nTitle:\n" + title + "\n\nGroup name:\n"+ groupName + "\n\nSelected members:\n"+ selectedMembers + "\nStart date:\n" + startDate + "\n"+ startTime + "\n\nEnd date\n" + endDate + "\n" + endTime + "\n\nSelected Location:\n" + selectedlocation);
+    }
+
 }
