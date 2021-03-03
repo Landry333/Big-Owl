@@ -9,7 +9,7 @@ import androidx.test.filters.LargeTest;
 
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.utils.AlarmBroadcastReceiverManager;
+import com.example.bigowlapp.utils.SupervisorSchedulesAlarmManager;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 
 import org.junit.Before;
@@ -38,7 +38,7 @@ public class HomePageActivityTest {
     private HomePageViewModel homePageViewModel;
 
     @Mock
-    private AlarmBroadcastReceiverManager alarmBroadcastReceiverManager;
+    private SupervisorSchedulesAlarmManager supervisorSchedulesAlarmManager;
 
     private User testUser;
     private LiveDataWithStatus<User> testUserData;
@@ -57,7 +57,7 @@ public class HomePageActivityTest {
         activityRule.getScenario().moveToState(Lifecycle.State.CREATED);
         activityRule.getScenario().onActivity(activity -> {
             activity.setHomePageViewModel(homePageViewModel);
-            activity.setAlarmBroadcastReceiverManager(alarmBroadcastReceiverManager);
+            activity.setAlarmBroadcastReceiverManager(supervisorSchedulesAlarmManager);
         });
         activityRule.getScenario().moveToState(Lifecycle.State.RESUMED);
     }
@@ -77,7 +77,7 @@ public class HomePageActivityTest {
 
     @Test
     public void isAlarmSetForBroadcastReceiver() {
-        verify(alarmBroadcastReceiverManager).setAlarms(testUser.getUid());
+        verify(supervisorSchedulesAlarmManager).setAlarms(testUser.getUid());
     }
 
 }
