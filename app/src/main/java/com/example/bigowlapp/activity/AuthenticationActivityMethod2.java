@@ -92,8 +92,6 @@ public class AuthenticationActivityMethod2 extends BigOwlActivity {
                         authenticationStatusDisplay.setText("Authentication Status: FAILED");
                     }
                     attendance.setAuthAttemptedPhoneUid(true);
-                    Timestamp currentTime = new Timestamp(Calendar.getInstance().getTime());
-                    attendance.setAuthenticationTime(currentTime);
                     repositoryFacade.getScheduleRepository().addDocument(schedule);
                 });
 
