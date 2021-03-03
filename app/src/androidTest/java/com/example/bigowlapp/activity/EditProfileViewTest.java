@@ -9,6 +9,7 @@ import androidx.test.filters.LargeTest;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.viewModel.EditProfileViewModel;
+import com.google.android.gms.tasks.Tasks;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -72,6 +73,7 @@ public class EditProfileViewTest {
 
     @Test
     public void editProfileAtEditProfileActivityTest() {
+        when(mockEditProfileViewModel.isPhoneNumberTaken("+1111111111")).thenReturn(Tasks.forResult(null));
         onView(withId(R.id.edit_user_first_name))
                 .check(matches(withText(testUser.getFirstName())));
         onView(withId(R.id.edit_user_last_name))
