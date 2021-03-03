@@ -66,22 +66,34 @@ public class EditProfileActivity extends BigOwlActivity {
         }
 
         String formattedPhone = phoneNumberFormatter(userPhone);
+        String oldPhoneNumber = Objects.requireNonNull(editProfileViewModel.getCurrentUserData().getValue()).getPhoneNumber();
 
         if (!firstName.isEmpty() && !lastName.isEmpty() && formattedPhone != null) {
-            editProfileViewModel.isPhoneNumberTaken(formattedPhone)
-                    .addOnSuccessListener(isSuccessful -> {
-                        editProfileViewModel.editUserProfile(
-                                firstName,
-                                editUserLastName.getText().toString(),
-                                formattedPhone,
-                                editImageURL.getText().toString()
-                        );
-                        startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
-                        finish();
-                    })
-                    .addOnFailureListener(exception -> {
-                        Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
+            if (!formattedPhone.equals(oldPhoneNumber)){
+                editProfileViewModel.isPhoneNumberTaken(formattedPhone)
+                        .addOnSuccessListener(isSuccessful -> {
+                            editProfileViewModel.editUserProfile(
+                                    firstName,
+                                    editUserLastName.getText().toString(),
+                                    formattedPhone,
+                                    editImageURL.getText().toString()
+                            );
+                            startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
+                            finish();
+                        })
+                        .addOnFailureListener(exception -> {
+                            Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
+            } else {
+                editProfileViewModel.editUserProfile(
+                        firstName,
+                        editUserLastName.getText().toString(),
+                        formattedPhone,
+                        editImageURL.getText().toString()
+                );
+                startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
+                finish();
+            }
         }
     }
 
