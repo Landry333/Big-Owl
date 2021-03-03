@@ -9,6 +9,7 @@ import androidx.test.filters.LargeTest;
 
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.utils.AlarmBroadcastReceiverManager;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 
 import org.junit.Before;
@@ -22,6 +23,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -35,6 +37,9 @@ public class HomePageActivityTest {
     @Mock
     private HomePageViewModel homePageViewModel;
 
+    @Mock
+    private AlarmBroadcastReceiverManager alarmBroadcastReceiverManager;
+
     private User testUser;
     private LiveDataWithStatus<User> testUserData;
 
@@ -47,10 +52,12 @@ public class HomePageActivityTest {
 
         when(homePageViewModel.isCurrentUserSet()).thenReturn(true);
         when(homePageViewModel.getCurrentUserData()).thenReturn(testUserData);
+        when(homePageViewModel.getCurrentUserUid()).thenReturn(testUser.getUid());
 
         activityRule.getScenario().moveToState(Lifecycle.State.CREATED);
         activityRule.getScenario().onActivity(activity -> {
             activity.setHomePageViewModel(homePageViewModel);
+            activity.setAlarmBroadcastReceiverManager(alarmBroadcastReceiverManager);
         });
         activityRule.getScenario().moveToState(Lifecycle.State.RESUMED);
     }
@@ -66,7 +73,11 @@ public class HomePageActivityTest {
         onView(withText(testUserData.getValue().getLastName())).check(matches(isDisplayed()));
         onView(withText(testUserData.getValue().getPhoneNumber())).check(matches(isDisplayed()));
         onView(withText(testUserData.getValue().getEmail())).check(matches(isDisplayed()));
+    }
 
+    @Test
+    public void isAlarmSetForBroadcastReceiver() {
+        verify(alarmBroadcastReceiverManager).setAlarms(testUser.getUid());
     }
 
 }
