@@ -55,6 +55,7 @@ public class EditProfileActivity extends BigOwlActivity {
         String userPhone = editPhoneNumber.getText().toString();
         String firstName = editUserFirstName.getText().toString();
         String lastName = editUserLastName.getText().toString();
+        String imageUrl = editImageURL.getText().toString();
 
         if (firstName.isEmpty()) {
             editUserFirstName.setError("Please enter a valid first name.");
@@ -69,32 +70,24 @@ public class EditProfileActivity extends BigOwlActivity {
         String oldPhoneNumber = Objects.requireNonNull(editProfileViewModel.getCurrentUserData().getValue()).getPhoneNumber();
 
         if (!firstName.isEmpty() && !lastName.isEmpty() && formattedPhone != null) {
-            if (!formattedPhone.equals(oldPhoneNumber)){
+            if (!formattedPhone.equals(oldPhoneNumber)) {
                 editProfileViewModel.isPhoneNumberTaken(formattedPhone)
                         .addOnSuccessListener(isSuccessful -> {
-                            editProfileViewModel.editUserProfile(
-                                    firstName,
-                                    editUserLastName.getText().toString(),
-                                    formattedPhone,
-                                    editImageURL.getText().toString()
-                            );
-                            startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
-                            finish();
+                            onFinishConfirmation(firstName, lastName, formattedPhone, imageUrl);
                         })
                         .addOnFailureListener(exception -> {
                             Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();
                         });
             } else {
-                editProfileViewModel.editUserProfile(
-                        firstName,
-                        editUserLastName.getText().toString(),
-                        formattedPhone,
-                        editImageURL.getText().toString()
-                );
-                startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
-                finish();
+                onFinishConfirmation(firstName, lastName, formattedPhone, imageUrl);
             }
         }
+    }
+
+    private void onFinishConfirmation(String firstName, String lastName, String formattedPhone, String imageUrl) {
+        editProfileViewModel.editUserProfile(firstName, lastName, formattedPhone, imageUrl);
+        startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
+        finish();
     }
 
     private String phoneNumberFormatter(String userPhone) {
