@@ -16,6 +16,7 @@ import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingEvent;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 
 import java.util.Collections;
 import java.util.List;
@@ -119,9 +120,12 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                             .getCurrentUser().getUid();
 
                     for (Schedule schedule : schedules) {
-                        schedule.getUserScheduleResponseMap().get(userUid)
-                                .getAttendance()
-                                .setScheduleLocated(locatedStatusToAdd);
+                        Attendance userAttendance = schedule
+                                .getUserScheduleResponseMap()
+                                .get(userUid)
+                                .getAttendance();
+                        userAttendance.setScheduleLocated(locatedStatusToAdd);
+                        userAttendance.setAuthenticationTime(Timestamp.now());
 
                         repositoryFacade.getScheduleRepository()
                                 .updateDocument(schedule.getUid(), schedule);

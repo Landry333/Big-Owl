@@ -1,5 +1,6 @@
 package com.example.bigowlapp.model;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.Exclude;
 
 public class Attendance {
@@ -14,6 +15,7 @@ public class Attendance {
     private boolean authAttemptedMethod2 = false;  // Authentication with second method
     private LocatedStatus scheduleLocated = LocatedStatus.NOT_DETECTED;
     private String deviceIdNumber;
+    private Timestamp authenticationTime;
 
     public Attendance() {
         // public no-argument constructor necessary for Firebase data mapping
@@ -57,6 +59,14 @@ public class Attendance {
 
     public void setDeviceIdNumber(String deviceIdNumber) {
         this.deviceIdNumber = deviceIdNumber;
+    }
+
+    public Timestamp getAuthenticationTime() {
+        return authenticationTime;
+    }
+
+    public void setAuthenticationTime(Timestamp authenticationTime) {
+        this.authenticationTime = authenticationTime;
     }
 
     @Exclude
