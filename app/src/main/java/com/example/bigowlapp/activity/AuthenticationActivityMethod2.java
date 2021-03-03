@@ -18,6 +18,9 @@ import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
+import com.google.firebase.Timestamp;
+
+import java.util.Calendar;
 
 public class AuthenticationActivityMethod2 extends BigOwlActivity {
 
@@ -89,6 +92,8 @@ public class AuthenticationActivityMethod2 extends BigOwlActivity {
                         authenticationStatusDisplay.setText("Authentication Status: FAILED");
                     }
                     attendance.setAuthAttempted_Method2(true);
+                    Timestamp currentTime = new Timestamp(Calendar.getInstance().getTime());
+                    attendance.setAuthenticationTime(currentTime);
                     repositoryFacade.getScheduleRepository().addDocument(schedule);
                 });
 

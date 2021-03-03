@@ -20,7 +20,7 @@ import com.google.firebase.Timestamp;
 import java.util.Calendar;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class SupervisorSmsReceiver extends BroadcastReceiver {
+public class SupervisorSmsListener extends BroadcastReceiver {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     private String smsNumber;

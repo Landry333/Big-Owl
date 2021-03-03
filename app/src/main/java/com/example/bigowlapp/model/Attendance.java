@@ -1,5 +1,6 @@
 package com.example.bigowlapp.model;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.Exclude;
 
 public class Attendance {
@@ -10,10 +11,11 @@ public class Attendance {
     }
 
     private boolean authenticated = false;
-    private boolean authAttempted_Method1 = false;  // Authentication with first method
-    private boolean authAttempted_Method2 = false;  // Authentication with second method
+    private boolean authAttempted_Method1 = false;  // Attempted authentication with first method
+    private boolean authAttempted_Method2 = false;  // Attempted authentication with second method
     private LocatedStatus scheduleLocated = LocatedStatus.NOT_DETECTED;
     private String deviceIdNumber;
+    private Timestamp authenticationTime;
 
     public Attendance() {
     }
@@ -62,5 +64,12 @@ public class Attendance {
     public boolean didAttend() {
         return authenticated && scheduleLocated == LocatedStatus.CORRECT_LOCATION;
 
+    }
+    public Timestamp getAuthenticationTime() {
+        return authenticationTime;
+    }
+
+    public void setAuthenticationTime(Timestamp authenticationTime) {
+        this.authenticationTime = authenticationTime;
     }
 }

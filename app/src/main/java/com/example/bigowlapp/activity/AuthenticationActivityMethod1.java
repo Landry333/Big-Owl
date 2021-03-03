@@ -19,6 +19,9 @@ import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
+import com.google.firebase.Timestamp;
+
+import java.util.Calendar;
 
 public class AuthenticationActivityMethod1 extends BigOwlActivity {
 
@@ -102,6 +105,8 @@ public class AuthenticationActivityMethod1 extends BigOwlActivity {
 
                     }
                     attendance.setAuthAttempted_Method1(true);
+                    Timestamp currentTime = new Timestamp(Calendar.getInstance().getTime());
+                    attendance.setAuthenticationTime(currentTime);
                     repositoryFacade.getScheduleRepository().addDocument(schedule);
 
 
