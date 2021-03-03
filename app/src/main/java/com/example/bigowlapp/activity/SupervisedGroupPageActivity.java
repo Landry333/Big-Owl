@@ -5,13 +5,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.viewModel.SupervisedGroupPageViewModel;
 
 import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.ViewModelProvider;
 
 public class SupervisedGroupPageActivity extends BigOwlActivity {
-    private String groupID, groupName, supervisorName;
+    private String groupID, groupName, supervisorName, supervisorId;
     private Intent arrivingIntent;
     private Intent intentToScheduleList;
+    private SupervisedGroupPageViewModel supervisedGroupPageViewModel;
 
     @Override
     protected void onStart() {
@@ -21,7 +24,11 @@ public class SupervisedGroupPageActivity extends BigOwlActivity {
         }
         groupID = arrivingIntent.getStringExtra("groupID");
         groupName = arrivingIntent.getStringExtra("groupName");
-        supervisorName = arrivingIntent.getStringExtra("supervisorName");
+        supervisorId = arrivingIntent.getStringExtra("supervisorId");
+
+        if (supervisedGroupPageViewModel == null) {
+            supervisedGroupPageViewModel = new ViewModelProvider(this).get(SupervisedGroupPageViewModel.class);
+        }
         initialize();
     }
 
@@ -29,8 +36,16 @@ public class SupervisedGroupPageActivity extends BigOwlActivity {
         TextView groupNameView = findViewById(R.id.group_name_view);
         groupNameView.setText(groupName);
 
-        Button btnListSchedule;
-        btnListSchedule = findViewById(R.id.btn_schedule_list);
+        supervisedGroupPageViewModel.getSupervisor(supervisorId).observe(this, supervisor -> {
+            if (supervisor != null) {
+                supervisorName = supervisor.getFullName();
+                TextView supervisorNameView = findViewById(R.id.supervisor_name_view);
+                supervisorNameView.setText(supervisorName);
+            }
+        });
+
+
+        Button btnListSchedule = findViewById(R.id.btn_schedule_list);
         btnListSchedule.setOnClickListener(v -> {
             intentToScheduleList = new Intent(SupervisedGroupPageActivity.this, ListOfScheduleActivity.class);
             intentToScheduleList.putExtra("groupID", groupID);
@@ -48,5 +63,10 @@ public class SupervisedGroupPageActivity extends BigOwlActivity {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public Intent getIntentToScheduleList() {
         return intentToScheduleList;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setSupervisedGroupListViewModel(SupervisedGroupPageViewModel supervisedGroupPageViewModel) {
+        this.supervisedGroupPageViewModel = supervisedGroupPageViewModel;
     }
 }

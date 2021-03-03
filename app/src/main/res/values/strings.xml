@@ -13,13 +13,6 @@
     <string name="home">Home</string>
     <string name="image_url">Image URL</string>
     <string name="last_name">Last name</string>
-    <string name="supervised_by">Supervised by</string>
-    <string name="supervisor_name">supervisor_name</string>
-    <string name="supervised_group">Supervised Group</string>
-    <string name="title_activity_supervised_group">SupervisedGroup</string>
-    <string name="title_activity_notification">NotificationActivity</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
     <string name="list_of_supervised_group">List of supervised group</string>
     <string name="monitoring_group">Monitoring Group</string>
     <string name="password">Password</string>
@@ -30,6 +23,8 @@
     <string name="invite_contacts">Invite From Contact List</string>
     <string name="invite_phone">Invite By Phone Number</string>
     <string name="sign_up">Sign Up</string>
+    <string name="supervised_group">Supervised Group</string>
+    <string name="supervisor_name">supervisor_name</string>
     <string name="user_avatar">User Avatar</string>
     <string name="user_email">user_email</string>
     <string name="user_first_name">First Name</string>
@@ -66,8 +61,5 @@
     <string name="schedule_list">Schedules</string>
     <string name="schedule_title">Schedules title</string>
     <string name="schedule_start_time">Schedules Start time</string>
-    <string name="search_users2">Search an user to supervise</string>
-    <string name="btn_notifications">Notifications</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="inspect">inspect</string>
 </resources>
