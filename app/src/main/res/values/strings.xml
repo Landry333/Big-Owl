@@ -61,4 +61,5 @@
     <string name="schedule_list">Schedules</string>
     <string name="schedule_title">Schedules title</string>
     <string name="schedule_start_time">Schedules Start time</string>
+    <string name="inspect">inspect</string>
 </resources>
