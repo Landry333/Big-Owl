@@ -14,6 +14,8 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
@@ -51,11 +53,16 @@ public class SupervisorSchedulesAlarmManager {
                         PendingIntent pendingIntent = PendingIntent
                                 .getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                         alarmManager.set(AlarmManager.RTC_WAKEUP,
-                                schedule.getStartTime().toDate().getTime(), pendingIntent);
+                                addMinutesToDate(schedule.getStartTime().toDate(),12).getTime(), pendingIntent);
                     }
                 }).addOnFailureListener(error -> Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show());
     }
-
+    public Date addMinutesToDate(Date date, int minutes) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, minutes);
+        return calendar.getTime();
+    }
     /**
      * Obtains the list of schedules for the user, and filters in schedules that have been accepted
      *
