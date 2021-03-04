@@ -20,7 +20,7 @@ import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
  * The alarms are set/defined in
  * {@link SupervisorSchedulesAlarmManager}
  */
-public class AlarmBroadcastReceiver extends BroadcastReceiver {
+public class SupervisorSchedulesAlarmReceiver extends BroadcastReceiver {
 
     RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
     SmsSender smsSender;
