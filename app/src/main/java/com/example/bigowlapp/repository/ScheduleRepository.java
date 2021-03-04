@@ -60,4 +60,10 @@ public class ScheduleRepository extends Repository<Schedule> {
                 .orderBy(START_TIME, Query.Direction.ASCENDING)
                 .get();
     }
+    public Task<QuerySnapshot> getTaskListSchedulesForSupervisor(String userID) {
+        return collectionReference.whereEqualTo("groupSupervisorUid", userID)
+                .whereGreaterThanOrEqualTo(START_TIME, Timestamp.now())
+                .orderBy(START_TIME, Query.Direction.ASCENDING)
+                .get();
+    }
 }
