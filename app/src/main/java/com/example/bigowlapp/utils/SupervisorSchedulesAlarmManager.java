@@ -6,10 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.ScheduleRepository;
-import com.example.bigowlapp.service.AlarmBroadcastReceiver;
+import com.example.bigowlapp.service.SupervisorSchedulesAlarmReceiver;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -17,14 +16,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LATITUDE;
-import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LONGITUDE;
 import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
 
 /**
  * The purpose of this class is to set/define alarms that the app will set.
  * After the time activation of an alarm, code will be executed from
- * {@link com.example.bigowlapp.service.AlarmBroadcastReceiver}
+ * {@link SupervisorSchedulesAlarmReceiver}
  */
 public class SupervisorSchedulesAlarmManager {
 
@@ -47,7 +44,7 @@ public class SupervisorSchedulesAlarmManager {
         getSchedulesForUser(userID)
                 .addOnSuccessListener(scheduleList -> {
                     for (Schedule schedule : scheduleList) {
-                        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+                        Intent intent = new Intent(context, SupervisorSchedulesAlarmReceiver.class);
                         intent.putExtra(EXTRA_UID, schedule.getUid());
                         //intent.putExtra(EXTRA_LATITUDE, schedule.getLocation().getLatitude());
                         //intent.putExtra(EXTRA_LONGITUDE, schedule.getLocation().getLongitude());
@@ -66,7 +63,7 @@ public class SupervisorSchedulesAlarmManager {
      * @return A Task that contains a list of schedule for the user that hasn't been attended
      */
     private Task<List<Schedule>> getSchedulesForUser(String userID) {
-        return scheduleRepository.getTaskListSchedulesForUser(userID)
+        return scheduleRepository.getTaskListSchedulesForSupervisor(userID)
                 .continueWithTask(task -> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
