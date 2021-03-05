@@ -5,14 +5,14 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.viewModel.EditProfileViewModel;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
-
-import androidx.annotation.VisibleForTesting;
-import androidx.lifecycle.ViewModelProvider;
 
 public class EditProfileActivity extends BigOwlActivity {
     Button editButtonCancel, editButtonConfirm;
