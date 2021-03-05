@@ -11,6 +11,7 @@ public class AuthByPhoneNumberFailure extends Notification {
     private String groupUid;
     private Timestamp timeRead;
     private String scheduleId;
+    private String senderPhoneNum;
 
     public AuthByPhoneNumberFailure() {
         super(Type.AUTH_BY_PHONE_NUMBER_FAILURE);
@@ -54,6 +55,14 @@ public class AuthByPhoneNumberFailure extends Notification {
 
     public void setScheduleId(String scheduleId) {
         this.scheduleId = scheduleId;
+    }
+
+    public String getSenderPhoneNum() {
+        return senderPhoneNum;
+    }
+
+    public void setSenderPhoneNum(String senderPhoneNum) {
+        this.senderPhoneNum = senderPhoneNum;
     }
 
 }
