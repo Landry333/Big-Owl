@@ -22,6 +22,7 @@ import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
+import com.google.firebase.Timestamp;
 
 public class AuthenticationByPhoneNumberActivity extends BigOwlActivity {
 
@@ -118,6 +119,7 @@ public class AuthenticationByPhoneNumberActivity extends BigOwlActivity {
                                     userScheduleResponse.getAttendance().setDeviceIdNumber(deviceIdNumber);
                                     AuthByPhoneNumberFailure authByPhoneNumberFailure = new AuthByPhoneNumberFailure();
                                     authByPhoneNumberFailure.setScheduleId(scheduleId);
+                                    authByPhoneNumberFailure.setCreationTime(Timestamp.now());
                                     authByPhoneNumberFailure.setSenderPhoneNum(currentUserPhoneNumber);
                                     authByPhoneNumberFailure.setReceiverUid(schedule.getGroupSupervisorUid());
                                     authByPhoneNumberFailure.setSenderUid(authRepository.getCurrentUser().getUid());
