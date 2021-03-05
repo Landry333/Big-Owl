@@ -9,9 +9,6 @@ import android.widget.Toast;
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.ViewModelProvider;
 
-import androidx.annotation.VisibleForTesting;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.repository.exception.EmptyFieldException;
 import com.example.bigowlapp.viewModel.EditProfileViewModel;
