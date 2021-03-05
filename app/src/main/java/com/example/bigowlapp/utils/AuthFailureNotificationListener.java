@@ -11,11 +11,14 @@ import androidx.annotation.Nullable;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.ScheduleRepository;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import static com.google.firebase.firestore.DocumentChange.Type.ADDED;
 
 public class AuthFailureNotificationListener {
 
@@ -29,6 +32,7 @@ public class AuthFailureNotificationListener {
     RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
 
     private ScheduleRepository scheduleRepository = new ScheduleRepository();
+    private static final int THIRTY_MINUTES = 1800;
 
     //scheduleRepository.get
     public AuthFailureNotificationListener() {
@@ -50,12 +54,13 @@ public class AuthFailureNotificationListener {
                         }
 
                         for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                            switch (dc.getType()) {
-                                case ADDED:
-                                    //doc[0] = dc.getDocument().toObject(Document.class);
-                                    //Log.e("ADDED", dc.getDocument().getData().toString());
-                                    //document[0] = dc.getDocument().toObject(Notification.class);
-                                    // Toast.makeText(context, "ADDED", Toast.LENGTH_SHORT).show();
+                            if (dc.getType().equals(ADDED)) {
+                                //switch (dc.getType()) {
+                                //case ADDED:
+                                //doc[0] = dc.getDocument().toObject(Document.class);
+                                //Log.e("ADDED", dc.getDocument().getData().toString());
+                                //document[0] = dc.getDocument().toObject(Notification.class);
+                                // Toast.makeText(context, "ADDED", Toast.LENGTH_SHORT).show();
 
                                             /*.getDocumentByUid(dc.getDocument().get("senderUid")
                                                     .toString(), User.class)
@@ -67,43 +72,51 @@ public class AuthFailureNotificationListener {
                                             .getValue()
                                             .getPhoneNumber();*/
 
-                                    //Log.e("notificationSenderPhoneNum", notificationSenderPhoneNum);
+                                //Log.e("notificationSenderPhoneNum", notificationSenderPhoneNum);
 
 
-                                    //Log.e("DC", dc.getDocument().getData().toString());
-                                    if (dc.getDocument().get("type").toString().equalsIgnoreCase("AUTH_BY_PHONE_NUMBER_FAILURE") &&
-                                            dc.getDocument().get("receiverUid").toString().equalsIgnoreCase(repositoryFacade.getAuthRepository().getCurrentUser().getUid())) {
+                                //Log.e("DC", dc.getDocument().getData().toString());
+                                if (dc.getDocument().get("type").toString()
+                                        .equalsIgnoreCase("AUTH_BY_PHONE_NUMBER_FAILURE")
+                                        && dc.getDocument().get("receiverUid").toString()
+                                        .equalsIgnoreCase(repositoryFacade.getAuthRepository().getCurrentUser().getUid())
+                                        && !dc.getDocument().getBoolean("used")
+                                        && ((Timestamp.now().getSeconds()
+                                        - dc.getDocument().getTimestamp("creationTime").getSeconds()) < THIRTY_MINUTES)) {
+
 
                                         /*repositoryFacade.getUserRepository().getDocumentByUid(dc.getDocument().get("receiverUid").toString(), User.class)
                                                 .observe(this, user -> {
 
                                                 });*/
-                                        Log.e("DC", dc.getDocument().getData().toString());
-                                        String notificationSenderPhoneNum= dc.getDocument().get("senderPhoneNum").toString();
-                                        String scheduleId = dc.getDocument().get("scheduleId").toString();
-                                        Log.e("notificationSenderPhoneNum", notificationSenderPhoneNum);
-                                        sendSMS(context,notificationSenderPhoneNum,scheduleId);
-                                        Toast.makeText(context, "Sending Auth2 SMS", Toast.LENGTH_SHORT).show();
-                                    }
-                                    break;
+                                    //dc.getDocument().getDocumentReference("used").set(true);
+                                    db.collection("notifications").document(dc.getDocument()
+                                            .getId()).update("used", true);
+                                    Log.e("DC", dc.getDocument().getData().toString());
+                                    String notificationSenderPhoneNum = dc.getDocument().get("senderPhoneNum").toString();
+                                    String scheduleId = dc.getDocument().get("scheduleId").toString();
+                                    Log.e("notificationSenderPhoneNum", notificationSenderPhoneNum);
+                                    sendSMS(context, notificationSenderPhoneNum, scheduleId);
+                                    Toast.makeText(context, "Sending Auth2 SMS", Toast.LENGTH_SHORT).show();
+                                }
 
 
-                                case MODIFIED:
+                                //case MODIFIED:
 
-                                    //Log.e("MODIFIED", dc.getDocument().getData().toString());
-                                    //document[0] = dc.getDocument();
-                                    //document[0] = (Notification) dc.getDocument().getData();
-                                    //Log.e("MODIFIED 2 doc", dc.getDocument().get("type").toString());
-                                    //Toast.makeText(context, dc.getDocument().get("type").toString(), Toast.LENGTH_SHORT).show();
-                                    //break;
-                                case REMOVED:
-                                    //doc[0] = dc.getDocument().toObject(Document.class);
-                                    //Log.e("REMOVED", dc.getDocument().getData().toString());
-                                    // document[0] = dc.getDocument().toObject(Notification.class);
-                                    //Toast.makeText(context, "REMOVED", Toast.LENGTH_SHORT).show();
-                                    //break;
-                                default:
-                                    break;
+                                //Log.e("MODIFIED", dc.getDocument().getData().toString());
+                                //document[0] = dc.getDocument();
+                                //document[0] = (Notification) dc.getDocument().getData();
+                                //Log.e("MODIFIED 2 doc", dc.getDocument().get("type").toString());
+                                //Toast.makeText(context, dc.getDocument().get("type").toString(), Toast.LENGTH_SHORT).show();
+                                //break;
+                                //case REMOVED:
+                                //doc[0] = dc.getDocument().toObject(Document.class);
+                                //Log.e("REMOVED", dc.getDocument().getData().toString());
+                                // document[0] = dc.getDocument().toObject(Notification.class);
+                                //Toast.makeText(context, "REMOVED", Toast.LENGTH_SHORT).show();
+                                //break;
+                                //default:
+                                // break;
                             }
                         }
                     }
