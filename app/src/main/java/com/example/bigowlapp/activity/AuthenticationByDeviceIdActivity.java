@@ -16,23 +16,23 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
-import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 
-public class AuthenticationActivityMethod2 extends BigOwlActivity {
+public class AuthenticationByDeviceIdActivity extends BigOwlActivity {
 
     private String deviceIdNumber;
     private TextView deviceIdDisplay;
     private TextView authenticationStatusDisplay;
-    private String scheduleId = getIntent().getStringExtra("scheduleId");
+    //private String scheduleId = "YiNpA4OWiR29iXPp1vHm";
+    //private String scheduleId = getIntent().getStringExtra("scheduleId");
 
-    private final AuthRepository authRepository = new AuthRepository();
+    //private final AuthRepository authRepository = new AuthRepository();
     RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        moveTaskToBack(true);
+        //moveTaskToBack(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -43,7 +43,7 @@ public class AuthenticationActivityMethod2 extends BigOwlActivity {
 
     @Override
     protected int getContentView() {
-        return R.layout.activity_authentication_by_phone_number;
+        return R.layout.activity_authentication_by_device_id;
     }
 
     @Override
@@ -61,17 +61,18 @@ public class AuthenticationActivityMethod2 extends BigOwlActivity {
 
     }
 
-    public String getDeviceIdNumber() {
+    /*public String getDeviceIdNumber() {
         return deviceIdNumber;
-    }
+    }*/
 
     @SuppressLint("MissingPermission")
     protected void onStart() {
         super.onStart();
+        String scheduleId = getIntent().getStringExtra("scheduleId");
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         deviceIdNumber = telephonyManager.getDeviceId();
         deviceIdDisplay = findViewById(R.id.device_Id_Display_2);
-        deviceIdDisplay.setText("Device ID Number: " + getDeviceIdNumber());
+        deviceIdDisplay.setText("Device ID Number: " + deviceIdNumber);
 
         authenticationStatusDisplay = findViewById(R.id.authentication_Status_Display_2);
         repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class)
@@ -87,9 +88,10 @@ public class AuthenticationActivityMethod2 extends BigOwlActivity {
                         attendance.setAuthenticated(true);
                     } else {
                         authenticationStatusDisplay.setText("Authentication Status: FAILED");
+                        attendance.setAuthenticated(false);
                     }
                     attendance.setAuthAttemptedPhoneUid(true);
-                    repositoryFacade.getScheduleRepository().addDocument(schedule);
+                    repositoryFacade.getScheduleRepository().updateDocument(scheduleId, schedule);
                 });
 
     }
