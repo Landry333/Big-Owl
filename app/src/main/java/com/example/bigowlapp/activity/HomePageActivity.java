@@ -17,7 +17,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bigowlapp.utils.AuthAttempt2Listener;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
