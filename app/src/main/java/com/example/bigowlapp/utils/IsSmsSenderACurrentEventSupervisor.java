@@ -20,16 +20,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class IsSmsSenderACurrentEventSupervisor extends AppCompatActivity {
 
-    private String toDisplay;
+    //private String toDisplay;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public String getToDisplay() {
+    /*public String getToDisplay() {
         return toDisplay;
     }
 
     public void setToDisplay(String toDisplay) {
         this.toDisplay = toDisplay;
-    }
+    }*/
 
     public IsSmsSenderACurrentEventSupervisor() {
 
@@ -38,7 +38,7 @@ public class IsSmsSenderACurrentEventSupervisor extends AppCompatActivity {
     public Task<List<Schedule>> check(String phoneNumber) {
         RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
         String currentUserUid = repositoryFacade.getAuthRepository().getCurrentUser().getUid();
-        Timestamp currentTime = new Timestamp(Calendar.getInstance().getTime());
+        //Timestamp currentTime = new Timestamp(Calendar.getInstance().getTime());
 
         Task<QuerySnapshot> gettingUserTask = db.collection("users")
                 .whereEqualTo("phoneNumber", phoneNumber)
