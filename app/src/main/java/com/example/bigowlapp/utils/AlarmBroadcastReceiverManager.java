@@ -12,9 +12,13 @@ import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.service.AlarmBroadcastReceiver;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LATITUDE;
@@ -35,6 +39,13 @@ public class AlarmBroadcastReceiverManager {
         this.context = context;
         scheduleRepository = new ScheduleRepository();
     }
+
+    // TODO: --START-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
+    public AlarmBroadcastReceiverManager(Context context, ScheduleRepository scheduleRepository) {
+        this.context = context;
+        this.scheduleRepository = scheduleRepository;
+    }
+    // TODO: --END-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
 
     /**
      * Sets the alarm(s) for the BroadcastReceiver given the schedules that the user has
@@ -66,6 +77,27 @@ public class AlarmBroadcastReceiverManager {
      * @return A Task that contains a list of schedule for the user that hasn't been attended
      */
     private Task<List<Schedule>> getSchedulesForUser(String userID) {
+
+        // TODO: --START-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
+        if (userID.equals("testing")) {
+            List<Schedule> acceptedScheduleList = new ArrayList<>();
+
+            Schedule schedule = new Schedule();
+            schedule.setUid("testing");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.MINUTE, 1);
+            Timestamp timestamp = new Timestamp(calendar.getTime());
+            schedule.setStartTime(timestamp);
+            GeoPoint geoPoint = new GeoPoint(0, 0);
+            schedule.setLocation(geoPoint);
+
+            acceptedScheduleList.add(schedule);
+
+            return Tasks.forResult(acceptedScheduleList);
+        }
+        // TODO: --END-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
+
         return scheduleRepository.getTaskListSchedulesForUser(userID)
                 .continueWithTask(task -> {
                     if (task.isSuccessful()) {
