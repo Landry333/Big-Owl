@@ -20,7 +20,8 @@ public class Notification extends Model {
     }
 
     private Type type;
-    private Timestamp time;
+    private Timestamp creationTime;
+    private boolean used = false;
 
     public Notification() {
         super();
@@ -41,11 +42,19 @@ public class Notification extends Model {
         this.type = type;
     }
 
-    public Timestamp getTime() {
-        return time;
+    public Timestamp getCreationTime() {
+        return creationTime;
     }
 
-    public void setTime(Timestamp time) {
-        this.time = time;
+    public void setCreationTime(Timestamp creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 }
