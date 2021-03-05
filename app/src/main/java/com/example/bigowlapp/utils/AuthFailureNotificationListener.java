@@ -8,8 +8,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.example.bigowlapp.model.LiveDataWithStatus;
-import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.ScheduleRepository;
@@ -19,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class AuthAttempt2Listener {
+public class AuthFailureNotificationListener {
 
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
@@ -33,7 +31,7 @@ public class AuthAttempt2Listener {
     private ScheduleRepository scheduleRepository = new ScheduleRepository();
 
     //scheduleRepository.get
-    public AuthAttempt2Listener() {
+    public AuthFailureNotificationListener() {
 
     }
 
@@ -47,7 +45,7 @@ public class AuthAttempt2Listener {
                     public void onEvent(@Nullable QuerySnapshot snapshots,
                                         @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
-                            Toast.makeText(context, "Listen failed: ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Listen process failed: ", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -59,32 +57,51 @@ public class AuthAttempt2Listener {
                                     //document[0] = dc.getDocument().toObject(Notification.class);
                                     // Toast.makeText(context, "ADDED", Toast.LENGTH_SHORT).show();
 
-                                    if(dc.getDocument().get("type").toString().equalsIgnoreCase("AUTH_ATTEMPTED_1_FAILURE")&&
-                                            dc.getDocument().get("receiverUid").toString().equalsIgnoreCase(repositoryFacade.getAuthRepository().getCurrentUser().getUid())){
-                                        String senderPhoneNum = repositoryFacade.getUserRepository()
-                                                .getDocumentByUid(dc.getDocument().get("receiverUid")
-                                                .toString(), User.class)
-                                                .getValue()
-                                                .getPhoneNumber();
+                                            /*.getDocumentByUid(dc.getDocument().get("senderUid")
+                                                    .toString(), User.class)
+                                            .observe(this, user -> {
+                                                String notificationSenderPhoneNum = user.getPhoneNumber();*/
+                                    /*String notificationSenderPhoneNum = repositoryFacade.getUserRepository()
+                                            .getDocumentByUid(dc.getDocument().get("senderUid")
+                                                    .toString(), User.class)
+                                            .getValue()
+                                            .getPhoneNumber();*/
 
+                                    //Log.e("notificationSenderPhoneNum", notificationSenderPhoneNum);
+
+
+                                    //Log.e("DC", dc.getDocument().getData().toString());
+                                    if (dc.getDocument().get("type").toString().equalsIgnoreCase("AUTH_BY_PHONE_NUMBER_FAILURE") &&
+                                            dc.getDocument().get("receiverUid").toString().equalsIgnoreCase(repositoryFacade.getAuthRepository().getCurrentUser().getUid())) {
+
+                                        /*repositoryFacade.getUserRepository().getDocumentByUid(dc.getDocument().get("receiverUid").toString(), User.class)
+                                                .observe(this, user -> {
+
+                                                });*/
+                                        Log.e("DC", dc.getDocument().getData().toString());
+                                        String notificationSenderPhoneNum= dc.getDocument().get("senderPhoneNum").toString();
                                         String scheduleId = dc.getDocument().get("scheduleId").toString();
-                                        sendSMS(context,senderPhoneNum,scheduleId);
+                                        Log.e("notificationSenderPhoneNum", notificationSenderPhoneNum);
+                                        sendSMS(context,notificationSenderPhoneNum,scheduleId);
+                                        Toast.makeText(context, "Sending Auth2 SMS", Toast.LENGTH_SHORT).show();
                                     }
                                     break;
+
+
                                 case MODIFIED:
 
-                                    Log.e("MODIFIED", dc.getDocument().getData().toString());
+                                    //Log.e("MODIFIED", dc.getDocument().getData().toString());
                                     //document[0] = dc.getDocument();
                                     //document[0] = (Notification) dc.getDocument().getData();
-                                    Log.e("MODIFIED 2 doc", dc.getDocument().get("type").toString());
-                                    Toast.makeText(context, dc.getDocument().get("type").toString(), Toast.LENGTH_SHORT).show();
-                                    break;
+                                    //Log.e("MODIFIED 2 doc", dc.getDocument().get("type").toString());
+                                    //Toast.makeText(context, dc.getDocument().get("type").toString(), Toast.LENGTH_SHORT).show();
+                                    //break;
                                 case REMOVED:
                                     //doc[0] = dc.getDocument().toObject(Document.class);
-                                    Log.e("REMOVED", dc.getDocument().getData().toString());
+                                    //Log.e("REMOVED", dc.getDocument().getData().toString());
                                     // document[0] = dc.getDocument().toObject(Notification.class);
                                     //Toast.makeText(context, "REMOVED", Toast.LENGTH_SHORT).show();
-                                    break;
+                                    //break;
                                 default:
                                     break;
                             }
