@@ -13,19 +13,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.AuthByPhoneNumberFailure;
-import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
-import com.example.bigowlapp.viewModel.HomePageViewModel;
-import com.squareup.picasso.Picasso;
 
 public class AuthenticationByPhoneNumberActivity extends BigOwlActivity {
 
@@ -36,7 +32,6 @@ public class AuthenticationByPhoneNumberActivity extends BigOwlActivity {
     private String currentUserPhoneNumber;
     //private String scheduleId = getIntent().getStringExtra("scheduleId");
     private String scheduleId = "YiNpA4OWiR29iXPp1vHm";
-    private HomePageViewModel homePageViewModel;
 
     private final AuthRepository authRepository = new AuthRepository();
     RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
@@ -44,7 +39,6 @@ public class AuthenticationByPhoneNumberActivity extends BigOwlActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        moveTaskToBack(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, 10);
@@ -80,21 +74,6 @@ public class AuthenticationByPhoneNumberActivity extends BigOwlActivity {
     @SuppressLint("MissingPermission")
     protected void onStart() {
         super.onStart();
-        if (homePageViewModel == null) {
-            homePageViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
-        }
-        if (homePageViewModel.isCurrentUserSet()) {
-            LiveDataWithStatus<User> currentUserData = homePageViewModel.getCurrentUserData();
-            currentUserData.observe(this, user -> {
-                if (currentUserData.hasError()) {
-                    Toast.makeText(getBaseContext(), currentUserData.getError().getMessage(), Toast.LENGTH_LONG).show();
-                    // TODO: Handle this failure (exist page, modify page, or set up page for error case)
-                    return;
-                }
-                currentUserPhoneNumber =user.getPhoneNumber();
-
-            });
-        }
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         deviceIdNumber = telephonyManager.getDeviceId();
         devicePhoneNumber = telephonyManager.getLine1Number();
@@ -117,36 +96,39 @@ public class AuthenticationByPhoneNumberActivity extends BigOwlActivity {
         repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class)
                 .observe(this, schedule -> {
                     //repositoryFacade.getScheduleRepository().addDocument(testSchedule);
-                    //repositoryFacade.getAuthRepository().getCurrentUser().getPhoneNumber().
-                    UserScheduleResponse userScheduleResponse = schedule.getUserScheduleResponseMap()
-                            .get(repositoryFacade.getAuthRepository().getCurrentUser().getUid());
-                    Attendance attendance = userScheduleResponse.getAttendance();
-                    Log.e(currentUserPhoneNumber, "currentUserPhoneNumber");
-                    Log.e(devicePhoneNumber, "devicePhoneNumber");
+                    repositoryFacade.getUserRepository()
+                            .getDocumentByUid(repositoryFacade.getAuthRepository().getCurrentUser().getUid(), User.class)
+                            .observe(this, user -> {
+                                currentUserPhoneNumber = user.getPhoneNumber();
+                                UserScheduleResponse userScheduleResponse = schedule.getUserScheduleResponseMap()
+                                        .get(repositoryFacade.getAuthRepository().getCurrentUser().getUid());
+                                Attendance attendance = userScheduleResponse.getAttendance();
+                                Log.e(currentUserPhoneNumber, "currentUserPhoneNumber");
+                                Log.e(devicePhoneNumber, "devicePhoneNumber");
 
-                    if (currentUserPhoneNumber.equalsIgnoreCase("+"+devicePhoneNumber)) {
-                        authenticationStatusDisplay.setText("Authentication Status: SUCCEEDED");
-                        attendance.setAuthenticated(true);
-                       // Toast.makeText(this, "SUCCEEDED", Toast.LENGTH_SHORT).show();
+                                if (currentUserPhoneNumber.equalsIgnoreCase("+"+devicePhoneNumber)) {
+                                    authenticationStatusDisplay.setText("Authentication Status: SUCCEEDED");
+                                    attendance.setAuthenticated(true);
+                                    Toast.makeText(this, "SUCCEEDED", Toast.LENGTH_SHORT).show();
 
-                    } else {
-                        authenticationStatusDisplay.setText("Authentication Status: FAILED");
-                        userScheduleResponse.getAttendance().setDeviceIdNumber(deviceIdNumber);
-                        AuthByPhoneNumberFailure authByPhoneNumberFailure = new AuthByPhoneNumberFailure();
-                        authByPhoneNumberFailure.setScheduleId(scheduleId);
-                        authByPhoneNumberFailure.setReceiverUid(schedule.getGroupSupervisorUid());
-                        authByPhoneNumberFailure.setSenderUid(authRepository.getCurrentUser().getUid());
-                        repositoryFacade.getNotificationRepository().addDocument(authByPhoneNumberFailure);
-
-
-                    }
-                    attendance.setAuthAttemptedUserMobileNumber(true);
-                    repositoryFacade.getScheduleRepository().updateDocument(scheduleId, schedule);
-
-
+                                } else {
+                                    Toast.makeText(this, "FAILED", Toast.LENGTH_SHORT).show();
+                                    authenticationStatusDisplay.setText("Authentication Status: FAILED");
+                                    attendance.setAuthenticated(false);
+                                    userScheduleResponse.getAttendance().setDeviceIdNumber(deviceIdNumber);
+                                    AuthByPhoneNumberFailure authByPhoneNumberFailure = new AuthByPhoneNumberFailure();
+                                    authByPhoneNumberFailure.setScheduleId(scheduleId);
+                                    authByPhoneNumberFailure.setSenderPhoneNum(currentUserPhoneNumber);
+                                    authByPhoneNumberFailure.setReceiverUid(schedule.getGroupSupervisorUid());
+                                    authByPhoneNumberFailure.setSenderUid(authRepository.getCurrentUser().getUid());
+                                    repositoryFacade.getNotificationRepository().addDocument(authByPhoneNumberFailure);
+                                }
+                                attendance.setAuthAttemptedUserMobileNumber(true);
+                                repositoryFacade.getScheduleRepository().updateDocument(scheduleId, schedule);
+                                //moveTaskToBack(true);
+                            });
                 });
 
     }
 
 }
-
