@@ -12,7 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.bigowlapp.utils.AuthAttempt2Listener;
+import com.example.bigowlapp.utils.AuthFailureNotificationListener;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.viewModel.LogInViewModel;
@@ -25,7 +25,7 @@ public class LoginPageActivity extends AppCompatActivity {
     TextView tvSignUp;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private LogInViewModel logInViewModel;
-    private AuthAttempt2Listener authListener = new AuthAttempt2Listener();
+    private AuthFailureNotificationListener authListener = new AuthFailureNotificationListener();
     RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
 
 
@@ -98,7 +98,7 @@ public class LoginPageActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        //authListener.listen(this);
+        authListener.listen(this);
         try {
             super.onStart();
             logInViewModel.addAuthStateListenerToDatabase(mAuthStateListener);
