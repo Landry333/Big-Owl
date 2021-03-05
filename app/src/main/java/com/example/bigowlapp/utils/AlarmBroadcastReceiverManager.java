@@ -83,13 +83,13 @@ public class AlarmBroadcastReceiverManager {
             List<Schedule> acceptedScheduleList = new ArrayList<>();
 
             Schedule schedule = new Schedule();
-            schedule.setUid("testing");
+            schedule.setUid("Hello there");
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
-            calendar.add(Calendar.MINUTE, 1);
+            calendar.add(Calendar.SECOND, 30);
             Timestamp timestamp = new Timestamp(calendar.getTime());
             schedule.setStartTime(timestamp);
-            GeoPoint geoPoint = new GeoPoint(0, 0);
+            GeoPoint geoPoint = new GeoPoint(10, -82);
             schedule.setLocation(geoPoint);
 
             acceptedScheduleList.add(schedule);
