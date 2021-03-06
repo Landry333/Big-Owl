@@ -13,6 +13,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Schedule;
+import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
 import com.google.firebase.firestore.GeoPoint;
 
 import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LATITUDE;
@@ -21,10 +22,11 @@ import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
 
 /**
  * The purpose of this BroadcastReceiver is to execute code after the time activation of an alarm.
+ * This class is specifically designed towards member's schedules.
  * The alarms are set/defined in
- * {@link com.example.bigowlapp.utils.AlarmBroadcastReceiverManager}
+ * {@link MemberScheduleAlarmManager}
  */
-public class AlarmBroadcastReceiver extends BroadcastReceiver {
+public class MemberScheduleAlarmReceiver extends BroadcastReceiver {
 
     private static final String CHANNEL_ID = "testingChannel";
 

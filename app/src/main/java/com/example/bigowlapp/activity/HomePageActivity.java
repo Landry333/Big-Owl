@@ -19,7 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.utils.AlarmBroadcastReceiverManager;
+import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -35,7 +35,7 @@ public class HomePageActivity extends BigOwlActivity {
     private TextView textLastName;
     private TextView textPhone;
     private HomePageViewModel homePageViewModel;
-    private AlarmBroadcastReceiverManager alarmBroadcastReceiverManager;
+    private MemberScheduleAlarmManager memberScheduleAlarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,18 +149,18 @@ public class HomePageActivity extends BigOwlActivity {
      * Initializes the AlarmManager to set alarms for the user's schedules that he has to attend to.
      */
     private void initAlarmManager() {
-        if (alarmBroadcastReceiverManager == null) {
-            alarmBroadcastReceiverManager = new AlarmBroadcastReceiverManager(this);
+        if (memberScheduleAlarmManager == null) {
+            memberScheduleAlarmManager = new MemberScheduleAlarmManager(this);
         }
-        alarmBroadcastReceiverManager.setAlarms(homePageViewModel.getCurrentUserUid());
+        memberScheduleAlarmManager.setAlarms(homePageViewModel.getCurrentUserUid());
     }
 
     // TODO: --START-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
     private void initAlarmManagerTesting() {
-        if (alarmBroadcastReceiverManager == null) {
-            alarmBroadcastReceiverManager = new AlarmBroadcastReceiverManager(this, null);
+        if (memberScheduleAlarmManager == null) {
+            memberScheduleAlarmManager = new MemberScheduleAlarmManager(this, null);
         }
-        alarmBroadcastReceiverManager.setAlarms("testing");
+        memberScheduleAlarmManager.setAlarms("testing");
     }
     // TODO: --END-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
 
@@ -200,7 +200,7 @@ public class HomePageActivity extends BigOwlActivity {
     }
 
     @VisibleForTesting
-    public void setAlarmBroadcastReceiverManager(AlarmBroadcastReceiverManager alarmBroadcastReceiverManager) {
-        this.alarmBroadcastReceiverManager = alarmBroadcastReceiverManager;
+    public void setMemberScheduleAlarmManager(MemberScheduleAlarmManager memberScheduleAlarmManager) {
+        this.memberScheduleAlarmManager = memberScheduleAlarmManager;
     }
 }

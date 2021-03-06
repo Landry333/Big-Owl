@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.ScheduleRepository;
-import com.example.bigowlapp.service.AlarmBroadcastReceiver;
+import com.example.bigowlapp.service.MemberScheduleAlarmReceiver;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
@@ -26,22 +26,22 @@ import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LONGITUDE;
 import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
 
 /**
- * The purpose of this class is to set/define alarms that the app will set.
+ * The purpose of this class is to set/define alarms for member schedules that the app will set.
  * After the time activation of an alarm, code will be executed from
- * {@link com.example.bigowlapp.service.AlarmBroadcastReceiver}
+ * {@link MemberScheduleAlarmReceiver}
  */
-public class AlarmBroadcastReceiverManager {
+public class MemberScheduleAlarmManager {
 
     private final Context context;
     private final ScheduleRepository scheduleRepository;
 
-    public AlarmBroadcastReceiverManager(Context context) {
+    public MemberScheduleAlarmManager(Context context) {
         this.context = context;
         scheduleRepository = new ScheduleRepository();
     }
 
     // TODO: --START-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
-    public AlarmBroadcastReceiverManager(Context context, ScheduleRepository scheduleRepository) {
+    public MemberScheduleAlarmManager(Context context, ScheduleRepository scheduleRepository) {
         this.context = context;
         this.scheduleRepository = scheduleRepository;
     }
@@ -58,7 +58,7 @@ public class AlarmBroadcastReceiverManager {
         getSchedulesForUser(userID)
                 .addOnSuccessListener(scheduleList -> {
                     for (Schedule schedule : scheduleList) {
-                        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+                        Intent intent = new Intent(context, MemberScheduleAlarmReceiver.class);
                         intent.putExtra(EXTRA_UID, schedule.getUid());
                         intent.putExtra(EXTRA_LATITUDE, schedule.getLocation().getLatitude());
                         intent.putExtra(EXTRA_LONGITUDE, schedule.getLocation().getLongitude());
