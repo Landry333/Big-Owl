@@ -77,14 +77,16 @@ public class SupervisionResponseFragment extends Fragment {
                         repositoryFacade.getGroupRepository().updateDocument(group.getUid(), group);
                         repositoryFacade.getUserRepository().updateDocument(receiver.getUid(), receiver);
 
-                        repositoryFacade.getNotificationRepository().removeDocument(supervisionRequest.getUid());
+                        repositoryFacade.getNotificationRepository(supervisionRequest.getReceiverUid())
+                                .removeDocument(supervisionRequest.getUid());
 
                         getActivity().onBackPressed();
                     });
                 });
 
                 rejectBtn.setOnClickListener(view2 -> {
-                    repositoryFacade.getNotificationRepository().removeDocument(supervisionRequest.getUid());
+                    repositoryFacade.getNotificationRepository(supervisionRequest.getReceiverUid())
+                            .removeDocument(supervisionRequest.getUid());
 
                     getActivity().onBackPressed();
                 });

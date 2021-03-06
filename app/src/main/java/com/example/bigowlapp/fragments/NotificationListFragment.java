@@ -52,8 +52,9 @@ public class NotificationListFragment extends Fragment implements NotificationAd
         recyclerView = view.findViewById(R.id.recyclerview_notifications);
 
         authRepository = new AuthRepository();
-        notificationRepository = new NotificationRepository();
-        notificationListData = notificationRepository.getListOfDocumentByAttribute("receiverUid", authRepository.getCurrentUser().getUid(), Notification.class);
+        String currentUserId = authRepository.getCurrentUser().getUid();
+        notificationRepository = new NotificationRepository(currentUserId);
+        notificationListData = notificationRepository.getAllDocumentsFromCollection(Notification.class);
 
         recyclerView.setHasFixedSize(true);
 

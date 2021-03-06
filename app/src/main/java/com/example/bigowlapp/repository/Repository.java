@@ -20,7 +20,7 @@ import java.util.List;
 public abstract class Repository<T extends Model> {
 
     protected final FirebaseFirestore mFirebaseFirestore;
-    protected final CollectionReference collectionReference;
+    protected CollectionReference collectionReference;
 
     protected Repository(String collectionName) {
         mFirebaseFirestore = Firestore.getDatabase();

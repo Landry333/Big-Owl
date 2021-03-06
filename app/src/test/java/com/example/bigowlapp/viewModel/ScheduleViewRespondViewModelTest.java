@@ -69,7 +69,7 @@ public class ScheduleViewRespondViewModelTest {
         // setup mock responses
         when(mockRepositoryFacade.getAuthRepository()).thenReturn(mockAuthRepository);
         when(mockRepositoryFacade.getScheduleRepository()).thenReturn(mockScheduleRepository);
-        when(mockRepositoryFacade.getNotificationRepository()).thenReturn(mockNotificationRepository);
+        when(mockRepositoryFacade.getNotificationRepository(anyString())).thenReturn(mockNotificationRepository);
         when(mockAuthRepository.getCurrentUser()).thenReturn(mockTestFirebaseUser);
         when(mockTestFirebaseUser.getUid()).thenReturn("abc123");
         when(mockScheduleRepository.getDocumentByUid(anyString(), eq(Schedule.class))).thenReturn(testScheduleData);

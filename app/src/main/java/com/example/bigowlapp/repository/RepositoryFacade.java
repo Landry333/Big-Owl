@@ -50,10 +50,8 @@ public class RepositoryFacade {
         return groupRepository;
     }
 
-    public NotificationRepository getNotificationRepository() {
-        if (notificationRepository == null) {
-            notificationRepository = new NotificationRepository();
-        }
+    public NotificationRepository getNotificationRepository(String userUid) {
+        notificationRepository = new NotificationRepository(userUid);
         return notificationRepository;
     }
 }

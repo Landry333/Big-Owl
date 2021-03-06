@@ -17,8 +17,9 @@ public class NotificationRepository extends Repository<Notification> {
     private static final String TYPE = "type";
 
     // TODO: Dependency Injection Implementation for Firestore
-    public NotificationRepository() {
-        super("notifications");
+    public NotificationRepository(String userUid) {
+        super("users");
+        collectionReference = collectionReference.document(userUid).collection("notifications");
     }
 
     public MutableLiveData<List<SupervisionRequest>> getListOfSupervisionRequestByAttribute(String attribute, String attrValue,

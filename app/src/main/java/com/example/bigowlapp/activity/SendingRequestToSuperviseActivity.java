@@ -42,7 +42,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
     String superviseAlready = "You already have an accepted request to supervise this user";
     String requestRejected = "Your last request was rejected by this user. You can send a new request";
 
-    NotificationRepository notificationRepository = new NotificationRepository();
+    NotificationRepository notificationRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         otherUser = getIntent().getParcelableExtra("user");
         assert otherUser != null;
         otherUserID = otherUser.getUid();
+        notificationRepository = new NotificationRepository(otherUserID);
         supRequestBtn = findViewById(R.id.SupRequest);
         currentUserID = authRepository.getCurrentUser().getUid();
         noteTv = findViewById(R.id.note);
@@ -101,6 +102,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         // in repository until one is found
         supRequestBtn.setText(supBtnSend); // Default setText
         resultNoteTv.setText(noRequest);
+        // TODO: make this call more efficient maybe
         LiveData<List<SupervisionRequest>> senderRequestsData = notificationRepository.getListOfSupervisionRequestByAttribute("senderUid", currentUserID, SupervisionRequest.class);
         senderRequestsData.observe(this, senderRequests -> {
             if (senderRequests == null)
