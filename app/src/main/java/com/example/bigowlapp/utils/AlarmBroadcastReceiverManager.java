@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LATITUDE;
 import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LONGITUDE;
@@ -104,12 +105,9 @@ public class AlarmBroadcastReceiverManager {
                         QuerySnapshot tDocs = task.getResult();
                         List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
                         List<Schedule> acceptedScheduleList = new ArrayList<>();
-                        for (Schedule schedule : scheduleList) {
-                            if (schedule.getUserScheduleResponseMap()
-                                    .get(userID).getResponse() == Response.ACCEPT) {
-                                acceptedScheduleList.add(schedule);
-                            }
-                        }
+                        acceptedScheduleList = scheduleList.stream()
+                                .filter(schedule -> schedule.getUserScheduleResponseMap().get(userID).getResponse() == Response.ACCEPT)
+                                .collect(Collectors.toList());
                         return Tasks.forResult(acceptedScheduleList);
                     } else {
                         throw task.getException();
