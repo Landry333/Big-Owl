@@ -54,8 +54,10 @@ public class NotificationRepository extends Repository<Notification> {
         List<Notification> notificationsFromDb = new ArrayList<>();
         for (QueryDocumentSnapshot doc : results) {
             Notification.Type type = doc.toObject(Notification.class).getType();
-            Notification t = doc.toObject(type.typeClass);
-            notificationsFromDb.add(t);
+            if (tClass == Notification.class || tClass == type.typeClass) {
+                Notification t = doc.toObject(type.typeClass);
+                notificationsFromDb.add(t);
+            }
         }
         return notificationsFromDb;
     }
