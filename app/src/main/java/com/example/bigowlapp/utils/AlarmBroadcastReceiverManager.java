@@ -14,7 +14,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -100,19 +99,12 @@ public class AlarmBroadcastReceiverManager {
         // TODO: --END-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
 
         return scheduleRepository.getTaskListSchedulesForUser(userID)
-                .continueWithTask(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot tDocs = task.getResult();
-                        List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
-                        List<Schedule> acceptedScheduleList = new ArrayList<>();
-                        acceptedScheduleList = scheduleList.stream()
-                                .filter(schedule -> schedule.getUserScheduleResponseMap().get(userID).getResponse() == Response.ACCEPT)
-                                .collect(Collectors.toList());
-                        return Tasks.forResult(acceptedScheduleList);
-                    } else {
-                        throw task.getException();
-                    }
-
+                .onSuccessTask(tDocs -> {
+                    List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
+                    List<Schedule> acceptedScheduleList = scheduleList.stream()
+                            .filter(schedule -> schedule.getUserScheduleResponseMap().get(userID).getResponse() == Response.ACCEPT)
+                            .collect(Collectors.toList());
+                    return Tasks.forResult(acceptedScheduleList);
                 });
     }
 }
