@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -36,6 +37,7 @@ public class HomePageActivity extends BigOwlActivity {
     private TextView textPhone;
 
     private HomePageViewModel homePageViewModel;
+    private MemberScheduleAlarmManager memberScheduleAlarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,12 +132,23 @@ public class HomePageActivity extends BigOwlActivity {
                         .into(imgUserAvatar);
             });
             scrollView.setVisibility(View.VISIBLE);
+            initAlarmManager();
         }
         /*  TODO: find a way to uncomment out below lines and allow HomePageActivityTest to pass
         else {
             this.noSignedInAlert().show();
         }
          */
+    }
+
+    /**
+     * Initializes the AlarmManager to set alarms for the user's schedules that he has to attend to.
+     */
+    private void initAlarmManager() {
+        if (memberScheduleAlarmManager == null) {
+            memberScheduleAlarmManager = new MemberScheduleAlarmManager(this);
+        }
+        memberScheduleAlarmManager.setAlarms(homePageViewModel.getCurrentUserUid());
     }
 
     @Override
@@ -146,7 +159,6 @@ public class HomePageActivity extends BigOwlActivity {
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getTitle().equals("Edit Profile")) {
-            finish();
             startActivity(new Intent(this, EditProfileActivity.class));
         }
         return super.onMenuItemClick(item);
@@ -174,4 +186,8 @@ public class HomePageActivity extends BigOwlActivity {
         this.homePageViewModel = homePageViewModel;
     }
 
+    @VisibleForTesting
+    public void setMemberScheduleAlarmManager(MemberScheduleAlarmManager memberScheduleAlarmManager) {
+        this.memberScheduleAlarmManager = memberScheduleAlarmManager;
+    }
 }
