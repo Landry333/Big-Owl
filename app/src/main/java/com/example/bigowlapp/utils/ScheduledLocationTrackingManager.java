@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
@@ -45,18 +44,8 @@ public class ScheduledLocationTrackingManager {
         }
 
         return locationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null)
-                .continueWithTask(locTask -> {
-                    if (Constants.ENABLE_TESTING_TOGGLE) {
-                        if (locTask.isSuccessful()) {
-                            Log.e("BigOwl", "location calc successful.");
-                        } else {
-                            Log.e("BigOwl", "location calc FAIL.");
-                        }
-                    }
-
-                    return geofencingClient.addGeofences(
-                            buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent());
-                });
+                .continueWithTask(locTask -> geofencingClient.addGeofences(
+                        buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent()));
     }
 
     private GeofencingRequest buildRequestToTrack(Schedule scheduleWithLocationToTrack) {

@@ -4,12 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.RepositoryFacade;
-import com.example.bigowlapp.utils.Constants;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingClient;
@@ -18,7 +16,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,26 +54,8 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                 .distinct()
                 .collect(Collectors.toList());
 
-
-        // TODO: Make sure to remove this code block when full implementation is done
-        List<String> testOnlyIdList = null;
-        if (Constants.ENABLE_TESTING_TOGGLE) {
-            Log.e(TAG, "SCHEDULE IDS THAT TRIGGERED THIS ARE: " + geofenceIdList);
-            testOnlyIdList = Collections.singletonList("4laPgh1xNIy8CDpnohDV");
-        }
-
-
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-            if (Constants.ENABLE_TESTING_TOGGLE) {
-                Toast.makeText(context, "YOU HAVE SUCCESSFULLY ARRIVED TO YOUR LOCATION!", Toast.LENGTH_LONG).show();
-                Log.e(TAG, "YOU ENTERED THE LOCATION");
-            }
-
-            if (Constants.ENABLE_TESTING_TOGGLE) {
-                this.updateUserLocatedStatus(testOnlyIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
-            } else {
-                this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
-            }
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
 
             // User was successfully detected in desired location, so no more tracking needed
             this.removeLocationTracking(context, geofenceIdList)
@@ -86,24 +65,9 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                             Log.e(TAG, "FAILED TO REMOVE LOCATIONS"));
 
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
-            if (Constants.ENABLE_TESTING_TOGGLE) {
-                Toast.makeText(context, "YOU HAVE YET TO ARRIVE TO THE NECESSARY LOCATION", Toast.LENGTH_LONG).show();
-                Log.e(TAG, "YOU EXITED THE LOCATION");
-            }
-
-            if (Constants.ENABLE_TESTING_TOGGLE) {
-                this.updateUserLocatedStatus(testOnlyIdList, Attendance.LocatedStatus.WRONG_LOCATION);
-            } else {
-                this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION);
-            }
-
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION);
         } else {
-            if (Constants.ENABLE_TESTING_TOGGLE) {
-                Log.e(TAG, "Location Detection has failed");
-                this.updateUserLocatedStatus(testOnlyIdList, Attendance.LocatedStatus.NOT_DETECTED);
-            } else {
-                this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED);
-            }
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED);
         }
     }
 

@@ -26,7 +26,6 @@ import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.Constants;
 import com.example.bigowlapp.utils.GroupRecyclerViewListener;
-import com.example.bigowlapp.utils.ScheduledLocationTrackingManager;
 import com.example.bigowlapp.utils.UserFragmentListener;
 import com.example.bigowlapp.viewModel.SetScheduleViewModel;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
@@ -35,7 +34,6 @@ import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static android.app.Activity.RESULT_OK;
@@ -156,29 +154,6 @@ public class ScheduleFormFragment extends Fragment
         setupSelectUserLayout();
         setupEditLocation();
         setupConfirmSetScheduleButton();
-
-        if (Constants.ENABLE_TESTING_TOGGLE) {
-            setupTestOnlyLocationMangerCheckButton(view);
-        }
-    }
-
-    // TODO: should be removed when everything implemented regarding location tracking
-    //       Make sure to remove related XML cod as well.
-    private void setupTestOnlyLocationMangerCheckButton(View view) {
-        Button testOnlyLocationTrackCheckButton = view.findViewById(R.id.test_only_location_track_check_button);
-        testOnlyLocationTrackCheckButton.setOnClickListener(v -> {
-            ScheduledLocationTrackingManager locationTrackingManager = new ScheduledLocationTrackingManager(getActivity());
-            Schedule schedule = setScheduleViewModel.getNewScheduleData().getValue();
-            schedule.setUid("TITLE='" + schedule.getTitle() + "'__" + UUID.randomUUID().toString());
-            locationTrackingManager.addNewScheduledLocationToTrack(schedule)
-                    .addOnSuccessListener(aVoid ->
-                            Toast.makeText(getActivity(), "ADDED LOCATION TRACKING", Toast.LENGTH_LONG).show())
-                    .addOnFailureListener(e ->
-                            // TODO: this runs when the user has location services off or
-                            //       location permissions denied
-                            Toast.makeText(getActivity(), "FAILURE!!!!! TO ADD LOCATION TRACKING", Toast.LENGTH_LONG).show()
-                    );
-        });
     }
 
     private void setupTitle() {
