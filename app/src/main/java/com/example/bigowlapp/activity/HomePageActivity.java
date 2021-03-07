@@ -130,13 +130,7 @@ public class HomePageActivity extends BigOwlActivity {
                         .into(imgUserAvatar);
             });
             scrollView.setVisibility(View.VISIBLE);
-
-            // TODO: --START-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
-            initAlarmManagerTesting();
-            // TODO: --END-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
-
-            // TODO: ADD THIS METHOD BEFORE MERGING
-            // initAlarmManager();
+            initAlarmManager();
         }
         /*  TODO: find a way to uncomment out below lines and allow HomePageActivityTest to pass
         else {
@@ -154,15 +148,6 @@ public class HomePageActivity extends BigOwlActivity {
         }
         memberScheduleAlarmManager.setAlarms(homePageViewModel.getCurrentUserUid());
     }
-
-    // TODO: --START-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
-    private void initAlarmManagerTesting() {
-        if (memberScheduleAlarmManager == null) {
-            memberScheduleAlarmManager = new MemberScheduleAlarmManager(this, null);
-        }
-        memberScheduleAlarmManager.setAlarms("testing");
-    }
-    // TODO: --END-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
 
     @Override
     public int getContentView() {

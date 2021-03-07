@@ -12,12 +12,7 @@ import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.service.MemberScheduleAlarmReceiver;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.GeoPoint;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,13 +34,6 @@ public class MemberScheduleAlarmManager {
         this.context = context;
         scheduleRepository = new ScheduleRepository();
     }
-
-    // TODO: --START-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
-    public MemberScheduleAlarmManager(Context context, ScheduleRepository scheduleRepository) {
-        this.context = context;
-        this.scheduleRepository = scheduleRepository;
-    }
-    // TODO: --END-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
 
     /**
      * Sets the alarm(s) for the BroadcastReceiver given the schedules that the user has
@@ -77,27 +65,6 @@ public class MemberScheduleAlarmManager {
      * @return A Task that contains a list of schedule for the user that hasn't been attended
      */
     private Task<List<Schedule>> getSchedulesForUser(String userID) {
-
-        // TODO: --START-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
-        if (userID.equals("testing")) {
-            List<Schedule> acceptedScheduleList = new ArrayList<>();
-
-            Schedule schedule = new Schedule();
-            schedule.setUid("Hello there");
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date());
-            calendar.add(Calendar.SECOND, 30);
-            Timestamp timestamp = new Timestamp(calendar.getTime());
-            schedule.setStartTime(timestamp);
-            GeoPoint geoPoint = new GeoPoint(10, -82);
-            schedule.setLocation(geoPoint);
-
-            acceptedScheduleList.add(schedule);
-
-            return Tasks.forResult(acceptedScheduleList);
-        }
-        // TODO: --END-- REMOVE BEFORE MERGING PULL REQUEST. THIS IS ONLY FOR TESTING PURPOSES.
-
         return scheduleRepository.getTaskListSchedulesForUser(userID)
                 .onSuccessTask(tDocs -> {
                     List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
