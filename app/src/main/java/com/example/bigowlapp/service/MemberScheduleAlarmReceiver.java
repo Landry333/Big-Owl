@@ -3,9 +3,11 @@ package com.example.bigowlapp.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
+import com.example.bigowlapp.utils.ScheduledLocationTrackingManager;
 import com.google.firebase.firestore.GeoPoint;
 
 import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LATITUDE;
@@ -22,9 +24,13 @@ public class MemberScheduleAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // Execute Schedule activatedSchedule = getSchedule(intent); to get the schedule
-        // Run the location/Geofencing code
-        // activatedSchedule should only have UID, LONGITUDE, LATITUDE
+        Schedule activatedSchedule = getSchedule(intent);
+
+        ScheduledLocationTrackingManager locationTrackingManager = new ScheduledLocationTrackingManager(context);
+        // TODO: figure what to do with success/failure, or remove them
+        locationTrackingManager.addNewScheduledLocationToTrack(activatedSchedule)
+                .addOnSuccessListener(aVoid -> Log.e("BigOwl", "LOCATION TRACKING STARTED"))
+                .addOnFailureListener(e -> Log.e("BigOwl", e.getMessage()));
     }
 
     private Schedule getSchedule(Intent intent) {
