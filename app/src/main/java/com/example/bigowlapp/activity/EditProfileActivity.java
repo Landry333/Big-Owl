@@ -4,15 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.repository.exception.EmptyFieldException;
 import com.example.bigowlapp.viewModel.EditProfileViewModel;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
-import androidx.annotation.VisibleForTesting;
-import androidx.lifecycle.ViewModelProvider;
+import java.util.Objects;
 
 public class EditProfileActivity extends BigOwlActivity {
     Button editButtonCancel, editButtonConfirm;
@@ -35,63 +39,60 @@ public class EditProfileActivity extends BigOwlActivity {
     }
 
     protected void initialize() {
-
-
         editButtonConfirm = findViewById(R.id.edit_button_confirm);
-        editButtonConfirm.setOnClickListener(v -> {
-            String userPhone = editPhoneNumber.getText().toString();
-            String firstName = editUserFirstName.getText().toString();
-            String lastName = editUserLastName.getText().toString();
-
-            if (firstName.isEmpty()) {
-                editUserFirstName.setError("Please enter a valid first name.");
-                editUserFirstName.requestFocus();
-            }
-            if (lastName.isEmpty()) {
-                editUserLastName.setError("Please enter a valid last name.");
-                editUserLastName.requestFocus();
-            }
-            if (userPhone.isEmpty()) {
-                editPhoneNumber.setError("Please enter a valid phone number.");
-                editPhoneNumber.requestFocus();
-            }
-
-            /*
-            if ((userPhone.contains("+") && !userPhone.startsWith("+")) || !Character.isDigit(userPhone.charAt(userPhone.length() - 1))) {
-                editPhoneNumber.setError("please enter a correct phone format");
-                editPhoneNumber.requestFocus();
-            }*/
-            String formatedPhone = null;
-            try {
-                formatedPhone = filteredNUmber(userPhone);
-            } catch (NumberParseException e) {
-                if (userPhone.isEmpty()) {
-                    editPhoneNumber.setError("Please enter a valid phone number.");
-                    editPhoneNumber.requestFocus();
-                } else {
-                    editPhoneNumber.setError(e.getMessage());
-                    editPhoneNumber.requestFocus();
-                }
-            }
-
-            if (!firstName.isEmpty() && !lastName.isEmpty() && !userPhone.isEmpty() && formatedPhone != null) {
-                editProfileViewModel.editUserProfile(
-                        firstName,
-                        editUserLastName.getText().toString(),
-                        formatedPhone,
-                        editImageURL.getText().toString()
-                );
-
-                startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
-                finish();
-            }
-        });
+        editButtonConfirm.setOnClickListener(v -> onClickConfirmButton());
 
         editButtonCancel = findViewById(R.id.edit_button_cancel);
         editButtonCancel.setOnClickListener(v -> {
             startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
             finish();
         });
+    }
+
+    private void onClickConfirmButton() {
+        String userPhone = editPhoneNumber.getText().toString();
+        String firstName = editUserFirstName.getText().toString();
+        String lastName = editUserLastName.getText().toString();
+        String imageUrl = editImageURL.getText().toString();
+
+        if (firstName.isEmpty()) {
+            editUserFirstName.setError("Please enter a valid first name.");
+            editUserFirstName.requestFocus();
+        }
+        if (lastName.isEmpty()) {
+            editUserLastName.setError("Please enter a valid last name.");
+            editUserLastName.requestFocus();
+        }
+
+        String formattedPhone = phoneNumberFormatter(userPhone);
+        String oldPhoneNumber = Objects.requireNonNull(editProfileViewModel.getCurrentUserData().getValue()).getPhoneNumber();
+
+        if (!firstName.isEmpty() && !lastName.isEmpty() && formattedPhone != null) {
+            if (!formattedPhone.equals(oldPhoneNumber)) {
+                editProfileViewModel.isPhoneNumberTaken(formattedPhone)
+                        .addOnSuccessListener(isSuccessful -> onFinishConfirmation(firstName, lastName, formattedPhone, imageUrl))
+                        .addOnFailureListener(exception -> Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show());
+            } else {
+                onFinishConfirmation(firstName, lastName, formattedPhone, imageUrl);
+            }
+        }
+    }
+
+    private void onFinishConfirmation(String firstName, String lastName, String formattedPhone, String imageUrl) {
+        editProfileViewModel.editUserProfile(firstName, lastName, formattedPhone, imageUrl);
+        startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
+        finish();
+    }
+
+    private String phoneNumberFormatter(String userPhone) {
+        String formattedPhone = null;
+        try {
+            formattedPhone = filteredNUmber(userPhone);
+        } catch (NumberParseException | EmptyFieldException e) {
+            editPhoneNumber.setError(e.getMessage());
+            editPhoneNumber.requestFocus();
+        }
+        return formattedPhone;
     }
 
     private void subscribeToData() {
@@ -120,13 +121,13 @@ public class EditProfileActivity extends BigOwlActivity {
         this.editProfileViewModel = editProfileViewModel;
     }
 
-    public String filteredNUmber(String number) throws NumberParseException {
+    public String filteredNUmber(String number) throws NumberParseException, EmptyFieldException {
+        if (number == null || number.isEmpty()) {
+            throw new EmptyFieldException("Please enter a valid phone number.");
+        }
         PhoneNumberUtil numbUtil = PhoneNumberUtil.getInstance();
         Phonenumber.PhoneNumber phonenumber = numbUtil.parseAndKeepRawInput(number, getResources().getConfiguration().getLocales().get(0).getCountry());
-
-        String formattedNumber = numbUtil.format(phonenumber, PhoneNumberUtil.PhoneNumberFormat.E164);
-
-        return formattedNumber;
+        return numbUtil.format(phonenumber, PhoneNumberUtil.PhoneNumberFormat.E164);
     }
 
 }

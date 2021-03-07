@@ -18,32 +18,68 @@ public class SignUpViewModel extends BaseViewModel {
 
     // TODO: Handle exceptions concerning the failure of the "user" database collection
     public Task<Void> createUser(String email, String password, String phoneNumber, String firstName, String lastName) {
+
+        // Check for phone number if it's in database and unique
+        Task<Void> taskIsPhoneNumberInDatabase =
+                repositoryFacade.getUserRepository().isPhoneNumberInDatabase(phoneNumber);
+
         // add user email and password to authentication database
-        Task<AuthResult> taskAuthSignUpResult = repositoryFacade.getAuthRepository().signUpUser(email, password);
-        // add basic user information to user document in firestore database
-        Task<Void> taskAddUser = taskAuthSignUpResult.continueWithTask(task -> {
+        Task<AuthResult> taskAuthSignUpResult = taskIsPhoneNumberInDatabase.continueWithTask(task -> {
             if (task.isSuccessful()) {
-                User user = new User();
-                String uid = getCurrentUserUid();
-                user.setUid(uid);
-                user.setEmail(email);
-                user.setPhoneNumber(phoneNumber);
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                repositoryFacade.getUserRepository().addDocument(uid, user);
-                return Tasks.forResult(null);
+                return signUpUserInAuthRepo(email, password);
             } else {
                 throw task.getException();
             }
         });
-        // add a default group when the user registers to a system where the user is the supervisor
-        taskAddUser.addOnSuccessListener(isSuccess -> {
-            Group group = new Group();
-            group.setSupervisorId(getCurrentUserUid());
-            group.setName(getFullName(firstName, lastName) + "'s group " + "#" + randomNumberStringGenerator());
-            repositoryFacade.getGroupRepository().addDocument(group);
+
+        // add basic user information to user document in firestore database
+        Task<Void> taskAddUser = taskAuthSignUpResult.continueWithTask(task -> {
+            if (task.isSuccessful()) {
+                return createUserEntry(email, phoneNumber, firstName, lastName);
+            } else {
+                throw task.getException();
+            }
         });
-        return taskAddUser;
+
+        // add a default group when the user registers to a system where the user is the supervisor
+        return taskFinishByCreatingGroup(taskAddUser, firstName, lastName);
+    }
+
+    private Task<Void> taskFinishByCreatingGroup(Task<Void> taskPrevious, String firstName, String lastName) {
+        return taskPrevious.continueWithTask(task -> {
+            if (task.isSuccessful()) {
+                return createGroupEntry(firstName, lastName);
+            } else {
+                throw task.getException();
+            }
+        });
+    }
+
+    private Task<AuthResult> signUpUserInAuthRepo(String email, String password) {
+        return repositoryFacade.getAuthRepository().signUpUser(email, password);
+    }
+
+    private Task<Void> createUserEntry(String email, String phoneNumber,
+                                       String firstName, String lastName) {
+        User user = new User();
+        String uid = getCurrentUserUid();
+        user.setUid(uid);
+        user.setEmail(email);
+        user.setPhoneNumber(phoneNumber);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        // TODO: Can't capture error b/c it's a livedata call; need to change repo structure
+        repositoryFacade.getUserRepository().addDocument(uid, user);
+        return Tasks.forResult(null);
+    }
+
+    private Task<Void> createGroupEntry(String firstName, String lastName) {
+        Group group = new Group();
+        group.setSupervisorId(getCurrentUserUid());
+        group.setName(getFullName(firstName, lastName) + "'s group " + "#" + randomNumberStringGenerator());
+        // TODO: Can't capture error b/c it's a livedata call; need to change repo structure
+        repositoryFacade.getGroupRepository().addDocument(group);
+        return Tasks.forResult(null);
     }
 
     public String getFullName(String firstName, String lastName) {
@@ -54,8 +90,7 @@ public class SignUpViewModel extends BaseViewModel {
         SecureRandom random = new SecureRandom();
         final int max = 9999;
         final int min = 0;
-        int randomNumber = (int)((random.nextDouble() * (max - min + 1)) + min);
+        int randomNumber = (int) ((random.nextDouble() * (max - min + 1)) + min);
         return String.format(Locale.getDefault(), "%04d", randomNumber);
     }
-
 }
