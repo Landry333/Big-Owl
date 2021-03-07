@@ -20,8 +20,6 @@ import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
  */
 public class MemberScheduleAlarmReceiver extends BroadcastReceiver {
 
-    private static final String CHANNEL_ID = "testingChannel";
-
     @Override
     public void onReceive(Context context, Intent intent) {
         // Execute Schedule activatedSchedule = getSchedule(intent); to get the schedule
