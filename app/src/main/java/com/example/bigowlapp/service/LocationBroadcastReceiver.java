@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class LocationBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = LocationBroadcastReceiver.class.getName();
 
-    RepositoryFacade repositoryFacade;
+    private final RepositoryFacade repositoryFacade;
 
     public LocationBroadcastReceiver() {
         super();
