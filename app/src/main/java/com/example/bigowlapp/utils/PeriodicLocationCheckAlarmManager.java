@@ -37,8 +37,17 @@ public class PeriodicLocationCheckAlarmManager {
         Intent intent = new Intent(context, PeriodicLocationCheckAlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
+
         alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(),
                 repeatIntervalMillis, pendingIntent);
+    }
+
+    public void cancelPeriodicLocationCheck() {
+        Intent intent = new Intent(context, PeriodicLocationCheckAlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+
+        alarmManager.cancel(pendingIntent);
     }
 
     public static class PeriodicLocationCheckAlarmReceiver extends BroadcastReceiver {

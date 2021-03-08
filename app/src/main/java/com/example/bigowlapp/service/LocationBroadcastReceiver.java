@@ -8,6 +8,7 @@ import android.util.Log;
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.RepositoryFacade;
+import com.example.bigowlapp.utils.PeriodicLocationCheckAlarmManager;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingClient;
@@ -72,6 +73,9 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
     }
 
     private Task<Void> removeLocationTracking(Context context, List<String> geofencesToRemoveIdList) {
+        PeriodicLocationCheckAlarmManager locationCheckAlarmManager = new PeriodicLocationCheckAlarmManager(context);
+        locationCheckAlarmManager.cancelPeriodicLocationCheck();
+
         GeofencingClient geofencingClient = LocationServices.getGeofencingClient(context);
         return geofencingClient.removeGeofences(geofencesToRemoveIdList);
     }
