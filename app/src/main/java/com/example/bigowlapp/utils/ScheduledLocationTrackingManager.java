@@ -10,11 +10,9 @@ import androidx.core.content.ContextCompat;
 
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.service.LocationBroadcastReceiver;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -22,11 +20,11 @@ import com.google.firebase.firestore.GeoPoint;
 
 public class ScheduledLocationTrackingManager {
 
-    private static final int REQUEST_CODE = 0;
+    private static final int REQUEST_CODE = 2;
     private static final int DEFAULT_TRACKING_RADIUS_METERS = 300;
     private static final long DEFAULT_TRACKING_TIME_MILLISECONDS = 30L * Constants.MINUTE_TO_MILLISECONDS;
     // use 0 for instant response, and allow delay for better battery life
-    private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS = 5 * Constants.MINUTE_TO_MILLISECONDS;
+    private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS = 1 * Constants.MINUTE_TO_MILLISECONDS;
 
     private final Context context;
     private final GeofencingClient geofencingClient;

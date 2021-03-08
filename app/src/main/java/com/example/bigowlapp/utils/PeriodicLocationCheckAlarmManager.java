@@ -22,7 +22,7 @@ import com.google.android.gms.location.LocationServices;
  */
 public class PeriodicLocationCheckAlarmManager {
 
-    private static final int REQUEST_CODE = 0;
+    private static final int REQUEST_CODE = 5;
     private final Context context;
     private final AlarmManager alarmManager;
 
@@ -31,24 +31,19 @@ public class PeriodicLocationCheckAlarmManager {
         this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    // TODO: need to find way to cancel the alarm when complete
-
     public void setAlarm(int repeatIntervalMillis) {
-        PendingIntent pendingIntent = getPendingIntent();
-
         alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(),
-                repeatIntervalMillis, pendingIntent);
+                repeatIntervalMillis, getPendingIntent());
+    }
+
+    public void cancelPeriodicLocationCheck() {
+        alarmManager.cancel(getPendingIntent());
     }
 
     private PendingIntent getPendingIntent() {
         Intent intent = new Intent(context, PeriodicLocationCheckAlarmReceiver.class);
         return PendingIntent.getBroadcast(context, REQUEST_CODE, intent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
-    }
-
-    public void cancelPeriodicLocationCheck() {
-        PendingIntent pendingIntent = getPendingIntent();
-        alarmManager.cancel(pendingIntent);
+                PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public static class PeriodicLocationCheckAlarmReceiver extends BroadcastReceiver {
