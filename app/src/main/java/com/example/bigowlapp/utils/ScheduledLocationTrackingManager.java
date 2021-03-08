@@ -22,6 +22,7 @@ import com.google.firebase.firestore.GeoPoint;
 
 public class ScheduledLocationTrackingManager {
 
+    private static final int REQUEST_CODE = 0;
     private static final int DEFAULT_TRACKING_RADIUS_METERS = 300;
     private static final long DEFAULT_TRACKING_TIME_MILLISECONDS = 30L * Constants.MINUTE_TO_MILLISECONDS;
     // use 0 for instant response, and allow delay for better battery life
@@ -74,7 +75,7 @@ public class ScheduledLocationTrackingManager {
         }
 
         Intent intent = new Intent(context, LocationBroadcastReceiver.class);
-        geofencePendingIntent = PendingIntent.getBroadcast(context, 0, intent,
+        geofencePendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         return geofencePendingIntent;
     }
