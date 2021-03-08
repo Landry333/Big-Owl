@@ -23,6 +23,8 @@ import com.google.android.gms.location.LocationServices;
 public class PeriodicLocationCheckAlarmManager {
 
     private static final int REQUEST_CODE = 5;
+    private static final int REQUEST_CODE_CANCEL = 6;
+    private static final int NO_FLAG = 0;
     private final Context context;
     private final AlarmManager alarmManager;
 
@@ -31,9 +33,13 @@ public class PeriodicLocationCheckAlarmManager {
         this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    public void setAlarm(int repeatIntervalMillis) {
+    public void setAlarm(long repeatIntervalMillis, long cancelTimeMillis) {
         alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(),
                 repeatIntervalMillis, getPendingIntent());
+
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME,
+                SystemClock.elapsedRealtime() + cancelTimeMillis,
+                getCancelPendingIntent());
     }
 
     public void cancelPeriodicLocationCheck() {
@@ -42,8 +48,12 @@ public class PeriodicLocationCheckAlarmManager {
 
     private PendingIntent getPendingIntent() {
         Intent intent = new Intent(context, PeriodicLocationCheckAlarmReceiver.class);
-        return PendingIntent.getBroadcast(context, REQUEST_CODE, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(context, REQUEST_CODE, intent, NO_FLAG);
+    }
+
+    private PendingIntent getCancelPendingIntent() {
+        Intent intent = new Intent(context, CancelPeriodicLocationCheckAlarmReceiver.class);
+        return PendingIntent.getBroadcast(context, REQUEST_CODE_CANCEL, intent, NO_FLAG);
     }
 
     public static class PeriodicLocationCheckAlarmReceiver extends BroadcastReceiver {
@@ -54,6 +64,14 @@ public class PeriodicLocationCheckAlarmManager {
                 return;
             }
             locationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null);
+        }
+    }
+
+    public static class CancelPeriodicLocationCheckAlarmReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            PeriodicLocationCheckAlarmManager locationCheckAlarmManager = new PeriodicLocationCheckAlarmManager(context);
+            locationCheckAlarmManager.cancelPeriodicLocationCheck();
         }
     }
 }

@@ -45,7 +45,8 @@ public class ScheduledLocationTrackingManager {
         return geofencingClient
                 .addGeofences(buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent())
                 .onSuccessTask(aVoid -> {
-                    locationCheckAlarmManager.setAlarm(DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS);
+                    locationCheckAlarmManager.setAlarm(DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS,
+                            DEFAULT_TRACKING_TIME_MILLISECONDS);
                     return Tasks.forResult(null);
                 });
     }

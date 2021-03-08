@@ -48,6 +48,8 @@
             android:enabled="true"/>
         <receiver android:name=".utils.PeriodicLocationCheckAlarmManager$PeriodicLocationCheckAlarmReceiver"
             android:enabled="true"/>
+        <receiver android:name=".utils.PeriodicLocationCheckAlarmManager$CancelPeriodicLocationCheckAlarmReceiver"
+            android:enabled="true"/>
     </application>
 
 </manifest>
