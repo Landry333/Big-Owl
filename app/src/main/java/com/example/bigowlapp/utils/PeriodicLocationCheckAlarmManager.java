@@ -1,10 +1,19 @@
 package com.example.bigowlapp.utils;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.SystemClock;
+
+import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 // TODO: Might want to create a super AlarmManger given there are multiple now
 
@@ -23,10 +32,21 @@ public class PeriodicLocationCheckAlarmManager {
     }
 
     public void setAlarm(int repeatIntervalMillis) {
-        Intent intent = new Intent(context, PeriodicLocationCheckAlarmReciever.class);
+        Intent intent = new Intent(context, PeriodicLocationCheckAlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(),
                 repeatIntervalMillis, pendingIntent);
+    }
+
+    private static class PeriodicLocationCheckAlarmReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            FusedLocationProviderClient locationClient = LocationServices.getFusedLocationProviderClient(context);
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            locationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null);
+        }
     }
 }
