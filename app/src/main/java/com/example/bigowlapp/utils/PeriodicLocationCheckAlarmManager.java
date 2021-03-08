@@ -34,19 +34,20 @@ public class PeriodicLocationCheckAlarmManager {
     // TODO: need to find way to cancel the alarm when complete
 
     public void setAlarm(int repeatIntervalMillis) {
-        Intent intent = new Intent(context, PeriodicLocationCheckAlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent = getPendingIntent();
 
         alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(),
                 repeatIntervalMillis, pendingIntent);
     }
 
-    public void cancelPeriodicLocationCheck() {
+    private PendingIntent getPendingIntent() {
         Intent intent = new Intent(context, PeriodicLocationCheckAlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent,
+        return PendingIntent.getBroadcast(context, REQUEST_CODE, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
+    }
 
+    public void cancelPeriodicLocationCheck() {
+        PendingIntent pendingIntent = getPendingIntent();
         alarmManager.cancel(pendingIntent);
     }
 
