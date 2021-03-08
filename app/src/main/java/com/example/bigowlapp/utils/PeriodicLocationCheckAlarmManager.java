@@ -31,6 +31,8 @@ public class PeriodicLocationCheckAlarmManager {
         this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
+    // TODO: need to find way to cancel the alarm when complete
+
     public void setAlarm(int repeatIntervalMillis) {
         Intent intent = new Intent(context, PeriodicLocationCheckAlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent,
@@ -39,7 +41,7 @@ public class PeriodicLocationCheckAlarmManager {
                 repeatIntervalMillis, pendingIntent);
     }
 
-    private static class PeriodicLocationCheckAlarmReceiver extends BroadcastReceiver {
+    public static class PeriodicLocationCheckAlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             FusedLocationProviderClient locationClient = LocationServices.getFusedLocationProviderClient(context);

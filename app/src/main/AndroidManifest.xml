@@ -45,6 +45,7 @@
         <receiver android:name=".service.MemberScheduleAlarmReceiver"
             android:enabled="true" />
         <receiver android:name=".service.LocationBroadcastReceiver" />
+        <receiver android:name=".utils.PeriodicLocationCheckAlarmManager$PeriodicLocationCheckAlarmReceiver" />
     </application>
 
 </manifest>

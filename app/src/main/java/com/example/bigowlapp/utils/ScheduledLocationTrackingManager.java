@@ -30,13 +30,13 @@ public class ScheduledLocationTrackingManager {
 
     private final Context context;
     private final GeofencingClient geofencingClient;
-    private final FusedLocationProviderClient locationClient;
+    private final PeriodicLocationCheckAlarmManager locationCheckAlarmManager;
     private PendingIntent geofencePendingIntent;
 
     public ScheduledLocationTrackingManager(Context context) {
         this.context = context;
         geofencingClient = LocationServices.getGeofencingClient(context);
-        locationClient = LocationServices.getFusedLocationProviderClient(context);
+        locationCheckAlarmManager = new PeriodicLocationCheckAlarmManager(context);
     }
 
     public Task<Void> addNewScheduledLocationToTrack(Schedule scheduleWithLocationToTrack) {
@@ -44,9 +44,12 @@ public class ScheduledLocationTrackingManager {
             return Tasks.forException(new SecurityException("Requires " + Manifest.permission.ACCESS_FINE_LOCATION + " permission."));
         }
 
-        return locationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null)
-                .continueWithTask(locTask -> geofencingClient.addGeofences(
-                        buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent()));
+        return geofencingClient
+                .addGeofences(buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent())
+                .onSuccessTask(aVoid -> {
+                    locationCheckAlarmManager.setAlarm(DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS);
+                    return Tasks.forResult(null);
+                });
     }
 
     private GeofencingRequest buildRequestToTrack(Schedule scheduleWithLocationToTrack) {
