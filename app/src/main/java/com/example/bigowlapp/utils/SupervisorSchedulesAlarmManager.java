@@ -8,20 +8,14 @@ import android.widget.Toast;
 
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.ScheduleRepository;
-<<<<<<< HEAD:app/src/main/java/com/example/bigowlapp/utils/SupervisorSchedulesAlarmManager.java
 import com.example.bigowlapp.service.SupervisorSchedulesAlarmReceiver;
-=======
-import com.example.bigowlapp.service.MemberScheduleAlarmReceiver;
->>>>>>> cb08e49b234cf74f58972ebf5d0eaf15a21991c0:app/src/main/java/com/example/bigowlapp/utils/MemberScheduleAlarmManager.java
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.QuerySnapshot;
 
-<<<<<<< HEAD:app/src/main/java/com/example/bigowlapp/utils/SupervisorSchedulesAlarmManager.java
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-=======
->>>>>>> cb08e49b234cf74f58972ebf5d0eaf15a21991c0:app/src/main/java/com/example/bigowlapp/utils/MemberScheduleAlarmManager.java
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,25 +23,17 @@ import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
 
 /**
  * The purpose of this class is to set/define alarms for member schedules that the app will set.
- * After the time activation of an alarm, code will be executed from
-<<<<<<< HEAD:app/src/main/java/com/example/bigowlapp/utils/SupervisorSchedulesAlarmManager.java
+ * After the time activation of an alarm, code will be executed fro
  * {@link SupervisorSchedulesAlarmReceiver}
  */
 public class SupervisorSchedulesAlarmManager {
-=======
- * {@link MemberScheduleAlarmReceiver}
- */
-public class MemberScheduleAlarmManager {
->>>>>>> cb08e49b234cf74f58972ebf5d0eaf15a21991c0:app/src/main/java/com/example/bigowlapp/utils/MemberScheduleAlarmManager.java
+
 
     private final Context context;
     private final ScheduleRepository scheduleRepository;
 
-<<<<<<< HEAD:app/src/main/java/com/example/bigowlapp/utils/SupervisorSchedulesAlarmManager.java
     public SupervisorSchedulesAlarmManager(Context context) {
-=======
-    public MemberScheduleAlarmManager(Context context) {
->>>>>>> cb08e49b234cf74f58972ebf5d0eaf15a21991c0:app/src/main/java/com/example/bigowlapp/utils/MemberScheduleAlarmManager.java
+
         this.context = context;
         scheduleRepository = new ScheduleRepository();
     }
@@ -63,11 +49,9 @@ public class MemberScheduleAlarmManager {
         getSchedulesForUser(userID)
                 .addOnSuccessListener(scheduleList -> {
                     for (Schedule schedule : scheduleList) {
-<<<<<<< HEAD:app/src/main/java/com/example/bigowlapp/utils/SupervisorSchedulesAlarmManager.java
+
                         Intent intent = new Intent(context, SupervisorSchedulesAlarmReceiver.class);
-=======
-                        Intent intent = new Intent(context, MemberScheduleAlarmReceiver.class);
->>>>>>> cb08e49b234cf74f58972ebf5d0eaf15a21991c0:app/src/main/java/com/example/bigowlapp/utils/MemberScheduleAlarmManager.java
+
                         intent.putExtra(EXTRA_UID, schedule.getUid());
                         //intent.putExtra(EXTRA_LATITUDE, schedule.getLocation().getLatitude());
                         //intent.putExtra(EXTRA_LONGITUDE, schedule.getLocation().getLongitude());
@@ -91,7 +75,6 @@ public class MemberScheduleAlarmManager {
      * @return A Task that contains a list of schedule for the user that hasn't been attended
      */
     private Task<List<Schedule>> getSchedulesForUser(String userID) {
-<<<<<<< HEAD:app/src/main/java/com/example/bigowlapp/utils/SupervisorSchedulesAlarmManager.java
         return scheduleRepository.getTaskListSchedulesForSupervisor(userID)
                 .continueWithTask(task -> {
                     if (task.isSuccessful()) {
@@ -110,15 +93,6 @@ public class MemberScheduleAlarmManager {
                         throw task.getException();
                     }
 
-=======
-        return scheduleRepository.getTaskListSchedulesForUser(userID)
-                .onSuccessTask(tDocs -> {
-                    List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
-                    List<Schedule> acceptedScheduleList = scheduleList.stream()
-                            .filter(schedule -> schedule.getUserScheduleResponseMap().get(userID).getResponse() == Response.ACCEPT)
-                            .collect(Collectors.toList());
-                    return Tasks.forResult(acceptedScheduleList);
->>>>>>> cb08e49b234cf74f58972ebf5d0eaf15a21991c0:app/src/main/java/com/example/bigowlapp/utils/MemberScheduleAlarmManager.java
                 });
     }
 }
