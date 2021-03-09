@@ -48,7 +48,7 @@
             android:enabled="true"/>
         <receiver android:name=".utils.PeriodicLocationCheckAlarmManager$PeriodicLocationCheckAlarmReceiver"
             android:enabled="true"/>
-        <receiver android:name=".utils.PeriodicLocationCheckAlarmManager$CancelPeriodicLocationCheckAlarmReceiver"
+        <receiver android:name=".service.LocationTrackingExpiredAlarmReceiver"
             android:enabled="true"/>
     </application>
 

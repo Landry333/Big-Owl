@@ -29,12 +29,14 @@ public class ScheduledLocationTrackingManager {
     private final Context context;
     private final GeofencingClient geofencingClient;
     private final PeriodicLocationCheckAlarmManager locationCheckAlarmManager;
+    private final LocationTrackingExpiredAlarmManager locationTrackingExpiredAlarmManager;
     private PendingIntent geofencePendingIntent;
 
     public ScheduledLocationTrackingManager(Context context) {
         this.context = context;
         geofencingClient = LocationServices.getGeofencingClient(context);
         locationCheckAlarmManager = new PeriodicLocationCheckAlarmManager(context);
+        locationTrackingExpiredAlarmManager = new LocationTrackingExpiredAlarmManager(context);
     }
 
     public Task<Void> addNewScheduledLocationToTrack(Schedule scheduleWithLocationToTrack) {
@@ -47,6 +49,7 @@ public class ScheduledLocationTrackingManager {
                 .onSuccessTask(aVoid -> {
                     locationCheckAlarmManager.setAlarm(DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS,
                             DEFAULT_TRACKING_TIME_MILLISECONDS);
+                    locationTrackingExpiredAlarmManager.setAlarm(DEFAULT_TRACKING_TIME_MILLISECONDS);
                     return Tasks.forResult(null);
                 });
     }
