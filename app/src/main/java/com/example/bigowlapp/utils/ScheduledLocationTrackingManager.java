@@ -24,7 +24,7 @@ public class ScheduledLocationTrackingManager {
     private static final int DEFAULT_TRACKING_RADIUS_METERS = 300;
     private static final long DEFAULT_TRACKING_TIME_MILLISECONDS = 30L * Constants.MINUTE_TO_MILLISECONDS;
     // use 0 for instant response, and allow delay for better battery life
-    private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS = 1 * Constants.MINUTE_TO_MILLISECONDS;
+    private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS = 3 * Constants.MINUTE_TO_MILLISECONDS;
 
     private final Context context;
     private final GeofencingClient geofencingClient;
@@ -47,8 +47,7 @@ public class ScheduledLocationTrackingManager {
         return geofencingClient
                 .addGeofences(buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent())
                 .onSuccessTask(aVoid -> {
-                    locationCheckAlarmManager.setAlarm(DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS,
-                            DEFAULT_TRACKING_TIME_MILLISECONDS);
+                    locationCheckAlarmManager.setAlarm(DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS);
                     locationTrackingExpiredAlarmManager.setAlarm(DEFAULT_TRACKING_TIME_MILLISECONDS);
                     return Tasks.forResult(null);
                 });

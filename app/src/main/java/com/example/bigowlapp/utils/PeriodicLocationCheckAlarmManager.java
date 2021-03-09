@@ -18,7 +18,7 @@ import com.google.android.gms.location.LocationServices;
 // TODO: Might want to create a super AlarmManger given there are multiple now
 
 /**
- * Create alarm that will force a location check periodically
+ * Create alarm that will force a location check periodically.
  */
 public class PeriodicLocationCheckAlarmManager {
     private static final int REQUEST_CODE = 5;
@@ -32,7 +32,7 @@ public class PeriodicLocationCheckAlarmManager {
         this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    public void setAlarm(long repeatIntervalMillis, long cancelTimeMillis) {
+    public void setAlarm(long repeatIntervalMillis) {
         alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(),
                 repeatIntervalMillis, getPendingIntent());
     }
