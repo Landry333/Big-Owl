@@ -20,6 +20,7 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.SupervisorSchedulesAlarmManager;
+import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -36,6 +37,8 @@ public class HomePageActivity extends BigOwlActivity {
     private TextView textPhone;
     private HomePageViewModel homePageViewModel;
     private SupervisorSchedulesAlarmManager supervisorSchedulesAlarmManager;
+    private MemberScheduleAlarmManager memberScheduleAlarmManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +150,11 @@ public class HomePageActivity extends BigOwlActivity {
             supervisorSchedulesAlarmManager = new SupervisorSchedulesAlarmManager(this);
         }
         supervisorSchedulesAlarmManager.setAlarms(homePageViewModel.getCurrentUserUid());
+
+        if (memberScheduleAlarmManager == null) {
+            memberScheduleAlarmManager = new MemberScheduleAlarmManager(this);
+        }
+        memberScheduleAlarmManager.setAlarms(homePageViewModel.getCurrentUserUid());
     }
 
     @Override
@@ -187,5 +195,10 @@ public class HomePageActivity extends BigOwlActivity {
     @VisibleForTesting
     public void setSupervisorSchedulesAlarmManager(SupervisorSchedulesAlarmManager supervisorSchedulesAlarmManager) {
         this.supervisorSchedulesAlarmManager = supervisorSchedulesAlarmManager;
+    }
+
+    @VisibleForTesting
+    public void setMemberScheduleAlarmManager(MemberScheduleAlarmManager memberScheduleAlarmManager) {
+        this.memberScheduleAlarmManager = memberScheduleAlarmManager;
     }
 }

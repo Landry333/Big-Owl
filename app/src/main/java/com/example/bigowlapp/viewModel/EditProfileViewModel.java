@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.RepositoryFacade;
+import com.google.android.gms.tasks.Task;
 
 public class EditProfileViewModel extends BaseViewModel {
 
@@ -35,6 +36,10 @@ public class EditProfileViewModel extends BaseViewModel {
             loadUserCurrentProfile();
         }
         return userData;
+    }
+
+    public Task<Void> isPhoneNumberTaken(String phoneNumber) {
+        return repositoryFacade.getUserRepository().isPhoneNumberInDatabase(phoneNumber);
     }
 
     private void loadUserCurrentProfile() {
