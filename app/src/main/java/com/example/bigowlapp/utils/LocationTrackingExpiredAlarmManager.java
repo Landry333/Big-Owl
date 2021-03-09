@@ -14,7 +14,7 @@ import com.example.bigowlapp.service.LocationTrackingExpiredAlarmReceiver;
  */
 public class LocationTrackingExpiredAlarmManager {
 
-    private static final int REQUEST_CODE_CANCEL = 6;
+    private static final int REQUEST_CODE = 6;
 
     private final Context context;
     private final AlarmManager alarmManager;
@@ -24,18 +24,18 @@ public class LocationTrackingExpiredAlarmManager {
         this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    public void setAlarm(long cancelTimeMillis) {
+    public void setAlarm(long expireTimeMillis) {
         alarmManager.set(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime() + cancelTimeMillis,
-                getCancelPendingIntent());
+                SystemClock.elapsedRealtime() + expireTimeMillis,
+                getPendingIntent());
     }
 
-    private PendingIntent getCancelPendingIntent() {
+    private PendingIntent getPendingIntent() {
         Intent intent = new Intent(context, LocationTrackingExpiredAlarmReceiver.class);
-        return PendingIntent.getBroadcast(context, REQUEST_CODE_CANCEL, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public void cancelExpirationAlarm() {
-        alarmManager.cancel(getCancelPendingIntent());
+        alarmManager.cancel(getPendingIntent());
     }
 }

@@ -58,13 +58,8 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
-
             // User was successfully detected in desired location, so no more tracking needed
-            this.removeLocationTracking(context, geofenceIdList)
-                    .addOnSuccessListener(aVoid ->
-                            Log.e(TAG, "Entered LOCATION TRACKING SUCCESSFULLY REMOVED"))
-                    .addOnFailureListener(e ->
-                            Log.e(TAG, "FAILED TO REMOVE LOCATIONS"));
+            this.removeLocationTracking(context, geofenceIdList);
 
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION);

@@ -27,10 +27,7 @@ public class MemberScheduleAlarmReceiver extends BroadcastReceiver {
         Schedule activatedSchedule = getSchedule(intent);
 
         ScheduledLocationTrackingManager locationTrackingManager = new ScheduledLocationTrackingManager(context);
-        // TODO: figure what to do with success/failure, or remove them
-        locationTrackingManager.addNewScheduledLocationToTrack(activatedSchedule)
-                .addOnSuccessListener(aVoid -> Log.e("BigOwl", "LOCATION TRACKING STARTED"))
-                .addOnFailureListener(e -> Log.e("BigOwl", e.getMessage()));
+        locationTrackingManager.addNewScheduledLocationToTrack(activatedSchedule);
     }
 
     private Schedule getSchedule(Intent intent) {
