@@ -3,6 +3,7 @@ package com.example.bigowlapp.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
@@ -25,6 +26,7 @@ public class MemberScheduleAlarmReceiver extends BroadcastReceiver {
         // Execute Schedule activatedSchedule = getSchedule(intent); to get the schedule
         // Run the location/Geofencing code
         // activatedSchedule should only have UID, LONGITUDE, LATITUDE
+        Log.e("Intent", intent.toString());
     }
 
     private Schedule getSchedule(Intent intent) {
