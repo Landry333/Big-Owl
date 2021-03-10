@@ -24,6 +24,7 @@ import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
 public class HomePageActivity extends BigOwlActivity {
+
     private Button btnLogOut;
     private Button btnAddUsers;
     private Button btnMonitoringGroup;
@@ -34,6 +35,7 @@ public class HomePageActivity extends BigOwlActivity {
     private TextView textFirstName;
     private TextView textLastName;
     private TextView textPhone;
+
     private HomePageViewModel homePageViewModel;
     private MemberScheduleAlarmManager memberScheduleAlarmManager;
 
