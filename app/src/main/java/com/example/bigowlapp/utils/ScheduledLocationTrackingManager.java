@@ -22,9 +22,9 @@ public class ScheduledLocationTrackingManager {
 
     private static final int REQUEST_CODE = 2;
     private static final int DEFAULT_TRACKING_RADIUS_METERS = 300;
-    private static final long DEFAULT_TRACKING_TIME_MILLISECONDS = 30L * Constants.MINUTE_TO_MILLISECONDS;
-    // use 0 for instant response, and allow delay for better battery life
-    private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS = 3 * Constants.MINUTE_TO_MILLISECONDS;
+    private static final long DEFAULT_TRACKING_EXPIRE_TIME_MILLIS = 30L * Constants.MINUTE_TO_MILLIS;
+    // use 0 for instant response, and allow longer delays for better battery life
+    private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLIS = 3 * Constants.MINUTE_TO_MILLIS;
 
     private final Context context;
     private final GeofencingClient geofencingClient;
@@ -47,8 +47,8 @@ public class ScheduledLocationTrackingManager {
         return geofencingClient
                 .addGeofences(buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent())
                 .onSuccessTask(aVoid -> {
-                    locationCheckAlarmManager.setAlarm(DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS);
-                    locationTrackingExpiredAlarmManager.setAlarm(DEFAULT_TRACKING_TIME_MILLISECONDS);
+                    locationCheckAlarmManager.setAlarm(DEFAULT_MAX_NOTIFY_DELAY_MILLIS);
+                    locationTrackingExpiredAlarmManager.setAlarm(DEFAULT_TRACKING_EXPIRE_TIME_MILLIS);
                     return Tasks.forResult(null);
                 });
     }
@@ -67,8 +67,8 @@ public class ScheduledLocationTrackingManager {
                 .setRequestId(scheduleWithLocationToTrack.getUid())
                 .setCircularRegion(locationCoords.getLatitude(), locationCoords.getLongitude(),
                         DEFAULT_TRACKING_RADIUS_METERS)
-                .setExpirationDuration(DEFAULT_TRACKING_TIME_MILLISECONDS)
-                .setNotificationResponsiveness(DEFAULT_MAX_NOTIFY_DELAY_MILLISECONDS)
+                .setExpirationDuration(DEFAULT_TRACKING_EXPIRE_TIME_MILLIS)
+                .setNotificationResponsiveness(DEFAULT_MAX_NOTIFY_DELAY_MILLIS)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
     }
