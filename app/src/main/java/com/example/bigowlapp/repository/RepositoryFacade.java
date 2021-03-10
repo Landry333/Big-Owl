@@ -10,7 +10,6 @@ public class RepositoryFacade {
     private UserRepository userRepository;
     private ScheduleRepository scheduleRepository;
     private GroupRepository groupRepository;
-    private NotificationRepository notificationRepository;
 
     private static RepositoryFacade instance = new RepositoryFacade();
 
@@ -51,7 +50,6 @@ public class RepositoryFacade {
     }
 
     public NotificationRepository getNotificationRepository(String userUid) {
-        notificationRepository = new NotificationRepository(userUid);
-        return notificationRepository;
+        return new NotificationRepository(userUid);
     }
 }

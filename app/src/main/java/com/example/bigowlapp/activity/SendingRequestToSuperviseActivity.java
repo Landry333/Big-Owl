@@ -102,7 +102,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         // in repository until one is found
         supRequestBtn.setText(supBtnSend); // Default setText
         resultNoteTv.setText(noRequest);
-        // TODO: make this call more efficient maybe
+
         LiveData<List<SupervisionRequest>> senderRequestsData = otherUserNotificationRepository
                 .getListOfDocumentByAttribute("senderUid", currentUserID, SupervisionRequest.class);
 
