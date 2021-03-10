@@ -94,9 +94,15 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                                 .getUserScheduleResponseMap()
                                 .get(userUid)
                                 .getAttendance();
+
+                        // If the user was already detected to be in the location, no need to
+                        // update the database anymore.
+                        if (userAttendance.getScheduleLocated() == Attendance.LocatedStatus.CORRECT_LOCATION) {
+                            return;
+                        }
+
                         userAttendance.setScheduleLocated(locatedStatusToAdd);
                         userAttendance.setAuthenticationTime(Timestamp.now());
-
                         repositoryFacade.getScheduleRepository()
                                 .updateDocument(schedule.getUid(), schedule);
                     }
