@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.service.SupervisorSchedulesAlarmReceiver;
@@ -23,7 +24,7 @@ import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
 
 /**
  * The purpose of this class is to set/define alarms for member schedules that the app will set.
- * After the time activation of an alarm, code will be executed fro
+ * After the time activation of an alarm, code will be executed from
  * {@link SupervisorSchedulesAlarmReceiver}
  */
 public class SupervisorSchedulesAlarmManager {
@@ -39,14 +40,14 @@ public class SupervisorSchedulesAlarmManager {
     }
 
     /**
-     * Sets the alarm(s) for the BroadcastReceiver given the schedules that the user has
+     * Sets the alarm(s) for the SupervisorSchedulesAlarmReceiver given the coming schedules that the user is supervising
      *
-     * @param userID The Id of the user
+     * @param userID The Id of the user who is a supervisor of some schedules
      */
     public void setAlarms(String userID) {
         int requestCode = 0;
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        getSchedulesForUser(userID)
+        getSchedulesForSupervisor(userID)
                 .addOnSuccessListener(scheduleList -> {
                     for (Schedule schedule : scheduleList) {
 
@@ -69,26 +70,31 @@ public class SupervisorSchedulesAlarmManager {
         return calendar.getTime();
     }
     /**
-     * Obtains the list of schedules for the user, and filters in schedules that have been accepted
+     * Obtains the list of schedules that the user is supervising, and filters in schedules that have been accepted
      *
      * @param userID The Id of the user
      * @return A Task that contains a list of schedule for the user that hasn't been attended
      */
-    private Task<List<Schedule>> getSchedulesForUser(String userID) {
+    private Task<List<Schedule>> getSchedulesForSupervisor(String userID) {
         return scheduleRepository.getTaskListSchedulesForSupervisor(userID)
                 .continueWithTask(task -> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
+                        /*List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
+                        List<Schedule> acceptedScheduleList = new ArrayList<>();*/
                         List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
-                        List<Schedule> acceptedScheduleList = new ArrayList<>();
-                        for (Schedule schedule : scheduleList) {
+                        List<Schedule> acceptedScheduleList = scheduleList.stream()
+                                .filter(schedule -> schedule.getGroupSupervisorUid().equalsIgnoreCase(userID))
+                                .collect(Collectors.toList());
+                        return Tasks.forResult(acceptedScheduleList);
+                        /*for (Schedule schedule : scheduleList) {
                             if (schedule.getGroupSupervisorUid().equalsIgnoreCase(userID)){
-                            /*if (schedule.getUserScheduleResponseMap()
-                                    .get(userID).getResponse() == Response.ACCEPT) {*/
+                            if (schedule.getUserScheduleResponseMap()
+                                    .get(userID).getResponse() == Response.ACCEPT) {
                                 acceptedScheduleList.add(schedule);
                             }
                         }
-                        return Tasks.forResult(acceptedScheduleList);
+                        return Tasks.forResult(acceptedScheduleList);*/
                     } else {
                         throw task.getException();
                     }
