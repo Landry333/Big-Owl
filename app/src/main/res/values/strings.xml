@@ -70,4 +70,5 @@
         Location access must be set to <b>Allow all the time</b> for background location access.\n\n
         Your location will be verified at the scheduled time without having to worry the app being open.
     </string>
+    <string name="wiki_page_manual">Wiki Page Manual</string>
 </resources>
