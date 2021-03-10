@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.utils.AuthenticatorByPhoneNumber;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -120,7 +121,7 @@ public class HomePageActivity extends BigOwlActivity {
 
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint({"MissingPermission"})
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStart() {
@@ -132,6 +133,8 @@ public class HomePageActivity extends BigOwlActivity {
         deviceID = telephonyManager.getImei();
         phoneNumber = telephonyManager.getLine1Number();
         subscribeToData();
+        AuthenticatorByPhoneNumber authenticationByPhoneNumber = new AuthenticatorByPhoneNumber(this);
+        authenticationByPhoneNumber.authenticate("YiNpA4OWiR29iXPp1vHm");
     }
 
 

@@ -85,14 +85,16 @@ public class SupervisorSmsListener extends BroadcastReceiver {
                                 if (Math.abs(schedule.getStartTime().getSeconds() - currentTime.getSeconds()) < THIRTY_MINUTES) {
 
                                     if(scheduleId.equalsIgnoreCase(schedule.getUid())){
-                                        Intent nextScreenIntent = new Intent(context, AuthenticationByDeviceIdActivity.class);
+                                        //Intent nextScreenIntent = new Intent(context, AuthenticationByDeviceIdActivity.class);
                                         //Intent nextScreenIntent = new Intent(context, HomePageActivity.class);
                                         //nextScreenIntent.putExtra("scheduleId", scheduleId);
-                                        nextScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        //nextScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         try {
-                                            nextScreenIntent.putExtra("scheduleId", scheduleId);
+                                            /*nextScreenIntent.putExtra("scheduleId", scheduleId);
                                             Toast.makeText(context, "STEP 2 PASSED", Toast.LENGTH_SHORT).show();
-                                            context.startActivity(nextScreenIntent);
+                                            context.startActivity(nextScreenIntent);*/
+                                            AuthenticatorByDeviceId authenticatorByDeviceId = new AuthenticatorByDeviceId(context);
+                                            authenticatorByDeviceId.authenticate(scheduleId);
                                             Log.e("scheduleId put in intent", scheduleId);
                                         } catch (Exception e) {
                                             Log.e("exception", "the message", e);

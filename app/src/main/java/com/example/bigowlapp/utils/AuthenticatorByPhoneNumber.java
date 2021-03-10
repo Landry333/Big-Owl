@@ -1,4 +1,4 @@
-package com.example.bigowlapp.activity;
+package com.example.bigowlapp.utils;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -13,8 +13,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.activity.BigOwlActivity;
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.AuthByPhoneNumberFailure;
 import com.example.bigowlapp.model.Schedule;
@@ -22,10 +24,9 @@ import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
-import com.example.bigowlapp.utils.AuthenticatorByPhoneNumber;
 import com.google.firebase.Timestamp;
 
-public class AuthenticationByPhoneNumberActivity extends BigOwlActivity {
+public class AuthenticatorByPhoneNumber {
 
     private String deviceIdNumber;
     private String devicePhoneNumber;
@@ -33,56 +34,29 @@ public class AuthenticationByPhoneNumberActivity extends BigOwlActivity {
     private TextView authenticationStatusDisplay;
     private String currentUserPhoneNumber;
     //private String scheduleId = getIntent().getStringExtra("scheduleId");
-    private String scheduleId = "YiNpA4OWiR29iXPp1vHm";
+    //private String scheduleId = "YiNpA4OWiR29iXPp1vHm";
 
     private final AuthRepository authRepository = new AuthRepository();
     RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, 10);
-        }
+    private final Context context;
 
+    public AuthenticatorByPhoneNumber(Context context) {
+        this.context = context;
     }
 
-    @Override
-    protected int getContentView() {
-        return R.layout.activity_authentication_by_phone_number;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == 10) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Phone State Permission GRANTED", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Phone State Permission DENIED", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-
-    }
-
-    public String getDeviceIdNumber() {
+    /*public String getDeviceIdNumber() {
         return deviceIdNumber;
-    }
+    }*/
 
-    @RequiresApi(api = Build.VERSION_CODES.R)
+
+    //@RequiresApi(api = Build.VERSION_CODES.R)
     @SuppressLint("MissingPermission")
-    protected void onStart() {
-        super.onStart();
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+    public void authenticate(String scheduleId) {
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         deviceIdNumber = telephonyManager.getDeviceId();
         devicePhoneNumber = telephonyManager.getLine1Number();
-        deviceIdDisplay = findViewById(R.id.device_Id_Display_1);
-        deviceIdDisplay.setText("Device ID Number: " + getDeviceIdNumber());
-        AuthenticatorByPhoneNumber authenticationByPhoneNumber = new AuthenticatorByPhoneNumber(this);
-        authenticationByPhoneNumber.authenticate("YiNpA4OWiR29iXPp1vHm");
+        //deviceIdDisplay.setText("Device ID Number: " + getDeviceIdNumber());
 
         //Attendance testAttendance = new Attendance();
         //testAttendance
@@ -95,14 +69,12 @@ public class AuthenticationByPhoneNumberActivity extends BigOwlActivity {
         //testSchedule.setUserScheduleResponseMap(userScheduleResponseMap);
 
 
-        authenticationStatusDisplay = findViewById(R.id.authentication_Status_Display_1);
-
         repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class)
-                .observe(this, schedule -> {
+                .observe((LifecycleOwner) context, schedule -> {
                     //repositoryFacade.getScheduleRepository().addDocument(testSchedule);
                     repositoryFacade.getUserRepository()
                             .getDocumentByUid(repositoryFacade.getAuthRepository().getCurrentUser().getUid(), User.class)
-                            .observe(this, user -> {
+                            .observe((LifecycleOwner) context, user -> {
                                 currentUserPhoneNumber = user.getPhoneNumber();
                                 UserScheduleResponse userScheduleResponse = schedule.getUserScheduleResponseMap()
                                         .get(repositoryFacade.getAuthRepository().getCurrentUser().getUid());
@@ -111,13 +83,13 @@ public class AuthenticationByPhoneNumberActivity extends BigOwlActivity {
                                 Log.e(devicePhoneNumber, "devicePhoneNumber");
 
                                 if (currentUserPhoneNumber.equalsIgnoreCase("+"+devicePhoneNumber)) {
-                                    authenticationStatusDisplay.setText("Authentication Status: SUCCEEDED");
+                                    //authenticationStatusDisplay.setText("Authentication Status: SUCCEEDED");
                                     attendance.setAuthenticated(true);
-                                    Toast.makeText(this, "SUCCEEDED", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "SUCCEEDED", Toast.LENGTH_SHORT).show();
 
                                 } else {
-                                    Toast.makeText(this, "FAILED", Toast.LENGTH_SHORT).show();
-                                    authenticationStatusDisplay.setText("Authentication Status: FAILED");
+                                    Toast.makeText(context, "FAILED", Toast.LENGTH_SHORT).show();
+                                    //authenticationStatusDisplay.setText("Authentication Status: FAILED");
                                     attendance.setAuthenticated(false);
                                     userScheduleResponse.getAttendance().setDeviceIdNumber(deviceIdNumber);
                                     AuthByPhoneNumberFailure authByPhoneNumberFailure = new AuthByPhoneNumberFailure();
