@@ -134,6 +134,7 @@ public class HomePageActivity extends BigOwlActivity {
             });
             scrollView.setVisibility(View.VISIBLE);
             initAlarmManager();
+            initSupervisorAlarmManager();
         }
         /*  TODO: find a way to uncomment out below lines and allow HomePageActivityTest to pass
         else {
@@ -146,15 +147,17 @@ public class HomePageActivity extends BigOwlActivity {
      * Initializes the AlarmManager to set alarms for the user's schedules that he has to attend to.
      */
     private void initAlarmManager() {
-        if (supervisorSchedulesAlarmManager == null) {
-            supervisorSchedulesAlarmManager = new SupervisorSchedulesAlarmManager(this);
-        }
-        supervisorSchedulesAlarmManager.setAlarms(homePageViewModel.getCurrentUserUid());
-
         if (memberScheduleAlarmManager == null) {
             memberScheduleAlarmManager = new MemberScheduleAlarmManager(this);
         }
         memberScheduleAlarmManager.setAlarms(homePageViewModel.getCurrentUserUid());
+    }
+
+    private void initSupervisorAlarmManager() {
+        if (supervisorSchedulesAlarmManager == null) {
+            supervisorSchedulesAlarmManager = new SupervisorSchedulesAlarmManager(this);
+        }
+        supervisorSchedulesAlarmManager.setAlarms(homePageViewModel.getCurrentUserUid());
     }
 
     @Override
