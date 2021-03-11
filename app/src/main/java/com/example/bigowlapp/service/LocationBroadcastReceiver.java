@@ -8,6 +8,7 @@ import android.util.Log;
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.RepositoryFacade;
+import com.example.bigowlapp.utils.AuthenticatorByPhoneNumber;
 import com.example.bigowlapp.utils.LocationTrackingExpiredAlarmManager;
 import com.example.bigowlapp.utils.PeriodicLocationCheckAlarmManager;
 import com.google.android.gms.location.Geofence;
@@ -38,6 +39,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
         if (geofencingEvent.hasError()) {
@@ -58,6 +60,11 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
+            for (String scheduleID: geofenceIdList){
+                AuthenticatorByPhoneNumber authenticationByPhoneNumber = new AuthenticatorByPhoneNumber(context);
+                authenticationByPhoneNumber.authenticate(scheduleID);
+            }
+
             // User was successfully detected in desired location, so no more tracking needed
             this.removeLocationTracking(context, geofenceIdList);
 
