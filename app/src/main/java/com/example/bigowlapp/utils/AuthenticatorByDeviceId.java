@@ -1,13 +1,10 @@
 package com.example.bigowlapp.utils;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Bundle;
+import android.content.Intent;
 import android.telephony.TelephonyManager;
-import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,19 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.activity.BigOwlActivity;
+import com.example.bigowlapp.activity.SearchContactsByPhone;
+import com.example.bigowlapp.activity.SendSmsInvitationActivity;
+import com.example.bigowlapp.activity.SendingRequestToSuperviseActivity;
 import com.example.bigowlapp.model.Attendance;
-import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.RepositoryFacade;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.List;
 
 public class AuthenticatorByDeviceId {
 
@@ -50,7 +46,7 @@ public class AuthenticatorByDeviceId {
     }*/
 
     @SuppressLint("MissingPermission")
-    protected void authenticate(String scheduleId) {
+    public void authenticate(String scheduleId) {
         //String scheduleId = getIntent().getStringExtra("scheduleId");
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         deviceIdNumber = telephonyManager.getDeviceId();
@@ -58,8 +54,8 @@ public class AuthenticatorByDeviceId {
         //deviceIdDisplay.setText("Device ID Number: " + deviceIdNumber);
 
         //authenticationStatusDisplay = findViewById(R.id.authentication_Status_Display_2);
-        /*repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class)
-                .observe((LifecycleOwner) context, schedule -> {
+        repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class)
+                .observeForever(schedule -> {
                     UserScheduleResponse userScheduleResponse = schedule.getUserScheduleResponseMap()
                             .get(repositoryFacade.getAuthRepository().getCurrentUser().getUid());
                     Attendance attendance = userScheduleResponse.getAttendance();
@@ -67,39 +63,19 @@ public class AuthenticatorByDeviceId {
                     Attendance.LocatedStatus scheduleLocated = attendance.getScheduleLocated();
 
                     if (scheduleLocated == Attendance.LocatedStatus.CORRECT_LOCATION && deviceIdNumber.equalsIgnoreCase(savedDeviceId)) {
-                        authenticationStatusDisplay.setText("Authentication Status: SUCCEEDED");
+                        //authenticationStatusDisplay.setText("Authentication Status: SUCCEEDED");
+                        Toast.makeText(context, "Big Owl next schedule authentication SUCCEEDED", Toast.LENGTH_LONG).show();
                         attendance.setAuthenticated(true);
                     } else {
-                        authenticationStatusDisplay.setText("Authentication Status: FAILED");
+                        //authenticationStatusDisplay.setText("Authentication Status: FAILED");
                         attendance.setAuthenticated(false);
+                        Toast.makeText(context, "Big Owl next schedule authentication FAILED", Toast.LENGTH_LONG).show();
                     }
                     attendance.setAuthAttemptedPhoneUid(true);
                     repositoryFacade.getScheduleRepository().updateDocument(scheduleId, schedule);
-                });*/
-
+                });
     }
 
-    public Task<Schedule> check(String scheduleId) {
-        RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
-        LiveDataWithStatus<Schedule> schedule = repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId,Schedule.class);
-        //Timestamp currentTime = new Timestamp(Calendar.getInstance().getTime());
 
-        Task<QuerySnapshot> gettingUserTask = db.collection("users")
-                .whereEqualTo("phoneNumber", phoneNumber)
-                .get();
-        Task<User> userTask = gettingUserTask.continueWithTask(task -> {
-            if (task.isSuccessful()) {
-                if (!task.getResult().isEmpty()) {
-                    List<User> listOfUsers = task.getResult().toObjects(User.class);
-                    Log.e("listOfusers", listOfUsers.toString());
-                    //Log.e("forResult_listOfUsers", Tasks.forResult(listOfUsers).toString());
-
-                    return Tasks.forResult(listOfUsers.get(0));
-
-                } else throw task.getException();
-
-            } else throw task.getException();
-
-        });
 
 }

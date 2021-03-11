@@ -70,11 +70,11 @@ public class AuthenticatorByPhoneNumber {
 
 
         repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class)
-                .observe((LifecycleOwner) context, schedule -> {
+                .observeForever(schedule -> {
                     //repositoryFacade.getScheduleRepository().addDocument(testSchedule);
                     repositoryFacade.getUserRepository()
                             .getDocumentByUid(repositoryFacade.getAuthRepository().getCurrentUser().getUid(), User.class)
-                            .observe((LifecycleOwner) context, user -> {
+                            .observeForever( user -> {
                                 currentUserPhoneNumber = user.getPhoneNumber();
                                 UserScheduleResponse userScheduleResponse = schedule.getUserScheduleResponseMap()
                                         .get(repositoryFacade.getAuthRepository().getCurrentUser().getUid());
@@ -85,7 +85,7 @@ public class AuthenticatorByPhoneNumber {
                                 if (currentUserPhoneNumber.equalsIgnoreCase("+"+devicePhoneNumber)) {
                                     //authenticationStatusDisplay.setText("Authentication Status: SUCCEEDED");
                                     attendance.setAuthenticated(true);
-                                    Toast.makeText(context, "SUCCEEDED", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Big Owl next schedule authentication SUCCEEDED", Toast.LENGTH_LONG).show();
 
                                 } else {
                                     Toast.makeText(context, "FAILED", Toast.LENGTH_SHORT).show();
