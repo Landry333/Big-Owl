@@ -1,5 +1,6 @@
 package com.example.bigowlapp.activity;
 
+import android.Manifest;
 import android.content.Intent;
 
 import androidx.lifecycle.Lifecycle;
@@ -8,6 +9,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
+import androidx.test.rule.GrantPermissionRule;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Response;
@@ -22,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.GeoPoint;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -48,6 +51,11 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class ScheduleViewRespondActivityTest {
+
+    @Rule
+    public final GrantPermissionRule permissionRule = GrantPermissionRule.grant(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION);
 
     @Mock
     private ScheduleViewRespondViewModel mockScheduleViewRespondViewModel;
@@ -128,9 +136,8 @@ public class ScheduleViewRespondActivityTest {
         activityScenario = ActivityScenario.launch(testIntent);
 
         activityScenario.moveToState(Lifecycle.State.CREATED);
-        activityScenario.onActivity(activity -> {
-            activity.setScheduleViewRespondViewModel(mockScheduleViewRespondViewModel);
-        });
+        activityScenario.onActivity(activity ->
+                activity.setScheduleViewRespondViewModel(mockScheduleViewRespondViewModel));
         activityScenario.moveToState(Lifecycle.State.RESUMED);
     }
 

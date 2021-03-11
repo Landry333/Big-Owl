@@ -11,13 +11,15 @@ public class Attendance {
     }
 
     private boolean authenticated = false;
-    private boolean authAttemptedUserMobileNumber = false;  // if authentication has been attempted at first using the UserMobileNumber
-    private boolean authAttemptedPhoneUid = false;  // if authentication has been attempted secondly using the PhoneUid
+
+    private boolean attemptedAuthByUserMobileNumber = false;  // if authentication has been attempted at first using the UserMobileNumber
+    private boolean attemptedAuthByPhoneUid = false;  // if authentication has been attempted secondly using the PhoneUid
     private LocatedStatus scheduleLocated = LocatedStatus.NOT_DETECTED;
     private String deviceIdNumber;
     private Timestamp authenticationTime;
 
     public Attendance() {
+        // public no-argument constructor necessary for Firebase data mapping
     }
 
     public boolean isAuthenticated() {
@@ -28,20 +30,20 @@ public class Attendance {
         this.authenticated = authenticated;
     }
 
-    public boolean isAuthAttemptedUserMobileNumber() {
-        return authAttemptedUserMobileNumber;
+    public boolean attemptedAuthByUserMobileNumber() {
+        return attemptedAuthByUserMobileNumber;
     }
 
-    public void setAuthAttemptedUserMobileNumber(boolean authAttemptedUserMobileNumber) {
-        this.authAttemptedUserMobileNumber = authAttemptedUserMobileNumber;
+    public void setAttemptedAuthByUserMobileNumber(boolean authAttemptedUserMobileNumber) {
+        this.attemptedAuthByUserMobileNumber = authAttemptedUserMobileNumber;
     }
 
-    public boolean isAuthAttemptedPhoneUid() {
-        return authAttemptedPhoneUid;
+    public boolean attemptedAuthByPhoneUid() {
+        return attemptedAuthByPhoneUid;
     }
 
-    public void setAuthAttemptedPhoneUid(boolean authAttemptedPhoneUid) {
-        this.authAttemptedPhoneUid = authAttemptedPhoneUid;
+    public void setAttemptedAuthByPhoneUid(boolean authAttemptedPhoneUid) {
+        this.attemptedAuthByPhoneUid = authAttemptedPhoneUid;
     }
 
     public LocatedStatus getScheduleLocated() {
@@ -60,11 +62,6 @@ public class Attendance {
         this.deviceIdNumber = deviceIdNumber;
     }
 
-    @Exclude
-    public boolean didAttend() {
-        return authenticated && scheduleLocated == LocatedStatus.CORRECT_LOCATION;
-
-    }
     public Timestamp getAuthenticationTime() {
         return authenticationTime;
     }
@@ -72,4 +69,12 @@ public class Attendance {
     public void setAuthenticationTime(Timestamp authenticationTime) {
         this.authenticationTime = authenticationTime;
     }
+
+
+    @Exclude
+    public boolean didAttend() {
+        return authenticated && scheduleLocated == LocatedStatus.CORRECT_LOCATION;
+
+    }
 }
+
