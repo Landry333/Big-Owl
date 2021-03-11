@@ -18,8 +18,25 @@ public class Notification extends Model {
         }
     }
 
-    private Type type;
-    private Timestamp time;
+    /**
+     * The type is used to differentiate notifications when storing/retrieving them from the db
+     */
+    protected Type type;
+
+    /**
+     * The date/time the notification was created
+     */
+    protected Timestamp time;
+
+    /**
+     * The database uid of the user who will receive this notification
+     */
+    protected String receiverUid;
+
+    /**
+     * The date/time the notification was viewed by its receiver
+     */
+    protected Timestamp timeRead;
 
     public Notification() {
         super();
@@ -48,8 +65,26 @@ public class Notification extends Model {
         this.time = time;
     }
 
+    public String getReceiverUid() {
+        return receiverUid;
+    }
+
+    public void setReceiverUid(String receiverUid) {
+        this.receiverUid = receiverUid;
+    }
+
+    public Timestamp getTimeRead() {
+        return timeRead;
+    }
+
+    public void setTimeRead(Timestamp timeRead) {
+        this.timeRead = timeRead;
+    }
+
     public static class Field {
         public static final String TYPE = "type";
         public static final String TIME = "time";
+        public static final String RECEIVER_UID = "receiverUid";
+        public static final String TIME_READ = "timeRead";
     }
 }
