@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.repository.UserRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,7 +47,7 @@ public class SearchContactsByPhone extends BigOwlActivity {
                 list.clear();
                 smsNumber = number.getText().toString();
 
-                db.collection("users")
+                db.collection(UserRepository.COLLECTION_NAME)
                         .whereEqualTo(User.Field.PHONE_NUMBER, number.getText().toString())
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

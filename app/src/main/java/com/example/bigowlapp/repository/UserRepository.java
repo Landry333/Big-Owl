@@ -8,9 +8,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class UserRepository extends Repository<User> {
 
+    public static final String COLLECTION_NAME = "users";
+
     // TODO: Dependency Injection Implementation for Firestore
     public UserRepository() {
-        super("users");
+        super(UserRepository.COLLECTION_NAME);
     }
 
     public Task<Void> isPhoneNumberInDatabase(String phoneNumber) {

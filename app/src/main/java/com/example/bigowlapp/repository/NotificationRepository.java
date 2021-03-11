@@ -14,9 +14,11 @@ import java.util.List;
 
 public class NotificationRepository extends Repository<Notification> {
 
+    public static final String COLLECTION_NAME = "notifications";
+
     // TODO: Dependency Injection Implementation for Firestore
     public NotificationRepository() {
-        super("notifications");
+        super(NotificationRepository.COLLECTION_NAME);
     }
 
     public MutableLiveData<List<SupervisionRequest>> getListOfSupervisionRequestByAttribute(String attribute, String attrValue,

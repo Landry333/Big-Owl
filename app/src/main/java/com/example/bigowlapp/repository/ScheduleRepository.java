@@ -12,9 +12,12 @@ import java.util.List;
 
 
 public class ScheduleRepository extends Repository<Schedule> {
+
+    public static final String COLLECTION_NAME = "schedules";
+
     // TODO: Add dependency injection
     public ScheduleRepository() {
-        super("schedules");
+        super(ScheduleRepository.COLLECTION_NAME);
     }
 
     public Task<Void> updateScheduleMemberResponse(String scheduleId, String userUid, UserScheduleResponse currentUserScheduleResponse) {

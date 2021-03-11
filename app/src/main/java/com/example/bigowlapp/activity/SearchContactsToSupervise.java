@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.repository.UserRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -95,7 +96,7 @@ public class SearchContactsToSupervise extends BigOwlActivity {
                             .replaceAll("[^+0-9]", "");
                 }
 
-                db.collection("users")
+                db.collection(UserRepository.COLLECTION_NAME)
                         .whereEqualTo(User.Field.PHONE_NUMBER, contactNumber)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
