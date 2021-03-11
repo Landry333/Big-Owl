@@ -16,4 +16,10 @@ public class LocationTrackingExpiredAlarmReceiver extends BroadcastReceiver {
         PeriodicLocationCheckAlarmManager locationCheckAlarmManager = new PeriodicLocationCheckAlarmManager(context);
         locationCheckAlarmManager.cancelPeriodicLocationCheck();
     }
+
+    public void sendMissedScheduleNotification(Context context){
+
+
+        
+    }
 }
