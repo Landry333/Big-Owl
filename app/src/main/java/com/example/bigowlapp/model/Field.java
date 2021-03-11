@@ -32,8 +32,10 @@ public class Field {
 
     public static class ScheduleRequest extends Notification {
         public static final String SENDER_UID = "senderUid";
+        // TODO: should probably pull up this field as its relevant to all Notifications
         public static final String RECEIVER_UID = "receiverUid";
         public static final String GROUP_UID = "groupUid";
+        // TODO: should probably pull up this field as its relevant to all Notifications
         public static final String TIME_READ = "timeRead";
         public static final String SENDER_RESPONSE = "senderResponse";
     }
