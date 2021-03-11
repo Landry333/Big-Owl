@@ -61,7 +61,7 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
             finish();
             startActivity(new Intent(this, HomePageActivity.class));
         } else if (item.getItemId() == R.id.overflow_wiki_page_manual) {
-            String WIKI_PAGE_MANUAL_URI = "https://github.com/Landry333/Big-Owl/wiki/Manual";
+            final String WIKI_PAGE_MANUAL_URI = "https://github.com/Landry333/Big-Owl/wiki/Manual";
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(WIKI_PAGE_MANUAL_URI));
             startActivity(intent);
         } else if (item.getItemId() == R.id.overflow_refresh) {
