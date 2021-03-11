@@ -3,6 +3,7 @@ package com.example.bigowlapp.viewModel;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.bigowlapp.model.Field;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Response;
@@ -61,7 +62,7 @@ public class SetScheduleViewModelTest {
     private FirebaseUser testFirebaseUser;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         when(repositoryFacade.getAuthRepository()).thenReturn(authRepository);
         when(repositoryFacade.getScheduleRepository()).thenReturn(scheduleRepository);
         when(repositoryFacade.getGroupRepository()).thenReturn(groupRepository);
@@ -71,10 +72,6 @@ public class SetScheduleViewModelTest {
 
         when(authRepository.getCurrentUser()).thenReturn(testFirebaseUser);
         when(testFirebaseUser.getUid()).thenReturn("123");
-    }
-
-    @After
-    public void tearDown() throws Exception {
     }
 
     @Test
@@ -104,10 +101,10 @@ public class SetScheduleViewModelTest {
     @Test
     public void getListOfGroup() {
         setScheduleViewModel.setListOfGroupData(null);
-        when(groupRepository.getListOfDocumentByAttribute("supervisorId", "123", Group.class)).thenReturn(new LiveDataWithStatus<>());
+        when(groupRepository.getListOfDocumentByAttribute(Field.Group.SUPERVISOR_ID, "123", Group.class)).thenReturn(new LiveDataWithStatus<>());
         assertNotNull(setScheduleViewModel.getListOfGroup());
         assertNotNull(setScheduleViewModel.getListOfGroup());
-        verify(groupRepository, times(1)).getListOfDocumentByAttribute("supervisorId", "123", Group.class);
+        verify(groupRepository, times(1)).getListOfDocumentByAttribute(Field.Group.SUPERVISOR_ID, "123", Group.class);
     }
 
     @Test

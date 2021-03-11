@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
+import com.example.bigowlapp.model.Field;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
@@ -73,7 +74,7 @@ public class SetScheduleViewModel extends BaseViewModel {
     private void loadListOfGroup() {
         String userId = getCurrentUserUid();
         listOfGroupData = repositoryFacade.getGroupRepository()
-                .getListOfDocumentByAttribute("supervisorId", userId, Group.class);
+                .getListOfDocumentByAttribute(Field.Group.SUPERVISOR_ID, userId, Group.class);
     }
 
     public void updateScheduleTitle(String title) {
