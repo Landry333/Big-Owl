@@ -97,7 +97,6 @@ public class EditProfileViewTest {
                 "+1111111111",
                 "https://simpleicon.com/wp-content/uploads/user1.png"
         );
-        assertEquals(Lifecycle.State.DESTROYED, activityRule.getScenario().getState());
     }
 
     @Test

@@ -62,4 +62,12 @@
     <string name="schedule_title">Schedules title</string>
     <string name="schedule_start_time">Schedules Start time</string>
     <string name="inspect">inspect</string>
+    <string name="general_location_justification">
+        Location detection is required to check whether you have arrived to a scheduled location.\n\n
+        If not provided, the system will assume you have not arrived to the location.
+    </string>
+    <string name="background_location_justification">
+        Location access must be set to <b>Allow all the time</b> for background location access.\n\n
+        Your location will be verified at the scheduled time without having to worry the app being open.
+    </string>
 </resources>
