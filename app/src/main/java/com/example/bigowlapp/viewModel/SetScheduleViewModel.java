@@ -154,7 +154,7 @@ public class SetScheduleViewModel extends BaseViewModel {
             return new MutableLiveData<>(new ArrayList<>());
         }
         return repositoryFacade.getUserRepository()
-                .getListOfDocumentByArrayContains("memberGroupIdList", group.getUid(), User.class);
+                .getListOfDocumentByArrayContains(Field.User.MEMBER_GROUP_ID_LIST, group.getUid(), User.class);
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

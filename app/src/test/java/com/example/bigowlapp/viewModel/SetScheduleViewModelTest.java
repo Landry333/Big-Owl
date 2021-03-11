@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.GeoPoint;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -199,9 +198,9 @@ public class SetScheduleViewModelTest {
 
         // case where data was not loaded yet
         setScheduleViewModel.setPreviousSelectedGroup(null);
-        when(userRepository.getListOfDocumentByArrayContains("memberGroupIdList", group.getUid(), User.class)).thenReturn(new LiveDataWithStatus<>(userList));
+        when(userRepository.getListOfDocumentByArrayContains(Field.User.MEMBER_GROUP_ID_LIST, group.getUid(), User.class)).thenReturn(new LiveDataWithStatus<>(userList));
         scheduleUserList = setScheduleViewModel.getListOfUsersFromGroup(group).getValue();
-        verify(userRepository).getListOfDocumentByArrayContains("memberGroupIdList", group.getUid(), User.class);
+        verify(userRepository).getListOfDocumentByArrayContains(Field.User.MEMBER_GROUP_ID_LIST, group.getUid(), User.class);
         assertEquals(userList, scheduleUserList);
 
         // case where the group is empty

@@ -43,7 +43,7 @@ public class MonitoringGroupPageViewModel extends BaseViewModel {
 
     private void loadAllUsersInGroup(Group group) {
         usersInGroup = repositoryFacade.getUserRepository()
-                .getListOfDocumentByArrayContains("memberGroupIdList", group.getUid(), User.class);
+                .getListOfDocumentByArrayContains(Field.User.MEMBER_GROUP_ID_LIST, group.getUid(), User.class);
     }
 
     public void removeUserFromGroup(User userToBeRemoved) {

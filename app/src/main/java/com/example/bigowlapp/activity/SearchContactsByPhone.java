@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.model.Field;
 import com.example.bigowlapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,7 +28,7 @@ public class SearchContactsByPhone extends BigOwlActivity {
     private List<String> list, listShow;
     private Button btnSearch;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static final ArrayList<QueryDocumentSnapshot> qds = new ArrayList<QueryDocumentSnapshot>();
+    private static final ArrayList<QueryDocumentSnapshot> qds = new ArrayList<>();
     private EditText number;
     private String smsNumber;
 
@@ -49,7 +50,7 @@ public class SearchContactsByPhone extends BigOwlActivity {
                 smsNumber = number.getText().toString();
 
                 db.collection("users")
-                        .whereEqualTo("phoneNumber", number.getText().toString())
+                        .whereEqualTo(Field.User.PHONE_NUMBER, number.getText().toString())
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
