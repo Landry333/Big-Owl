@@ -86,5 +86,9 @@ public class Notification extends Model {
         public static final String TIME = "time";
         public static final String RECEIVER_UID = "receiverUid";
         public static final String TIME_READ = "timeRead";
+
+        protected Field() {
+            // constants class should not be instantiated
+        }
     }
 }

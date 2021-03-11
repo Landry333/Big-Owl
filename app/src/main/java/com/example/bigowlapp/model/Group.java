@@ -58,5 +58,9 @@ public class Group extends Model {
         public static final String NAME = "name";
         public static final String SUPERVISOR_ID = "supervisorId";
         public static final String MEMBER_ID_LIST = "memberIdList";
+
+        private Field() {
+            // constants class should not be instantiated
+        }
     }
 }

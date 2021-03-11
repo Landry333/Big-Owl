@@ -40,5 +40,9 @@ public class ScheduleRequest extends Notification {
         public static final String SENDER_UID = "senderUid";
         public static final String GROUP_UID = "groupUid";
         public static final String SENDER_RESPONSE = "senderResponse";
+
+        private Field() {
+            // constants class should not be instantiated
+        }
     }
 }

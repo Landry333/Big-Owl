@@ -122,5 +122,9 @@ public class Schedule extends Model {
         public static final String END_TIME = "endTime";
         public static final String LOCATION = "location";
         public static final String USER_SCHEDULE_RESPONSE_MAP = "userScheduleResponseMap";
+
+        private Field() {
+            // constants class should not be instantiated
+        }
     }
 }
