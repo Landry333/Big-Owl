@@ -1,7 +1,6 @@
 package com.example.bigowlapp.model;
 
 public class Field {
-    public static final String UID = "uid";
 
     private Field() {
         // This is a constants class, and should not be instantiated
