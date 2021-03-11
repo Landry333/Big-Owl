@@ -18,10 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.utils.AuthenticatorByPhoneNumber;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -52,7 +50,6 @@ public class HomePageActivity extends BigOwlActivity {
     private HomePageViewModel homePageViewModel;
     String deviceID;
     String phoneNumber;
-    private Button btnTestAuth1;
     private MemberScheduleAlarmManager memberScheduleAlarmManager;
 
     @Override
@@ -138,8 +135,6 @@ public class HomePageActivity extends BigOwlActivity {
         deviceID = telephonyManager.getImei();
         phoneNumber = telephonyManager.getLine1Number();
         subscribeToData();
-        AuthenticatorByPhoneNumber authenticationByPhoneNumber = new AuthenticatorByPhoneNumber(this);
-        authenticationByPhoneNumber.authenticate("YiNpA4OWiR29iXPp1vHm");
     }
 
 
@@ -174,13 +169,6 @@ public class HomePageActivity extends BigOwlActivity {
 
         btnSupervisedGroup.setOnClickListener(v -> {
             Intent i = new Intent(HomePageActivity.this, SupervisedGroupListActivity.class);
-            startActivity(i);
-        });
-
-        btnTestAuth1 = findViewById(R.id.btn_test_auth1);
-
-        btnTestAuth1.setOnClickListener(v -> {
-            Intent i = new Intent(HomePageActivity.this, AuthenticationByPhoneNumberActivity.class);
             startActivity(i);
         });
 

@@ -2,28 +2,15 @@ package com.example.bigowlapp.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.telephony.TelephonyManager;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
-
-import com.example.bigowlapp.R;
-import com.example.bigowlapp.activity.SearchContactsByPhone;
-import com.example.bigowlapp.activity.SendSmsInvitationActivity;
-import com.example.bigowlapp.activity.SendingRequestToSuperviseActivity;
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.Schedule;
-import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.RepositoryFacade;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 public class AuthenticatorByDeviceId {
 
@@ -71,7 +58,7 @@ public class AuthenticatorByDeviceId {
                         attendance.setAuthenticated(false);
                         Toast.makeText(context, "Big Owl next schedule authentication FAILED", Toast.LENGTH_LONG).show();
                     }
-                    attendance.setAuthAttemptedPhoneUid(true);
+                    attendance.setAttemptedAuthByPhoneUid(true);
                     repositoryFacade.getScheduleRepository().updateDocument(scheduleId, schedule);
                 });
     }

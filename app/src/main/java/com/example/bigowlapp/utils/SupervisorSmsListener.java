@@ -20,32 +20,15 @@ import java.util.Calendar;
 public class SupervisorSmsListener extends BroadcastReceiver {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-    //private String smsNumber;
-    //private String smsMessage;
     private String smsSender;
     private static final int THIRTY_MINUTES = 1800;
     private String scheduleId;
 
-    //RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
     IsSmsSenderACurrentEventSupervisor isSmsSenderACurrentEventSupervisor = new IsSmsSenderACurrentEventSupervisor();
-    //DeviceIDNumberGetter deviceIDNumberGetter = new DeviceIDNumberGetter();
-    //UserAuthenticator_Method1 authenticator_1 = new UserAuthenticator_Method1();
-
-
-    //private String deviceID = authenticator_1.getDeviceID();
 
     public void onReceive(Context context, Intent receiverIntent) {
-        //AlertDialog.Builder display = new AlertDialog.Builder(context)
 
         if (receiverIntent.getAction().equals(SMS_RECEIVED)) {
-            /*try{
-                DeviceIDNumberGetter deviceIDNumberGetter = new DeviceIDNumberGetter();
-                String deviceID = deviceIDNumberGetter.getIDNumber();
-                Toast.makeText(context, deviceID, Toast.LENGTH_SHORT).show();
-            }
-            catch(Exception e){
-                Log.e("exception", "the message", e);
-            }*/
             Bundle bundle = receiverIntent.getExtras();
             if (bundle != null) {
                 // get sms objects
@@ -91,8 +74,8 @@ public class SupervisorSmsListener extends BroadcastReceiver {
                                             /*nextScreenIntent.putExtra("scheduleId", scheduleId);
                                             Toast.makeText(context, "STEP 2 PASSED", Toast.LENGTH_SHORT).show();
                                             context.startActivity(nextScreenIntent);*/
-                                            //AuthenticatorByDeviceId authenticatorByDeviceId = new AuthenticatorByDeviceId(context);
-                                            //authenticatorByDeviceId.authenticate(scheduleId);
+                                            AuthenticatorByDeviceId authenticatorByDeviceId = new AuthenticatorByDeviceId(context);
+                                            authenticatorByDeviceId.authenticate(scheduleId);
                                             Toast.makeText(context, "STEP 2 PASSED", Toast.LENGTH_SHORT).show();
                                             Log.e("scheduleId put in intent", scheduleId);
                                         } catch (Exception e) {
