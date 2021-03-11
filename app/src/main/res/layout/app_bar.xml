@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="51dp"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    android:visibility="visible"
     android:orientation="vertical">
 
     <LinearLayout
@@ -99,4 +100,16 @@
         android:layout_height="1dp"
         android:background="?attr/colorPrimary" />
 
+    <ProgressBar
+        android:id="@+id/database_progress_bar"
+        style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-6dp"
+        android:max="100"
+        android:progress="0"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateOnly="true"
+        />
 </LinearLayout>
