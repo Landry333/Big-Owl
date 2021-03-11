@@ -1,6 +1,5 @@
 package com.example.bigowlapp.repository;
 
-import com.example.bigowlapp.model.Field;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
@@ -20,15 +19,15 @@ public class ScheduleRepository extends Repository<Schedule> {
 
     public Task<Void> updateScheduleMemberResponse(String scheduleId, String userUid, UserScheduleResponse currentUserScheduleResponse) {
         return collectionReference.document(scheduleId)
-                .update((Field.Schedule.USER_SCHEDULE_RESPONSE_MAP + ".").concat(userUid),
+                .update((Schedule.Field.USER_SCHEDULE_RESPONSE_MAP + ".").concat(userUid),
                         currentUserScheduleResponse);
     }
 
     public LiveDataWithStatus<List<Schedule>> getListSchedulesFromGroupForUser(String groupID, String userID) {
         LiveDataWithStatus<List<Schedule>> listOfTData = new LiveDataWithStatus<>();
-        collectionReference.whereEqualTo(Field.Schedule.GROUP_UID, groupID)
-                .whereArrayContains(Field.Schedule.MEMBER_LIST, userID)
-                .orderBy(Field.Schedule.START_TIME, Query.Direction.ASCENDING)
+        collectionReference.whereEqualTo(Schedule.Field.GROUP_UID, groupID)
+                .whereArrayContains(Schedule.Field.MEMBER_LIST, userID)
+                .orderBy(Schedule.Field.START_TIME, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -53,9 +52,9 @@ public class ScheduleRepository extends Repository<Schedule> {
      * @return A Task that contains the QuerySnapshot of the list of schedule for the given user
      */
     public Task<QuerySnapshot> getTaskListSchedulesForUser(String userID) {
-        return collectionReference.whereArrayContains(Field.Schedule.MEMBER_LIST, userID)
-                .whereGreaterThanOrEqualTo(Field.Schedule.START_TIME, Timestamp.now())
-                .orderBy(Field.Schedule.START_TIME, Query.Direction.ASCENDING)
+        return collectionReference.whereArrayContains(Schedule.Field.MEMBER_LIST, userID)
+                .whereGreaterThanOrEqualTo(Schedule.Field.START_TIME, Timestamp.now())
+                .orderBy(Schedule.Field.START_TIME, Query.Direction.ASCENDING)
                 .get();
     }
 }

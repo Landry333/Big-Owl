@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.model.Field;
 import com.example.bigowlapp.model.SupervisionRequest;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
@@ -103,7 +102,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         supRequestBtn.setText(supBtnSend); // Default setText
         resultNoteTv.setText(noRequest);
         LiveData<List<SupervisionRequest>> senderRequestsData = notificationRepository
-                .getListOfSupervisionRequestByAttribute(Field.SupervisionRequest.SENDER_UID,
+                .getListOfSupervisionRequestByAttribute(SupervisionRequest.Field.SENDER_UID,
                         currentUserID, SupervisionRequest.class);
 
         senderRequestsData.observe(this, senderRequests -> {

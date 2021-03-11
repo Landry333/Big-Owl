@@ -47,4 +47,9 @@ public class Notification extends Model {
     public void setTime(Timestamp time) {
         this.time = time;
     }
+
+    public static class Field {
+        public static final String TYPE = "type";
+        public static final String TIME = "time";
+    }
 }

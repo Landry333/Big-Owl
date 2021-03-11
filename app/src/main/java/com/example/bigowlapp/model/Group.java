@@ -6,7 +6,6 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 import java.util.ArrayList;
 import java.util.List;
 
-// Exclude uneeded data from documents
 @IgnoreExtraProperties
 public class Group extends Model {
 
@@ -55,4 +54,9 @@ public class Group extends Model {
         this.memberIdList = memberIdList;
     }
 
+    public static class Field {
+        public static final String NAME = "name";
+        public static final String SUPERVISOR_ID = "supervisorId";
+        public static final String MEMBER_ID_LIST = "memberIdList";
+    }
 }

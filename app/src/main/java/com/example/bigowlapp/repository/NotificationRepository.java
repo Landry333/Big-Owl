@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.bigowlapp.model.Field;
 import com.example.bigowlapp.model.Notification;
 import com.example.bigowlapp.model.SupervisionRequest;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -24,7 +23,7 @@ public class NotificationRepository extends Repository<Notification> {
                                                                                             Class<? extends SupervisionRequest> tClass) {
         MutableLiveData<List<SupervisionRequest>> listOfTData = new MutableLiveData<>();
         collectionReference.whereEqualTo(attribute, attrValue)
-                .whereEqualTo(Field.Notification.TYPE, Notification.Type.SUPERVISION_REQUEST)
+                .whereEqualTo(Notification.Field.TYPE, Notification.Type.SUPERVISION_REQUEST)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

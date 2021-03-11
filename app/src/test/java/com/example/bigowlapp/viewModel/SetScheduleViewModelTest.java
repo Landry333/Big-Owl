@@ -3,7 +3,6 @@ package com.example.bigowlapp.viewModel;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.bigowlapp.model.Field;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Response;
@@ -100,10 +99,10 @@ public class SetScheduleViewModelTest {
     @Test
     public void getListOfGroup() {
         setScheduleViewModel.setListOfGroupData(null);
-        when(groupRepository.getListOfDocumentByAttribute(Field.Group.SUPERVISOR_ID, "123", Group.class)).thenReturn(new LiveDataWithStatus<>());
+        when(groupRepository.getListOfDocumentByAttribute(Group.Field.SUPERVISOR_ID, "123", Group.class)).thenReturn(new LiveDataWithStatus<>());
         assertNotNull(setScheduleViewModel.getListOfGroup());
         assertNotNull(setScheduleViewModel.getListOfGroup());
-        verify(groupRepository, times(1)).getListOfDocumentByAttribute(Field.Group.SUPERVISOR_ID, "123", Group.class);
+        verify(groupRepository, times(1)).getListOfDocumentByAttribute(Group.Field.SUPERVISOR_ID, "123", Group.class);
     }
 
     @Test
@@ -198,9 +197,9 @@ public class SetScheduleViewModelTest {
 
         // case where data was not loaded yet
         setScheduleViewModel.setPreviousSelectedGroup(null);
-        when(userRepository.getListOfDocumentByArrayContains(Field.User.MEMBER_GROUP_ID_LIST, group.getUid(), User.class)).thenReturn(new LiveDataWithStatus<>(userList));
+        when(userRepository.getListOfDocumentByArrayContains(User.Field.MEMBER_GROUP_ID_LIST, group.getUid(), User.class)).thenReturn(new LiveDataWithStatus<>(userList));
         scheduleUserList = setScheduleViewModel.getListOfUsersFromGroup(group).getValue();
-        verify(userRepository).getListOfDocumentByArrayContains(Field.User.MEMBER_GROUP_ID_LIST, group.getUid(), User.class);
+        verify(userRepository).getListOfDocumentByArrayContains(User.Field.MEMBER_GROUP_ID_LIST, group.getUid(), User.class);
         assertEquals(userList, scheduleUserList);
 
         // case where the group is empty

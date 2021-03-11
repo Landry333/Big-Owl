@@ -3,7 +3,6 @@ package com.example.bigowlapp.viewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.bigowlapp.model.Field;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
 
@@ -38,12 +37,12 @@ public class MonitoringGroupPageViewModel extends BaseViewModel {
     private void loadGroup() {
         String userId = getCurrentUserUid();
         selectedGroup = repositoryFacade.getGroupRepository()
-                .getDocumentByAttribute(Field.Group.SUPERVISOR_ID, userId, Group.class);
+                .getDocumentByAttribute(Group.Field.SUPERVISOR_ID, userId, Group.class);
     }
 
     private void loadAllUsersInGroup(Group group) {
         usersInGroup = repositoryFacade.getUserRepository()
-                .getListOfDocumentByArrayContains(Field.User.MEMBER_GROUP_ID_LIST, group.getUid(), User.class);
+                .getListOfDocumentByArrayContains(User.Field.MEMBER_GROUP_ID_LIST, group.getUid(), User.class);
     }
 
     public void removeUserFromGroup(User userToBeRemoved) {

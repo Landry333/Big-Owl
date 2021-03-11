@@ -17,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.model.Field;
 import com.example.bigowlapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -97,7 +96,7 @@ public class SearchContactsToSupervise extends BigOwlActivity {
                 }
 
                 db.collection("users")
-                        .whereEqualTo(Field.User.PHONE_NUMBER, contactNumber)
+                        .whereEqualTo(User.Field.PHONE_NUMBER, contactNumber)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override

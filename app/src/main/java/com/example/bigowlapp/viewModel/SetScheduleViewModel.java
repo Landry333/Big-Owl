@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import com.example.bigowlapp.model.Field;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
@@ -74,7 +73,7 @@ public class SetScheduleViewModel extends BaseViewModel {
     private void loadListOfGroup() {
         String userId = getCurrentUserUid();
         listOfGroupData = repositoryFacade.getGroupRepository()
-                .getListOfDocumentByAttribute(Field.Group.SUPERVISOR_ID, userId, Group.class);
+                .getListOfDocumentByAttribute(Group.Field.SUPERVISOR_ID, userId, Group.class);
     }
 
     public void updateScheduleTitle(String title) {
@@ -154,7 +153,7 @@ public class SetScheduleViewModel extends BaseViewModel {
             return new MutableLiveData<>(new ArrayList<>());
         }
         return repositoryFacade.getUserRepository()
-                .getListOfDocumentByArrayContains(Field.User.MEMBER_GROUP_ID_LIST, group.getUid(), User.class);
+                .getListOfDocumentByArrayContains(User.Field.MEMBER_GROUP_ID_LIST, group.getUid(), User.class);
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

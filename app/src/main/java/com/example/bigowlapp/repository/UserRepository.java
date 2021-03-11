@@ -1,6 +1,5 @@
 package com.example.bigowlapp.repository;
 
-import com.example.bigowlapp.model.Field;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.exception.PhoneNumberTakenException;
 import com.google.android.gms.tasks.Task;
@@ -16,7 +15,7 @@ public class UserRepository extends Repository<User> {
 
     public Task<Void> isPhoneNumberInDatabase(String phoneNumber) {
         Task<QuerySnapshot> taskGetPhoneNumber =
-                collectionReference.whereEqualTo(Field.User.PHONE_NUMBER, phoneNumber)
+                collectionReference.whereEqualTo(User.Field.PHONE_NUMBER, phoneNumber)
                         .limit(1)
                         .get();
 

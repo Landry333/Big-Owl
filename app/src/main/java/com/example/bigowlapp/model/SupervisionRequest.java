@@ -61,4 +61,12 @@ public class SupervisionRequest extends Notification {
         REJECT,
         NEUTRAL
     }
+
+    public static class Field extends Notification.Field{
+        public static final String SENDER_UID = "senderUid";
+        public static final String RECEIVER_UID = "receiverUid";
+        public static final String GROUP_UID = "groupUid";
+        public static final String RESPONSE = "response";
+        public static final String TIME_RESPONSE = "timeResponse";
+    }
 }
