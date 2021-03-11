@@ -8,6 +8,7 @@ import android.util.Log;
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.RepositoryFacade;
+import com.example.bigowlapp.utils.LocationTrackingExpiredAlarmManager;
 import com.example.bigowlapp.utils.PeriodicLocationCheckAlarmManager;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
@@ -57,13 +58,8 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
-
             // User was successfully detected in desired location, so no more tracking needed
-            this.removeLocationTracking(context, geofenceIdList)
-                    .addOnSuccessListener(aVoid ->
-                            Log.e(TAG, "Entered LOCATION TRACKING SUCCESSFULLY REMOVED"))
-                    .addOnFailureListener(e ->
-                            Log.e(TAG, "FAILED TO REMOVE LOCATIONS"));
+            this.removeLocationTracking(context, geofenceIdList);
 
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION);
@@ -73,8 +69,14 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
     }
 
     private Task<Void> removeLocationTracking(Context context, List<String> geofencesToRemoveIdList) {
+        // no need for periodic location checking anymore
         PeriodicLocationCheckAlarmManager locationCheckAlarmManager = new PeriodicLocationCheckAlarmManager(context);
         locationCheckAlarmManager.cancelPeriodicLocationCheck();
+
+        // no need to check tracking expiration anymore
+        LocationTrackingExpiredAlarmManager locationTrackingExpiredAlarmManager =
+                new LocationTrackingExpiredAlarmManager(context);
+        locationTrackingExpiredAlarmManager.cancelExpirationAlarm();
 
         GeofencingClient geofencingClient = LocationServices.getGeofencingClient(context);
         return geofencingClient.removeGeofences(geofencesToRemoveIdList);
@@ -92,9 +94,15 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                                 .getUserScheduleResponseMap()
                                 .get(userUid)
                                 .getAttendance();
+
+                        // If the user was already detected to be in the location, no need to
+                        // update the database anymore.
+                        if (userAttendance.getScheduleLocated() == Attendance.LocatedStatus.CORRECT_LOCATION) {
+                            return;
+                        }
+
                         userAttendance.setScheduleLocated(locatedStatusToAdd);
                         userAttendance.setAuthenticationTime(Timestamp.now());
-
                         repositoryFacade.getScheduleRepository()
                                 .updateDocument(schedule.getUid(), schedule);
                     }

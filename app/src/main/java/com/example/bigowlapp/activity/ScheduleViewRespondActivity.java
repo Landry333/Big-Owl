@@ -30,6 +30,8 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
         scheduleUid = intent.getStringExtra("scheduleUid");
         groupName = intent.getStringExtra("groupName");
         supervisorName = intent.getStringExtra("supervisorName");
+
+        this.permissionsHelper = new PermissionsHelper(this);
     }
 
     @Override
@@ -81,7 +83,6 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
     }
 
     public void requestLocationPermissions() {
-        this.permissionsHelper = new PermissionsHelper(this);
         permissionsHelper.requestLocationAndBackgroundLocationPermissions();
     }
 

@@ -3,7 +3,6 @@ package com.example.bigowlapp.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
@@ -27,10 +26,7 @@ public class MemberScheduleAlarmReceiver extends BroadcastReceiver {
         Schedule activatedSchedule = getSchedule(intent);
 
         ScheduledLocationTrackingManager locationTrackingManager = new ScheduledLocationTrackingManager(context);
-        // TODO: figure what to do with success/failure, or remove them
-        locationTrackingManager.addNewScheduledLocationToTrack(activatedSchedule)
-                .addOnSuccessListener(aVoid -> Log.e("BigOwl", "LOCATION TRACKING STARTED"))
-                .addOnFailureListener(e -> Log.e("BigOwl", e.getMessage()));
+        locationTrackingManager.addNewScheduledLocationToTrack(activatedSchedule);
     }
 
     private Schedule getSchedule(Intent intent) {
