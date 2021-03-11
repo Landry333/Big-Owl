@@ -55,8 +55,6 @@ public class HomePageActivity extends BigOwlActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initialize();
-
         // RECEIVE SMS and SEND SMS permissions for the text sms authentication system
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 checkSelfPermission(Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED){
@@ -74,6 +72,8 @@ public class HomePageActivity extends BigOwlActivity {
                 checkSelfPermission(Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_PHONE_NUMBERS}, 1);
         }
+
+        initialize();
 
     }
 

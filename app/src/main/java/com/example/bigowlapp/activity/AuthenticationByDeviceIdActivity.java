@@ -90,7 +90,7 @@ public class AuthenticationByDeviceIdActivity extends BigOwlActivity {
                         authenticationStatusDisplay.setText("Authentication Status: FAILED");
                         attendance.setAuthenticated(false);
                     }
-                    attendance.setAuthAttemptedPhoneUid(true);
+                    attendance.setAttemptedAuthByPhoneUid(true);
                     repositoryFacade.getScheduleRepository().updateDocument(scheduleId, schedule);
                 });
 

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.Schedule;
@@ -60,6 +61,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
+            Toast.makeText(context, "Found correct location and started authentication", Toast.LENGTH_LONG).show();
             for (String scheduleID: geofenceIdList){
                 AuthenticatorByPhoneNumber authenticationByPhoneNumber = new AuthenticatorByPhoneNumber(context);
                 authenticationByPhoneNumber.authenticate(scheduleID);
@@ -70,8 +72,10 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION);
+            Toast.makeText(context, "WRONG LOCATION DETECTED", Toast.LENGTH_LONG).show();
         } else {
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED);
+            Toast.makeText(context, "LOCATION NOT DETECTED", Toast.LENGTH_LONG).show();
         }
     }
 

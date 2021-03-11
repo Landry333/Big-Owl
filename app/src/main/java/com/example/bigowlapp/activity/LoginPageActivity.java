@@ -49,6 +49,7 @@ public class LoginPageActivity extends AppCompatActivity {
                 if (m_FirebaseUser != null) {
                     Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
+                    authListener.listen(this);
                     startActivity(i);
                 } else {
                     Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_SHORT).show();
@@ -98,7 +99,6 @@ public class LoginPageActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        authListener.listen(this);
         try {
             super.onStart();
             logInViewModel.addAuthStateListenerToDatabase(mAuthStateListener);

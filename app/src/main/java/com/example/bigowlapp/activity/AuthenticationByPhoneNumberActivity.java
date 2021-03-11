@@ -32,7 +32,6 @@ public class AuthenticationByPhoneNumberActivity extends BigOwlActivity {
     private TextView deviceIdDisplay;
     private TextView authenticationStatusDisplay;
     private String currentUserPhoneNumber;
-    //private String scheduleId = getIntent().getStringExtra("scheduleId");
     private String scheduleId = "YiNpA4OWiR29iXPp1vHm";
 
     private final AuthRepository authRepository = new AuthRepository();
@@ -110,7 +109,7 @@ public class AuthenticationByPhoneNumberActivity extends BigOwlActivity {
                                 Log.e(currentUserPhoneNumber, "currentUserPhoneNumber");
                                 Log.e(devicePhoneNumber, "devicePhoneNumber");
 
-                                if (currentUserPhoneNumber.equalsIgnoreCase("+"+devicePhoneNumber)) {
+                                if (currentUserPhoneNumber.equalsIgnoreCase("+" + devicePhoneNumber)) {
                                     authenticationStatusDisplay.setText("Authentication Status: SUCCEEDED");
                                     attendance.setAuthenticated(true);
                                     Toast.makeText(this, "SUCCEEDED", Toast.LENGTH_SHORT).show();
@@ -128,7 +127,7 @@ public class AuthenticationByPhoneNumberActivity extends BigOwlActivity {
                                     authByPhoneNumberFailure.setSenderUid(authRepository.getCurrentUser().getUid());
                                     repositoryFacade.getNotificationRepository().addDocument(authByPhoneNumberFailure);
                                 }
-                                attendance.setAuthAttemptedUserMobileNumber(true);
+                                attendance.setAttemptedAuthByUserMobileNumber(true);
                                 repositoryFacade.getScheduleRepository().updateDocument(scheduleId, schedule);
                                 //moveTaskToBack(true);
                             });
