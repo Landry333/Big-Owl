@@ -17,7 +17,6 @@ import com.example.bigowlapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -28,7 +27,6 @@ public class SearchContactsByPhone extends BigOwlActivity {
     private List<String> list, listShow;
     private Button btnSearch;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static final ArrayList<QueryDocumentSnapshot> qds = new ArrayList<>();
     private EditText number;
     private String smsNumber;
 

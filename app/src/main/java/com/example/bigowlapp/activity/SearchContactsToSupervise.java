@@ -10,7 +10,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -23,7 +22,6 @@ import com.example.bigowlapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -33,9 +31,7 @@ import java.util.stream.Collectors;
 public class SearchContactsToSupervise extends BigOwlActivity {
     private ListView listContactsView;
     private List<String> list, listShow;
-    private Button loadContacts;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static final ArrayList<QueryDocumentSnapshot> qds = new ArrayList<>();
 
     EditText search_users;
 
