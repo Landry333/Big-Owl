@@ -41,6 +41,8 @@
         </activity>
         <receiver android:name=".service.MemberScheduleAlarmReceiver"
             android:enabled="true" />
+        <receiver android:name=".service.SupervisorSchedulesAlarmReceiver"
+            android:enabled="true" />
     </application>
 
 </manifest>

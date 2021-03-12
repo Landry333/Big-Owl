@@ -4,14 +4,19 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.example.bigowlapp.activity.LoginPageActivity;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.service.SupervisorSchedulesAlarmReceiver;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -32,6 +37,7 @@ public class SupervisorSchedulesAlarmManager {
 
     private final Context context;
     private final ScheduleRepository scheduleRepository;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public SupervisorSchedulesAlarmManager(Context context) {
 
@@ -49,7 +55,9 @@ public class SupervisorSchedulesAlarmManager {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         getSchedulesForSupervisor(userID)
                 .addOnSuccessListener(scheduleList -> {
+                    Toast.makeText(context, "Found supervisor schedules and started setAlarms", Toast.LENGTH_LONG).show();
                     for (Schedule schedule : scheduleList) {
+                        Log.e("found schedule", schedule.toString());
 
                         Intent intent = new Intent(context, SupervisorSchedulesAlarmReceiver.class);
 
@@ -59,9 +67,12 @@ public class SupervisorSchedulesAlarmManager {
                         PendingIntent pendingIntent = PendingIntent
                                 .getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                         alarmManager.set(AlarmManager.RTC_WAKEUP,
-                                addMinutesToDate(schedule.getStartTime().toDate(),12).getTime(), pendingIntent);
+                                addMinutesToDate(schedule.getStartTime().toDate(),0).getTime(), pendingIntent);
                     }
-                }).addOnFailureListener(error -> Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show());
+                }).addOnFailureListener(error -> {
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.e("addOnFailureListener Error", error.getMessage());
+        });
     }
     public Date addMinutesToDate(Date date, int minutes) {
         Calendar calendar = Calendar.getInstance();
@@ -75,30 +86,58 @@ public class SupervisorSchedulesAlarmManager {
      * @param userID The Id of the user
      * @return A Task that contains a list of schedule for the user that hasn't been attended
      */
+
     private Task<List<Schedule>> getSchedulesForSupervisor(String userID) {
+        return scheduleRepository.getTaskListSchedulesForSupervisor(userID).addOnFailureListener(error -> {
+            Log.e("addOnFailureListener Error1", error.getMessage());})
+                .onSuccessTask(tDocs -> {
+                    List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
+                    List<Schedule> acceptedScheduleList = scheduleList.stream()
+                            //.filter(schedule -> schedule.getUserScheduleResponseMap().get(userID).getResponse() == Response.ACCEPT)
+                            .collect(Collectors.toList());
+                    return Tasks.forResult(acceptedScheduleList);
+                }).addOnFailureListener(error -> {
+                            Log.e("addOnFailureListener Error2", error.getMessage());});
+
+    }
+
+    public Task<QuerySnapshot> getTaskListSchedulesForSupervisor(String userID) {
+        return db.collection("schedules").whereEqualTo("groupSupervisorUid", userID)
+                .whereGreaterThanOrEqualTo("startTime", Timestamp.now())
+                .orderBy("startTime", Query.Direction.ASCENDING)
+                .get();
+    }
+
+    private Task<List<Schedule>> getSchedulesForUser(String userID) {
+        return scheduleRepository.getTaskListSchedulesForUser(userID)
+                .onSuccessTask(tDocs -> {
+                    List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
+                    List<Schedule> acceptedScheduleList = scheduleList.stream()
+                            .filter(schedule -> schedule.getUserScheduleResponseMap().get(userID).getResponse() == Response.ACCEPT)
+                            .collect(Collectors.toList());
+                    return Tasks.forResult(acceptedScheduleList);
+                });
+    }
+
+    /*private Task<List<Schedule>> getSchedulesForSupervisor(String userID) {
         return scheduleRepository.getTaskListSchedulesForSupervisor(userID)
                 .continueWithTask(task -> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDocs = task.getResult();
-                        /*List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
-                        List<Schedule> acceptedScheduleList = new ArrayList<>();*/
                         List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
-                        List<Schedule> acceptedScheduleList = scheduleList.stream()
-                                .filter(schedule -> schedule.getGroupSupervisorUid().equalsIgnoreCase(userID))
-                                .collect(Collectors.toList());
-                        return Tasks.forResult(acceptedScheduleList);
-                        /*for (Schedule schedule : scheduleList) {
-                            if (schedule.getGroupSupervisorUid().equalsIgnoreCase(userID)){
-                            if (schedule.getUserScheduleResponseMap()
-                                    .get(userID).getResponse() == Response.ACCEPT) {
+                        List<Schedule> acceptedScheduleList = new ArrayList<>();
+                        for (Schedule schedule : scheduleList) {
+                            if (schedule.getGroupSupervisorUid().equalsIgnoreCase(userID)) {
+                            //if (schedule.getUserScheduleResponseMap()
+                                    .get(userID).getResponse() == Response.ACCEPT) {//
                                 acceptedScheduleList.add(schedule);
                             }
                         }
-                        return Tasks.forResult(acceptedScheduleList);*/
+                        return Tasks.forResult(acceptedScheduleList);
                     } else {
                         throw task.getException();
                     }
 
                 });
-    }
+    }*/
 }

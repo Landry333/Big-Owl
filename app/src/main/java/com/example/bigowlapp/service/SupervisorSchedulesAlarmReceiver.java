@@ -3,9 +3,12 @@ package com.example.bigowlapp.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.LifecycleOwner;
 
+import com.example.bigowlapp.activity.LoginPageActivity;
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Schedule;
@@ -31,10 +34,12 @@ public class SupervisorSchedulesAlarmReceiver extends BroadcastReceiver {
         // Execute Schedule activatedSchedule = getSchedule(intent); to get the schedule
         // Run the location/Geofencing code
         // activatedSchedule should only have UID, LONGITUDE, LATITUDE
+        Toast.makeText(context, "Received Alarm and started to send sms", Toast.LENGTH_LONG).show();
         Schedule activatedSchedule = getSchedule(intent);
+        Log.e("activatedSchedule", activatedSchedule.getStartTime().toString());
         LiveDataWithStatus<Schedule> supervisorScheduleData = repositoryFacade.getScheduleRepository()
                 .getDocumentByUid(activatedSchedule.getUid(), Schedule.class);
-        supervisorScheduleData.observe((LifecycleOwner) this, supervisorSchedule -> {
+        supervisorScheduleData.observeForever(supervisorSchedule -> {
             if (supervisorSchedule == null) {
                 return;
             } else {

@@ -47,7 +47,7 @@ public class LoginPageActivity extends AppCompatActivity {
                     Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
                     startActivity(i);
                 } else {
-                    Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_LONG).show();
                 }
             };
 

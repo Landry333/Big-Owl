@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.bigowlapp.model.Response;
@@ -45,6 +46,7 @@ public class MemberScheduleAlarmManager {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         getSchedulesForUser(userID)
                 .addOnSuccessListener(scheduleList -> {
+                    Toast.makeText(context, "Found user schedules and started setAlarms", Toast.LENGTH_LONG).show();
                     for (Schedule schedule : scheduleList) {
                         Intent intent = new Intent(context, MemberScheduleAlarmReceiver.class);
                         intent.putExtra(EXTRA_UID, schedule.getUid());
@@ -65,7 +67,8 @@ public class MemberScheduleAlarmManager {
      * @return A Task that contains a list of schedule for the user that hasn't been attended
      */
     private Task<List<Schedule>> getSchedulesForUser(String userID) {
-        return scheduleRepository.getTaskListSchedulesForUser(userID)
+        return scheduleRepository.getTaskListSchedulesForUser(userID).addOnFailureListener(error -> {
+            Log.e("addOnFailureListener ErrorA1", error.getMessage());})
                 .onSuccessTask(tDocs -> {
                     List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
                     List<Schedule> acceptedScheduleList = scheduleList.stream()
