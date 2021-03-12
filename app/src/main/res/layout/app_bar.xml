@@ -108,7 +108,7 @@
         android:layout_marginTop="-6dp"
         android:max="100"
         android:progress="0"
-        android:visibility="gone"
+        android:visibility="invisible"
         android:indeterminate="true"
         android:indeterminateOnly="true"
         />
