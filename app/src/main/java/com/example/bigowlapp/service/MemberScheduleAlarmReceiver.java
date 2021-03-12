@@ -3,6 +3,7 @@ package com.example.bigowlapp.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.bigowlapp.model.Schedule;
@@ -27,7 +28,13 @@ public class MemberScheduleAlarmReceiver extends BroadcastReceiver {
         Schedule activatedSchedule = getSchedule(intent);
         Toast.makeText(context, "Received alarm and started location tracking", Toast.LENGTH_LONG).show();
         ScheduledLocationTrackingManager locationTrackingManager = new ScheduledLocationTrackingManager(context);
-        locationTrackingManager.addNewScheduledLocationToTrack(activatedSchedule);
+        locationTrackingManager.addNewScheduledLocationToTrack(activatedSchedule)
+                .addOnSuccessListener(var -> {Toast.makeText(context, " tracking started", Toast.LENGTH_LONG).show();})
+                .addOnFailureListener(var -> {Toast.makeText(context, " tracking FAILED", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, var.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("Tracking Error", var.getMessage());
+                });
+
     }
 
     private Schedule getSchedule(Intent intent) {

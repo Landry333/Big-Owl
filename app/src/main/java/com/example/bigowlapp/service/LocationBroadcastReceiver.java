@@ -41,9 +41,11 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        Toast.makeText(context, "Reached LocationBroadcastReceiver ligne 1", Toast.LENGTH_LONG).show();
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
         if (geofencingEvent.hasError()) {
+            Toast.makeText(context, "Reached LocationBroadcastReceiver: Geofencing Error", Toast.LENGTH_LONG).show();
             String errorMessage = GeofenceStatusCodes.getStatusCodeString(geofencingEvent.getErrorCode());
             Log.e(TAG, errorMessage);
             return;
@@ -62,10 +64,10 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
             Toast.makeText(context, "Found correct location and started authentication", Toast.LENGTH_LONG).show();
-            for (String scheduleID: geofenceIdList){
+            /*for (String scheduleID: geofenceIdList){
                 AuthenticatorByPhoneNumber authenticationByPhoneNumber = new AuthenticatorByPhoneNumber(context);
                 authenticationByPhoneNumber.authenticate(scheduleID);
-            }
+            }*/
 
             // User was successfully detected in desired location, so no more tracking needed
             this.removeLocationTracking(context, geofenceIdList);

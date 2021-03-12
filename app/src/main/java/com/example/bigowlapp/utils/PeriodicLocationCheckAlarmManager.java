@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -49,11 +51,20 @@ public class PeriodicLocationCheckAlarmManager {
     public static class PeriodicLocationCheckAlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context, "Periodic alarm checked", Toast.LENGTH_LONG).show();
             FusedLocationProviderClient locationClient = LocationServices.getFusedLocationProviderClient(context);
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            locationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null);
+            locationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null)
+                    .addOnSuccessListener(var -> {Toast.makeText(context, " Periodic Location success", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, ""+ var.getLongitude(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, ""+var.getLatitude(), Toast.LENGTH_LONG).show();
+                        Log.e("Periodic Location", ""+ var.getLongitude()+" "+var.getLatitude());})
+                    .addOnFailureListener(var -> {Toast.makeText(context, " Periodic Location FAILED", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, var.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e("Tracking Error", var.getMessage());
+                    });
         }
     }
 }
