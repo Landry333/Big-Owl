@@ -62,7 +62,7 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
                                             .create();
                                     this.noGroupAlert.show();
                                 }
-                                setProgressBarGone();
+                                setProgressBarInvisible();
                             }));
         } catch (
                 Exception e) {

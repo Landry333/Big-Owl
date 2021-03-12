@@ -92,7 +92,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
                     registerForContextMenu(usersListView);
                 });
             }
-            setProgressBarGone();
+            setProgressBarInvisible();
         });
     }
 

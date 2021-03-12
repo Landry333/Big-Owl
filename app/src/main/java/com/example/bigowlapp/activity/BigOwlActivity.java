@@ -61,7 +61,7 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
         progressBar.setVisibility(View.VISIBLE);
     }
 
-    protected void setProgressBarGone() {
+    protected void setProgressBarInvisible() {
         progressBar.setVisibility(View.INVISIBLE);
     }
 

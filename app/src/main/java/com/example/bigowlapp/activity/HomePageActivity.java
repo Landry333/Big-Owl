@@ -131,7 +131,7 @@ public class HomePageActivity extends BigOwlActivity {
                         .placeholder(R.drawable.logo_square)
                         .error(R.drawable.logo_square)
                         .into(imgUserAvatar);
-                setProgressBarGone();
+                setProgressBarInvisible();
             });
             scrollView.setVisibility(View.VISIBLE);
             initAlarmManager();
