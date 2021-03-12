@@ -61,13 +61,16 @@ public class SupervisorSchedulesAlarmManager {
 
                         Intent intent = new Intent(context, SupervisorSchedulesAlarmReceiver.class);
 
-                        intent.putExtra(EXTRA_UID, schedule.getUid());
+                        intent.putExtra("scheduleUid", schedule.getUid());
+                        Log.e("ScheduleId in Intent", schedule.getUid());
+                        Log.e("supervisor Intent", intent.toString());
                         //intent.putExtra(EXTRA_LATITUDE, schedule.getLocation().getLatitude());
                         //intent.putExtra(EXTRA_LONGITUDE, schedule.getLocation().getLongitude());
                         PendingIntent pendingIntent = PendingIntent
                                 .getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                         alarmManager.set(AlarmManager.RTC_WAKEUP,
-                                addMinutesToDate(schedule.getStartTime().toDate(),0).getTime(), pendingIntent);
+                                addMinutesToDate(schedule.getStartTime().toDate(),12).getTime(), pendingIntent);
+                        Log.e("supervisor pendingIntent", pendingIntent.toString());
                     }
                 }).addOnFailureListener(error -> {
                     Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
