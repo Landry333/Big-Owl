@@ -57,7 +57,6 @@ public class LoginPageActivity extends AppCompatActivity {
                     String email = emailId.getText().toString();
                     String pass = password.getText().toString();
 
-
                     if (email.isEmpty()) {
                         emailId.setError("Please enter a valid email");
                         emailId.requestFocus();

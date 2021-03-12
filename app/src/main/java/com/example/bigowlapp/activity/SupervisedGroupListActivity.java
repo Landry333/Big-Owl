@@ -38,6 +38,7 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
 
     private void subscribeToData() {
         try {
+            setProgressBarVisible();
             supervisedGroupListViewModel.getCurrentUserData().observe(this,
                     currentUser -> supervisedGroupListViewModel.getSupervisedGroupListData().observe(this,
                             supervisedGroups -> {
@@ -61,6 +62,7 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
                                             .create();
                                     this.noGroupAlert.show();
                                 }
+                                setProgressBarGone();
                             }));
         } catch (
                 Exception e) {
