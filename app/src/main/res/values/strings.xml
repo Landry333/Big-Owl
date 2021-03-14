@@ -71,4 +71,5 @@
         Your location will be verified at the scheduled time without having to worry the app being open.
     </string>
     <string name="wiki_page_manual">Wiki Page Manual</string>
+    <string name="wiki_page_manual_uri">"https://github.com/Landry333/Big-Owl/wiki/Manual"</string>
 </resources>
