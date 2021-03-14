@@ -112,6 +112,7 @@ public class HomePageActivity extends BigOwlActivity {
             textPhone = findViewById(R.id.user_phone_number);
 
             LiveDataWithStatus<User> currentUserData = homePageViewModel.getCurrentUserData();
+            setProgressBarVisible();
             currentUserData.observe(this, user -> {
                 if (currentUserData.hasError()) {
                     Toast.makeText(getBaseContext(), currentUserData.getError().getMessage(), Toast.LENGTH_LONG).show();
@@ -130,6 +131,7 @@ public class HomePageActivity extends BigOwlActivity {
                         .placeholder(R.drawable.logo_square)
                         .error(R.drawable.logo_square)
                         .into(imgUserAvatar);
+                setProgressBarInvisible();
             });
             scrollView.setVisibility(View.VISIBLE);
             initAlarmManager();

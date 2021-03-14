@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
@@ -18,11 +20,14 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
     ImageButton imgBtnUser;
     ImageButton imgBtnNotification;
     ImageButton imgBtnBigOwl;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentView());
+
+        progressBar = (ProgressBar) findViewById(R.id.database_progress_bar);
 
         imgBtnOverflow = findViewById(R.id.action_overflow);
         imgBtnOverflow.setOnClickListener(v -> {
@@ -51,6 +56,14 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
         imgBtnBigOwl.setOnClickListener(v -> {
             // TODO startActivity(new Intent(this, BigOwl? .class));
         });
+    }
+
+    protected void setProgressBarVisible() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    protected void setProgressBarInvisible() {
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     protected abstract int getContentView();
