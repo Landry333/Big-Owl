@@ -58,10 +58,8 @@ public class LoginPageActivity extends AppCompatActivity {
             btnSignIn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    progressBar.setVisibility(View.VISIBLE);
                     String email = emailId.getText().toString();
                     String pass = password.getText().toString();
-
                     if (email.isEmpty()) {
                         emailId.setError("Please enter a valid email");
                         emailId.requestFocus();
@@ -69,6 +67,7 @@ public class LoginPageActivity extends AppCompatActivity {
                         password.setError("Please enter your password");
                         password.requestFocus();
                     } else if (!(email.isEmpty() && pass.isEmpty())) {
+                        progressBar.setVisibility(View.VISIBLE);
                         logInViewModel.logInUser(email, pass)
                                 .addOnSuccessListener(isSuccessful -> {
                                     progressBar.setVisibility(View.INVISIBLE);
