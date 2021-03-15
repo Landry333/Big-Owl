@@ -64,10 +64,11 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
             Toast.makeText(context, "Found correct location and started authentication", Toast.LENGTH_LONG).show();
-            /*for (String scheduleID: geofenceIdList){
+            for (String scheduleID: geofenceIdList){
                 AuthenticatorByPhoneNumber authenticationByPhoneNumber = new AuthenticatorByPhoneNumber(context);
                 authenticationByPhoneNumber.authenticate(scheduleID);
-            }*/
+                Log.e("Authentication Start scheduleID", scheduleID);
+            }
 
             // User was successfully detected in desired location, so no more tracking needed
             this.removeLocationTracking(context, geofenceIdList);
