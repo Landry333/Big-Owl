@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.Schedule;
@@ -41,11 +40,9 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Toast.makeText(context, "Reached LocationBroadcastReceiver ligne 1", Toast.LENGTH_LONG).show();
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
         if (geofencingEvent.hasError()) {
-            Toast.makeText(context, "Reached LocationBroadcastReceiver: Geofencing Error", Toast.LENGTH_LONG).show();
             String errorMessage = GeofenceStatusCodes.getStatusCodeString(geofencingEvent.getErrorCode());
             Log.e(TAG, errorMessage);
             return;
@@ -63,11 +60,10 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
-            Toast.makeText(context, "Found correct location and started authentication", Toast.LENGTH_LONG).show();
-            for (String scheduleID: geofenceIdList){
+
+            for (String scheduleID : geofenceIdList) {
                 AuthenticatorByPhoneNumber authenticationByPhoneNumber = new AuthenticatorByPhoneNumber(context);
                 authenticationByPhoneNumber.authenticate(scheduleID);
-                Log.e("Authentication Start scheduleID", scheduleID);
             }
 
             // User was successfully detected in desired location, so no more tracking needed
@@ -75,10 +71,8 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION);
-            Toast.makeText(context, "WRONG LOCATION DETECTED", Toast.LENGTH_LONG).show();
         } else {
             this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED);
-            Toast.makeText(context, "LOCATION NOT DETECTED", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -109,14 +103,14 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                                 .get(userUid)
                                 .getAttendance();
 
-                        // If the user was already detected to be in the location, no need to
-                        // update the database anymore.
-                        if (userAttendance.getScheduleLocated() == Attendance.LocatedStatus.CORRECT_LOCATION) {
-                            return;
+                        userAttendance.setAuthenticationTime(Timestamp.now());
+
+                        // Avoid marking user as not in correct location if they happen to leave the geofence
+                        // instantly after they are within it.
+                        if (userAttendance.getScheduleLocated() != Attendance.LocatedStatus.CORRECT_LOCATION) {
+                            userAttendance.setScheduleLocated(locatedStatusToAdd);
                         }
 
-                        userAttendance.setScheduleLocated(locatedStatusToAdd);
-                        userAttendance.setAuthenticationTime(Timestamp.now());
                         repositoryFacade.getScheduleRepository()
                                 .updateDocument(schedule.getUid(), schedule);
                     }
