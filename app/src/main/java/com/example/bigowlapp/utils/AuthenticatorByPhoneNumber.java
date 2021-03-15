@@ -44,7 +44,7 @@ public class AuthenticatorByPhoneNumber {
                                 Attendance attendance = userScheduleResponse.getAttendance();
                                 if (currentUserPhoneNumber.equalsIgnoreCase("+" + devicePhoneNumber)) {
                                     attendance.setAuthenticated(true);
-                                    Toast.makeText(context, "Your next Big Owl schedule authentication SUCCEEDED", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(context, "SUCCESS in authentication for your next BIG OWL schedule", Toast.LENGTH_LONG).show();
                                 } else {
                                     attendance.setAuthenticated(false);
                                     userScheduleResponse.getAttendance().setDeviceIdNumber(deviceIdNumber);
