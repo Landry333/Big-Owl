@@ -20,18 +20,23 @@ public class LocationTrackingExpiredAlarmManager {
     private final AlarmManager alarmManager;
 
     public LocationTrackingExpiredAlarmManager(Context context) {
+
         this.context = context;
         this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    public void setAlarm(long expireTimeMillis) {
+    public void setAlarm(long expireTimeMillis) {  //add the extra parameter
+
+
         alarmManager.set(AlarmManager.ELAPSED_REALTIME,
                 SystemClock.elapsedRealtime() + expireTimeMillis,
-                getPendingIntent());
+                getPendingIntent()); //add paramenter
     }
 
-    private PendingIntent getPendingIntent() {
+    private PendingIntent getPendingIntent() { //parameter
+
         Intent intent = new Intent(context, LocationTrackingExpiredAlarmReceiver.class);
+        //intent.putExtra("1", );
         return PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
