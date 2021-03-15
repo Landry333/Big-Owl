@@ -17,10 +17,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bigowlapp.R;
-import com.example.bigowlapp.viewModel.HomePageViewModel;
-import com.squareup.picasso.Picasso;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.VisibleForTesting;
@@ -28,6 +24,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
@@ -48,8 +45,6 @@ public class HomePageActivity extends BigOwlActivity {
     private TextView textLastName;
     private TextView textPhone;
     private HomePageViewModel homePageViewModel;
-    String deviceID;
-    String phoneNumber;
     private MemberScheduleAlarmManager memberScheduleAlarmManager;
 
     @Override
@@ -57,8 +52,8 @@ public class HomePageActivity extends BigOwlActivity {
         super.onCreate(savedInstanceState);
         // RECEIVE SMS and SEND SMS permissions for the text sms authentication system
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                checkSelfPermission(Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED){
-            requestPermissions(new String[] {Manifest.permission.RECEIVE_SMS}, 1000);
+                checkSelfPermission(Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS}, 1000);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
@@ -78,8 +73,8 @@ public class HomePageActivity extends BigOwlActivity {
     }
 
 
-
-    @Override // This is solely for the SEND SMS and the RECEIVE SMS permission for the text sms authentication system
+    @Override
+    // This is solely for the SEND SMS and the RECEIVE SMS permission for the text sms authentication system
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1000) {
@@ -103,7 +98,6 @@ public class HomePageActivity extends BigOwlActivity {
                 //TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                 //deviceID = telephonyManager.getDeviceId();
                 //deviceID ="deviceID";
-                Toast.makeText(this, "DeviceID is: " + deviceID, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "DeviceID Permission DENIED", Toast.LENGTH_SHORT).show();
                 finish();
@@ -131,9 +125,6 @@ public class HomePageActivity extends BigOwlActivity {
         if (homePageViewModel == null) {
             homePageViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
         }
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        deviceID = telephonyManager.getImei();
-        phoneNumber = telephonyManager.getLine1Number();
         subscribeToData();
     }
 
@@ -204,8 +195,8 @@ public class HomePageActivity extends BigOwlActivity {
                 }
 
                 textEmail.setText(user.getEmail());
-                textFirstName.setText(user.getFirstName()+" "+phoneNumber);
-                textLastName.setText(user.getLastName()+" "+deviceID);
+                textFirstName.setText(user.getFirstName());
+                textLastName.setText(user.getLastName());
                 textPhone.setText(user.getPhoneNumber());
 
                 Picasso.get()

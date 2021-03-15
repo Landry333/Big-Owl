@@ -3,7 +3,6 @@ package com.example.bigowlapp.utils;
 
 import android.content.Context;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -36,7 +35,7 @@ public class AuthFailureNotificationListener {
                     public void onEvent(@Nullable QuerySnapshot snapshots,
                                         @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
-                            Toast.makeText(context, "Big Owl notification listen process failed: ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "BIG OWL notification listener failed: ", Toast.LENGTH_LONG).show();
                             return;
                         }
 
