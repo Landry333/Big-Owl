@@ -1,6 +1,8 @@
 package com.example.bigowlapp.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,9 +14,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.bigowlapp.utils.AuthFailureNotificationListener;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.repository.RepositoryFacade;
+import com.example.bigowlapp.utils.AuthFailureNotificationListener;
 import com.example.bigowlapp.viewModel.LogInViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,7 +28,6 @@ public class LoginPageActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private LogInViewModel logInViewModel;
     private AuthFailureNotificationListener authListener = new AuthFailureNotificationListener();
-    RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
 
 
     @Override

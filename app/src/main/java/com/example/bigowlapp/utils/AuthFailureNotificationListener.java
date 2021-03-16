@@ -2,7 +2,6 @@ package com.example.bigowlapp.utils;
 
 
 import android.content.Context;
-import android.telephony.SmsManager;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -21,7 +20,9 @@ public class AuthFailureNotificationListener {
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final int THIRTY_MINUTES = 1800;
+    private SmsSender smsSender = new SmsSender();
     RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
+
 
     public AuthFailureNotificationListener() {
 
@@ -53,7 +54,7 @@ public class AuthFailureNotificationListener {
                                             .getId()).update("used", true);
                                     String notificationSenderPhoneNum = dc.getDocument().get("senderPhoneNum").toString();
                                     String scheduleId = dc.getDocument().get("scheduleId").toString();
-                                    sendSMS(context, notificationSenderPhoneNum, scheduleId);
+                                    smsSender.sendSMS(context, notificationSenderPhoneNum, scheduleId);
                                 }
 
                             }
@@ -61,10 +62,5 @@ public class AuthFailureNotificationListener {
                     }
                 });
 
-    }
-
-    private void sendSMS(Context context, String smsNumber, String smsMessage) {
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(smsNumber, null, smsMessage, null, null);
     }
 }

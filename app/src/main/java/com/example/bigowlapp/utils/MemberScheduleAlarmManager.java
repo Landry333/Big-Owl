@@ -45,7 +45,6 @@ public class MemberScheduleAlarmManager {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         getSchedulesForUser(userID)
                 .addOnSuccessListener(scheduleList -> {
-                    Toast.makeText(context, "Started SETALARMS for schedule", Toast.LENGTH_LONG).show();
                     for (Schedule schedule : scheduleList) {
                         Intent intent = new Intent(context, MemberScheduleAlarmReceiver.class);
                         intent.putExtra(EXTRA_UID, schedule.getUid());

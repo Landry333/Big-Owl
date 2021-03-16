@@ -22,8 +22,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.AuthenticationByDeviceIdActivity"></activity>
-        <activity android:name=".activity.AuthenticationByPhoneNumberActivity" />
         <activity android:name=".activity.SetScheduleActivity" />
         <activity android:name=".activity.ScheduleViewRespondActivity" />
         <activity android:name=".activity.EditProfileActivity" />
