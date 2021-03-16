@@ -75,6 +75,8 @@ public class Attendance {
     @Exclude
     public boolean didAttend() {
         return authenticated;
+        // authenticated begins only for CORRECT_LOCATION,
+        // so authenticated is enough to determine attendance
     }
 
 }
