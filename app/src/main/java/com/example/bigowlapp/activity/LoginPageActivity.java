@@ -1,13 +1,12 @@
 package com.example.bigowlapp.activity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.utils.AuthFailureNotificationListener;
 import com.example.bigowlapp.viewModel.LogInViewModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +26,7 @@ public class LoginPageActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private LogInViewModel logInViewModel;
     private AuthFailureNotificationListener authListener = new AuthFailureNotificationListener();
+    private ProgressBar progressBar;
 
 
     @Override
@@ -40,6 +39,8 @@ public class LoginPageActivity extends AppCompatActivity {
 
     protected void initialize() {
         try {
+            progressBar = (ProgressBar) findViewById(R.id.login_progress_bar);
+
             emailId = findViewById(R.id.editTextTextEmailAddress);
             password = findViewById(R.id.editTextTextPassword);
             btnSignIn = findViewById(R.id.button);
@@ -62,8 +63,6 @@ public class LoginPageActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     String email = emailId.getText().toString();
                     String pass = password.getText().toString();
-
-
                     if (email.isEmpty()) {
                         emailId.setError("Please enter a valid email");
                         emailId.requestFocus();
@@ -71,14 +70,17 @@ public class LoginPageActivity extends AppCompatActivity {
                         password.setError("Please enter your password");
                         password.requestFocus();
                     } else if (!(email.isEmpty() && pass.isEmpty())) {
+                        progressBar.setVisibility(View.VISIBLE);
                         logInViewModel.logInUser(email, pass)
                                 .addOnSuccessListener(isSuccessful -> {
+                                    progressBar.setVisibility(View.INVISIBLE);
                                     Toast.makeText(LoginPageActivity.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
                                     Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
                                     startActivity(i);
                                 })
                                 .addOnFailureListener(e -> {
                                     Toast.makeText(LoginPageActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    progressBar.setVisibility(View.INVISIBLE);
                                 });
                     } else {
                         Toast.makeText(LoginPageActivity.this, "An error has occurred", Toast.LENGTH_SHORT).show();
