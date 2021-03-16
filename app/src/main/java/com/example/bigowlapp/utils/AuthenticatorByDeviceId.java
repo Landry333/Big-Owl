@@ -34,7 +34,7 @@ public class AuthenticatorByDeviceId {
                     String savedDeviceId = attendance.getDeviceIdNumber();
                     Attendance.LocatedStatus scheduleLocated = attendance.getScheduleLocated();
 
-                    if (scheduleLocated == Attendance.LocatedStatus.CORRECT_LOCATION && deviceIdNumber.equalsIgnoreCase(savedDeviceId)) {
+                    if (deviceIdNumber.equalsIgnoreCase(savedDeviceId)) {
                         Toast.makeText(context, "SUCCESS in authentication for your next BIG OWL schedule", Toast.LENGTH_LONG).show();
                         attendance.setAuthenticated(true);
                     } else {
