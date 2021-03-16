@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.Schedule;
@@ -60,23 +59,14 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                 .collect(Collectors.toList());
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-            Toast.makeText(context, "Reached LocationBroadcast for CORRECT LOCATION", Toast.LENGTH_LONG).show();
-            Log.e("geofenceIdList", geofenceIdList.toString());
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
-
-            for (String scheduleID : geofenceIdList) {
-                Log.e("broadcastReceiver scheduleID", scheduleID);
-                AuthenticatorByPhoneNumber authenticationByPhoneNumber = new AuthenticatorByPhoneNumber(context);
-                authenticationByPhoneNumber.authenticate(scheduleID);
-            }
-
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION,context);
             // User was successfully detected in desired location, so no more tracking needed
             this.removeLocationTracking(context, geofenceIdList);
 
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION);
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION,context);
         } else {
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED);
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED,context);
         }
     }
 
@@ -94,7 +84,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         return geofencingClient.removeGeofences(geofencesToRemoveIdList);
     }
 
-    private void updateUserLocatedStatus(List<String> scheduleUidList, Attendance.LocatedStatus locatedStatusToAdd) {
+    private void updateUserLocatedStatus(List<String> scheduleUidList, Attendance.LocatedStatus locatedStatusToAdd, Context context) {
         repositoryFacade.getScheduleRepository()
                 .getDocumentsByListOfUid(scheduleUidList, Schedule.class)
                 .observeForever(schedules -> {
@@ -117,6 +107,13 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
                         repositoryFacade.getScheduleRepository()
                                 .updateDocument(schedule.getUid(), schedule);
+
+                        if (userAttendance.getScheduleLocated() == Attendance.LocatedStatus.CORRECT_LOCATION){
+                            for (String scheduleID : scheduleUidList) {
+                                AuthenticatorByPhoneNumber authenticationByPhoneNumber = new AuthenticatorByPhoneNumber(context);
+                                authenticationByPhoneNumber.authenticate(scheduleID);
+                            }
+                        }
                     }
                 });
     }
