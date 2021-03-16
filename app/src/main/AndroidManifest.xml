@@ -33,6 +33,7 @@
         <activity android:name=".activity.SendingRequestToSuperviseActivity" />
         <activity android:name=".activity.ListOfScheduleActivity" />
         <activity android:name=".activity.AddUsersActivity" />
+        <activity android:name=".activity.ScheduleReportActivity" />
         <activity
             android:name=".activity.WelcomePageActivity"
             android:theme="@style/AppTheme.NoActionBar">

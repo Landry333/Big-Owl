@@ -17,6 +17,7 @@ public class ScheduleRepository extends Repository<Schedule> {
     private static final String START_TIME = "startTime";
     private static final String MEMBER_LIST = "memberList";
     private static final String GROUP_ID = "groupUid";
+    private static final String GROUP_SUPERVISOR_UID = "groupSupervisorUid";
 
     // TODO: Add dependency injection
     public ScheduleRepository() {
@@ -59,5 +60,25 @@ public class ScheduleRepository extends Repository<Schedule> {
                 .whereGreaterThanOrEqualTo(START_TIME, Timestamp.now())
                 .orderBy(START_TIME, Query.Direction.ASCENDING)
                 .get();
+    }
+
+    public LiveDataWithStatus<List<Schedule>> getAllSchedulesForSupervisor(String currentUserUid) {
+        LiveDataWithStatus<List<Schedule>> listOfTData = new LiveDataWithStatus<>();
+        collectionReference.whereEqualTo(GROUP_SUPERVISOR_UID, currentUserUid)
+                .orderBy(START_TIME, Query.Direction.ASCENDING)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot tDocs = task.getResult();
+                        if (tDocs != null && !tDocs.isEmpty()) {
+                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), Schedule.class));
+                        } else {
+                            listOfTData.setError(getDocumentNotFoundException(Schedule.class));
+                        }
+                    } else {
+                        listOfTData.setError(task.getException());
+                    }
+                });
+        return listOfTData;
     }
 }

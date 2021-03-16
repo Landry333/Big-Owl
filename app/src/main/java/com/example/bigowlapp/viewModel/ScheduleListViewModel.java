@@ -14,15 +14,19 @@ public class ScheduleListViewModel extends BaseViewModel {
         // used implicitly when ViewModel constructed using ViewModelProvider
     }
 
-    public LiveData<List<Schedule>> getScheduleList(String groupID) {
+    public LiveData<List<Schedule>> getScheduleList(Boolean isGroupSupervisor, String groupID) {
         if (scheduleData == null) {
-            loadScheduleList(groupID);
+            loadScheduleList(isGroupSupervisor, groupID);
         }
         return scheduleData;
     }
 
-    private void loadScheduleList(String groupID) {
-        scheduleData = repositoryFacade.getScheduleRepository()
-                .getListSchedulesFromGroupForUser(groupID, getCurrentUserUid());
+    private void loadScheduleList(Boolean isGroupSupervisor, String groupID) {
+        if (isGroupSupervisor)
+            scheduleData = repositoryFacade.getScheduleRepository()
+                    .getAllSchedulesForSupervisor(getCurrentUserUid());
+        else
+            scheduleData = repositoryFacade.getScheduleRepository()
+                    .getListSchedulesFromGroupForUser(groupID, getCurrentUserUid());
     }
 }
