@@ -25,6 +25,7 @@ import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
 public class HomePageActivity extends BigOwlActivity {
+
     private Button btnLogOut;
     private Button btnAddUsers;
     private Button btnMonitoringGroup;
@@ -35,6 +36,7 @@ public class HomePageActivity extends BigOwlActivity {
     private TextView textFirstName;
     private TextView textLastName;
     private TextView textPhone;
+
     private HomePageViewModel homePageViewModel;
     private SupervisorSchedulesAlarmManager supervisorSchedulesAlarmManager;
     private MemberScheduleAlarmManager memberScheduleAlarmManager;
@@ -113,6 +115,7 @@ public class HomePageActivity extends BigOwlActivity {
             textPhone = findViewById(R.id.user_phone_number);
 
             LiveDataWithStatus<User> currentUserData = homePageViewModel.getCurrentUserData();
+            setProgressBarVisible();
             currentUserData.observe(this, user -> {
                 if (currentUserData.hasError()) {
                     Toast.makeText(getBaseContext(), currentUserData.getError().getMessage(), Toast.LENGTH_LONG).show();
@@ -131,6 +134,7 @@ public class HomePageActivity extends BigOwlActivity {
                         .placeholder(R.drawable.logo_square)
                         .error(R.drawable.logo_square)
                         .into(imgUserAvatar);
+                setProgressBarInvisible();
             });
             scrollView.setVisibility(View.VISIBLE);
             initAlarmManager();

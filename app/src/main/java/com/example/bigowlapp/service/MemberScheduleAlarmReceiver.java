@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
+import com.example.bigowlapp.utils.ScheduledLocationTrackingManager;
 import com.google.firebase.firestore.GeoPoint;
 
 import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LATITUDE;
@@ -22,6 +23,11 @@ public class MemberScheduleAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        Schedule activatedSchedule = getSchedule(intent);
+
+        ScheduledLocationTrackingManager locationTrackingManager = new ScheduledLocationTrackingManager(context);
+        locationTrackingManager.addNewScheduledLocationToTrack(activatedSchedule);
     }
 
     private Schedule getSchedule(Intent intent) {

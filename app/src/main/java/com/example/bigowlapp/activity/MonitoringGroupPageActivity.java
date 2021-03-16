@@ -75,6 +75,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
             return;
         }
 
+        setProgressBarVisible();
         mGroupPageViewModel.getGroup().observe(this, group -> {
             if (group == null) {
                 createAlertDialog("No monitoring group found",
@@ -91,6 +92,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
                     registerForContextMenu(usersListView);
                 });
             }
+            setProgressBarInvisible();
         });
     }
 
