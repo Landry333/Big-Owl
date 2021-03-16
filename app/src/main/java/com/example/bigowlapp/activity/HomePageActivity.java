@@ -50,70 +50,51 @@ public class HomePageActivity extends BigOwlActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // RECEIVE SMS and SEND SMS permissions for the text sms authentication system
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                checkSelfPermission(Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS}, 1000);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.SEND_SMS}, 100);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+        initialize();
+        if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, 10);
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                checkSelfPermission(Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_PHONE_NUMBERS}, 1);
+        // RECEIVE and SEND SMS permissions for the text sms authentication system
+        else if (checkSelfPermission(Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS}, 1000);
         }
-
-        initialize();
+        else if (checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.SEND_SMS}, 100);
+        }
 
     }
 
 
     @Override
-    // This is solely for the SEND SMS and the RECEIVE SMS permission for the text sms authentication system
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1000) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "RECEIVE SMS Permission GRANTED", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "SMS READ Permission GRANTED", Toast.LENGTH_LONG).show();
+                finish();
             } else {
-                Toast.makeText(this, "RECEIVE SMS Permission DENIED", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Need to allow SMS permission or reinstall app then allow", Toast.LENGTH_LONG).show();
                 finish();
             }
         }
-        if (requestCode == 100) {
-            if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "SEND SMS Permission GRANTED", Toast.LENGTH_SHORT).show();
+        else if (requestCode == 100) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "SMS SEND Permission GRANTED", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "SEND SMS Permission DENIED", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Need to allow SMS permission or reinstall app then allow", Toast.LENGTH_LONG).show();
                 finish();
             }
         }
-        if (requestCode == 10) {
-            if (grantResults[2] == PackageManager.PERMISSION_GRANTED) {
-                //TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                //deviceID = telephonyManager.getDeviceId();
-                //deviceID ="deviceID";
+        else if (requestCode == 10) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "PHONE Permission GRANTED", Toast.LENGTH_LONG).show();
+                finish();
             } else {
-                Toast.makeText(this, "DeviceID Permission DENIED", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Need to allow PHONE permission or reinstall app then allow", Toast.LENGTH_LONG).show();
                 finish();
             }
         }
-        if (requestCode == 1) {
-            if (grantResults[3] == PackageManager.PERMISSION_GRANTED) {
-                //TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                //deviceID = telephonyManager.getDeviceId();
-                //deviceID ="deviceID";
-                Toast.makeText(this, "Phone number Read Permission GRANTED", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Phone number Read Permission DENIED", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
+
 
     }
 
