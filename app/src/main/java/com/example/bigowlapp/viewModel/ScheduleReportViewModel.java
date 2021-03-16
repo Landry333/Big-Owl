@@ -5,10 +5,8 @@ import android.location.Geocoder;
 
 import com.example.bigowlapp.activity.ScheduleReportActivity;
 import com.example.bigowlapp.model.Schedule;
-import com.example.bigowlapp.model.User;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,19 +28,8 @@ public class ScheduleReportViewModel extends BaseViewModel {
         return scheduleData;
     }
 
-    public Map<String, Boolean> getMemberNameDidAttendMap(ScheduleReportActivity scheduleReportActivity, Schedule schedule) {
-        LiveData<List<User>> groupMembers = repositoryFacade.getUserRepository()
-                .getListOfDocumentByArrayContains("memberGroupIdList", schedule.getGroupUid(), User.class);
-
-        Map<String, Boolean> memberNameAttend = new HashMap<>();
-
-        groupMembers.observe(scheduleReportActivity, userList -> {
-            for (User user : userList) {
-                memberNameAttend.put(user.getFullName(), schedule.getUserScheduleResponseMap().get(user.getUid()).getAttendance().didAttend());
-            }
-        });
-
-        return memberNameAttend;
+    public Map<String, Boolean> getMemberNameDidAttendMap(Schedule schedule) {
+        return repositoryFacade.getUserRepository().getMemberNameAttendanceMapFromSchedule(schedule.getUserScheduleResponseMap());
     }
 
     public String getScheduleLocation(ScheduleReportActivity scheduleReportActivity, Schedule schedule) {

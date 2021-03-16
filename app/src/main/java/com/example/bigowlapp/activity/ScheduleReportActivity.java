@@ -35,7 +35,7 @@ public class ScheduleReportActivity extends BigOwlActivity {
     }
 
     private void subscribeToData() {
-        if (!scheduleReportViewModel.isCurrentUserSupervisor(scheduleUid)) {
+        if (!scheduleReportViewModel.isCurrentUserSupervisor(supervisorId)) {
             return;
         }
 
@@ -51,9 +51,8 @@ public class ScheduleReportActivity extends BigOwlActivity {
                 scheduleReportStartTime.setText(schedule.getStartTime().toDate().toString());
                 scheduleReportEndTime.setText(schedule.getEndTime().toDate().toString());
                 scheduleReportLocation.setText(scheduleReportViewModel.getScheduleLocation(this, schedule));
-
                 scheduleReportMemberListView.setAdapter(new ScheduleReportMembersAdapter(
-                        this, scheduleReportViewModel.getMemberNameDidAttendMap(this, schedule)));
+                        this, scheduleReportViewModel.getMemberNameDidAttendMap(schedule)));
             }
         });
     }
