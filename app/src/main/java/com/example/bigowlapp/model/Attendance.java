@@ -11,7 +11,6 @@ public class Attendance {
     }
 
     private boolean authenticated = false;
-
     private boolean attemptedAuthByUserMobileNumber = false;  // if authentication has been attempted at first using the UserMobileNumber
     private boolean attemptedAuthByPhoneUid = false;  // if authentication has been attempted secondly using the PhoneUid
     private LocatedStatus scheduleLocated = LocatedStatus.NOT_DETECTED;

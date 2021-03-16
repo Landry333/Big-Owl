@@ -31,7 +31,6 @@ public class SupervisorSmsListener extends BroadcastReceiver {
             Bundle bundle = receiverIntent.getExtras();
             if (bundle != null) {
                 // get sms objects
-                Toast.makeText(context, "RECEIVED NOT EMPTY TEXT SMS", Toast.LENGTH_SHORT).show();
                 Object[] pdus = (Object[]) bundle.get("pdus");
                 if (pdus.length == 0) {
                     return;
