@@ -3,8 +3,6 @@ package com.example.bigowlapp.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
@@ -24,11 +22,6 @@ public class MemberScheduleAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "Received User schedules alarm", Toast.LENGTH_LONG).show();
-        // Execute Schedule activatedSchedule = getSchedule(intent); to get the schedule
-        // Run the location/Geofencing code
-        // activatedSchedule should only have UID, LONGITUDE, LATITUDE
-        Log.e("Intent", intent.toString());
     }
 
     private Schedule getSchedule(Intent intent) {

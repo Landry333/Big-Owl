@@ -16,7 +16,6 @@ public class SmsSender {
     public void sendSMS(Context context, String smsNumber, String smsMessage) {
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(smsNumber, null, smsMessage, null, null);
-        Toast.makeText(context, "SMS SENT FROM SMS SENDER OBJECT", Toast.LENGTH_SHORT).show();
     }
 
 }
