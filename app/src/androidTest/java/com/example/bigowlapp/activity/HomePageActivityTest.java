@@ -9,11 +9,7 @@ import androidx.test.filters.LargeTest;
 
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
-<<<<<<< HEAD
-import com.example.bigowlapp.utils.SupervisorSchedulesAlarmManager;
-=======
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
->>>>>>> cb08e49b234cf74f58972ebf5d0eaf15a21991c0
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 
 import org.junit.Before;
@@ -42,11 +38,8 @@ public class HomePageActivityTest {
     private HomePageViewModel homePageViewModel;
 
     @Mock
-<<<<<<< HEAD
-    private SupervisorSchedulesAlarmManager supervisorSchedulesAlarmManager;
-=======
     private MemberScheduleAlarmManager memberScheduleAlarmManager;
->>>>>>> cb08e49b234cf74f58972ebf5d0eaf15a21991c0
+
 
     private User testUser;
     private LiveDataWithStatus<User> testUserData;
@@ -65,11 +58,7 @@ public class HomePageActivityTest {
         activityRule.getScenario().moveToState(Lifecycle.State.CREATED);
         activityRule.getScenario().onActivity(activity -> {
             activity.setHomePageViewModel(homePageViewModel);
-<<<<<<< HEAD
-            activity.setAlarmBroadcastReceiverManager(supervisorSchedulesAlarmManager);
-=======
             activity.setMemberScheduleAlarmManager(memberScheduleAlarmManager);
->>>>>>> cb08e49b234cf74f58972ebf5d0eaf15a21991c0
         });
         activityRule.getScenario().moveToState(Lifecycle.State.RESUMED);
     }
@@ -89,11 +78,7 @@ public class HomePageActivityTest {
 
     @Test
     public void isAlarmSetForBroadcastReceiver() {
-<<<<<<< HEAD
-        verify(supervisorSchedulesAlarmManager).setAlarms(testUser.getUid());
-=======
         verify(memberScheduleAlarmManager).setAlarms(testUser.getUid());
->>>>>>> cb08e49b234cf74f58972ebf5d0eaf15a21991c0
     }
 
 }
