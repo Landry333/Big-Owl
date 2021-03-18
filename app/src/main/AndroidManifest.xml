@@ -20,6 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.FingerprintAuthenticationActivity"></activity>
         <activity android:name=".activity.SetScheduleActivity" />
         <activity android:name=".activity.ScheduleViewRespondActivity" />
         <activity android:name=".activity.EditProfileActivity" />
@@ -42,6 +43,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -51,15 +53,18 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".service.MemberScheduleAlarmReceiver"
+        <receiver
+            android:name=".service.MemberScheduleAlarmReceiver"
             android:enabled="true" />
-        <receiver android:name=".service.LocationBroadcastReceiver"
-            android:enabled="true"/>
-        <receiver android:name=".utils.PeriodicLocationCheckAlarmManager$PeriodicLocationCheckAlarmReceiver"
-            android:enabled="true"/>
-        <receiver android:name=".service.LocationTrackingExpiredAlarmReceiver"
-            android:enabled="true"/>
-
+        <receiver
+            android:name=".service.LocationBroadcastReceiver"
+            android:enabled="true" />
+        <receiver
+            android:name=".utils.PeriodicLocationCheckAlarmManager$PeriodicLocationCheckAlarmReceiver"
+            android:enabled="true" />
+        <receiver
+            android:name=".service.LocationTrackingExpiredAlarmReceiver"
+            android:enabled="true" />
     </application>
 
 </manifest>
