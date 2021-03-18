@@ -416,19 +416,13 @@ public class ScheduleFormFragment extends Fragment
         AlertDialog.Builder scheduleConfirmation = new AlertDialog.Builder(getContext());
         scheduleConfirmation.setTitle("New Schedule details");
         scheduleConfirmation.setMessage(confirmationString(group, userList, schedule, location));
-        scheduleConfirmation.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                setScheduleViewModel.addSchedule();
-                Toast.makeText(getContext(), "Schedule added successfully", Toast.LENGTH_LONG).show();
-                getActivity().finish();
-            }
+        scheduleConfirmation.setPositiveButton("Confirm", (dialog, which) -> {
+            setScheduleViewModel.addSchedule();
+            Toast.makeText(getContext(), "Schedule added successfully", Toast.LENGTH_LONG).show();
+            getActivity().finish();
         });
 
-        scheduleConfirmation.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
+        scheduleConfirmation.setNegativeButton("Cancel", (dialog, which) -> {
         });
         scheduleConfirmation.show();
     }
