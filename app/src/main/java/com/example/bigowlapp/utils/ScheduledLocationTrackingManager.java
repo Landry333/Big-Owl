@@ -22,9 +22,9 @@ public class ScheduledLocationTrackingManager {
 
     private static final int REQUEST_CODE = 2;
     private static final int DEFAULT_TRACKING_RADIUS_METERS = 300;
-    private static final long DEFAULT_TRACKING_EXPIRE_TIME_MILLIS = 1L * Constants.MINUTE_TO_MILLIS;
+    private static final long DEFAULT_TRACKING_EXPIRE_TIME_MILLIS = 30L * Constants.MINUTE_TO_MILLIS;
     // use 0 for instant response, and allow longer delays for better battery life
-    private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLIS = 1 * Constants.MINUTE_TO_MILLIS;
+    private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLIS = 3 * Constants.MINUTE_TO_MILLIS;
 
     private final Context context;
     private final GeofencingClient geofencingClient;
