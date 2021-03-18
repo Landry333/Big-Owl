@@ -27,7 +27,6 @@ public class SupervisorSchedulesAlarmManager {
 
     private final Context context;
     private final ScheduleRepository scheduleRepository;
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public SupervisorSchedulesAlarmManager(Context context) {
 
@@ -75,7 +74,6 @@ public class SupervisorSchedulesAlarmManager {
                 .onSuccessTask(tDocs -> {
                     List<Schedule> scheduleList = tDocs.toObjects(Schedule.class);
                     List<Schedule> acceptedScheduleList = scheduleList.stream()
-                            //.filter(schedule -> schedule.getUserScheduleResponseMap().get(userID).getResponse() == Response.ACCEPT)
                             .collect(Collectors.toList());
                     return Tasks.forResult(acceptedScheduleList);
                 });
