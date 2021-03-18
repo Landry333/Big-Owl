@@ -51,6 +51,7 @@ public class ListOfScheduleActivity extends BigOwlActivity {
 
     private void subscribeToData() {
         try {
+            setProgressBarVisible();
             scheduleListViewModel.getScheduleList(groupID).observe(this, schedules -> {
                 if (schedules != null) {
                     scheduleListView = findViewById(R.id.schedule_list);
@@ -67,6 +68,7 @@ public class ListOfScheduleActivity extends BigOwlActivity {
                 } else {
                     this.noScheduleAlert().show();
                 }
+                setProgressBarInvisible();
             });
         } catch (
                 Exception e) {

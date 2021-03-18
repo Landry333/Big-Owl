@@ -1,9 +1,12 @@
 package com.example.bigowlapp.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
@@ -17,11 +20,14 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
     ImageButton imgBtnUser;
     ImageButton imgBtnNotification;
     ImageButton imgBtnBigOwl;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentView());
+
+        progressBar = (ProgressBar) findViewById(R.id.database_progress_bar);
 
         imgBtnOverflow = findViewById(R.id.action_overflow);
         imgBtnOverflow.setOnClickListener(v -> {
@@ -52,6 +58,14 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
         });
     }
 
+    protected void setProgressBarVisible() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    protected void setProgressBarInvisible() {
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
     protected abstract int getContentView();
 
     @Override
@@ -59,6 +73,10 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
         if (item.getItemId() == R.id.overflow_home) {
             finish();
             startActivity(new Intent(this, HomePageActivity.class));
+        } else if (item.getItemId() == R.id.overflow_wiki_page_manual) {
+            final String WIKI_PAGE_MANUAL_URI = getString(R.string.wiki_page_manual_uri);
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(WIKI_PAGE_MANUAL_URI));
+            startActivity(intent);
         } else if (item.getItemId() == R.id.overflow_refresh) {
             finish();
             startActivity(getIntent());

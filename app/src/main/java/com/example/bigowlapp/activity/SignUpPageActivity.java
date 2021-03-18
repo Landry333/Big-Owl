@@ -2,8 +2,10 @@ package com.example.bigowlapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ public class SignUpPageActivity extends AppCompatActivity {
     Button btnSignUp;
     TextView tvSignIn;
     private SignUpViewModel signUpViewModel;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,8 @@ public class SignUpPageActivity extends AppCompatActivity {
 
     protected void initialize() {
         //Authentication with firebase
+        progressBar = (ProgressBar) findViewById(R.id.sign_up_progress_bar);
+
         userFirstName = findViewById(R.id.user_first_name);
         userLastName = findViewById(R.id.user_last_name);
         userEmail = findViewById(R.id.edit_text_text_mail_address);
@@ -73,12 +78,17 @@ public class SignUpPageActivity extends AppCompatActivity {
                 this.userPhone.setError("please enter a phone number");
                 this.userPhone.requestFocus();
             } else {
+                progressBar.setVisibility(View.VISIBLE);
                 signUpViewModel.createUser(email, pass, formatedPhone, firstName, lastName)
                         .addOnSuccessListener(isSuccessful -> {
+                            progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
                         })
-                        .addOnFailureListener(e -> Toast.makeText(SignUpPageActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(SignUpPageActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.INVISIBLE);
+                        });
             }
         });
 
