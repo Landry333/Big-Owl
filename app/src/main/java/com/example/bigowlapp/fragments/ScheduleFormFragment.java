@@ -447,9 +447,9 @@ public class ScheduleFormFragment extends Fragment
         String endDate = dateFormatter(endDateTime);
         String endTime = timeFormatter(endDateTime);
 
-        String selectedlocation = (location.placeName() == null) ? location.address() : location.placeName();
+        String selectedLocation = (location.placeName() == null) ? location.address() : location.placeName();
 
-        return ("Please confirm the new Schedule info: \n\nTitle:\n" + title + "\n\nGroup name:\n"+ groupName + "\n\nSelected members:\n"+ selectedMembers + "\nStart date:\n" + startDate + "\n"+ startTime + "\n\nEnd date\n" + endDate + "\n" + endTime + "\n\nSelected Location:\n" + selectedlocation);
+        return ("Please confirm the new Schedule info: \n\nTitle:\n" + title + "\n\nGroup name:\n"+ groupName + "\n\nSelected members:\n"+ selectedMembers + "\nStart date:\n" + startDate + "\n"+ startTime + "\n\nEnd date\n" + endDate + "\n" + endTime + "\n\nSelected Location:\n" + selectedLocation);
     }
 
 }

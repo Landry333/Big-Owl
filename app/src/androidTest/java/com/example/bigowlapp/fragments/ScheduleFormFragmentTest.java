@@ -253,10 +253,10 @@ public class ScheduleFormFragmentTest {
         String startTime = timeFormatter(startNewTime);
         String endDate = dateFormatter(newEndTime);
         String endTime = timeFormatter(newEndTime);
-        String selectedlocation = (fakeSelectedLocation.placeName() == null) ? location.address() : location.placeName();
+        String selectedLocation = (fakeSelectedLocation.placeName() == null) ? location.address() : location.placeName();
 
         onView(withText("Please confirm the new Schedule info: \n\nTitle:\n" + "Schedule_Title" + "\n\nGroup name:\n"+ "group_name" + "\n\nSelected members:\n"+ selectedMembers
-                + "\nStart date:\n" + startDate + "\n"+ startTime + "\n\nEnd date\n" + endDate + "\n" + endTime + "\n\nSelected Location:\n" + selectedlocation))
+                + "\nStart date:\n" + startDate + "\n"+ startTime + "\n\nEnd date\n" + endDate + "\n" + endTime + "\n\nSelected Location:\n" + selectedLocation))
                 .check(matches(isDisplayed()));
         onView(withText("CONFIRM")).perform(click());
 
