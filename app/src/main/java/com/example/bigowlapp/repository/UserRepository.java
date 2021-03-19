@@ -1,7 +1,6 @@
 package com.example.bigowlapp.repository;
 
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.exception.PhoneNumberTakenException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -9,11 +8,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 public class UserRepository extends Repository<User> {
 
@@ -46,18 +46,19 @@ public class UserRepository extends Repository<User> {
         });
     }
 
-    public Map<String, Boolean> getMemberNameAttendanceMapFromSchedule(Map<String, UserScheduleResponse> map) {
-        List<String> scheduleMemberList = new ArrayList<>(map.keySet());
-        Map<String, Boolean> memberNameAttend = new HashMap<>();
-        collectionReference.whereIn(FieldPath.documentId(), scheduleMemberList).get().addOnCompleteListener(task -> {
+    public LiveData<Map<String, String>> getScheduleMemberNameMap(List<String> memberList) {
+        Map<String, String> memberNameAttend = new HashMap<>();
+        MutableLiveData<Map<String, String>> memberNameAttendData = new MutableLiveData<>();
+        collectionReference.whereIn(FieldPath.documentId(), memberList).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (DocumentSnapshot document : task.getResult().getDocuments()) {
                     memberNameAttend.put(
-                            document.getString("firstName") + " " + document.getString("lastName"),
-                            Objects.requireNonNull(map.get(document.getId())).getAttendance().didAttend());
+                            document.getId(),
+                            document.getString("firstName") + " " + document.getString("lastName"));
                 }
+                memberNameAttendData.setValue(memberNameAttend);
             }
         });
-        return memberNameAttend;
+        return memberNameAttendData;
     }
 }

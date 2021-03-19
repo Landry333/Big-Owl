@@ -7,6 +7,7 @@ import com.example.bigowlapp.activity.ScheduleReportActivity;
 import com.example.bigowlapp.model.Schedule;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,12 +29,8 @@ public class ScheduleReportViewModel extends BaseViewModel {
         return scheduleData;
     }
 
-    public Map<String, Boolean> getMemberNameDidAttendMap(Schedule schedule) {
-        return repositoryFacade.getUserRepository().getMemberNameAttendanceMapFromSchedule(schedule.getUserScheduleResponseMap());
-    }
-
     public String getScheduleLocation(ScheduleReportActivity scheduleReportActivity, Schedule schedule) {
-        List<Address> address = null;
+        List<Address> address = new ArrayList<>();
         try {
             address = new Geocoder(scheduleReportActivity)
                     .getFromLocation(schedule.getLocation().getLatitude(),
@@ -43,5 +40,9 @@ public class ScheduleReportViewModel extends BaseViewModel {
         }
 
         return address.get(0).getAddressLine(0);
+    }
+
+    public LiveData<Map<String, String>> getScheduleMemberNameMap(List<String> memberList) {
+        return repositoryFacade.getUserRepository().getScheduleMemberNameMap(memberList);
     }
 }

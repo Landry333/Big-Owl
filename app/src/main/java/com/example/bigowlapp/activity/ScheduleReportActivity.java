@@ -51,8 +51,11 @@ public class ScheduleReportActivity extends BigOwlActivity {
                 scheduleReportStartTime.setText(schedule.getStartTime().toDate().toString());
                 scheduleReportEndTime.setText(schedule.getEndTime().toDate().toString());
                 scheduleReportLocation.setText(scheduleReportViewModel.getScheduleLocation(this, schedule));
-                scheduleReportMemberListView.setAdapter(new ScheduleReportMembersAdapter(
-                        this, scheduleReportViewModel.getMemberNameDidAttendMap(schedule)));
+
+                scheduleReportViewModel.getScheduleMemberNameMap(schedule.getMemberList()).observe(this, memberNameMap -> {
+                    scheduleReportMemberListView.setAdapter(new ScheduleReportMembersAdapter(
+                            this, memberNameMap, schedule.getUserScheduleResponseMap()));
+                });
             }
         });
     }

@@ -9,30 +9,33 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.model.UserScheduleResponse;
 
 import java.util.Map;
 
 public class ScheduleReportMembersAdapter extends BaseAdapter {
     private final Context context;
-    private final Map<String, Boolean> memberNameAttendMap;
+    private final Map<String, UserScheduleResponse> userScheduleResponseMap;
     private final String[] mapKeys;
     private static final String SCHEDULE_ATTENDED = "Attended";
     private static final String SCHEDULE_Missed = "Missed";
+    private final Map<String, String> memberNameMap;
 
-    public ScheduleReportMembersAdapter(Context context, Map<String, Boolean> data) {
+    public ScheduleReportMembersAdapter(Context context, Map<String, String> memberNameMap, Map<String, UserScheduleResponse> userScheduleResponseMap) {
         this.context = context;
-        this.memberNameAttendMap = data;
-        this.mapKeys = memberNameAttendMap.keySet().toArray(new String[data.size()]);
+        this.memberNameMap = memberNameMap;
+        this.userScheduleResponseMap = userScheduleResponseMap;
+        this.mapKeys = userScheduleResponseMap.keySet().toArray(new String[0]);
     }
 
     @Override
     public int getCount() {
-        return memberNameAttendMap.size();
+        return userScheduleResponseMap.size();
     }
 
     @Override
-    public Boolean getItem(int position) {
-        return memberNameAttendMap.get(mapKeys[position]);
+    public UserScheduleResponse getItem(int position) {
+        return userScheduleResponseMap.get(mapKeys[position]);
     }
 
     @Override
@@ -48,11 +51,10 @@ public class ScheduleReportMembersAdapter extends BaseAdapter {
         }
 
         TextView scheduleReportMemberName = convertView.findViewById(R.id.schedule_report_member_name);
+        scheduleReportMemberName.setText(memberNameMap.get(mapKeys[position]));
+
         TextView scheduleReportMemberAttendance = convertView.findViewById(R.id.schedule_report_member_attendance);
-
-        scheduleReportMemberName.setText(mapKeys[position]);
-
-        if (getItem(position)) {
+        if (getItem(position).getAttendance().didAttend()) {
             scheduleReportMemberAttendance.setText(SCHEDULE_ATTENDED);
             scheduleReportMemberAttendance.setTextColor(Color.GREEN);
         } else {
