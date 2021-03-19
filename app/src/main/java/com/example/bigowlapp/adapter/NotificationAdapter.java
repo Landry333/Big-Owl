@@ -18,7 +18,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     private static final String TAG = "NotificationAdapter";
     private List<Notification> mNotificationTitles;
-//    private Context mContext;
     private OnNotificationListener mOnNotificationListener;
 
     @Override

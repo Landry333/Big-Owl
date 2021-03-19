@@ -62,4 +62,8 @@
     <string name="schedule_title">Schedules title</string>
     <string name="schedule_start_time">Schedules Start time</string>
     <string name="inspect">inspect</string>
+    <string name="notification_time">inspect</string>
+    <string name="notification_page">inspect</string>
+    <string name="notification_content">inspect</string>
+    <string name="notification_name">inspect</string>
 </resources>

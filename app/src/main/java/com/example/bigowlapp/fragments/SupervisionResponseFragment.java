@@ -25,7 +25,7 @@ public class SupervisionResponseFragment extends Fragment {
     private RepositoryFacade repositoryFacade;
     private LiveData<Group> groupLiveData;
     private LiveData<User> userLiveData;
-    SupervisionRequest supervisionRequest;
+    private SupervisionRequest supervisionRequest;
 
     public SupervisionResponseFragment() {
 
@@ -41,14 +41,8 @@ public class SupervisionResponseFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_supervision_response, container, false);
 
         acceptBtn = view.findViewById(R.id.button_accept);
@@ -56,41 +50,57 @@ public class SupervisionResponseFragment extends Fragment {
         groupName = view.findViewById(R.id.text_view_group_name);
         groupSupervisor = view.findViewById(R.id.text_view_group_supervisor_name);
 
+        return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        subscribeToData();
+    }
+
+    private void subscribeToData() {
         repositoryFacade = RepositoryFacade.getInstance();
 
         userLiveData = repositoryFacade.getUserRepository().getDocumentByUid(supervisionRequest.getSenderUid(), User.class);
 
         userLiveData.observe(getActivity(), supervisor -> {
             groupSupervisor.setText(supervisor.getFullName());
-
             groupLiveData = repositoryFacade.getGroupRepository().getDocumentByAttribute("supervisorId", supervisor.getUid(), Group.class);
 
             groupLiveData.observe(getActivity(), group -> {
                 groupName.setText(group.getName());
 
-                acceptBtn.setOnClickListener(view1 -> {
-                    group.getMemberIdList().add(supervisionRequest.getReceiverUid());
-
-                    repositoryFacade.getUserRepository().getDocumentByUid(supervisionRequest.getReceiverUid(), User.class).observe(getActivity(), receiver -> {
-                        receiver.getMemberGroupIdList().add(group.getUid());
-
-                        repositoryFacade.getGroupRepository().updateDocument(group.getUid(), group);
-                        repositoryFacade.getUserRepository().updateDocument(receiver.getUid(), receiver);
-
-                        repositoryFacade.getNotificationRepository().removeDocument(supervisionRequest.getUid());
-
-                        getActivity().onBackPressed();
-                    });
-                });
-
-                rejectBtn.setOnClickListener(view2 -> {
-                    repositoryFacade.getNotificationRepository().removeDocument(supervisionRequest.getUid());
-
-                    getActivity().onBackPressed();
-                });
+                setupAcceptBtn(group);
+                setupRejectBtn();
             });
         });
+    }
 
-        return view;
+    private void removeNotification() {
+        repositoryFacade.getNotificationRepository().removeDocument(supervisionRequest.getUid());
+
+        getActivity().onBackPressed();
+    }
+
+    private void setupRejectBtn() {
+        rejectBtn.setOnClickListener(view -> {
+            removeNotification();
+        });
+    }
+
+    private void setupAcceptBtn(Group group) {
+        acceptBtn.setOnClickListener(view -> {
+            group.getMemberIdList().add(supervisionRequest.getReceiverUid());
+
+            repositoryFacade.getUserRepository().getDocumentByUid(supervisionRequest.getReceiverUid(), User.class).observe(getActivity(), receiver -> {
+                receiver.getMemberGroupIdList().add(group.getUid());
+
+                repositoryFacade.getGroupRepository().updateDocument(group.getUid(), group);
+                repositoryFacade.getUserRepository().updateDocument(receiver.getUid(), receiver);
+
+                removeNotification();
+            });
+        });
     }
 }
