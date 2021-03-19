@@ -72,8 +72,8 @@
     </string>
     <string name="wiki_page_manual">Wiki Page Manual</string>
     <string name="wiki_page_manual_uri">"https://github.com/Landry333/Big-Owl/wiki/Manual"</string>
-    <string name="notification_time">inspect</string>
-    <string name="notification_page">inspect</string>
-    <string name="notification_content">inspect</string>
-    <string name="notification_name">inspect</string>
+    <string name="notification_time">Time</string>
+    <string name="notification_page">Notifications</string>
+    <string name="notification_content">Content</string>
+    <string name="notification_name">Name</string>
 </resources>
