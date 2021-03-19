@@ -2,6 +2,7 @@ package com.example.bigowlapp.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
@@ -21,18 +22,24 @@ public class AuthenticatorByPhoneNumber {
     private String currentUserPhoneNumber;
     private final Context context;
     private final AuthRepository authRepository = new AuthRepository();
-
-    RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
+    private RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
 
     public AuthenticatorByPhoneNumber(Context context) {
         this.context = context;
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission") // Permission has already been granted after sign in step
     public void authenticate(String scheduleId) {
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        deviceIdNumber = telephonyManager.getDeviceId();
         devicePhoneNumber = telephonyManager.getLine1Number();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            deviceIdNumber = telephonyManager.getImei();
+            if (deviceIdNumber == null) {
+                deviceIdNumber = telephonyManager.getMeid();
+            }
+        } else {
+            deviceIdNumber = telephonyManager.getDeviceId();
+        }
         repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class)
                 .observeForever(schedule -> {
                     repositoryFacade.getUserRepository()
