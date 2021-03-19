@@ -19,8 +19,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.utils.SupervisorSchedulesAlarmManager;
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
+import com.example.bigowlapp.utils.SupervisorSchedulesAlarmManager;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -189,19 +189,10 @@ public class HomePageActivity extends BigOwlActivity {
                 .create();
     }
 
-    @VisibleForTesting
-    public HomePageViewModel getHomePageViewModel() {
-        return homePageViewModel;
-    }
 
     @VisibleForTesting
     public void setHomePageViewModel(HomePageViewModel homePageViewModel) {
         this.homePageViewModel = homePageViewModel;
-    }
-
-    @VisibleForTesting
-    public void setSupervisorSchedulesAlarmManager(SupervisorSchedulesAlarmManager supervisorSchedulesAlarmManager) {
-        this.supervisorSchedulesAlarmManager = supervisorSchedulesAlarmManager;
     }
 
     @VisibleForTesting
