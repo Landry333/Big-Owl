@@ -10,7 +10,6 @@ public class SetScheduleActivity extends BigOwlActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        moveTaskToBack(true);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
