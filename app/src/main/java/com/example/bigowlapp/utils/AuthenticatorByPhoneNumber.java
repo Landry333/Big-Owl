@@ -28,6 +28,7 @@ public class AuthenticatorByPhoneNumber {
         this.context = context;
     }
 
+
     @SuppressLint("MissingPermission")
     public void authenticate(String scheduleId) {
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
