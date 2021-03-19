@@ -3,9 +3,9 @@ package com.example.bigowlapp.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.example.bigowlapp.model.Attendance;
+import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.RepositoryFacade;
@@ -19,8 +19,10 @@ import com.example.bigowlapp.utils.SupervisorSchedulesAlarmManager;
  */
 public class SupervisorSchedulesAlarmReceiver extends BroadcastReceiver {
 
-    RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
-    SmsSender smsSender = new SmsSender();
+    private RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
+    private static final String WARNING_MESSAGE = "ATTENTION: BigOwl wasn't able to detect your current location for" +
+            " your next attendance. Please make sure your internet and " +
+            "BigOwl app are on";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -33,15 +35,12 @@ public class SupervisorSchedulesAlarmReceiver extends BroadcastReceiver {
                         for (String scheduleMemberUid : supervisorSchedule.getMemberList()) {
                             if ((supervisorSchedule.getUserScheduleResponseMap().get(scheduleMemberUid)
                                     .getAttendance().getScheduleLocated() == Attendance.LocatedStatus.NOT_DETECTED) && supervisorSchedule.getUserScheduleResponseMap().get(scheduleMemberUid)
-                                    .getAttendance().isAuthenticated() == false) {
+                                    .getAttendance().isAuthenticated() == false && (supervisorSchedule.getUserScheduleResponseMap().get(scheduleMemberUid).getResponse()==Response.ACCEPT)) {
                                 repositoryFacade.getUserRepository()
                                         .getDocumentByUid(scheduleMemberUid, User.class)
                                         .observeForever(scheduleMember -> {
                                             String scheduleMemberPhoneNum = scheduleMember.getPhoneNumber();
-                                            smsSender.sendSMS(context, scheduleMemberPhoneNum,
-                                                    "ATTENTION: BigOwl wasn't able to get your current location for" +
-                                                            " your next attendance. Please make sure your internet and " +
-                                                            "BigOwl app are on");
+                                            SmsSender.sendSMS(scheduleMemberPhoneNum,WARNING_MESSAGE);
                                         });
 
                             }
