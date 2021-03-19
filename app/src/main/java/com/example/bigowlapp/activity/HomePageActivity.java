@@ -118,6 +118,7 @@ public class HomePageActivity extends BigOwlActivity {
 
         btnLogOut.setOnClickListener(v -> {
             homePageViewModel.signOut();
+            Toast.makeText(HomePageActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(HomePageActivity.this, LoginPageActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);

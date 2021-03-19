@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
@@ -38,7 +39,9 @@ public class LoginPageActivity extends AppCompatActivity {
     }
 
     protected void initialize() {
+
         try {
+            BiometricManager biometricManager = BiometricManager.from(this);
             progressBar = (ProgressBar) findViewById(R.id.login_progress_bar);
 
             emailId = findViewById(R.id.editTextTextEmailAddress);
@@ -53,6 +56,11 @@ public class LoginPageActivity extends AppCompatActivity {
                     Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
                     authListener.listen(this);
                     startActivity(i);
+                    /*
+                    Toast.makeText(LoginPageActivity.this, "Authenticate fingerprint to get access", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
+                    i.putExtra("login message","You are logged in");
+                    startActivity(i);*/
                 } else {
                     Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_SHORT).show();
                 }
@@ -74,16 +82,24 @@ public class LoginPageActivity extends AppCompatActivity {
                         logInViewModel.logInUser(email, pass)
                                 .addOnSuccessListener(isSuccessful -> {
                                     progressBar.setVisibility(View.INVISIBLE);
-                                    Toast.makeText(LoginPageActivity.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
-                                    Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
+                                    Intent i;
+                                    if (biometricManager.canAuthenticate() != BiometricManager.BIOMETRIC_SUCCESS){
+                                        Toast.makeText(LoginPageActivity.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
+                                        i = new Intent(LoginPageActivity.this, HomePageActivity.class);
+                                        //i.putExtra("login message","Successfully logged in!");
+                                    }
+                                    else{
+                                        Toast.makeText(LoginPageActivity.this, "user ID and password accepted", Toast.LENGTH_LONG).show();
+                                        i = new Intent(LoginPageActivity.this, FingerprintAuthenticationActivity.class);
+                                    }
                                     startActivity(i);
                                 })
                                 .addOnFailureListener(e -> {
-                                    Toast.makeText(LoginPageActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginPageActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                                     progressBar.setVisibility(View.INVISIBLE);
                                 });
                     } else {
-                        Toast.makeText(LoginPageActivity.this, "An error has occurred", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginPageActivity.this, "An error has occurred", Toast.LENGTH_LONG).show();
                     }
                 }
             });
