@@ -19,22 +19,25 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
 public class HomePageActivity extends BigOwlActivity {
+
     private Button btnLogOut;
     private Button btnAddUsers;
     private Button btnMonitoringGroup;
     private Button btnSupervisedGroup;
-    private Button btnSetSchedule;
     private ScrollView scrollView;
     private ImageView imgUserAvatar;
     private TextView textEmail;
     private TextView textFirstName;
     private TextView textLastName;
     private TextView textPhone;
+
     private HomePageViewModel homePageViewModel;
+    private MemberScheduleAlarmManager memberScheduleAlarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +65,6 @@ public class HomePageActivity extends BigOwlActivity {
             Intent intent = new Intent(HomePageActivity.this, LoginPageActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-        });
-
-        btnSetSchedule = findViewById(R.id.btn_set_schedule);
-
-        btnSetSchedule.setOnClickListener(v -> {
-            Intent i = new Intent(HomePageActivity.this, SetScheduleActivity.class);
-            startActivity(i);
         });
 
         btnAddUsers = findViewById(R.id.btn_add_users);
@@ -116,6 +112,7 @@ public class HomePageActivity extends BigOwlActivity {
             textPhone = findViewById(R.id.user_phone_number);
 
             LiveDataWithStatus<User> currentUserData = homePageViewModel.getCurrentUserData();
+            setProgressBarVisible();
             currentUserData.observe(this, user -> {
                 if (currentUserData.hasError()) {
                     Toast.makeText(getBaseContext(), currentUserData.getError().getMessage(), Toast.LENGTH_LONG).show();
@@ -134,14 +131,26 @@ public class HomePageActivity extends BigOwlActivity {
                         .placeholder(R.drawable.logo_square)
                         .error(R.drawable.logo_square)
                         .into(imgUserAvatar);
+                setProgressBarInvisible();
             });
             scrollView.setVisibility(View.VISIBLE);
+            initAlarmManager();
         }
         /*  TODO: find a way to uncomment out below lines and allow HomePageActivityTest to pass
         else {
             this.noSignedInAlert().show();
         }
          */
+    }
+
+    /**
+     * Initializes the AlarmManager to set alarms for the user's schedules that he has to attend to.
+     */
+    private void initAlarmManager() {
+        if (memberScheduleAlarmManager == null) {
+            memberScheduleAlarmManager = new MemberScheduleAlarmManager(this);
+        }
+        memberScheduleAlarmManager.setAlarms(homePageViewModel.getCurrentUserUid());
     }
 
     @Override
@@ -152,7 +161,6 @@ public class HomePageActivity extends BigOwlActivity {
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getTitle().equals("Edit Profile")) {
-            finish();
             startActivity(new Intent(this, EditProfileActivity.class));
         }
         return super.onMenuItemClick(item);
@@ -180,4 +188,8 @@ public class HomePageActivity extends BigOwlActivity {
         this.homePageViewModel = homePageViewModel;
     }
 
+    @VisibleForTesting
+    public void setMemberScheduleAlarmManager(MemberScheduleAlarmManager memberScheduleAlarmManager) {
+        this.memberScheduleAlarmManager = memberScheduleAlarmManager;
+    }
 }
