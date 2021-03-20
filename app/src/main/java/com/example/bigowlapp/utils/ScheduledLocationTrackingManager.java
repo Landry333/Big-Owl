@@ -48,7 +48,7 @@ public class ScheduledLocationTrackingManager {
                 .addGeofences(buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent())
                 .onSuccessTask(aVoid -> {
                     locationCheckAlarmManager.setAlarm(DEFAULT_MAX_NOTIFY_DELAY_MILLIS);
-                    locationTrackingExpiredAlarmManager.setAlarm(DEFAULT_TRACKING_EXPIRE_TIME_MILLIS); //Add info for notification as parameters
+                    locationTrackingExpiredAlarmManager.setAlarm(DEFAULT_TRACKING_EXPIRE_TIME_MILLIS);
                     return Tasks.forResult(null);
                 });
     }

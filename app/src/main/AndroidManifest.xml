@@ -50,7 +50,6 @@
         <receiver android:name=".service.SupervisorSchedulesAlarmReceiver"
             android:enabled="true" />
 
-
         <receiver android:name=".service.LocationBroadcastReceiver"
             android:enabled="true"/>
         <receiver android:name=".utils.PeriodicLocationCheckAlarmManager$PeriodicLocationCheckAlarmReceiver"

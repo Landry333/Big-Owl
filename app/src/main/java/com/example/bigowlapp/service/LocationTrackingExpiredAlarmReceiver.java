@@ -33,7 +33,6 @@ public class LocationTrackingExpiredAlarmReceiver extends BroadcastReceiver {
             wl.acquire(3000);
         }
 
-        //String adsa = intent.getExtras("1");
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle("AlarmManager")
