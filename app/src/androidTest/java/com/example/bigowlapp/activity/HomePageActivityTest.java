@@ -40,6 +40,7 @@ public class HomePageActivityTest {
     @Mock
     private MemberScheduleAlarmManager memberScheduleAlarmManager;
 
+
     private User testUser;
     private LiveDataWithStatus<User> testUserData;
 

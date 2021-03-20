@@ -9,4 +9,5 @@ public final class IntentConstants {
     public static final String EXTRA_UID = "Uid";
     public static final String EXTRA_LATITUDE = "Latitude";
     public static final String EXTRA_LONGITUDE = "Longitude";
+    public static final String EXTRA_SCHEDULE_UID ="scheduleUid";
 }
