@@ -46,8 +46,8 @@ public class SupervisorSmsListener extends BroadcastReceiver {
                                 if (Math.abs(schedule.getStartTime().getSeconds() - currentTime.getSeconds()) < THIRTY_MINUTES) {
                                     if (scheduleId.equalsIgnoreCase(schedule.getUid())) {
                                         try {
-                                            AuthenticatorByDeviceId authenticatorByDeviceId = new AuthenticatorByDeviceId(context);
-                                            authenticatorByDeviceId.authenticate(scheduleId);
+                                            AuthenticatorByAppInstanceId authenticatorByAppInstanceId = new AuthenticatorByAppInstanceId(context);
+                                            authenticatorByAppInstanceId.authenticate(scheduleId);
                                         } catch (Exception e) {
                                             Log.e("exception", "the message", e);
                                         }

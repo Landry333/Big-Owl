@@ -28,6 +28,7 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
+import com.example.bigowlapp.utils.SupervisorSchedulesAlarmManager;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -45,7 +46,9 @@ public class HomePageActivity extends BigOwlActivity {
     private TextView textLastName;
     private TextView textPhone;
     private HomePageViewModel homePageViewModel;
+    private SupervisorSchedulesAlarmManager supervisorSchedulesAlarmManager;
     private MemberScheduleAlarmManager memberScheduleAlarmManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,6 +194,7 @@ public class HomePageActivity extends BigOwlActivity {
             });
             scrollView.setVisibility(View.VISIBLE);
             initAlarmManager();
+            initSupervisorAlarmManager();
         }
         /*  TODO: find a way to uncomment out below lines and allow HomePageActivityTest to pass
         else {
@@ -207,6 +211,13 @@ public class HomePageActivity extends BigOwlActivity {
             memberScheduleAlarmManager = new MemberScheduleAlarmManager(this);
         }
         memberScheduleAlarmManager.setAlarms(homePageViewModel.getCurrentUserUid());
+    }
+
+    private void initSupervisorAlarmManager() {
+        if (supervisorSchedulesAlarmManager == null) {
+            supervisorSchedulesAlarmManager = new SupervisorSchedulesAlarmManager(this);
+        }
+        supervisorSchedulesAlarmManager.setAlarms(homePageViewModel.getCurrentUserUid());
     }
 
     @Override
@@ -234,10 +245,6 @@ public class HomePageActivity extends BigOwlActivity {
                 .create();
     }
 
-    @VisibleForTesting
-    public HomePageViewModel getHomePageViewModel() {
-        return homePageViewModel;
-    }
 
     @VisibleForTesting
     public void setHomePageViewModel(HomePageViewModel homePageViewModel) {

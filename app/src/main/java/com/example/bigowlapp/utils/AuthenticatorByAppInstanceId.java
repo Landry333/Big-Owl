@@ -10,13 +10,13 @@ import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.installations.FirebaseInstallations;
 
-public class AuthenticatorByDeviceId {
+public class AuthenticatorByAppInstanceId {
 
     private String appInstanceId;
     private final Context context;
     RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
 
-    public AuthenticatorByDeviceId(Context context) {
+    public AuthenticatorByAppInstanceId(Context context) {
         this.context = context;
     }
 
@@ -36,7 +36,7 @@ public class AuthenticatorByDeviceId {
                         attendance.setAuthenticated(false);
                         Toast.makeText(context, "FAILURE in authentication for your next BIG OWL schedule", Toast.LENGTH_LONG).show();
                     }
-                    attendance.setAttemptedAuthByPhoneUid(true);
+                    attendance.setAttemptedAuthByAppUid(true);
                     repositoryFacade.getScheduleRepository().updateDocument(scheduleId, schedule);
                 });
     }

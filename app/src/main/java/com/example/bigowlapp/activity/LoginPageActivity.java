@@ -55,7 +55,7 @@ public class LoginPageActivity extends AppCompatActivity {
                     authListener.listen(this);
                     startActivity(i);
                 } else {
-                    Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_LONG).show();
                 }
             };
 

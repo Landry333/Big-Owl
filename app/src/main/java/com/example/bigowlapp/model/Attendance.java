@@ -12,13 +12,16 @@ public class Attendance {
 
     private boolean authenticated = false;
     private boolean attemptedAuthByUserMobileNumber = false;  // if authentication has been attempted at first using the UserMobileNumber
-    private boolean attemptedAuthByPhoneUid = false;  // if authentication has been attempted secondly using the PhoneUid
+    private boolean attemptedAuthByAppUid = false;  // if authentication has been attempted secondly using the PhoneUid
+
     private LocatedStatus scheduleLocated = LocatedStatus.NOT_DETECTED;
     private String appInstanceId;
     private Timestamp authenticationTime;
 
     public Attendance() {
+
         // public no-argument constructor necessary for Firebase data mapping
+
     }
 
     public boolean isAuthenticated() {
@@ -38,11 +41,11 @@ public class Attendance {
     }
 
     public boolean attemptedAuthByPhoneUid() {
-        return attemptedAuthByPhoneUid;
+        return attemptedAuthByAppUid;
     }
 
-    public void setAttemptedAuthByPhoneUid(boolean authAttemptedPhoneUid) {
-        this.attemptedAuthByPhoneUid = authAttemptedPhoneUid;
+    public void setAttemptedAuthByAppUid(boolean authAttemptedPhoneUid) {
+        this.attemptedAuthByAppUid = authAttemptedPhoneUid;
     }
 
     public LocatedStatus getScheduleLocated() {
@@ -72,8 +75,11 @@ public class Attendance {
 
     @Exclude
     public boolean didAttend() {
-        return authenticated && scheduleLocated == LocatedStatus.CORRECT_LOCATION;
-
+        return authenticated;
+        // authenticated begins only for CORRECT_LOCATION,
+        // so authenticated is enough to determine attendance
     }
+
+
 }
 
