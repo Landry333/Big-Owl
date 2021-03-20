@@ -27,7 +27,8 @@ public class AuthenticatorByPhoneNumber {
         this.context = context;
     }
 
-    @SuppressLint("MissingPermission") // Permission has already been granted after sign in step
+    @SuppressLint("MissingPermission")
+    // Permission was already granted after sign in step to be able to proceed
     public void authenticate(String scheduleId) {
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         devicePhoneNumber = telephonyManager.getLine1Number();

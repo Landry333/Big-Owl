@@ -3,24 +3,19 @@ package com.example.bigowlapp.utils;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
-
-import androidx.annotation.RequiresApi;
 
 import com.example.bigowlapp.model.Schedule;
 import com.google.firebase.Timestamp;
 
 import java.util.Calendar;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class SupervisorSmsListener extends BroadcastReceiver {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-    private String smsSender;
     private static final int THIRTY_MINUTES = 1800;
     private String scheduleId;
 
@@ -42,7 +37,7 @@ public class SupervisorSmsListener extends BroadcastReceiver {
                     messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
                     sb.append(messages[i].getMessageBody());
                 }
-                smsSender = messages[0].getOriginatingAddress().substring(2);
+                String smsSender = messages[0].getOriginatingAddress().substring(2);
                 scheduleId = sb.toString();
                 Timestamp currentTime = new Timestamp(Calendar.getInstance().getTime());
                 isSmsSenderACurrentEventSupervisor.check(smsSender)
