@@ -11,14 +11,17 @@ public class Attendance {
     }
 
     private boolean authenticated = false;
-    private boolean authAttemptedMethod1 = false;  // Authentication with first method
-    private boolean authAttemptedMethod2 = false;  // Authentication with second method
+
+    private boolean authAttemptedUserMobileNumber = false;  // if authentication has been attempted at first using the UserMobileNumber
+    private boolean authAttemptedPhoneUid = false;  // if authentication has been attempted secondly using the PhoneUid
     private LocatedStatus scheduleLocated = LocatedStatus.NOT_DETECTED;
     private String deviceIdNumber;
     private Timestamp authenticationTime;
 
     public Attendance() {
+
         // public no-argument constructor necessary for Firebase data mapping
+
     }
 
     public boolean isAuthenticated() {
@@ -29,20 +32,20 @@ public class Attendance {
         this.authenticated = authenticated;
     }
 
-    public boolean isAuthAttemptedMethod1() {
-        return authAttemptedMethod1;
+    public boolean isAuthAttemptedUserMobileNumber() {
+        return authAttemptedUserMobileNumber;
     }
 
-    public void setAuthAttemptedMethod1(boolean authAttemptedMethod1) {
-        this.authAttemptedMethod1 = authAttemptedMethod1;
+    public void setAuthAttemptedUserMobileNumber(boolean authAttemptedUserMobileNumber) {
+        this.authAttemptedUserMobileNumber = authAttemptedUserMobileNumber;
     }
 
-    public boolean isAuthAttemptedMethod2() {
-        return authAttemptedMethod2;
+    public boolean isAuthAttemptedPhoneUid() {
+        return authAttemptedPhoneUid;
     }
 
-    public void setAuthAttemptedMethod2(boolean authAttemptedMethod2) {
-        this.authAttemptedMethod2 = authAttemptedMethod2;
+    public void setAuthAttemptedPhoneUid(boolean authAttemptedPhoneUid) {
+        this.authAttemptedPhoneUid = authAttemptedPhoneUid;
     }
 
     public LocatedStatus getScheduleLocated() {
@@ -71,7 +74,9 @@ public class Attendance {
 
     @Exclude
     public boolean didAttend() {
-        return authenticated && scheduleLocated == LocatedStatus.CORRECT_LOCATION;
-
+        return authenticated;
+        // authenticated begins only for CORRECT_LOCATION,
+        // so authenticated is enough to determine attendance
     }
+
 }

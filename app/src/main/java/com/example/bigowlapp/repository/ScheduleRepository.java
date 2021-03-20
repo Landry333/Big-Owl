@@ -17,6 +17,7 @@ public class ScheduleRepository extends Repository<Schedule> {
     private static final String START_TIME = "startTime";
     private static final String MEMBER_LIST = "memberList";
     private static final String GROUP_ID = "groupUid";
+    private static final String SUPERVISOR_ID = "groupSupervisorUid";
 
     // TODO: Add dependency injection
     public ScheduleRepository() {
@@ -56,6 +57,12 @@ public class ScheduleRepository extends Repository<Schedule> {
      */
     public Task<QuerySnapshot> getTaskListSchedulesForUser(String userID) {
         return collectionReference.whereArrayContains(MEMBER_LIST, userID)
+                .whereGreaterThanOrEqualTo(START_TIME, Timestamp.now())
+                .orderBy(START_TIME, Query.Direction.ASCENDING)
+                .get();
+    }
+    public Task<QuerySnapshot> getTaskListSchedulesForSupervisor(String userID) {
+        return collectionReference.whereEqualTo(SUPERVISOR_ID, userID)
                 .whereGreaterThanOrEqualTo(START_TIME, Timestamp.now())
                 .orderBy(START_TIME, Query.Direction.ASCENDING)
                 .get();

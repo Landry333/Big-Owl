@@ -44,12 +44,17 @@
 
         <receiver android:name=".service.MemberScheduleAlarmReceiver"
             android:enabled="true" />
+
+        <receiver android:name=".service.SupervisorSchedulesAlarmReceiver"
+            android:enabled="true" />
+
         <receiver android:name=".service.LocationBroadcastReceiver"
             android:enabled="true"/>
         <receiver android:name=".utils.PeriodicLocationCheckAlarmManager$PeriodicLocationCheckAlarmReceiver"
             android:enabled="true"/>
         <receiver android:name=".service.LocationTrackingExpiredAlarmReceiver"
             android:enabled="true"/>
+
     </application>
 
 </manifest>
