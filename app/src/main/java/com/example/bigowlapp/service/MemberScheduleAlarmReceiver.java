@@ -3,15 +3,14 @@ package com.example.bigowlapp.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
 import com.example.bigowlapp.utils.ScheduledLocationTrackingManager;
 import com.google.firebase.firestore.GeoPoint;
 
-import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LATITUDE;
-import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LONGITUDE;
-import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
+import static com.example.bigowlapp.utils.IntentConstants.*;
 
 /**
  * The purpose of this BroadcastReceiver is to execute code after the time activation of an alarm.
@@ -34,6 +33,8 @@ public class MemberScheduleAlarmReceiver extends BroadcastReceiver {
         double defaultValueLatLng = 0.0;
         Schedule schedule = new Schedule();
         schedule.setUid(intent.getStringExtra(EXTRA_UID));
+        schedule.setTitle(intent.getStringExtra(EXTRA_SCHEDULE_TITLE));
+        schedule.setStartTime(intent.getParcelableExtra(EXTRA_SCHEDULE_STARTTIME));
         GeoPoint geoPoint = new GeoPoint(intent.getDoubleExtra(EXTRA_LATITUDE, defaultValueLatLng),
                 intent.getDoubleExtra(EXTRA_LONGITUDE, defaultValueLatLng));
         schedule.setLocation(geoPoint);

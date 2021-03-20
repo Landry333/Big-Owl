@@ -15,9 +15,7 @@ import com.google.android.gms.tasks.Tasks;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LATITUDE;
-import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LONGITUDE;
-import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
+import static com.example.bigowlapp.utils.IntentConstants.*;
 
 /**
  * The purpose of this class is to set/define alarms for member schedules that the app will set.
@@ -49,6 +47,8 @@ public class MemberScheduleAlarmManager {
                         intent.putExtra(EXTRA_UID, schedule.getUid());
                         intent.putExtra(EXTRA_LATITUDE, schedule.getLocation().getLatitude());
                         intent.putExtra(EXTRA_LONGITUDE, schedule.getLocation().getLongitude());
+                        intent.putExtra(EXTRA_SCHEDULE_TITLE, schedule.getTitle());
+                        intent.putExtra(EXTRA_SCHEDULE_STARTTIME, schedule.getStartTime());
                         PendingIntent pendingIntent = PendingIntent
                                 .getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                         alarmManager.set(AlarmManager.RTC_WAKEUP,

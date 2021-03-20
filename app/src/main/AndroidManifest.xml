@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.bigowlapp">
 
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -8,7 +7,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -56,17 +54,6 @@
             android:enabled="true"/>
         <receiver android:name=".service.LocationTrackingExpiredAlarmReceiver"
             android:enabled="true"/>
-
-
-        <service
-            android:name=".notifications.MissedScheduleNotification"
-            android:exported="false"
-            android:enabled="true"
-            tools:ignore="Instantiatable">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
 
     </application>
 

@@ -14,12 +14,19 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.utils.PeriodicLocationCheckAlarmManager;
 
+import com.google.firebase.Timestamp;
+
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_SCHEDULE_STARTTIME;
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_SCHEDULE_TITLE;
+
 /**
  * This will run when location tracking has expired for a user as a result of not getting
  * to a location at the expected time.
  */
 public class LocationTrackingExpiredAlarmReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "Missed Schedule";
+    private String title;
+    private Timestamp startTime;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -33,10 +40,12 @@ public class LocationTrackingExpiredAlarmReceiver extends BroadcastReceiver {
             wl.acquire(3000);
         }
 
+        title = intent.getStringExtra(EXTRA_SCHEDULE_TITLE);
+        startTime = intent.getParcelableExtra(EXTRA_SCHEDULE_STARTTIME);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle("AlarmManager")
-                .setContentText("test")
+                .setContentTitle("Missed Schedule for: " + title)
+                .setContentText("You've missed your schedule with starting time: " + startTime)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
