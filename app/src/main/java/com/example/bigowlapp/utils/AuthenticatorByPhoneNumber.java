@@ -2,7 +2,6 @@ package com.example.bigowlapp.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
@@ -14,10 +13,10 @@ import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.Timestamp;
+import com.google.firebase.installations.FirebaseInstallations;
 
 public class AuthenticatorByPhoneNumber {
 
-    private String deviceIdNumber;
     private String devicePhoneNumber;
     private String currentUserPhoneNumber;
     private final Context context;
@@ -32,14 +31,6 @@ public class AuthenticatorByPhoneNumber {
     public void authenticate(String scheduleId) {
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         devicePhoneNumber = telephonyManager.getLine1Number();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            deviceIdNumber = telephonyManager.getImei();
-            if (deviceIdNumber == null) {
-                deviceIdNumber = telephonyManager.getMeid();
-            }
-        } else {
-            deviceIdNumber = telephonyManager.getDeviceId();
-        }
         repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class)
                 .observeForever(schedule -> {
                     repositoryFacade.getUserRepository()
@@ -54,7 +45,7 @@ public class AuthenticatorByPhoneNumber {
                                     Toast.makeText(context, "SUCCESS in authentication for your next BIG OWL schedule", Toast.LENGTH_LONG).show();
                                 } else {
                                     attendance.setAuthenticated(false);
-                                    userScheduleResponse.getAttendance().setDeviceIdNumber(deviceIdNumber);
+                                    userScheduleResponse.getAttendance().setAppInstanceId(FirebaseInstallations.getInstance().getId().getResult());
                                     AuthByPhoneNumberFailure authByPhoneNumberFailure = new AuthByPhoneNumberFailure();
                                     authByPhoneNumberFailure.setScheduleId(scheduleId);
                                     authByPhoneNumberFailure.setCreationTime(Timestamp.now());

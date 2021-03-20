@@ -14,7 +14,7 @@ public class Attendance {
     private boolean attemptedAuthByUserMobileNumber = false;  // if authentication has been attempted at first using the UserMobileNumber
     private boolean attemptedAuthByPhoneUid = false;  // if authentication has been attempted secondly using the PhoneUid
     private LocatedStatus scheduleLocated = LocatedStatus.NOT_DETECTED;
-    private String deviceIdNumber;
+    private String appInstanceId;
     private Timestamp authenticationTime;
 
     public Attendance() {
@@ -53,12 +53,12 @@ public class Attendance {
         this.scheduleLocated = scheduleLocated;
     }
 
-    public String getDeviceIdNumber() {
-        return deviceIdNumber;
+    public String getAppInstanceId() {
+        return appInstanceId;
     }
 
-    public void setDeviceIdNumber(String deviceIdNumber) {
-        this.deviceIdNumber = deviceIdNumber;
+    public void setAppInstanceId(String appInstanceId) {
+        this.appInstanceId = appInstanceId;
     }
 
     public Timestamp getAuthenticationTime() {
