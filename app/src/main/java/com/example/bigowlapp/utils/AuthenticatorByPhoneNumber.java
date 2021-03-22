@@ -3,6 +3,7 @@ package com.example.bigowlapp.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.bigowlapp.model.Attendance;
@@ -14,6 +15,7 @@ import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.Timestamp;
 import com.google.firebase.installations.FirebaseInstallations;
+import com.google.i18n.phonenumbers.NumberParseException;
 
 public class AuthenticatorByPhoneNumber {
 
@@ -41,10 +43,19 @@ public class AuthenticatorByPhoneNumber {
                                 UserScheduleResponse userScheduleResponse = schedule.getUserScheduleResponseMap()
                                         .get(repositoryFacade.getAuthRepository().getCurrentUser().getUid());
                                 Attendance attendance = userScheduleResponse.getAttendance();
-                                if (currentUserPhoneNumber.equalsIgnoreCase("+" + devicePhoneNumber)) {
+                                String formattedDevicePhoneNum;
+                                try {
+                                    formattedDevicePhoneNum = PhoneNumberFormatter.formatNumber(devicePhoneNumber,context);
+                                } catch (NumberParseException e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(context, "FAILED to format phone number. Process failed", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                                if (currentUserPhoneNumber.equalsIgnoreCase(formattedDevicePhoneNum)){
                                     attendance.setAuthenticated(true);
                                     Toast.makeText(context, "SUCCESS in authentication for your next BIG OWL schedule", Toast.LENGTH_LONG).show();
-                                } else {
+                                }
+                                else {
                                     attendance.setAuthenticated(false);
                                     userScheduleResponse.getAttendance().setAppInstanceId(FirebaseInstallations.getInstance().getId().getResult());
                                     AuthByPhoneNumberFailure authByPhoneNumberFailure = new AuthByPhoneNumberFailure();

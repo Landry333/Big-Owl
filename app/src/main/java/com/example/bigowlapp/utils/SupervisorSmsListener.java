@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.bigowlapp.model.Schedule;
 import com.google.firebase.Timestamp;
+import com.google.i18n.phonenumbers.NumberParseException;
 
 import java.util.Calendar;
 
@@ -37,10 +38,18 @@ public class SupervisorSmsListener extends BroadcastReceiver {
                     messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
                     sb.append(messages[i].getMessageBody());
                 }
-                String smsSender = messages[0].getOriginatingAddress().substring(2);
+                String smsSenderNum = messages[0].getOriginatingAddress();
                 scheduleId = sb.toString();
                 Timestamp currentTime = new Timestamp(Calendar.getInstance().getTime());
-                isSmsSenderACurrentEventSupervisor.check(smsSender)
+                String formattedSmsSenderNum;
+                try {
+                    formattedSmsSenderNum = PhoneNumberFormatter.formatNumber(smsSenderNum,context);
+                } catch (NumberParseException e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, "FAILED to format phone number. Process failed", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                isSmsSenderACurrentEventSupervisor.check(formattedSmsSenderNum)
                         .addOnSuccessListener(schedulesList -> {
                             for (Schedule schedule : schedulesList) {
                                 if (Math.abs(schedule.getStartTime().getSeconds() - currentTime.getSeconds()) < THIRTY_MINUTES) {
