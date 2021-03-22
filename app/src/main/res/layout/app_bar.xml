@@ -28,7 +28,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="?attr/colorPrimary" />
+            android:background="?attr/white" />
 
         <ImageButton
             android:id="@+id/action_schedule"
@@ -45,7 +45,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="?attr/colorPrimary" />
+            android:background="?attr/white" />
 
         <ImageButton
             android:id="@+id/action_user"
@@ -62,7 +62,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="?attr/colorPrimary" />
+            android:background="?attr/white" />
 
         <ImageButton
             android:id="@+id/action_notification"
@@ -79,7 +79,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="?attr/colorPrimary" />
+            android:background="?attr/white" />
 
         <ImageButton
             android:id="@+id/action_big_owl"
@@ -97,7 +97,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/colorPrimary" />
+        android:background="?attr/white" />
 
     <ProgressBar
         android:id="@+id/database_progress_bar"
