@@ -32,22 +32,6 @@ public class Attendance {
         this.authenticated = authenticated;
     }
 
-    public boolean attemptedAuthByUserMobileNumber() {
-        return attemptedAuthByUserMobileNumber;
-    }
-
-    public void setAttemptedAuthByUserMobileNumber(boolean authAttemptedUserMobileNumber) {
-        this.attemptedAuthByUserMobileNumber = authAttemptedUserMobileNumber;
-    }
-
-    public boolean attemptedAuthByPhoneUid() {
-        return attemptedAuthByAppUid;
-    }
-
-    public void setAttemptedAuthByAppUid(boolean authAttemptedPhoneUid) {
-        this.attemptedAuthByAppUid = authAttemptedPhoneUid;
-    }
-
     public LocatedStatus getScheduleLocated() {
         return scheduleLocated;
     }
@@ -70,6 +54,22 @@ public class Attendance {
 
     public void setAuthenticationTime(Timestamp authenticationTime) {
         this.authenticationTime = authenticationTime;
+    }
+
+    public boolean isAttemptedAuthByUserMobileNumber() {
+        return attemptedAuthByUserMobileNumber;
+    }
+
+    public void setAttemptedAuthByUserMobileNumber(boolean attemptedAuthByUserMobileNumber) {
+        this.attemptedAuthByUserMobileNumber = attemptedAuthByUserMobileNumber;
+    }
+
+    public boolean isAttemptedAuthByAppUid() {
+        return attemptedAuthByAppUid;
+    }
+
+    public void setAttemptedAuthByAppUid(boolean attemptedAuthByAppUid) {
+        this.attemptedAuthByAppUid = attemptedAuthByAppUid;
     }
 
 
