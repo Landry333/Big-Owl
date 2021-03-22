@@ -21,8 +21,8 @@ public class SupervisorSchedulesAlarmReceiver extends BroadcastReceiver {
 
     private RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
     private static final String WARNING_MESSAGE = "ATTENTION: BigOwl wasn't able to detect your current location for" +
-            " your next attendance. Please make sure your internet and " +
-            "BigOwl app are on";
+            " your next attendance. Please make sure your internet is on and " +
+            " that app are signed in";
 
     @Override
     public void onReceive(Context context, Intent intent) {
