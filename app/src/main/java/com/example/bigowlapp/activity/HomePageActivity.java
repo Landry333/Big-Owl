@@ -53,7 +53,8 @@ public class HomePageActivity extends BigOwlActivity {
         super.onCreate(savedInstanceState);
         initialize();
         if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, 10);
+            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.READ_SMS, Manifest.permission.READ_PHONE_NUMBERS}, 10);
         }
         // RECEIVE and SEND SMS permissions for the text sms authentication system
         else if (checkSelfPermission(Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
