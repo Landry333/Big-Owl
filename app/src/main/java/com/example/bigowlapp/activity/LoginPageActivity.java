@@ -10,12 +10,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.example.bigowlapp.viewModel.LogInViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -107,10 +105,5 @@ public class LoginPageActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("Error: ", e.getMessage());
         }
-    }
-
-    @VisibleForTesting
-    public void setLogInViewModel(LogInViewModel logInViewModel) {
-        this.logInViewModel = logInViewModel;
     }
 }
