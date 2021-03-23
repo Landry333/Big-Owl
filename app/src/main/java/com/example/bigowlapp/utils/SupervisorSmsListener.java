@@ -27,7 +27,8 @@ public class SupervisorSmsListener extends BroadcastReceiver {
             Bundle bundle = receiverIntent.getExtras();
             if (bundle != null) {
                 // get sms objects
-                Object[] pdus = (Object[]) bundle.get("pdus");
+                Object[] pdus = (Object[]) bundle.get("pdus"); // getting from the bundle the value
+                // of the key "pdus". Here the pdus(protocol data units) is a SMS
                 if (pdus.length == 0) {
                     return;
                 }
@@ -45,8 +46,8 @@ public class SupervisorSmsListener extends BroadcastReceiver {
                 try {
                     formattedSmsSenderNum = PhoneNumberFormatter.formatNumber(smsSenderNum,context);
                 } catch (NumberParseException e) {
-                    e.printStackTrace();
-                    Toast.makeText(context, "FAILED to format phone number. Process failed", Toast.LENGTH_LONG).show();
+                    Log.e("BigOwl", Log.getStackTraceString(e));
+                    Toast.makeText(context, "FAILED to format phone number for next schedule authentication. Process failed", Toast.LENGTH_LONG).show();
                     return;
                 }
                 isSmsSenderACurrentEventSupervisor.check(formattedSmsSenderNum)
