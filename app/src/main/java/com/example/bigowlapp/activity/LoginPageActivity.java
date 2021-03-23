@@ -110,7 +110,7 @@ public class LoginPageActivity extends AppCompatActivity {
     }
 
     @VisibleForTesting
-    public void setHomePageViewModel(LogInViewModel logInViewModel) {
+    public void setLogInViewModel(LogInViewModel logInViewModel) {
         this.logInViewModel = logInViewModel;
     }
 }

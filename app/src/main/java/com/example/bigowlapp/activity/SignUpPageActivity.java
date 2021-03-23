@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -103,5 +104,10 @@ public class SignUpPageActivity extends AppCompatActivity {
         String formattedNumber = numbUtil.format(phonenumber, PhoneNumberUtil.PhoneNumberFormat.E164);
 
         return formattedNumber;
+    }
+
+    @VisibleForTesting
+    public void setSignUpViewModel(SignUpViewModel signUpViewModel) {
+        this.signUpViewModel = signUpViewModel;
     }
 }
