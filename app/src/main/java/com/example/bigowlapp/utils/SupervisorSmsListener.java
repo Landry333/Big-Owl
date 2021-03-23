@@ -26,13 +26,13 @@ public class SupervisorSmsListener extends BroadcastReceiver {
         if (receiverIntent.getAction().equals(SMS_RECEIVED)) {
             Bundle bundle = receiverIntent.getExtras();
             if (bundle != null) {
-                // get sms objects
-                Object[] pdus = (Object[]) bundle.get("pdus"); // getting from the bundle the value
-                // of the key "pdus". Here the pdus(protocol data units) is a SMS
+                // retrieving any PDUs as objects
+                Object[] pdus = (Object[]) bundle.get("pdus"); // getting  the value
+                // of the key "pdus" from the bundle. Here the pdus(protocol data units) is a SMS
                 if (pdus.length == 0) {
                     return;
                 }
-                // large message might be broken into many
+                // getting messages from the pdus
                 SmsMessage[] messages = new SmsMessage[pdus.length];
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < pdus.length; i++) {
