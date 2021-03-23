@@ -22,7 +22,7 @@ public class ScheduledLocationTrackingManager {
 
     private static final int REQUEST_CODE = 2;
     private static final int DEFAULT_TRACKING_RADIUS_METERS = 300;
-    private static final long DEFAULT_TRACKING_EXPIRE_TIME_MILLIS = 1L * Constants.SECONDS_TO_MILLIS;
+    public static final long DEFAULT_TRACKING_EXPIRE_TIME_MILLIS = 3L * Constants.MINUTE_TO_MILLIS;
     // use 0 for instant response, and allow longer delays for better battery life
     private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLIS = 3 * Constants.MINUTE_TO_MILLIS;
 
@@ -48,7 +48,7 @@ public class ScheduledLocationTrackingManager {
                 .addGeofences(buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent())
                 .onSuccessTask(aVoid -> {
                     locationCheckAlarmManager.setAlarm(DEFAULT_MAX_NOTIFY_DELAY_MILLIS);
-                    locationTrackingExpiredAlarmManager.setAlarm(DEFAULT_TRACKING_EXPIRE_TIME_MILLIS);
+                    locationTrackingExpiredAlarmManager.setAlarm(DEFAULT_TRACKING_EXPIRE_TIME_MILLIS, scheduleWithLocationToTrack.getTitle());
                     return Tasks.forResult(null);
                 });
     }

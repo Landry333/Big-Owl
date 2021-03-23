@@ -11,13 +11,13 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.utils.PeriodicLocationCheckAlarmManager;
+import com.example.bigowlapp.utils.ScheduledLocationTrackingManager;
 
-import com.google.firebase.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import static com.example.bigowlapp.utils.IntentConstants.EXTRA_SCHEDULE_STARTTIME;
-import static com.example.bigowlapp.utils.IntentConstants.EXTRA_SCHEDULE_TITLE;
 
 /**
  * This will run when location tracking has expired for a user as a result of not getting
@@ -25,8 +25,6 @@ import static com.example.bigowlapp.utils.IntentConstants.EXTRA_SCHEDULE_TITLE;
  */
 public class LocationTrackingExpiredAlarmReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "Missed Schedule";
-    private String title;
-    private Timestamp startTime;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -40,17 +38,18 @@ public class LocationTrackingExpiredAlarmReceiver extends BroadcastReceiver {
             wl.acquire(3000);
         }
 
-        title = intent.getStringExtra(EXTRA_SCHEDULE_TITLE);
-        startTime = intent.getParcelableExtra(EXTRA_SCHEDULE_STARTTIME);
+
+        Date date = new Date(System.currentTimeMillis()-ScheduledLocationTrackingManager.DEFAULT_TRACKING_EXPIRE_TIME_MILLIS);
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle("Missed Schedule for: " + title)
-                .setContentText("You've missed your schedule with starting time: " + startTime)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
+                .setContentTitle("Missed Schedule for: " + intent.getStringExtra("schedule_title"))
+                .setStyle(new NotificationCompat.InboxStyle()
+                        .addLine("You've missed your schedule starting at:")
+                        .addLine(df.format(date)));
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-
-        // notificationId is a unique int for each notification that you must define
         notificationManager.notify(1, builder.build());
     }
 
@@ -61,7 +60,6 @@ public class LocationTrackingExpiredAlarmReceiver extends BroadcastReceiver {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
-
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }

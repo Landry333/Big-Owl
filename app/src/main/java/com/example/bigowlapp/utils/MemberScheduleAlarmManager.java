@@ -4,6 +4,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
@@ -38,17 +40,20 @@ public class MemberScheduleAlarmManager {
      * @param userID The Id of the user
      */
     public void setAlarms(String userID) {
+
+
         int requestCode = 0;
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         getSchedulesForUser(userID)
                 .addOnSuccessListener(scheduleList -> {
                     for (Schedule schedule : scheduleList) {
                         Intent intent = new Intent(context, MemberScheduleAlarmReceiver.class);
-                        intent.putExtra(EXTRA_UID, schedule.getUid());
-                        intent.putExtra(EXTRA_LATITUDE, schedule.getLocation().getLatitude());
-                        intent.putExtra(EXTRA_LONGITUDE, schedule.getLocation().getLongitude());
-                        intent.putExtra(EXTRA_SCHEDULE_TITLE, schedule.getTitle());
-                        intent.putExtra(EXTRA_SCHEDULE_STARTTIME, schedule.getStartTime());
+                        Bundle bundle = new Bundle();
+                        bundle.putString(EXTRA_UID, schedule.getUid());
+                        bundle.putString(EXTRA_SCHEDULE_TITLE, schedule.getTitle());
+                        bundle.putDouble(EXTRA_LATITUDE, schedule.getLocation().getLatitude());
+                        bundle.putDouble(EXTRA_LONGITUDE, schedule.getLocation().getLongitude());
+                        intent.putExtras(bundle);
                         PendingIntent pendingIntent = PendingIntent
                                 .getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                         alarmManager.set(AlarmManager.RTC_WAKEUP,

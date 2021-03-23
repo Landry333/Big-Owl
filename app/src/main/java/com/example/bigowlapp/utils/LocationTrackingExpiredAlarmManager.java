@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
-
 import com.example.bigowlapp.service.LocationTrackingExpiredAlarmReceiver;
 
 /**
@@ -18,13 +17,15 @@ public class LocationTrackingExpiredAlarmManager {
 
     private final Context context;
     private final AlarmManager alarmManager;
+    private String title;
 
     public LocationTrackingExpiredAlarmManager(Context context) {
         this.context = context;
         this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    public void setAlarm(long expireTimeMillis) {
+    public void setAlarm(long expireTimeMillis, String title) {
+        this.title = title;
         alarmManager.set(AlarmManager.ELAPSED_REALTIME,
                 SystemClock.elapsedRealtime() + expireTimeMillis,
                 getPendingIntent());
@@ -32,6 +33,7 @@ public class LocationTrackingExpiredAlarmManager {
 
     private PendingIntent getPendingIntent() {
         Intent intent = new Intent(context, LocationTrackingExpiredAlarmReceiver.class);
+        intent.putExtra("schedule_title", title);
         return PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 

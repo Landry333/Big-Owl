@@ -3,6 +3,7 @@ package com.example.bigowlapp.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.bigowlapp.model.Schedule;
@@ -30,13 +31,12 @@ public class MemberScheduleAlarmReceiver extends BroadcastReceiver {
     }
 
     private Schedule getSchedule(Intent intent) {
-        double defaultValueLatLng = 0.0;
         Schedule schedule = new Schedule();
-        schedule.setUid(intent.getStringExtra(EXTRA_UID));
-        schedule.setTitle(intent.getStringExtra(EXTRA_SCHEDULE_TITLE));
-        schedule.setStartTime(intent.getParcelableExtra(EXTRA_SCHEDULE_STARTTIME));
-        GeoPoint geoPoint = new GeoPoint(intent.getDoubleExtra(EXTRA_LATITUDE, defaultValueLatLng),
-                intent.getDoubleExtra(EXTRA_LONGITUDE, defaultValueLatLng));
+        Bundle bundle = intent.getExtras();
+        schedule.setUid(bundle.getString(EXTRA_UID));
+        schedule.setTitle(bundle.getString(EXTRA_SCHEDULE_TITLE));
+        GeoPoint geoPoint = new GeoPoint(bundle.getDouble(EXTRA_LATITUDE),
+                bundle.getDouble(EXTRA_LONGITUDE));
         schedule.setLocation(geoPoint);
         return schedule;
     }
