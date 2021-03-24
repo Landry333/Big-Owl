@@ -52,49 +52,6 @@ public class HomePageActivity extends BigOwlActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initialize();
-        if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.READ_SMS, Manifest.permission.READ_PHONE_NUMBERS}, 10);
-        }
-        // RECEIVE and SEND SMS permissions for the text sms authentication system
-        else if (checkSelfPermission(Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS}, 1000);
-        } else if (checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.SEND_SMS}, 100);
-        }
-
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1000) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "SMS READ Permission GRANTED", Toast.LENGTH_LONG).show();
-                finish();
-            } else {
-                Toast.makeText(this, "Need to allow SMS permission or reinstall app then allow", Toast.LENGTH_LONG).show();
-                finish();
-            }
-        } else if (requestCode == 100) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "SMS SEND Permission GRANTED", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Need to allow SMS permission or reinstall app then allow", Toast.LENGTH_LONG).show();
-                finish();
-            }
-        } else if (requestCode == 10) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "PHONE Permission GRANTED", Toast.LENGTH_LONG).show();
-                finish();
-            } else {
-                Toast.makeText(this, "Need to allow PHONE permission or reinstall app then allow", Toast.LENGTH_LONG).show();
-                finish();
-            }
-        }
-
-
     }
 
     @SuppressLint({"MissingPermission"})
