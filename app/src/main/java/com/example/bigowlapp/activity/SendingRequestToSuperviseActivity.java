@@ -98,7 +98,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
 
     private void observeRequests() {
         aRequestAlready = false; // A false value allows for search for an existing request with
-        // in repository until one is found
+                                 // in repository until one is found
         supRequestBtn.setText(supBtnSend); // Default setText
         resultNoteTv.setText(noRequest);
         LiveData<List<SupervisionRequest>> senderRequestsData = notificationRepository.getListOfSupervisionRequestByAttribute("senderUid", currentUserID, SupervisionRequest.class);
