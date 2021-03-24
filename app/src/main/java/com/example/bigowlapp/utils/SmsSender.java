@@ -11,9 +11,12 @@ public class SmsSender {
     }
 
     public static void sendSMS(String smsNumber, String smsMessage) {
+
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(smsNumber, null, smsMessage, null, null);
     }
 
 }
+
+
 

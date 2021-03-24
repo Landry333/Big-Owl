@@ -1,6 +1,10 @@
 package com.example.bigowlapp.activity;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +15,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
@@ -24,6 +30,7 @@ import com.example.bigowlapp.utils.SupervisorSchedulesAlarmManager;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
+
 public class HomePageActivity extends BigOwlActivity {
 
     private Button btnLogOut;
@@ -36,7 +43,6 @@ public class HomePageActivity extends BigOwlActivity {
     private TextView textFirstName;
     private TextView textLastName;
     private TextView textPhone;
-
     private HomePageViewModel homePageViewModel;
     private SupervisorSchedulesAlarmManager supervisorSchedulesAlarmManager;
     private MemberScheduleAlarmManager memberScheduleAlarmManager;
@@ -48,6 +54,8 @@ public class HomePageActivity extends BigOwlActivity {
         initialize();
     }
 
+    @SuppressLint({"MissingPermission"})
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStart() {
         super.onStart();
@@ -56,6 +64,7 @@ public class HomePageActivity extends BigOwlActivity {
         }
         subscribeToData();
     }
+
 
     protected void initialize() {
         scrollView = findViewById(R.id.scroll_view);

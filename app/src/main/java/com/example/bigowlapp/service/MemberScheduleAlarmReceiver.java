@@ -25,7 +25,6 @@ public class MemberScheduleAlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         Schedule activatedSchedule = getSchedule(intent);
-
         ScheduledLocationTrackingManager locationTrackingManager = new ScheduledLocationTrackingManager(context);
         locationTrackingManager.addNewScheduledLocationToTrack(activatedSchedule);
     }

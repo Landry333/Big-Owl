@@ -11,11 +11,11 @@ public class Attendance {
     }
 
     private boolean authenticated = false;
+    private boolean attemptedAuthByUserMobileNumber = false;  // if authentication has been attempted at first using the UserMobileNumber
+    private boolean attemptedAuthByAppUid = false;  // if authentication has been attempted secondly using the PhoneUid
 
-    private boolean authAttemptedUserMobileNumber = false;  // if authentication has been attempted at first using the UserMobileNumber
-    private boolean authAttemptedPhoneUid = false;  // if authentication has been attempted secondly using the PhoneUid
     private LocatedStatus scheduleLocated = LocatedStatus.NOT_DETECTED;
-    private String deviceIdNumber;
+    private String appInstanceId;
     private Timestamp authenticationTime;
 
     public Attendance() {
@@ -32,22 +32,6 @@ public class Attendance {
         this.authenticated = authenticated;
     }
 
-    public boolean isAuthAttemptedUserMobileNumber() {
-        return authAttemptedUserMobileNumber;
-    }
-
-    public void setAuthAttemptedUserMobileNumber(boolean authAttemptedUserMobileNumber) {
-        this.authAttemptedUserMobileNumber = authAttemptedUserMobileNumber;
-    }
-
-    public boolean isAuthAttemptedPhoneUid() {
-        return authAttemptedPhoneUid;
-    }
-
-    public void setAuthAttemptedPhoneUid(boolean authAttemptedPhoneUid) {
-        this.authAttemptedPhoneUid = authAttemptedPhoneUid;
-    }
-
     public LocatedStatus getScheduleLocated() {
         return scheduleLocated;
     }
@@ -56,12 +40,12 @@ public class Attendance {
         this.scheduleLocated = scheduleLocated;
     }
 
-    public String getDeviceIdNumber() {
-        return deviceIdNumber;
+    public String getAppInstanceId() {
+        return appInstanceId;
     }
 
-    public void setDeviceIdNumber(String deviceIdNumber) {
-        this.deviceIdNumber = deviceIdNumber;
+    public void setAppInstanceId(String appInstanceId) {
+        this.appInstanceId = appInstanceId;
     }
 
     public Timestamp getAuthenticationTime() {
@@ -72,6 +56,23 @@ public class Attendance {
         this.authenticationTime = authenticationTime;
     }
 
+    public boolean isAttemptedAuthByUserMobileNumber() {
+        return attemptedAuthByUserMobileNumber;
+    }
+
+    public void setAttemptedAuthByUserMobileNumber(boolean attemptedAuthByUserMobileNumber) {
+        this.attemptedAuthByUserMobileNumber = attemptedAuthByUserMobileNumber;
+    }
+
+    public boolean isAttemptedAuthByAppUid() {
+        return attemptedAuthByAppUid;
+    }
+
+    public void setAttemptedAuthByAppUid(boolean attemptedAuthByAppUid) {
+        this.attemptedAuthByAppUid = attemptedAuthByAppUid;
+    }
+
+
     @Exclude
     public boolean didAttend() {
         return authenticated;
@@ -79,4 +80,6 @@ public class Attendance {
         // so authenticated is enough to determine attendance
     }
 
+
 }
+
