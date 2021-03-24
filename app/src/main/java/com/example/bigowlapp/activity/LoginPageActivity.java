@@ -110,4 +110,6 @@ public class LoginPageActivity extends AppCompatActivity {
             Log.e("Error: ", e.getMessage());
         }
     }
+
+
 }
