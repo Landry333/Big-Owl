@@ -1,11 +1,13 @@
 package com.example.bigowlapp.activity;
 
+import android.Manifest;
 import android.os.SystemClock;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
+import androidx.test.rule.GrantPermissionRule;
 
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
@@ -34,6 +36,14 @@ public class HomePageActivityTest {
     @Rule
     public ActivityScenarioRule<HomePageActivity> activityRule = new ActivityScenarioRule<>(HomePageActivity.class);
 
+    @Rule
+    public final GrantPermissionRule permissionRule = GrantPermissionRule.grant(
+            Manifest.permission.SEND_SMS,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.RECEIVE_SMS,
+            Manifest.permission.READ_SMS,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_PHONE_NUMBERS);
     @Mock
     private HomePageViewModel homePageViewModel;
 
