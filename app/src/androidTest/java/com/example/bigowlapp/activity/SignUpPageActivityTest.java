@@ -32,6 +32,7 @@ import java.util.Random;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -66,7 +67,6 @@ public class SignUpPageActivityTest {
 
     @Test
     public void A_unSufficientSignUpInputTest() {
-        onView(withId(R.id.button_sign_up)).perform(ViewActions.scrollTo());
         onView(withId(R.id.button_sign_up))
                 .check(matches(withText("Sign Up"))).perform(click());
         onView(withId(R.id.edit_text_phone)).check(matches(hasErrorText("The string supplied did not seem to be a phone number.")));
@@ -74,13 +74,12 @@ public class SignUpPageActivityTest {
 
     @Test
     public void B_unValidSignUpInputTest() {
-        onView(withId(R.id.user_first_name)).perform(replaceText(firstName));
-        onView(withId(R.id.user_last_name)).perform(replaceText(lastName));
-        onView(withId(R.id.edit_text_text_mail_address)).perform(replaceText(email));
-        onView(withId(R.id.edit_text_text_password)).perform(replaceText(password));
-        onView(withId(R.id.edit_text_phone)).perform(replaceText("5141234567"));
+        onView(withId(R.id.user_first_name)).perform(typeText(firstName), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.user_last_name)).perform(typeText(lastName), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.edit_text_text_mail_address)).perform(typeText(email), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.edit_text_text_password)).perform(typeText(password), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.edit_text_phone)).perform(typeText("5141234567"), ViewActions.closeSoftKeyboard());
 
-        onView(withId(R.id.button_sign_up)).perform(ViewActions.scrollTo());
         onView(withId(R.id.button_sign_up))
                 .check(matches(withText("Sign Up"))).perform(click());
 
@@ -103,13 +102,12 @@ public class SignUpPageActivityTest {
         this.phone = String.valueOf(result);
         this.email = result + "@email.com";
 
-        onView(withId(R.id.user_first_name)).perform(replaceText(firstName));
-        onView(withId(R.id.user_last_name)).perform(replaceText(lastName));
-        onView(withId(R.id.edit_text_text_mail_address)).perform(replaceText(this.email));
-        onView(withId(R.id.edit_text_text_password)).perform(replaceText(password));
-        onView(withId(R.id.edit_text_phone)).perform(replaceText(this.phone));
+        onView(withId(R.id.user_first_name)).perform(typeText(firstName), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.user_last_name)).perform(typeText(lastName), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.edit_text_text_mail_address)).perform(typeText(this.email), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.edit_text_text_password)).perform(typeText(password), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.edit_text_phone)).perform(typeText(this.phone), ViewActions.closeSoftKeyboard());
 
-        onView(withId(R.id.button_sign_up)).perform(ViewActions.scrollTo());
         onView(withId(R.id.button_sign_up))
                 .check(matches(withText("Sign Up"))).perform(click());
 
@@ -118,9 +116,6 @@ public class SignUpPageActivityTest {
         Espresso.onView(withId(R.id.user_avatar)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.user_first_name)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.user_last_name)).check(matches(isDisplayed()));
-
-        onView(withId(R.id.btn_logout))
-                .check(matches(withText("Log out"))).perform(click());
     }
 
     private ViewAction waitFor(final long ms) {
