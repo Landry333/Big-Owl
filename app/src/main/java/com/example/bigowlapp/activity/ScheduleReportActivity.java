@@ -1,13 +1,20 @@
 package com.example.bigowlapp.activity;
 
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.adapter.ScheduleReportMembersAdapter;
+import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.viewModel.ScheduleReportViewModel;
+import com.google.firebase.firestore.GeoPoint;
 
+import java.io.IOException;
+
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.ViewModelProvider;
 
 public class ScheduleReportActivity extends BigOwlActivity {
@@ -15,6 +22,7 @@ public class ScheduleReportActivity extends BigOwlActivity {
     private TextView scheduleReportTitle, scheduleReportStartTime, scheduleReportEndTime, scheduleReportLocation;
     private ScheduleReportViewModel scheduleReportViewModel;
     private ListView scheduleReportMemberListView;
+    private ScheduleReportMembersAdapter scheduleReportMembersAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +58,30 @@ public class ScheduleReportActivity extends BigOwlActivity {
                 scheduleReportTitle.setText(schedule.getTitle());
                 scheduleReportStartTime.setText(schedule.getStartTime().toDate().toString());
                 scheduleReportEndTime.setText(schedule.getEndTime().toDate().toString());
-                scheduleReportLocation.setText(scheduleReportViewModel.getScheduleLocation(this, schedule));
+                scheduleReportLocation.setText(getScheduleLocation(schedule.getLocation()));
 
                 scheduleReportViewModel.getScheduleMemberNameMap(schedule.getMemberList()).observe(this, memberNameMap -> {
-                    scheduleReportMemberListView.setAdapter(new ScheduleReportMembersAdapter(
-                            this, memberNameMap, schedule.getUserScheduleResponseMap()));
+                    if (schedule.scheduleCurrentState() == Schedule.Status.ON_GOING)
+                        Toast.makeText(this, "Schedule is ongoing and attendance results are subject to change", Toast.LENGTH_LONG).show();
+
+                    scheduleReportMembersAdapter = new ScheduleReportMembersAdapter(this, memberNameMap, schedule);
+                    scheduleReportMemberListView.setAdapter(scheduleReportMembersAdapter);
                 });
             }
         });
+    }
+
+    private String getScheduleLocation(GeoPoint geoPoint) {
+        try {
+            return new Geocoder(this).getFromLocation(
+                    geoPoint.getLatitude(),
+                    geoPoint.getLongitude(),
+                    1)
+                    .get(0).getAddressLine(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "ERROR";
     }
 
     @Override
@@ -65,4 +89,14 @@ public class ScheduleReportActivity extends BigOwlActivity {
         return R.layout.activity_schedule_report;
     }
 
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setScheduleReportViewModel(ScheduleReportViewModel scheduleReportViewModel) {
+        this.scheduleReportViewModel = scheduleReportViewModel;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public ScheduleReportMembersAdapter getScheduleReportMembersAdapter() {
+        return scheduleReportMembersAdapter;
+    }
 }

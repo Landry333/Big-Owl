@@ -46,19 +46,17 @@ public class UserRepository extends Repository<User> {
         });
     }
 
-    public LiveData<Map<String, String>> getScheduleMemberNameMap(List<String> memberList) {
-        Map<String, String> memberNameAttend = new HashMap<>();
-        MutableLiveData<Map<String, String>> memberNameAttendData = new MutableLiveData<>();
+    public LiveData<Map<String, String>> getScheduleMemberIdNameMap(List<String> memberList) {
+        MutableLiveData<Map<String, String>> mapData = new MutableLiveData<>();
         collectionReference.whereIn(FieldPath.documentId(), memberList).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                Map<String, String> map = new HashMap<>();
                 for (DocumentSnapshot document : task.getResult().getDocuments()) {
-                    memberNameAttend.put(
-                            document.getId(),
-                            document.getString("firstName") + " " + document.getString("lastName"));
+                    map.put(document.getId(), document.getString("firstName") + " " + document.getString("lastName"));
                 }
-                memberNameAttendData.setValue(memberNameAttend);
+                mapData.setValue(map);
             }
         });
-        return memberNameAttendData;
+        return mapData;
     }
 }

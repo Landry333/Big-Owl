@@ -80,4 +80,5 @@
     <string name="schedule_report_start_time">schedule_report_start_time</string>
     <string name="schedule_report_end_time">schedule_report_end_time</string>
     <string name="schedule_report_location">schedule_report_location</string>
+    <string name="member_attendance_time">member_attendance_time</string>
 </resources>
