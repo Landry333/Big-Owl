@@ -41,17 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:textStyle="bold" />
-
-
     </LinearLayout>
-
-    <View
-        android:id="@+id/line_below_response"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/linear_layout_response"
-        android:background="@color/colorAccent"
-        android:visibility="invisible" />
 
     <LinearLayout
         android:layout_width="match_parent"
