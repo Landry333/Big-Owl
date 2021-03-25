@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
@@ -55,7 +54,7 @@ public class MemberScheduleAlarmManager {
                         alarmManager.set(AlarmManager.RTC_WAKEUP,
                                 schedule.getStartTime().toDate().getTime(), pendingIntent);
                     }
-                }).addOnFailureListener(error -> Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show());
+                });
     }
 
     /**

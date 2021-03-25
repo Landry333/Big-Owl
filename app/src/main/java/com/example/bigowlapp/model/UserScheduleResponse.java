@@ -40,4 +40,7 @@ public class UserScheduleResponse {
     public void setAttendance(Attendance attendance) {
         this.attendance = attendance;
     }
+
+
 }
+

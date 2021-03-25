@@ -102,13 +102,6 @@
                         android:text="@string/log_out" />
                 </TableRow>
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center">
-                </TableRow>
-
             </TableLayout>
 
             <TableLayout
