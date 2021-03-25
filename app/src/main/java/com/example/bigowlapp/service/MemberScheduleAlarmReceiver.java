@@ -23,8 +23,8 @@ public class MemberScheduleAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Schedule activatedSchedule = getSchedule(intent);
 
+        Schedule activatedSchedule = getSchedule(intent);
         ScheduledLocationTrackingManager locationTrackingManager = new ScheduledLocationTrackingManager(context);
         locationTrackingManager.addNewScheduledLocationToTrack(activatedSchedule);
     }

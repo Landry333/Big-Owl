@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.example.bigowlapp.viewModel.SignUpViewModel;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -52,9 +53,9 @@ public class SignUpPageActivity extends AppCompatActivity {
             String firstName = userFirstName.getText().toString();
             String lastName = userLastName.getText().toString();
 
-            String formatedPhone = null;
+            String formattedUserPhone;
             try {
-                formatedPhone = filteredNUmber(userPhone);
+                formattedUserPhone = PhoneNumberFormatter.formatNumber(userPhone, this);
             } catch (NumberParseException e) {
                 this.userPhone.setError(e.getMessage());
                 this.userPhone.requestFocus();
@@ -79,7 +80,7 @@ public class SignUpPageActivity extends AppCompatActivity {
                 this.userPhone.requestFocus();
             } else {
                 progressBar.setVisibility(View.VISIBLE);
-                signUpViewModel.createUser(email, pass, formatedPhone, firstName, lastName)
+                signUpViewModel.createUser(email, pass, formattedUserPhone, firstName, lastName)
                         .addOnSuccessListener(isSuccessful -> {
                             progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
@@ -97,11 +98,4 @@ public class SignUpPageActivity extends AppCompatActivity {
         });
     }
 
-    public String filteredNUmber(String number) throws NumberParseException {
-        PhoneNumberUtil numbUtil = PhoneNumberUtil.getInstance();
-        Phonenumber.PhoneNumber phonenumber = numbUtil.parseAndKeepRawInput(number, getResources().getConfiguration().getLocales().get(0).getCountry());
-        String formattedNumber = numbUtil.format(phonenumber, PhoneNumberUtil.PhoneNumberFormat.E164);
-
-        return formattedNumber;
-    }
 }

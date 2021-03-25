@@ -46,6 +46,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.bigowlapp.utils.DateTimeFormatter.dateFormatter;
+import static com.example.bigowlapp.utils.DateTimeFormatter.timeFormatter;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -241,6 +243,23 @@ public class ScheduleFormFragmentTest {
 
         // Click on Set Schedule
         confirmSetSchedule.perform(click());
+
+        //Verify Dialog
+        StringBuilder selectedMembers = new StringBuilder();
+        for (User user : fakeListOfUsers) {
+            selectedMembers.append(user.getFullName()).append("\n");
+        }
+        String startDate = dateFormatter(startNewTime);
+        String startTime = timeFormatter(startNewTime);
+        String endDate = dateFormatter(newEndTime);
+        String endTime = timeFormatter(newEndTime);
+        String selectedLocation = (fakeSelectedLocation.placeName() == null) ? location.address() : location.placeName();
+
+        onView(withText("Please confirm the new Schedule info: \n\nTitle:\n" + "Schedule_Title" + "\n\nGroup name:\n"+ "group_name" + "\n\nSelected members:\n"+ selectedMembers
+                + "\nStart date:\n" + startDate + "\n"+ startTime + "\n\nEnd date\n" + endDate + "\n" + endTime + "\n\nSelected Location:\n" + selectedLocation))
+                .check(matches(isDisplayed()));
+        onView(withText("CONFIRM")).perform(click());
+
         verify(mockSetScheduleViewModel).addSchedule();
     }
 

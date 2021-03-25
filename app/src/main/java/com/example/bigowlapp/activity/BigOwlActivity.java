@@ -1,6 +1,7 @@
 package com.example.bigowlapp.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,7 +49,7 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
 
         imgBtnNotification = findViewById(R.id.action_notification);
         imgBtnNotification.setOnClickListener(v -> {
-            // TODO startActivity(new Intent(this, Notification? .class));
+            startActivity(new Intent(this, NotificationActivity.class));
         });
 
         imgBtnBigOwl = findViewById(R.id.action_big_owl);
@@ -72,6 +73,10 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
         if (item.getItemId() == R.id.overflow_home) {
             finish();
             startActivity(new Intent(this, HomePageActivity.class));
+        } else if (item.getItemId() == R.id.overflow_wiki_page_manual) {
+            final String WIKI_PAGE_MANUAL_URI = getString(R.string.wiki_page_manual_uri);
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(WIKI_PAGE_MANUAL_URI));
+            startActivity(intent);
         } else if (item.getItemId() == R.id.overflow_refresh) {
             finish();
             startActivity(getIntent());
