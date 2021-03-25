@@ -100,7 +100,7 @@ public class LoginPageActivityTest {
         onView(withId(R.id.button))
                 .check(matches(withText("Sign In"))).perform(click());
 
-        Espresso.onView(isRoot()).perform(waitFor(3000));
+        Espresso.onView(isRoot()).perform(waitFor(10000));
         Espresso.onView(withId(R.id.top_app_bar)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.user_avatar)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.user_first_name)).check(matches(isDisplayed()));

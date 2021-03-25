@@ -102,7 +102,7 @@ public class SignUpPageActivityTest {
 
         onView(withId(R.id.user_first_name)).perform(replaceText(firstName));
         onView(withId(R.id.user_last_name)).perform(replaceText(lastName));
-        onView(withId(R.id.edit_text_text_mail_address)).perform(replaceText(email));
+        onView(withId(R.id.edit_text_text_mail_address)).perform(replaceText(this.email));
         onView(withId(R.id.edit_text_text_password)).perform(replaceText(password));
         onView(withId(R.id.edit_text_phone)).perform(replaceText(this.phone));
 
