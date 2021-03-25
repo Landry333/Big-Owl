@@ -7,6 +7,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -65,6 +66,7 @@ public class SignUpPageActivityTest {
 
     @Test
     public void A_unSufficientSignUpInputTest() {
+        onView(withId(R.id.button_sign_up)).perform(ViewActions.scrollTo());
         onView(withId(R.id.button_sign_up))
                 .check(matches(withText("Sign Up"))).perform(click());
         onView(withId(R.id.edit_text_phone)).check(matches(hasErrorText("The string supplied did not seem to be a phone number.")));
@@ -78,6 +80,7 @@ public class SignUpPageActivityTest {
         onView(withId(R.id.edit_text_text_password)).perform(replaceText(password));
         onView(withId(R.id.edit_text_phone)).perform(replaceText("5141234567"));
 
+        onView(withId(R.id.button_sign_up)).perform(ViewActions.scrollTo());
         onView(withId(R.id.button_sign_up))
                 .check(matches(withText("Sign Up"))).perform(click());
 
@@ -106,6 +109,7 @@ public class SignUpPageActivityTest {
         onView(withId(R.id.edit_text_text_password)).perform(replaceText(password));
         onView(withId(R.id.edit_text_phone)).perform(replaceText(this.phone));
 
+        onView(withId(R.id.button_sign_up)).perform(ViewActions.scrollTo());
         onView(withId(R.id.button_sign_up))
                 .check(matches(withText("Sign Up"))).perform(click());
 

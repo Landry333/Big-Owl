@@ -7,6 +7,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -100,7 +101,6 @@ public class LoginPageActivityTest {
         onView(withId(R.id.button))
                 .check(matches(withText("Sign In"))).perform(click());
 
-        Espresso.onView(isRoot()).perform(waitFor(10000));
         Espresso.onView(withId(R.id.top_app_bar)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.user_avatar)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.user_first_name)).check(matches(isDisplayed()));
