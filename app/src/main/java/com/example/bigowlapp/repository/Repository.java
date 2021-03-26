@@ -6,8 +6,10 @@ import com.example.bigowlapp.model.Model;
 import com.example.bigowlapp.repository.exception.DocumentNotFoundException;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -23,6 +25,10 @@ public abstract class Repository<T extends Model> {
     protected Repository(String collectionName) {
         mFirebaseFirestore = Firestore.getDatabase();
         collectionReference = mFirebaseFirestore.collection(collectionName);
+    }
+
+    public ListenerRegistration listenToCollection(EventListener<QuerySnapshot> listener) {
+        return collectionReference.addSnapshotListener(listener);
     }
 
     //===========================================================================================

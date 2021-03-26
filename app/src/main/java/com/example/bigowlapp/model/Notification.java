@@ -1,6 +1,7 @@
 package com.example.bigowlapp.model;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
@@ -8,6 +9,7 @@ public class Notification extends Model {
 
     public enum Type {
         NONE(Notification.class),
+        INVALID(Notification.class),
         SUPERVISION_REQUEST(SupervisionRequest.class),
         SCHEDULE_REQUEST(ScheduleRequest.class),
         AUTH_BY_PHONE_NUMBER_FAILURE(AuthByPhoneNumberFailure.class);
@@ -56,5 +58,19 @@ public class Notification extends Model {
 
     public void setUsed(boolean used) {
         this.used = used;
+    }
+
+    @Exclude
+    public boolean isValid() {
+        return !this.getType().equals(Type.INVALID);
+    }
+
+    public long timeSinceCreationMillis() {
+        return Timestamp.now().toDate().getTime() - this.getCreationTime().toDate().getTime();
+    }
+
+    // TODO: Maybe convert to null object design pattern
+    public static Notification getInvalidNotification() {
+        return new Notification(Type.INVALID);
     }
 }

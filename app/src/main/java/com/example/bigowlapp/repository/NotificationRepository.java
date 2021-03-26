@@ -1,6 +1,7 @@
 package com.example.bigowlapp.repository;
 
 import com.example.bigowlapp.model.Notification;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -19,12 +20,20 @@ public class NotificationRepository extends Repository<Notification> {
     protected <X extends Notification> List<X> extractListOfDataToModel(QuerySnapshot results, Class<X> tClass) {
         List<X> notificationsFromDb = new ArrayList<>();
         for (QueryDocumentSnapshot doc : results) {
-            Notification.Type type = doc.toObject(Notification.class).getType();
-            if (tClass == Notification.class || tClass == type.typeClass) {
-                X t = (X) doc.toObject(type.typeClass);
-                notificationsFromDb.add(t);
+            X notification = getNotificationFromDocument(doc, tClass);
+            if (notification.isValid()) {
+                notificationsFromDb.add(notification);
             }
         }
         return notificationsFromDb;
+    }
+
+    public static <X extends Notification> X getNotificationFromDocument(DocumentSnapshot doc, Class<X> xClass) {
+        Notification.Type type = doc.toObject(Notification.class).getType();
+        if (xClass == Notification.class || xClass == type.typeClass) {
+            return (X) doc.toObject(type.typeClass);
+        }
+
+        return (X) Notification.getInvalidNotification();
     }
 }
