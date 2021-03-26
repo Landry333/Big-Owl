@@ -54,6 +54,7 @@ public class PeriodicLocationCheckAlarmManager {
                 return;
             }
             locationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null);
+
         }
     }
 }

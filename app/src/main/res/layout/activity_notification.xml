@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context=".activity.NotificationActivity">
 
     <include
         android:id="@+id/top_app_bar"
@@ -12,9 +13,9 @@
         android:layout_height="wrap_content" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/schedule_form_container"
+        android:id="@+id/notification_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.SetScheduleActivity"/>
+        tools:context=".activity.NotificationActivity" />
 
 </LinearLayout>
