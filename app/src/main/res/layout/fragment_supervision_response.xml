@@ -14,7 +14,6 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="70dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
         android:orientation="vertical"
         android:textColor="@color/black"
         android:textSize="36sp">
@@ -42,101 +41,36 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:textStyle="bold" />
-
-
     </LinearLayout>
 
-    <View
-        android:id="@+id/view_divider_below_schedule"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/linear_layout_schedule_view"
-        android:background="@color/colorAccent" />
-
     <LinearLayout
-        android:id="@+id/linear_layout_response"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/view_divider_below_schedule"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="20dp"
+        android:layout_below="@+id/linear_layout_schedule_view"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="62dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:orientation="vertical"
-        android:textColor="@color/black"
-        android:textSize="36sp"
-        android:visibility="invisible">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/you_last" />
-
-            <TextView
-                android:id="@+id/text_view_schedule_user_response_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/this_schedule_on" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/text_view_schedule_user_response_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/line_below_response"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/linear_layout_response"
-        android:background="@color/colorAccent"
-        android:visibility="invisible" />
-
-    <LinearLayout
-        android:layout_below="@+id/line_below_response"
         android:gravity="center"
-        android:layout_margin="20dp"
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_accept"
-            android:background="@drawable/rounded_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
             android:layout_margin="20dp"
+            android:background="@drawable/rounded_button"
             android:text="@string/accept"
+            android:visibility="visible"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/button_reject"
-            android:background="@drawable/rounded_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
             android:layout_margin="20dp"
+            android:background="@drawable/rounded_button"
             android:text="@string/reject"
+            android:visibility="visible"
             tools:ignore="ButtonStyle" />
 
     </LinearLayout>

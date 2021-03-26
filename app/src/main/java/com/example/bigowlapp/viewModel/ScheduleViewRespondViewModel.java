@@ -62,7 +62,7 @@ public class ScheduleViewRespondViewModel extends BaseViewModel {
         newNotification.setReceiverUid(supervisorUid);
         newNotification.setGroupUid(scheduleData.getValue().getGroupUid());
         newNotification.setTimeRead(null);
-        newNotification.setTime(now());
+        newNotification.setCreationTime(now());
         newNotification.setSenderResponse(currentUserNewResponse);
         repositoryFacade.getNotificationRepository(supervisorUid)
                 .addDocument(newNotification);
