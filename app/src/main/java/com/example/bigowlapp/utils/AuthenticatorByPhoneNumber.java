@@ -36,11 +36,11 @@ public class AuthenticatorByPhoneNumber {
         repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class)
                 .observeForever(schedule -> {
                     repositoryFacade.getUserRepository()
-                            .getDocumentByUid(repositoryFacade.getAuthRepository().getCurrentUser().getUid(), User.class)
+                            .getDocumentByUid(repositoryFacade.getCurrentUserUid(), User.class)
                             .observeForever(user -> {
                                 currentUserPhoneNumber = user.getPhoneNumber();
                                 UserScheduleResponse userScheduleResponse = schedule.getUserScheduleResponseMap()
-                                        .get(repositoryFacade.getAuthRepository().getCurrentUser().getUid());
+                                        .get(repositoryFacade.getCurrentUserUid());
                                 Attendance attendance = userScheduleResponse.getAttendance();
                                 String formattedDevicePhoneNum = null;
                                 try {

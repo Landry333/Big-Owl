@@ -36,7 +36,7 @@ public class AuthFailureNotificationListener {
                             if (dc.getDocument().get("type").toString()
                                     .equalsIgnoreCase("AUTH_BY_PHONE_NUMBER_FAILURE")
                                     && dc.getDocument().getString("receiverUid")
-                                    .equalsIgnoreCase(repositoryFacade.getAuthRepository().getCurrentUser().getUid())
+                                    .equalsIgnoreCase(repositoryFacade.getCurrentUserUid())
                                     && !dc.getDocument().getBoolean("used")
                                     && ((Timestamp.now().getSeconds()
                                     - dc.getDocument().getTimestamp("creationTime").getSeconds()) < THIRTY_MINUTES)) {

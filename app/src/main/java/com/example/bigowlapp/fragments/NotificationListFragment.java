@@ -50,8 +50,7 @@ public class NotificationListFragment extends Fragment implements NotificationAd
         super.onStart();
 
         RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
-        String currentUserId = repositoryFacade.getAuthRepository().getCurrentUser().getUid();
-        notificationListData = repositoryFacade.getNotificationRepository(currentUserId)
+        notificationListData = repositoryFacade.getCurrentUserNotificationRepository()
                 .getAllDocumentsFromCollection(Notification.class);
 
         recyclerView.setHasFixedSize(true);

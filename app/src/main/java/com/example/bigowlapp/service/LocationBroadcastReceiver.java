@@ -88,13 +88,10 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         repositoryFacade.getScheduleRepository()
                 .getDocumentsByListOfUid(scheduleUidList, Schedule.class)
                 .observeForever(schedules -> {
-                    String userUid = repositoryFacade.getAuthRepository()
-                            .getCurrentUser().getUid();
-
                     for (Schedule schedule : schedules) {
                         Attendance userAttendance = schedule
                                 .getUserScheduleResponseMap()
-                                .get(userUid)
+                                .get(repositoryFacade.getCurrentUserUid())
                                 .getAttendance();
 
                         userAttendance.setAuthenticationTime(Timestamp.now());

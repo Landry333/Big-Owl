@@ -78,7 +78,7 @@ public class SupervisionResponseFragment extends Fragment {
     }
 
     private void removeNotification() {
-        repositoryFacade.getNotificationRepository(supervisionRequest.getReceiverUid())
+        repositoryFacade.getCurrentUserNotificationRepository()
                 .removeDocument(supervisionRequest.getUid());
 
         getActivity().onBackPressed();

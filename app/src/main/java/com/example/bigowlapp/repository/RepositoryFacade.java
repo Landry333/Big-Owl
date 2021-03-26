@@ -10,6 +10,7 @@ public class RepositoryFacade {
     private UserRepository userRepository;
     private ScheduleRepository scheduleRepository;
     private GroupRepository groupRepository;
+    private NotificationRepository currentUserNotificationRepository;
 
     private static RepositoryFacade instance = new RepositoryFacade();
 
@@ -19,6 +20,10 @@ public class RepositoryFacade {
 
     private RepositoryFacade() {
         // Repositories are only initialized when needed by a ViewModel
+    }
+
+    public String getCurrentUserUid() {
+        return getAuthRepository().getCurrentUser().getUid();
     }
 
     public AuthRepository getAuthRepository() {
@@ -47,6 +52,13 @@ public class RepositoryFacade {
             groupRepository = new GroupRepository();
         }
         return groupRepository;
+    }
+
+    public NotificationRepository getCurrentUserNotificationRepository() {
+        if (currentUserNotificationRepository == null) {
+            currentUserNotificationRepository = new NotificationRepository(getCurrentUserUid());
+        }
+        return currentUserNotificationRepository;
     }
 
     public NotificationRepository getNotificationRepository(String userUid) {
