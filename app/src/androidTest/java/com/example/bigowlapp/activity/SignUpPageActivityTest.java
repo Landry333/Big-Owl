@@ -70,12 +70,12 @@ public class SignUpPageActivityTest {
     @Test
     public void unSufficientSignUpInputTest() {
         onView(withId(R.id.button_sign_up))
-                .perform(nestedScrollTo())
+                .perform(scrollTo())
                 .check(matches(withText("Sign Up"))).perform(click());
         onView(withId(R.id.edit_text_phone)).check(matches(hasErrorText("The string supplied did not seem to be a phone number.")));
     }
 
-    /*@Test
+    @Test
     public void unValidSignUpInputTest() {
         onView(withId(R.id.user_first_name)).perform(typeText(firstName), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.user_last_name)).perform(typeText(lastName), ViewActions.closeSoftKeyboard());
@@ -84,6 +84,7 @@ public class SignUpPageActivityTest {
         onView(withId(R.id.edit_text_phone)).perform(typeText("5141234567"), ViewActions.closeSoftKeyboard());
 
         onView(withId(R.id.button_sign_up))
+                .perform(scrollTo())
                 .check(matches(withText("Sign Up"))).perform(click());
 
         Espresso.onView(isRoot()).perform(waitFor(1000));
@@ -112,8 +113,9 @@ public class SignUpPageActivityTest {
         onView(withId(R.id.edit_text_phone)).perform(typeText(this.phone), ViewActions.closeSoftKeyboard());
 
         onView(withId(R.id.button_sign_up))
+                .perform(scrollTo())
                 .check(matches(withText("Sign Up"))).perform(click());
-    }*/
+    }
 
     private ViewAction waitFor(final long ms) {
         return new ViewAction() {
