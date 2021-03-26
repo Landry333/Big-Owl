@@ -61,7 +61,8 @@ public class AuthenticatorByPhoneNumber {
                                     authByPhoneNumberFailure.setSenderPhoneNum(currentUserPhoneNumber);
                                     authByPhoneNumberFailure.setReceiverUid(schedule.getGroupSupervisorUid());
                                     authByPhoneNumberFailure.setSenderUid(authRepository.getCurrentUser().getUid());
-                                    repositoryFacade.getNotificationRepository().addDocument(authByPhoneNumberFailure);
+                                    repositoryFacade.getNotificationRepository(schedule.getGroupSupervisorUid())
+                                            .addDocument(authByPhoneNumberFailure);
                                 }
                                 attendance.setAttemptedAuthByUserMobileNumber(true);
                                 repositoryFacade.getScheduleRepository().updateDocument(scheduleId, schedule);
