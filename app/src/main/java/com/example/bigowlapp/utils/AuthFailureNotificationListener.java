@@ -14,7 +14,6 @@ public class AuthFailureNotificationListener {
 
     private final RepositoryFacade repositoryFacade;
 
-
     // TODO: check that this doesn't duplicate listeners
     public AuthFailureNotificationListener() {
         this.repositoryFacade = RepositoryFacade.getInstance();
@@ -31,24 +30,30 @@ public class AuthFailureNotificationListener {
                     assert snapshots != null;
                     for (DocumentChange dc : snapshots.getDocumentChanges()) {
                         AuthByPhoneNumberFailure notification = NotificationRepository.getNotificationFromDocument(dc.getDocument(), AuthByPhoneNumberFailure.class);
+                        if (!notification.isValid()) {
+                            continue;
+                        }
 
                         // TODO: further improve by only listening to AUTH_BY_PHONE_NUMBER_FAILURE notifs
                         if (dc.getType().equals(DocumentChange.Type.ADDED)) {
-                            if (notification.getType() == Notification.Type.AUTH_BY_PHONE_NUMBER_FAILURE
-                                    && !notification.isUsed()
-                                    && notification.timeSinceCreationMillis() < ScheduledLocationTrackingManager.DEFAULT_TRACKING_EXPIRE_TIME_MILLIS) {
-
-                                notification.setUsed(true);
-                                repositoryFacade.getCurrentUserNotificationRepository()
-                                        .updateDocument(notification.getUid(), notification);
-
-                                String senderPhoneNum = notification.getSenderPhoneNum();
-                                String scheduleId = notification.getScheduleId();
-                                SmsSender.sendSMS(senderPhoneNum, scheduleId);
-                            }
-
+                            handleAuthByPhoneNumberFailure(notification);
                         }
                     }
                 });
+    }
+
+    private void handleAuthByPhoneNumberFailure(AuthByPhoneNumberFailure notification) {
+        if (notification.getType() == Notification.Type.AUTH_BY_PHONE_NUMBER_FAILURE
+                && !notification.isUsed()
+                && notification.timeSinceCreationMillis() < ScheduledLocationTrackingManager.DEFAULT_TRACKING_EXPIRE_TIME_MILLIS) {
+
+            notification.setUsed(true);
+            repositoryFacade.getCurrentUserNotificationRepository()
+                    .updateDocument(notification.getUid(), notification);
+
+            String senderPhoneNum = notification.getSenderPhoneNum();
+            String scheduleId = notification.getScheduleId();
+            SmsSender.sendSMS(senderPhoneNum, scheduleId);
+        }
     }
 }
