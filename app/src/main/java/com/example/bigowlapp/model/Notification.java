@@ -9,7 +9,7 @@ public class Notification extends Model {
 
     public enum Type {
         NONE(Notification.class),
-        INVALID(Notification.class),
+        INVALID(NullNotification.class),
         SUPERVISION_REQUEST(SupervisionRequest.class),
         SCHEDULE_REQUEST(ScheduleRequest.class),
         AUTH_BY_PHONE_NUMBER_FAILURE(AuthByPhoneNumberFailure.class);
@@ -26,13 +26,16 @@ public class Notification extends Model {
     private boolean used = false;
 
     public Notification() {
-        super();
-        this.type = Type.NONE;
+        this(Type.NONE);
     }
 
     public Notification(Type type) {
         super();
         this.type = type;
+    }
+
+    public static Notification getNotificationSafe(Notification notification) {
+        return notification == null || notification.type == null ? new NullNotification() : notification;
     }
 
     public Type getType() {
@@ -62,15 +65,10 @@ public class Notification extends Model {
 
     @Exclude
     public boolean isValid() {
-        return !this.getType().equals(Type.INVALID);
+        return true;
     }
 
     public long timeSinceCreationMillis() {
         return Timestamp.now().toDate().getTime() - this.getCreationTime().toDate().getTime();
-    }
-
-    // TODO: Maybe convert to null object design pattern
-    public static Notification getInvalidNotification() {
-        return new Notification(Type.INVALID);
     }
 }
