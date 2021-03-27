@@ -20,20 +20,20 @@ public class NotificationRepository extends Repository<Notification> {
     protected <X extends Notification> List<X> extractListOfDataToModel(QuerySnapshot results, Class<X> tClass) {
         List<X> notificationsFromDb = new ArrayList<>();
         for (QueryDocumentSnapshot doc : results) {
-            X notification = getNotificationFromDocument(doc, tClass);
+            Notification notification = getNotificationFromDocument(doc, tClass);
             if (notification.isValid()) {
-                notificationsFromDb.add(notification);
+                notificationsFromDb.add((X) notification);
             }
         }
         return notificationsFromDb;
     }
 
-    public static <X extends Notification> X getNotificationFromDocument(DocumentSnapshot doc, Class<X> xClass) {
+    public static <X extends Notification> Notification getNotificationFromDocument(DocumentSnapshot doc, Class<X> xClass) {
         Notification.Type type = doc.toObject(Notification.class).getType();
         if (type != null && (xClass == Notification.class || xClass == type.typeClass)) {
-            return (X) doc.toObject(type.typeClass);
+            return doc.toObject(type.typeClass);
         }
 
-        return (X) Notification.getInvalidNotification();
+        return Notification.getInvalidNotification();
     }
 }

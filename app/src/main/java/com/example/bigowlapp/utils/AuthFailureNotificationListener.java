@@ -29,13 +29,14 @@ public class AuthFailureNotificationListener {
 
                     assert snapshots != null;
                     for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                        AuthByPhoneNumberFailure notification = NotificationRepository.getNotificationFromDocument(dc.getDocument(), AuthByPhoneNumberFailure.class);
-                        if (!notification.isValid()) {
+                        Notification notification = NotificationRepository.getNotificationFromDocument(dc.getDocument(), Notification.class);
+                        if (!notification.isValid() || !dc.getType().equals(DocumentChange.Type.ADDED)) {
                             continue;
                         }
 
-                        if (dc.getType().equals(DocumentChange.Type.ADDED)) {
-                            handleAuthByPhoneNumberFailure(notification);
+                        switch (notification.getType()) {
+                            case AUTH_BY_PHONE_NUMBER_FAILURE:
+                                handleAuthByPhoneNumberFailure((AuthByPhoneNumberFailure) notification);
                         }
                     }
                 });
