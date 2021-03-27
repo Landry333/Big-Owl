@@ -15,8 +15,6 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-// TODO: Might want to create a super AlarmManger given there are multiple now
-
 /**
  * Create alarm that will force a location check periodically.
  */

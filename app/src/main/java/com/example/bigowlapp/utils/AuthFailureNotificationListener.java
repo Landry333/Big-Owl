@@ -34,7 +34,6 @@ public class AuthFailureNotificationListener {
                             continue;
                         }
 
-                        // TODO: further improve by only listening to AUTH_BY_PHONE_NUMBER_FAILURE notifs
                         if (dc.getType().equals(DocumentChange.Type.ADDED)) {
                             handleAuthByPhoneNumberFailure(notification);
                         }
