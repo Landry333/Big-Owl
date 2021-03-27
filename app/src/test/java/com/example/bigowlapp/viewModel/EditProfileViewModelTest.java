@@ -56,7 +56,6 @@ public class EditProfileViewModelTest {
 
         when(authRepository.getCurrentUser()).thenReturn(testFirebaseUser);
         when(userRepository.getDocumentByUid(anyString(), eq(User.class))).thenReturn(testUserData);
-        when(testFirebaseUser.getUid()).thenReturn("abc123");
 
         editProfileViewModel = new EditProfileViewModel(repositoryFacade, testUserData);
     }

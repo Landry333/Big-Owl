@@ -8,13 +8,11 @@ import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.repository.UserRepository;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.GeoPoint;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 
@@ -50,28 +48,20 @@ public class SetScheduleViewModelTest {
     @Mock
     private RepositoryFacade repositoryFacade;
     @Mock
-    private AuthRepository authRepository;
-    @Mock
     private ScheduleRepository scheduleRepository;
     @Mock
     private GroupRepository groupRepository;
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private FirebaseUser testFirebaseUser;
 
     @Before
     public void setUp() throws Exception {
-        when(repositoryFacade.getAuthRepository()).thenReturn(authRepository);
         when(repositoryFacade.getScheduleRepository()).thenReturn(scheduleRepository);
         when(repositoryFacade.getGroupRepository()).thenReturn(groupRepository);
         when(repositoryFacade.getUserRepository()).thenReturn(userRepository);
         when(repositoryFacade.getCurrentUserUid()).thenReturn("123");
 
         setScheduleViewModel = new SetScheduleViewModel(repositoryFacade);
-
-        when(authRepository.getCurrentUser()).thenReturn(testFirebaseUser);
-        when(testFirebaseUser.getUid()).thenReturn("123");
     }
 
     @After
