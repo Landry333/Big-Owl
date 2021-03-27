@@ -10,9 +10,8 @@ public class RepositoryFacade {
     private UserRepository userRepository;
     private ScheduleRepository scheduleRepository;
     private GroupRepository groupRepository;
-    private NotificationRepository currentUserNotificationRepository;
 
-    private static RepositoryFacade instance = new RepositoryFacade();
+    private static final RepositoryFacade instance = new RepositoryFacade();
 
     public static RepositoryFacade getInstance() {
         return instance;
@@ -55,10 +54,7 @@ public class RepositoryFacade {
     }
 
     public NotificationRepository getCurrentUserNotificationRepository() {
-        if (currentUserNotificationRepository == null) {
-            currentUserNotificationRepository = new NotificationRepository(getCurrentUserUid());
-        }
-        return currentUserNotificationRepository;
+        return new NotificationRepository(getCurrentUserUid());
     }
 
     public NotificationRepository getNotificationRepository(String userUid) {
