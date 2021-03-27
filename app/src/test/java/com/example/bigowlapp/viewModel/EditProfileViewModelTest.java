@@ -49,6 +49,7 @@ public class EditProfileViewModelTest {
     public void setUp() {
         when(repositoryFacade.getAuthRepository()).thenReturn(authRepository);
         when(repositoryFacade.getUserRepository()).thenReturn(userRepository);
+        when(repositoryFacade.getCurrentUserUid()).thenReturn("abc123");
 
         testUser = new User("abc123", "first", "last", "+911", "test@mail.com", "url", null);
         testUserData = new LiveDataWithStatus<>(testUser);

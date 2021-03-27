@@ -66,6 +66,7 @@ public class SetScheduleViewModelTest {
         when(repositoryFacade.getScheduleRepository()).thenReturn(scheduleRepository);
         when(repositoryFacade.getGroupRepository()).thenReturn(groupRepository);
         when(repositoryFacade.getUserRepository()).thenReturn(userRepository);
+        when(repositoryFacade.getCurrentUserUid()).thenReturn("123");
 
         setScheduleViewModel = new SetScheduleViewModel(repositoryFacade);
 
