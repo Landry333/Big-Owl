@@ -55,7 +55,7 @@ public class ListOfScheduleActivity extends BigOwlActivity {
         scheduleListViewModel.getScheduleList(isUserTheGroupSupervisor, groupID).observe(this, schedules -> {
             if (schedules != null) {
                 scheduleListView = findViewById(R.id.schedule_list);
-                scheduleListView.setAdapter(new ListOfScheduleActivity.ScheduleAdapter(getBaseContext(), new ArrayList<>(schedules)));
+                scheduleListView.setAdapter(new ScheduleAdapter(getBaseContext(), new ArrayList<>(schedules)));
 
                 scheduleListView.setOnItemClickListener((arg0, v, position, arg3) -> {
                     Intent intent;
@@ -78,7 +78,7 @@ public class ListOfScheduleActivity extends BigOwlActivity {
         });
     }
 
-    private class ScheduleAdapter extends ArrayAdapter<Schedule> {
+    private static class ScheduleAdapter extends ArrayAdapter<Schedule> {
 
         public ScheduleAdapter(@NonNull Context context, ArrayList<Schedule> schedules) {
             super(context, 0, schedules);
@@ -101,21 +101,16 @@ public class ListOfScheduleActivity extends BigOwlActivity {
     }
 
     private AlertDialog noScheduleAlert() {
-        if (isUserTheGroupSupervisor) {
-            return new AlertDialog.Builder(ListOfScheduleActivity.this)
-                    .setTitle("No schedule found!")
-                    .setMessage("You have never set a schedule")
-                    .setPositiveButton("Ok", (dialogInterface, which) -> ListOfScheduleActivity.super.onBackPressed())
-                    .setCancelable(false)
-                    .create();
-        } else {
-            return new AlertDialog.Builder(ListOfScheduleActivity.this)
-                    .setTitle("No schedule found!")
-                    .setMessage("You currently have no future schedules")
-                    .setPositiveButton("Ok", (dialogInterface, which) -> ListOfScheduleActivity.super.onBackPressed())
-                    .setCancelable(false)
-                    .create();
-        }
+        AlertDialog alertDialog = new AlertDialog.Builder(ListOfScheduleActivity.this)
+                .setTitle("No schedule found!")
+                .setMessage("You currently have no future schedules")
+                .setPositiveButton("Ok", (dialogInterface, which) -> ListOfScheduleActivity.super.onBackPressed())
+                .setCancelable(false)
+                .create();
+        if (isUserTheGroupSupervisor) alertDialog.setMessage("You have never set a schedule");
+        else alertDialog.setMessage("You currently have no future schedules");
+
+        return alertDialog;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

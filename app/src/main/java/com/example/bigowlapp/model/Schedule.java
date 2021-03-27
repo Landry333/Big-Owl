@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 @IgnoreExtraProperties
@@ -118,15 +119,18 @@ public class Schedule extends Model {
     @Exclude
     public Map<String, Object> scheduleMemberResponseAttendanceMap(String memberId) {
         UserScheduleResponse userScheduleResponse = this.userScheduleResponseMap.get(memberId);
+        Response memberResponse = Objects.requireNonNull(userScheduleResponse).getResponse();
+        Attendance memberAttendance = userScheduleResponse.getAttendance();
+
         Map<String, Object> map = new HashMap<>();
-        if (userScheduleResponse.getAttendance().didAttend()) {
+        if (memberAttendance.didAttend()) {
             map.put("responseText", "ATTENDED");
             map.put("responseColor", Color.GREEN);
-            map.put("attendanceTime", userScheduleResponse.getAttendance().getAuthenticationTime().toDate().toString());
-        } else if (userScheduleResponse.getResponse() == Response.REJECT) {
+            map.put("attendanceTime", memberAttendance.getAuthenticationTime().toDate().toString());
+        } else if (memberResponse == Response.REJECT) {
             map.put("responseText", "REJECTED");
             map.put("responseColor", Color.RED);
-        } else if (userScheduleResponse.getResponse() == Response.NEUTRAL) {
+        } else if (memberResponse == Response.NEUTRAL) {
             map.put("responseText", "NO RESPONSE");
             map.put("responseColor", Color.GRAY);
         } else {
@@ -154,10 +158,11 @@ public class Schedule extends Model {
 
     @Exclude
     public Status scheduleCurrentState() {
+        final int THIRTY_MINUTES = 1800;
         Timestamp timeNow = Timestamp.now();
         if (timeNow.compareTo(startTime) < 0) {
             return Status.SCHEDULED;
-        } else if (timeNow.compareTo(startTime) >= 0 && timeNow.compareTo(endTime) <= 0) {
+        } else if (timeNow.getSeconds() <= (startTime.getSeconds() + THIRTY_MINUTES)) {
             return Status.ON_GOING;
         } else {
             return Status.COMPLETED;

@@ -17,7 +17,6 @@ public class ScheduleRepository extends Repository<Schedule> {
     private static final String START_TIME = "startTime";
     private static final String MEMBER_LIST = "memberList";
     private static final String GROUP_ID = "groupUid";
-    private static final String GROUP_SUPERVISOR_UID = "groupSupervisorUid";
     private static final String SUPERVISOR_ID = "groupSupervisorUid";
 
     // TODO: Add dependency injection
@@ -66,7 +65,7 @@ public class ScheduleRepository extends Repository<Schedule> {
 
     public LiveDataWithStatus<List<Schedule>> getAllSchedulesForSupervisor(String currentUserUid) {
         LiveDataWithStatus<List<Schedule>> listOfTData = new LiveDataWithStatus<>();
-        collectionReference.whereEqualTo(GROUP_SUPERVISOR_UID, currentUserUid)
+        collectionReference.whereEqualTo(SUPERVISOR_ID, currentUserUid)
                 .orderBy(START_TIME, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
