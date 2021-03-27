@@ -1,11 +1,11 @@
 package com.example.bigowlapp.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,10 +16,10 @@ import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
-    private static final String TAG = "NotificationAdapter";
     private List<Notification> mNotificationTitles;
     private OnNotificationListener mOnNotificationListener;
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_list_of_notification, parent, false);
@@ -27,11 +27,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        if(!mNotificationTitles.isEmpty()) {
-            holder.nameTextView.setText(mNotificationTitles.get(position).getType().toString());
-            holder.timeTextView.setText(mNotificationTitles.get(position).getCreationTime().toDate().toString());
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        if (mNotificationTitles.isEmpty()) {
+            return;
         }
+
+        Notification notification = mNotificationTitles.get(position);
+        holder.getNameTextView().setText(notification.getType().toString());
+        holder.getTimeTextView().setText(notification.getCreationTime().toDate().toString());
     }
 
     @Override
@@ -41,11 +44,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView nameTextView;
-        public TextView contentTextView;
-        public TextView timeTextView;
-        public ConstraintLayout parentLayout;
-        OnNotificationListener onNotificationListener;
+        private final TextView nameTextView;
+        private final TextView contentTextView;
+        private final TextView timeTextView;
+        private final ConstraintLayout parentLayout;
+        private OnNotificationListener onNotificationListener;
 
         public ViewHolder(View v, OnNotificationListener onNotificationListener) {
             super(v);
@@ -61,9 +64,21 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         public void onClick(View view) {
             onNotificationListener.onNotificationClick(getAdapterPosition());
         }
+
+        public TextView getNameTextView() {
+            return nameTextView;
+        }
+
+        public TextView getContentTextView() {
+            return contentTextView;
+        }
+
+        public TextView getTimeTextView() {
+            return timeTextView;
+        }
     }
 
-    public interface  OnNotificationListener {
+    public interface OnNotificationListener {
         void onNotificationClick(int position);
     }
 
