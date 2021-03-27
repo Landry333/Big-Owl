@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bigowlapp.R;
@@ -47,15 +46,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         private final TextView nameTextView;
         private final TextView contentTextView;
         private final TextView timeTextView;
-        private final ConstraintLayout parentLayout;
-        private OnNotificationListener onNotificationListener;
+        private final OnNotificationListener onNotificationListener;
 
         public ViewHolder(View v, OnNotificationListener onNotificationListener) {
             super(v);
             nameTextView = v.findViewById(R.id.notification_name);
             contentTextView = v.findViewById(R.id.notification_content);
             timeTextView = v.findViewById(R.id.notification_time);
-            parentLayout = v.findViewById(R.id.parent_layout);
             this.onNotificationListener = onNotificationListener;
 
             itemView.setOnClickListener(this);

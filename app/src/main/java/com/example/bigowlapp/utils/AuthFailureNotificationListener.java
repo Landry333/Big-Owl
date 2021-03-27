@@ -34,9 +34,8 @@ public class AuthFailureNotificationListener {
                             continue;
                         }
 
-                        switch (notification.getType()) {
-                            case AUTH_BY_PHONE_NUMBER_FAILURE:
-                                handleAuthByPhoneNumberFailure((AuthByPhoneNumberFailure) notification);
+                        if (notification.getType() == Notification.Type.AUTH_BY_PHONE_NUMBER_FAILURE) {
+                            handleAuthByPhoneNumberFailure((AuthByPhoneNumberFailure) notification);
                         }
                     }
                 });
