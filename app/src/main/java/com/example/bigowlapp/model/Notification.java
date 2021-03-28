@@ -34,6 +34,7 @@ public class Notification extends Model {
         this.type = type;
     }
 
+    @Exclude
     public static Notification getNotificationSafe(Notification notification) {
         return notification == null || notification.type == null ? new NullNotification() : notification;
     }
@@ -69,6 +70,10 @@ public class Notification extends Model {
     }
 
     public long timeSinceCreationMillis() {
+        if (creationTime == null) {
+            return -1L;
+        }
+
         return Timestamp.now().toDate().getTime() - this.getCreationTime().toDate().getTime();
     }
 }
