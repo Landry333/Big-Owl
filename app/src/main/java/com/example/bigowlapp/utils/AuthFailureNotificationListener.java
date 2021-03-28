@@ -14,7 +14,6 @@ public class AuthFailureNotificationListener {
 
     private final RepositoryFacade repositoryFacade;
 
-    // TODO: check that this doesn't duplicate listeners
     public AuthFailureNotificationListener() {
         this.repositoryFacade = RepositoryFacade.getInstance();
     }
