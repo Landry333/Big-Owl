@@ -158,8 +158,6 @@ public class ScheduleReportActivityTest {
         testSchedule.setEndTime(new Timestamp(timestampNow.getSeconds() + 7200, 0));
         testScheduleData.postValue(testSchedule);
 
-        SystemClock.sleep(1000);
-
         checkIfMemberAndAttendanceResultMatchOnView();
     }
 
@@ -167,15 +165,19 @@ public class ScheduleReportActivityTest {
     public void scheduleOnGoingTest() {
         testSchedule.setStartTime(new Timestamp(timestampNow.getSeconds() - 3600, 0));
         testSchedule.setEndTime(new Timestamp(timestampNow.getSeconds() + 3600, 0));
-        testSchedule.getUserScheduleResponseMap().get("testMember000").setAttendance(new Attendance(true, new Timestamp(timestampNow.getSeconds() - 3600, 0)));
-        testSchedule.getUserScheduleResponseMap().get("testMember001").setAttendance(new Attendance(false));
+        testSchedule.getUserScheduleResponseMap().put("testMember000",
+                new UserScheduleResponse(Response.ACCEPT,
+                        new Timestamp(timestampNow.getSeconds() - 7200, 0),
+                        new Attendance(true, new Timestamp(timestampNow.getSeconds() - 3600, 0))));
+        testSchedule.getUserScheduleResponseMap().put("testMember001",
+                new UserScheduleResponse(Response.ACCEPT,
+                        new Timestamp(timestampNow.getSeconds() - 7200, 0),
+                        new Attendance(false)));
         testScheduleData.postValue(testSchedule);
 
         onView(withText("Schedule is ongoing and attendance results are subject to change"))
                 .inRoot(withDecorView(not(is(currentActivity.getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-
-        SystemClock.sleep(1000);
 
         checkIfMemberAndAttendanceResultMatchOnView();
     }
@@ -187,8 +189,6 @@ public class ScheduleReportActivityTest {
         testSchedule.getUserScheduleResponseMap().get("testMember000").setAttendance(new Attendance(true, new Timestamp(timestampNow.getSeconds() - 5400, 0)));
         testSchedule.getUserScheduleResponseMap().get("testMember001").setAttendance(new Attendance(false));
         testScheduleData.postValue(testSchedule);
-
-        SystemClock.sleep(1000);
 
         checkIfMemberAndAttendanceResultMatchOnView();
     }
@@ -224,13 +224,13 @@ public class ScheduleReportActivityTest {
                     String memberId = memberNameIdMap.get(memberNameTextView.getText().toString());
                     String memberExpectedAttendanceResult = testSchedule.scheduleMemberResponseAttendanceMap(memberId).get("responseText").toString();
 
-                    Object memberExpectedAttendanceTime = testSchedule.scheduleMemberResponseAttendanceMap(memberId).get("attendanceTime");
-                    if (memberExpectedAttendanceTime != null) {
+                    if (testSchedule.scheduleMemberResponseAttendanceMap(memberId).containsKey("attendanceTime")) {
                         TextView attendanceTimeTextView = listView.getChildAt(position).findViewById(R.id.schedule_report_member_attendance_time);
                         String memberAttendanceTime = attendanceTimeTextView.getText().toString();
+                        String memberExpectedAttendanceTime = testSchedule.scheduleMemberResponseAttendanceMap(memberId).get("attendanceTime").toString();
                         return view == listView
                                 && memberAttendanceResult.equals(memberExpectedAttendanceResult)
-                                && memberAttendanceTime.equals(memberExpectedAttendanceTime.toString());
+                                && memberAttendanceTime.equals(memberExpectedAttendanceTime);
                     } else
                         return view == listView && memberAttendanceResult.equals(memberExpectedAttendanceResult);
                 }
