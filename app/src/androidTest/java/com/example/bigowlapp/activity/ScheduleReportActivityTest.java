@@ -2,6 +2,7 @@ package com.example.bigowlapp.activity;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -157,6 +158,8 @@ public class ScheduleReportActivityTest {
         testSchedule.setEndTime(new Timestamp(timestampNow.getSeconds() + 7200, 0));
         testScheduleData.postValue(testSchedule);
 
+        SystemClock.sleep(1000);
+
         checkIfMemberAndAttendanceResultMatchOnView();
     }
 
@@ -172,6 +175,8 @@ public class ScheduleReportActivityTest {
                 .inRoot(withDecorView(not(is(currentActivity.getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
 
+        SystemClock.sleep(1000);
+
         checkIfMemberAndAttendanceResultMatchOnView();
     }
 
@@ -182,6 +187,8 @@ public class ScheduleReportActivityTest {
         testSchedule.getUserScheduleResponseMap().get("testMember000").setAttendance(new Attendance(true, new Timestamp(timestampNow.getSeconds() - 5400, 0)));
         testSchedule.getUserScheduleResponseMap().get("testMember001").setAttendance(new Attendance(false));
         testScheduleData.postValue(testSchedule);
+
+        SystemClock.sleep(1000);
 
         checkIfMemberAndAttendanceResultMatchOnView();
     }
