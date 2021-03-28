@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.example.bigowlapp.model.AuthByPhoneNumberFailure;
 import com.example.bigowlapp.model.Notification;
+import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.NotificationRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.firestore.DocumentChange;
@@ -41,17 +42,16 @@ public class AuthFailureNotificationListener {
     }
 
     private void handleAuthByPhoneNumberFailure(AuthByPhoneNumberFailure notification) {
-        if (notification.getType() == Notification.Type.AUTH_BY_PHONE_NUMBER_FAILURE
-                && !notification.isUsed()
-                && notification.timeSinceCreationMillis() < ScheduledLocationTrackingManager.DEFAULT_TRACKING_EXPIRE_TIME_MILLIS) {
-
-            notification.setUsed(true);
-            repositoryFacade.getCurrentUserNotificationRepository()
-                    .updateDocument(notification.getUid(), notification);
+        if (!notification.isUsed()
+                && notification.timeSinceCreationMillis() < Schedule.MAX_TRACKING_TIME_MILLIS) {
 
             String senderPhoneNum = notification.getSenderPhoneNum();
             String scheduleId = notification.getScheduleId();
             SmsSender.sendSMS(senderPhoneNum, scheduleId);
+
+            notification.setUsed(true);
+            repositoryFacade.getCurrentUserNotificationRepository()
+                    .updateDocument(notification.getUid(), notification);
         }
     }
 }
