@@ -24,6 +24,15 @@ public class Attendance {
 
     }
 
+    public Attendance(boolean authenticated) {
+        this.authenticated = authenticated;
+    }
+
+    public Attendance(boolean authenticated, Timestamp authenticationTime) {
+        this.authenticated = authenticated;
+        this.authenticationTime = authenticationTime;
+    }
+
     public boolean isAuthenticated() {
         return authenticated;
     }
