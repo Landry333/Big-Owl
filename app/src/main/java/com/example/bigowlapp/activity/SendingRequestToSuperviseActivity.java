@@ -81,7 +81,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         supervisionRequest.setSenderUid(currentUserID);
         supervisionRequest.setResponse(SupervisionRequest.Response.NEUTRAL);
         supervisionRequest.setGroupUid(""); // TODO think about creating and setting group IDs
-        supervisionRequest.setTime(Timestamp.now());
+        supervisionRequest.setCreationTime(Timestamp.now());
 
         if (!aRequestAlready) {
             notificationRepository.addDocument(supervisionRequest);

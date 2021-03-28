@@ -52,6 +52,7 @@ public class ScheduleRepository extends Repository<Schedule> {
     /**
      * Queries the list of schedules for the user in which all schedules have a startTime greater than
      * the date today. The list of schedules are ordered by startTime in ascending order.
+     *
      * @param userID The id of the user
      * @return A Task that contains the QuerySnapshot of the list of schedule for the given user
      */
@@ -61,6 +62,7 @@ public class ScheduleRepository extends Repository<Schedule> {
                 .orderBy(START_TIME, Query.Direction.ASCENDING)
                 .get();
     }
+
     public Task<QuerySnapshot> getTaskListSchedulesForSupervisor(String userID) {
         return collectionReference.whereEqualTo(SUPERVISOR_ID, userID)
                 .whereGreaterThanOrEqualTo(START_TIME, Timestamp.now())
