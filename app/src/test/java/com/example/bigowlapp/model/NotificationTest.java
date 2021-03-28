@@ -53,7 +53,7 @@ public class NotificationTest {
         Notification notification = new Notification();
 
         notification.setCreationTime(Timestamp.now());
-        assertTrue(notification.timeSinceCreationMillis() > 0);
+        assertTrue(notification.timeSinceCreationMillis() >= 0L);
 
         notification.setCreationTime(null);
         assertEquals(-1L, notification.timeSinceCreationMillis());
