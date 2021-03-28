@@ -11,11 +11,13 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.utils.DateTimeFormatter;
 import com.example.bigowlapp.utils.PeriodicLocationCheckAlarmManager;
 import com.example.bigowlapp.utils.ScheduledLocationTrackingManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -31,29 +33,27 @@ public class LocationTrackingExpiredAlarmReceiver extends BroadcastReceiver {
         PeriodicLocationCheckAlarmManager locationCheckAlarmManager = new PeriodicLocationCheckAlarmManager(context);
         locationCheckAlarmManager.cancelPeriodicLocationCheck();
 
-        sendMissedScheduleNotification(context);
+        createNotificationChannel(context);
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         if (!pm.isInteractive()) {
             PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:notificationLock");
             wl.acquire(3000);
         }
 
-
-        Date date = new Date(System.currentTimeMillis()-ScheduledLocationTrackingManager.DEFAULT_TRACKING_EXPIRE_TIME_MILLIS);
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis()-ScheduledLocationTrackingManager.DEFAULT_TRACKING_EXPIRE_TIME_MILLIS);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle("Missed Schedule for: " + intent.getStringExtra("schedule_title"))
                 .setStyle(new NotificationCompat.InboxStyle()
                         .addLine("You've missed your schedule starting at:")
-                        .addLine(df.format(date)));
+                        .addLine(DateTimeFormatter.dateAndTimeFortmatter(calendar)));
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(1, builder.build());
     }
 
-    public void sendMissedScheduleNotification(Context context) {
+    public void createNotificationChannel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Channel name";
             String description = "Channel Description";
