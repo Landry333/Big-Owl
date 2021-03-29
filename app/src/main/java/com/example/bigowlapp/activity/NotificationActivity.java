@@ -3,9 +3,9 @@ package com.example.bigowlapp.activity;
 import android.os.Bundle;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.fragments.ScheduleFormFragment;
+import com.example.bigowlapp.fragments.NotificationListFragment;
 
-public class SetScheduleActivity extends BigOwlActivity {
+public class NotificationActivity extends BigOwlActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -13,13 +13,13 @@ public class SetScheduleActivity extends BigOwlActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.schedule_form_container, ScheduleFormFragment.newInstance())
+                    .replace(R.id.notification_fragment_container, NotificationListFragment.newInstance())
                     .commitNow();
         }
     }
 
     @Override
     protected int getContentView() {
-        return R.layout.activity_set_schedule;
+        return R.layout.activity_notification;
     }
 }

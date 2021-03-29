@@ -2,46 +2,41 @@ package com.example.bigowlapp.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.RepositoryFacade;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.installations.FirebaseInstallations;
 
-public class AuthenticatorByDeviceId {
+public class AuthenticatorByAppInstanceId {
 
-    private String deviceIdNumber;
+    private String appInstanceId;
     private final Context context;
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
 
-    public AuthenticatorByDeviceId(Context context) {
+    public AuthenticatorByAppInstanceId(Context context) {
         this.context = context;
     }
 
     @SuppressLint("MissingPermission")
     public void authenticate(String scheduleId) {
-        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        deviceIdNumber = telephonyManager.getDeviceId();
         repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class)
                 .observeForever(schedule -> {
                     UserScheduleResponse userScheduleResponse = schedule.getUserScheduleResponseMap()
                             .get(repositoryFacade.getAuthRepository().getCurrentUser().getUid());
                     Attendance attendance = userScheduleResponse.getAttendance();
-                    String savedDeviceId = attendance.getDeviceIdNumber();
-                    Attendance.LocatedStatus scheduleLocated = attendance.getScheduleLocated();
-
-                    if (deviceIdNumber.equalsIgnoreCase(savedDeviceId)) {
+                    String savedAppInstanceId = attendance.getAppInstanceId();
+                    appInstanceId = FirebaseInstallations.getInstance().getId().getResult();
+                    if (appInstanceId.equalsIgnoreCase(savedAppInstanceId)) {
                         Toast.makeText(context, "SUCCESS in authentication for your next BIG OWL schedule", Toast.LENGTH_LONG).show();
                         attendance.setAuthenticated(true);
                     } else {
                         attendance.setAuthenticated(false);
                         Toast.makeText(context, "FAILURE in authentication for your next BIG OWL schedule", Toast.LENGTH_LONG).show();
                     }
-                    attendance.setAttemptedAuthByPhoneUid(true);
+                    attendance.setAttemptedAuthByAppUid(true);
                     repositoryFacade.getScheduleRepository().updateDocument(scheduleId, schedule);
                 });
     }

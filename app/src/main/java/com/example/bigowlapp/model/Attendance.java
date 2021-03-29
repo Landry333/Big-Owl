@@ -12,13 +12,16 @@ public class Attendance {
 
     private boolean authenticated = false;
     private boolean attemptedAuthByUserMobileNumber = false;  // if authentication has been attempted at first using the UserMobileNumber
-    private boolean attemptedAuthByPhoneUid = false;  // if authentication has been attempted secondly using the PhoneUid
+    private boolean attemptedAuthByAppUid = false;  // if authentication has been attempted secondly using the PhoneUid
+
     private LocatedStatus scheduleLocated = LocatedStatus.NOT_DETECTED;
-    private String deviceIdNumber;
+    private String appInstanceId;
     private Timestamp authenticationTime;
 
     public Attendance() {
+
         // public no-argument constructor necessary for Firebase data mapping
+
     }
 
     public boolean isAuthenticated() {
@@ -29,22 +32,6 @@ public class Attendance {
         this.authenticated = authenticated;
     }
 
-    public boolean attemptedAuthByUserMobileNumber() {
-        return attemptedAuthByUserMobileNumber;
-    }
-
-    public void setAttemptedAuthByUserMobileNumber(boolean authAttemptedUserMobileNumber) {
-        this.attemptedAuthByUserMobileNumber = authAttemptedUserMobileNumber;
-    }
-
-    public boolean attemptedAuthByPhoneUid() {
-        return attemptedAuthByPhoneUid;
-    }
-
-    public void setAttemptedAuthByPhoneUid(boolean authAttemptedPhoneUid) {
-        this.attemptedAuthByPhoneUid = authAttemptedPhoneUid;
-    }
-
     public LocatedStatus getScheduleLocated() {
         return scheduleLocated;
     }
@@ -53,12 +40,12 @@ public class Attendance {
         this.scheduleLocated = scheduleLocated;
     }
 
-    public String getDeviceIdNumber() {
-        return deviceIdNumber;
+    public String getAppInstanceId() {
+        return appInstanceId;
     }
 
-    public void setDeviceIdNumber(String deviceIdNumber) {
-        this.deviceIdNumber = deviceIdNumber;
+    public void setAppInstanceId(String appInstanceId) {
+        this.appInstanceId = appInstanceId;
     }
 
     public Timestamp getAuthenticationTime() {
@@ -69,11 +56,30 @@ public class Attendance {
         this.authenticationTime = authenticationTime;
     }
 
+    public boolean isAttemptedAuthByUserMobileNumber() {
+        return attemptedAuthByUserMobileNumber;
+    }
+
+    public void setAttemptedAuthByUserMobileNumber(boolean attemptedAuthByUserMobileNumber) {
+        this.attemptedAuthByUserMobileNumber = attemptedAuthByUserMobileNumber;
+    }
+
+    public boolean isAttemptedAuthByAppUid() {
+        return attemptedAuthByAppUid;
+    }
+
+    public void setAttemptedAuthByAppUid(boolean attemptedAuthByAppUid) {
+        this.attemptedAuthByAppUid = attemptedAuthByAppUid;
+    }
+
 
     @Exclude
     public boolean didAttend() {
-        return authenticated && scheduleLocated == LocatedStatus.CORRECT_LOCATION;
-
+        return authenticated;
+        // authenticated begins only for CORRECT_LOCATION,
+        // so authenticated is enough to determine attendance
     }
+
+
 }
 

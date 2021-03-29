@@ -3,24 +3,20 @@ package com.example.bigowlapp.utils;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
-
 import com.example.bigowlapp.model.Schedule;
 import com.google.firebase.Timestamp;
+import com.google.i18n.phonenumbers.NumberParseException;
 
 import java.util.Calendar;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class SupervisorSmsListener extends BroadcastReceiver {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-    private String smsSender;
     private static final int THIRTY_MINUTES = 1800;
     private String scheduleId;
 
@@ -30,29 +26,38 @@ public class SupervisorSmsListener extends BroadcastReceiver {
         if (receiverIntent.getAction().equals(SMS_RECEIVED)) {
             Bundle bundle = receiverIntent.getExtras();
             if (bundle != null) {
-                // get sms objects
-                Object[] pdus = (Object[]) bundle.get("pdus");
+                // retrieving any PDUs as objects
+                Object[] pdus = (Object[]) bundle.get("pdus"); // getting  the value
+                // of the key "pdus" from the bundle. Here the pdus(protocol data units) is a SMS
                 if (pdus.length == 0) {
                     return;
                 }
-                // large message might be broken into many
+                // getting messages from the pdus
                 SmsMessage[] messages = new SmsMessage[pdus.length];
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < pdus.length; i++) {
                     messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
                     sb.append(messages[i].getMessageBody());
                 }
-                smsSender = messages[0].getOriginatingAddress().substring(2);
+                String smsSenderNum = messages[0].getOriginatingAddress();
                 scheduleId = sb.toString();
                 Timestamp currentTime = new Timestamp(Calendar.getInstance().getTime());
-                isSmsSenderACurrentEventSupervisor.check(smsSender)
+                String formattedSmsSenderNum;
+                try {
+                    formattedSmsSenderNum = PhoneNumberFormatter.formatNumber(smsSenderNum,context);
+                } catch (NumberParseException e) {
+                    Log.e("BigOwl", Log.getStackTraceString(e));
+                    Toast.makeText(context, "FAILED to format phone number for next schedule authentication. Process failed", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                isSmsSenderACurrentEventSupervisor.check(formattedSmsSenderNum)
                         .addOnSuccessListener(schedulesList -> {
                             for (Schedule schedule : schedulesList) {
                                 if (Math.abs(schedule.getStartTime().getSeconds() - currentTime.getSeconds()) < THIRTY_MINUTES) {
                                     if (scheduleId.equalsIgnoreCase(schedule.getUid())) {
                                         try {
-                                            AuthenticatorByDeviceId authenticatorByDeviceId = new AuthenticatorByDeviceId(context);
-                                            authenticatorByDeviceId.authenticate(scheduleId);
+                                            AuthenticatorByAppInstanceId authenticatorByAppInstanceId = new AuthenticatorByAppInstanceId(context);
+                                            authenticatorByAppInstanceId.authenticate(scheduleId);
                                         } catch (Exception e) {
                                             Log.e("exception", "the message", e);
                                         }

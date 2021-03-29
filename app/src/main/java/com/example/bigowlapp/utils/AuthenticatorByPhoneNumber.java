@@ -13,25 +13,25 @@ import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.Timestamp;
+import com.google.firebase.installations.FirebaseInstallations;
+import com.google.i18n.phonenumbers.NumberParseException;
 
 public class AuthenticatorByPhoneNumber {
 
-    private String deviceIdNumber;
     private String devicePhoneNumber;
     private String currentUserPhoneNumber;
     private final Context context;
     private final AuthRepository authRepository = new AuthRepository();
-
-    RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
+    private RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
 
     public AuthenticatorByPhoneNumber(Context context) {
         this.context = context;
     }
 
     @SuppressLint("MissingPermission")
+    // Permission was already granted after sign in step to be able to proceed
     public void authenticate(String scheduleId) {
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        deviceIdNumber = telephonyManager.getDeviceId();
         devicePhoneNumber = telephonyManager.getLine1Number();
         repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class)
                 .observeForever(schedule -> {
@@ -42,12 +42,19 @@ public class AuthenticatorByPhoneNumber {
                                 UserScheduleResponse userScheduleResponse = schedule.getUserScheduleResponseMap()
                                         .get(repositoryFacade.getAuthRepository().getCurrentUser().getUid());
                                 Attendance attendance = userScheduleResponse.getAttendance();
-                                if (currentUserPhoneNumber.equalsIgnoreCase("+" + devicePhoneNumber)) {
+                                String formattedDevicePhoneNum = null;
+                                try {
+                                    formattedDevicePhoneNum = PhoneNumberFormatter.formatNumber(devicePhoneNumber, context);
+                                } catch (NumberParseException e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(context, "FAILED to format phone number. Process failed", Toast.LENGTH_LONG).show();
+                                }
+                                if (currentUserPhoneNumber.equalsIgnoreCase(formattedDevicePhoneNum)) {
                                     attendance.setAuthenticated(true);
                                     Toast.makeText(context, "SUCCESS in authentication for your next BIG OWL schedule", Toast.LENGTH_LONG).show();
                                 } else {
                                     attendance.setAuthenticated(false);
-                                    userScheduleResponse.getAttendance().setDeviceIdNumber(deviceIdNumber);
+                                    userScheduleResponse.getAttendance().setAppInstanceId(FirebaseInstallations.getInstance().getId().getResult());
                                     AuthByPhoneNumberFailure authByPhoneNumberFailure = new AuthByPhoneNumberFailure();
                                     authByPhoneNumberFailure.setScheduleId(scheduleId);
                                     authByPhoneNumberFailure.setCreationTime(Timestamp.now());

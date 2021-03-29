@@ -61,4 +61,15 @@ public class SupervisionRequest extends Notification {
         REJECT,
         NEUTRAL
     }
+
+    @Override
+    public String toString() {
+        return "SupervisionRequest{" +
+                "senderUId='" + senderUid + '\'' +
+                ", receiverUId='" + receiverUid + '\'' +
+                ", groupUId='" + groupUid + '\'' +
+                ", response=" + response +
+                ", timeResponse=" + timeResponse +
+                '}';
+    }
 }

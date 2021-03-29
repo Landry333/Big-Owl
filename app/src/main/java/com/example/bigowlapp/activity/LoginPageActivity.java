@@ -26,7 +26,7 @@ public class LoginPageActivity extends AppCompatActivity {
     TextView tvSignUp;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private LogInViewModel logInViewModel;
-    private AuthFailureNotificationListener authListener = new AuthFailureNotificationListener();
+    private AuthFailureNotificationListener authListener;
     private ProgressBar progressBar;
 
 
@@ -54,6 +54,7 @@ public class LoginPageActivity extends AppCompatActivity {
                 if (m_FirebaseUser != null) {
                     Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
+                    authListener = new AuthFailureNotificationListener();
                     authListener.listen(this);
                     startActivity(i);
                     /*
@@ -62,7 +63,7 @@ public class LoginPageActivity extends AppCompatActivity {
                     i.putExtra("login message","You are logged in");
                     startActivity(i);*/
                 } else {
-                    Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_LONG).show();
                 }
             };
 
@@ -125,4 +126,6 @@ public class LoginPageActivity extends AppCompatActivity {
             Log.e("Error: ", e.getMessage());
         }
     }
+
+
 }

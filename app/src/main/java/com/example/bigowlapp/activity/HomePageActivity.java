@@ -2,12 +2,10 @@ package com.example.bigowlapp.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +26,7 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
+import com.example.bigowlapp.utils.SupervisorSchedulesAlarmManager;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -45,57 +44,14 @@ public class HomePageActivity extends BigOwlActivity {
     private TextView textLastName;
     private TextView textPhone;
     private HomePageViewModel homePageViewModel;
+    private SupervisorSchedulesAlarmManager supervisorSchedulesAlarmManager;
     private MemberScheduleAlarmManager memberScheduleAlarmManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initialize();
-        if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, 10);
-        }
-        // RECEIVE and SEND SMS permissions for the text sms authentication system
-        else if (checkSelfPermission(Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS}, 1000);
-        }
-        else if (checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.SEND_SMS}, 100);
-        }
-
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1000) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "SMS READ Permission GRANTED", Toast.LENGTH_LONG).show();
-                finish();
-            } else {
-                Toast.makeText(this, "Need to allow SMS permission or reinstall app then allow", Toast.LENGTH_LONG).show();
-                finish();
-            }
-        }
-        else if (requestCode == 100) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "SMS SEND Permission GRANTED", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Need to allow SMS permission or reinstall app then allow", Toast.LENGTH_LONG).show();
-                finish();
-            }
-        }
-        else if (requestCode == 10) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "PHONE Permission GRANTED", Toast.LENGTH_LONG).show();
-                finish();
-            } else {
-                Toast.makeText(this, "Need to allow PHONE permission or reinstall app then allow", Toast.LENGTH_LONG).show();
-                finish();
-            }
-        }
-
-
     }
 
     @SuppressLint({"MissingPermission"})
@@ -192,6 +148,7 @@ public class HomePageActivity extends BigOwlActivity {
             });
             scrollView.setVisibility(View.VISIBLE);
             initAlarmManager();
+            initSupervisorAlarmManager();
         }
         /*  TODO: find a way to uncomment out below lines and allow HomePageActivityTest to pass
         else {
@@ -208,6 +165,13 @@ public class HomePageActivity extends BigOwlActivity {
             memberScheduleAlarmManager = new MemberScheduleAlarmManager(this);
         }
         memberScheduleAlarmManager.setAlarms(homePageViewModel.getCurrentUserUid());
+    }
+
+    private void initSupervisorAlarmManager() {
+        if (supervisorSchedulesAlarmManager == null) {
+            supervisorSchedulesAlarmManager = new SupervisorSchedulesAlarmManager(this);
+        }
+        supervisorSchedulesAlarmManager.setAlarms(homePageViewModel.getCurrentUserUid());
     }
 
     @Override
@@ -235,10 +199,6 @@ public class HomePageActivity extends BigOwlActivity {
                 .create();
     }
 
-    @VisibleForTesting
-    public HomePageViewModel getHomePageViewModel() {
-        return homePageViewModel;
-    }
 
     @VisibleForTesting
     public void setHomePageViewModel(HomePageViewModel homePageViewModel) {
