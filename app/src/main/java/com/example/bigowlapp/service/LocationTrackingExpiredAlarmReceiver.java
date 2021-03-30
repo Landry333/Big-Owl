@@ -15,10 +15,7 @@ import com.example.bigowlapp.utils.DateTimeFormatter;
 import com.example.bigowlapp.utils.PeriodicLocationCheckAlarmManager;
 import com.example.bigowlapp.utils.ScheduledLocationTrackingManager;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 
 /**
