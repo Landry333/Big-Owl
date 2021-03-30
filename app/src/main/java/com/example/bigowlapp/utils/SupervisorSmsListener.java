@@ -65,9 +65,6 @@ public class SupervisorSmsListener extends BroadcastReceiver {
                                     break;
                                 }
                             }
-                        })
-                        .addOnFailureListener(error -> {
-                            Toast.makeText(context, "FAILURE for checking if the SMS was from supervisor", Toast.LENGTH_SHORT).show();
                         });
 
             }
