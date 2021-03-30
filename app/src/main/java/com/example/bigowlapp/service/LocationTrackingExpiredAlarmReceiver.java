@@ -33,7 +33,7 @@ public class LocationTrackingExpiredAlarmReceiver extends BroadcastReceiver {
         createNotificationChannel(context);
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         if (!pm.isInteractive()) {
-            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:notificationLock");
+            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:notificationLock");
             wl.acquire(3000);
         }
 
