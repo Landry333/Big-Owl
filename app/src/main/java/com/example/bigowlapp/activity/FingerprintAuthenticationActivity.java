@@ -38,7 +38,8 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
     private Executor executor;
     private Button btnStartFingerAuth;
     private Button btnLogOut;
-    private Button btnFingerprintAuthRegistration;
+    private Button btnFingerprintAuthAdd;
+    private Button btnFingerprintAuthMaybeLater;
     private HomePageViewModel homePageViewModel;
     private static final String PROPOSE_FINGERPRINT_AUTH = "Add fingerprint authentication to secure your account?\n\n" +
             "NOTE: This will also make your account accessible only by a device having sim card phone number same " +
@@ -47,7 +48,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
             "You can modify your choice on Edit profile";
     private static final String NO_COMPATIBILITY_WITH_PHONE = "Sorry, this additional security service is not available with" +
             " this phone or with your telephony provider\n\nPhone number on this phone should be the same as in your account";
-    private static final String NOT_ALLOWED = "You are not allowed to access this account\n\n"+
+    private static final String NOT_ALLOWED = "You are not allowed to access this account\n\n" +
             "Phone number on this phone should be the same as in your account";
 
     @Override
@@ -57,13 +58,15 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
 
         AuthResultText = findViewById(R.id.authentication_result_message);
         btnStartFingerAuth = findViewById(R.id.btn_start_authentication);
-        btnFingerprintAuthRegistration = findViewById(R.id.fingerprint_auth_registration_btn);
+        btnFingerprintAuthAdd = findViewById(R.id.fingerprint_auth_add_btn);
+        btnFingerprintAuthMaybeLater = findViewById(R.id.fingerprint_auth_maybe_later_btn);
         fingerprintAuthRegistrationText = findViewById(R.id.fingerprint_auth_registration_text);
         btnLogOut = findViewById(R.id.btn_logout);
         executor = ContextCompat.getMainExecutor(this);
         AuthResultText.setVisibility(View.GONE);
         btnStartFingerAuth.setVisibility(View.GONE);
-        btnFingerprintAuthRegistration.setVisibility(View.GONE);
+        btnFingerprintAuthAdd.setVisibility(View.GONE);
+        btnFingerprintAuthMaybeLater.setVisibility(View.GONE);
 
         //Toast.makeText(FingerprintAuthenticationActivity.this, "Authenticate fingerprint to get access", Toast.LENGTH_LONG).show();
 
@@ -109,6 +112,10 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });
+        btnFingerprintAuthMaybeLater.setOnClickListener(v -> {
+            goToHomePage();
+            Toast.makeText(this, "You are logged in", Toast.LENGTH_LONG).show();
+        });
 
         promptInfo = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle("BigOwl fingerprint Authentication")
@@ -142,32 +149,37 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
                         && user.getFingerprintAuthRegistration().equalsIgnoreCase("NO")) {
                     Log.e("user.getFingerprintAuthRegistration()", user.getFingerprintAuthRegistration());
                     fingerprintAuthRegistrationText.setText(NO_COMPATIBILITY_WITH_PHONE);
-                    btnFingerprintAuthRegistration.setText("Go to home page");
-                    btnFingerprintAuthRegistration.setVisibility(View.VISIBLE);
-                    btnFingerprintAuthRegistration.setOnClickListener(v -> goToHomePage());
+                    btnFingerprintAuthAdd.setText("Go to home page");
+                    btnFingerprintAuthAdd.setVisibility(View.VISIBLE);
+                    btnFingerprintAuthAdd.setOnClickListener(v -> goToHomePage());
                     return;
                 }
                 if (user.getFingerprintAuthRegistration().equalsIgnoreCase("NO")) {
                     fingerprintAuthRegistrationText.setText(PROPOSE_FINGERPRINT_AUTH);
-                    btnFingerprintAuthRegistration.setText("ADD");
-                    btnFingerprintAuthRegistration.setVisibility(View.VISIBLE);
-                    btnFingerprintAuthRegistration.setOnClickListener(v -> {
+                    btnFingerprintAuthAdd.setText("ADD");
+                    btnFingerprintAuthMaybeLater.setText("MAYBE LATER");
+                    btnFingerprintAuthAdd.setVisibility(View.VISIBLE);
+                    btnFingerprintAuthMaybeLater.setVisibility(View.VISIBLE);
+                    btnFingerprintAuthAdd.setOnClickListener(v -> {
                         user.setFingerprintAuthRegistration("YES");
-                        Log.e("user last name", user.getLastName());
                         fingerprintAuthRegistrationText.setText(IS_FINGERPRINT_AUTH_REGISTERED);
-                        btnFingerprintAuthRegistration.setVisibility(View.GONE);
+                        btnFingerprintAuthAdd.setVisibility(View.GONE);
+                        btnFingerprintAuthMaybeLater.setVisibility(View.GONE);
                         btnStartFingerAuth.setVisibility(View.VISIBLE);
                         Toast.makeText(this, "You now have the fingerprint authentication", Toast.LENGTH_LONG).show();
                     });
-                } else {
+
+                } else if (user.getFingerprintAuthRegistration().equalsIgnoreCase("YES")) {
                     if (user.getPhoneNumber().equalsIgnoreCase(formattedDevicePhoneNum)) {
                         fingerprintAuthRegistrationText.setText(IS_FINGERPRINT_AUTH_REGISTERED);
-                        btnFingerprintAuthRegistration.setVisibility(View.GONE);
+                        btnFingerprintAuthAdd.setVisibility(View.GONE);
                         btnStartFingerAuth.setVisibility(View.VISIBLE);
-                    }
-                    else{
+                    } else {
                         fingerprintAuthRegistrationText.setText(NOT_ALLOWED);
                     }
+
+                } else {
+                    fingerprintAuthRegistrationText.setText("NOT ALLOWED");
                 }
 
             });

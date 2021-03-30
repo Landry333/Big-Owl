@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.AddUsersActivity">
+    tools:context=".activity.FingerprintAuthenticationActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -39,16 +39,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fingerprint_auth_screen_title" />
 
-    <Button
-        android:id="@+id/fingerprint_auth_registration_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:text="authentication registration"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fingerprint_auth_registration_text" />
 
     <Button
         android:id="@+id/btn_start_authentication"
@@ -58,7 +48,7 @@
         android:text="start fingerprint authentication"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fingerprint_auth_registration_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/fingerprint_auth_add_btn" />
 
     <Button
         android:id="@+id/btn_logout"
@@ -80,6 +70,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_start_authentication" />
+
+    <Button
+        android:id="@+id/fingerprint_auth_add_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fingerprint_auth_registration_text" />
+
+    <Button
+        android:id="@+id/fingerprint_auth_maybe_later_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="maybe later"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.729"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fingerprint_auth_registration_text" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
