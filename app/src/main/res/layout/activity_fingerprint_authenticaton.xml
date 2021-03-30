@@ -17,36 +17,48 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/logo" />
 
-    <Button
-        android:id="@+id/btnContacts"
+    <TextView
+        android:id="@+id/fingerprint_auth_screen_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="to be completed"
+        android:layout_marginTop="40dp"
+        android:text="Fingerprint authentication"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-    <Button
-        android:id="@+id/btnCurrentPhoneRegistration"
+    <TextView
+        android:id="@+id/fingerprint_auth_registration_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:text="Update phone registration"
+        android:layout_marginTop="40dp"
+        android:text="authentication_message"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fingerprint_auth_screen_title" />
+
+    <Button
+        android:id="@+id/fingerprint_auth_registration_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:text="authentication registration"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnContacts" />
+        app:layout_constraintTop_toBottomOf="@+id/fingerprint_auth_registration_text" />
 
     <Button
-        android:id="@+id/btnStartAuthentication"
+        android:id="@+id/btn_start_authentication"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:text="start fingerprint authentication"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCurrentPhoneRegistration" />
+        app:layout_constraintTop_toBottomOf="@+id/fingerprint_auth_registration_btn" />
 
     <Button
         android:id="@+id/btn_logout"
@@ -56,18 +68,18 @@
         android:text="@string/log_out"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnStartAuthentication" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_start_authentication" />
 
     <TextView
-        android:id="@+id/authentication_message"
+        android:id="@+id/authentication_result_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="authentication_message"
-        android:textSize="18sp"
+        android:text="authentication_result_message"
+        android:textSize="19sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnStartAuthentication" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_start_authentication" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
