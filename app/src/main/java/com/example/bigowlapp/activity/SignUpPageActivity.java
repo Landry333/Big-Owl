@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
@@ -79,12 +80,21 @@ public class SignUpPageActivity extends AppCompatActivity {
                 this.userPhone.setError("please enter a phone number");
                 this.userPhone.requestFocus();
             } else {
+                BiometricManager biometricManager = BiometricManager.from(this);
                 progressBar.setVisibility(View.VISIBLE);
                 signUpViewModel.createUser(email, pass, formattedUserPhone, firstName, lastName)
                         .addOnSuccessListener(isSuccessful -> {
                             progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
+                            //startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class)); ToDo: to remove
+                            Intent i;
+                            if (biometricManager.canAuthenticate() != BiometricManager.BIOMETRIC_SUCCESS){
+                                i = new Intent(SignUpPageActivity.this, HomePageActivity.class);
+                            }
+                            else{
+                                i = new Intent(SignUpPageActivity.this, FingerprintAuthenticationActivity.class);
+                            }
+                            startActivity(i);
                         })
                         .addOnFailureListener(e -> {
                             Toast.makeText(SignUpPageActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
