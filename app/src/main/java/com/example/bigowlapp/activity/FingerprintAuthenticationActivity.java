@@ -38,6 +38,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
     private Executor executor;
     private Button btnStartFingerAuth;
     private Button btnLogOut;
+    private Button btnGoToHomePage;
     private Button btnFingerprintAuthAdd;
     private Button btnFingerprintAuthMaybeLater;
     private HomePageViewModel homePageViewModel;
@@ -60,11 +61,13 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
         btnStartFingerAuth = findViewById(R.id.btn_start_authentication);
         btnFingerprintAuthAdd = findViewById(R.id.fingerprint_auth_add_btn);
         btnFingerprintAuthMaybeLater = findViewById(R.id.fingerprint_auth_maybe_later_btn);
+        btnGoToHomePage = findViewById(R.id.btn_go_to_home_page);
         fingerprintAuthRegistrationText = findViewById(R.id.fingerprint_auth_registration_text);
         btnLogOut = findViewById(R.id.btn_logout);
         executor = ContextCompat.getMainExecutor(this);
         AuthResultText.setVisibility(View.GONE);
         btnStartFingerAuth.setVisibility(View.GONE);
+        btnGoToHomePage.setVisibility(View.GONE);
         btnFingerprintAuthAdd.setVisibility(View.GONE);
         btnFingerprintAuthMaybeLater.setVisibility(View.GONE);
 
@@ -116,6 +119,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
             goToHomePage();
             Toast.makeText(this, "You are logged in", Toast.LENGTH_LONG).show();
         });
+        btnGoToHomePage.setOnClickListener(v -> goToHomePage());
 
         promptInfo = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle("BigOwl fingerprint Authentication")
@@ -149,9 +153,8 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
                         && user.getFingerprintAuthRegistration().equalsIgnoreCase("NO")) {
                     Log.e("user.getFingerprintAuthRegistration()", user.getFingerprintAuthRegistration());
                     fingerprintAuthRegistrationText.setText(NO_COMPATIBILITY_WITH_PHONE);
-                    btnFingerprintAuthAdd.setText("Go to home page");
-                    btnFingerprintAuthAdd.setVisibility(View.VISIBLE);
-                    btnFingerprintAuthAdd.setOnClickListener(v -> goToHomePage());
+                    btnGoToHomePage.setText("Go to home page");
+                    btnGoToHomePage.setVisibility(View.VISIBLE);
                     return;
                 }
                 if (user.getFingerprintAuthRegistration().equalsIgnoreCase("NO")) {
@@ -201,7 +204,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
         BiometricManager biometricManager = BiometricManager.from(this);
         if (biometricManager.canAuthenticate() != BiometricManager.BIOMETRIC_SUCCESS) {
 
-            AuthResultText.setText("Biometric Not Supported");
+            AuthResultText.setText("Biometric Not Supported on this phone");
             return;
         }
         biometricPrompt.authenticate(promptInfo);
