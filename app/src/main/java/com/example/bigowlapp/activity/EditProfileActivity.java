@@ -20,7 +20,7 @@ import java.util.Objects;
 
 public class EditProfileActivity extends BigOwlActivity {
     Button editButtonCancel, editButtonConfirm;
-    EditText editUserFirstName, editUserLastName, editPhoneNumber, editImageURL;
+    EditText editUserFirstName, editUserLastName, editPhoneNumber, editFingerprintAuthRegistration,editImageURL;
     private EditProfileViewModel editProfileViewModel;
 
     @Override
@@ -53,6 +53,7 @@ public class EditProfileActivity extends BigOwlActivity {
         String userPhone = editPhoneNumber.getText().toString();
         String firstName = editUserFirstName.getText().toString();
         String lastName = editUserLastName.getText().toString();
+        String fingerprintAuthRegistration = editFingerprintAuthRegistration.getText().toString();
         String imageUrl = editImageURL.getText().toString();
 
         if (firstName.isEmpty()) {
@@ -64,22 +65,30 @@ public class EditProfileActivity extends BigOwlActivity {
             editUserLastName.requestFocus();
         }
 
+        if (!(fingerprintAuthRegistration.equalsIgnoreCase("NO")
+                || fingerprintAuthRegistration.equalsIgnoreCase("YES"))) {
+            editFingerprintAuthRegistration.setError("Please enter YES or NO and remove any empty space.");
+            editFingerprintAuthRegistration.requestFocus();
+        }
+
         String formattedPhone = phoneNumberFormatter(userPhone);
         String oldPhoneNumber = Objects.requireNonNull(editProfileViewModel.getCurrentUserData().getValue()).getPhoneNumber();
 
-        if (!firstName.isEmpty() && !lastName.isEmpty() && formattedPhone != null) {
+        if (!firstName.isEmpty() && !lastName.isEmpty() && (fingerprintAuthRegistration.equalsIgnoreCase("NO")
+                || fingerprintAuthRegistration.equalsIgnoreCase("YES") )&& formattedPhone != null) {
             if (!formattedPhone.equals(oldPhoneNumber)) {
                 editProfileViewModel.isPhoneNumberTaken(formattedPhone)
-                        .addOnSuccessListener(isSuccessful -> onFinishConfirmation(firstName, lastName, formattedPhone, imageUrl))
+                        .addOnSuccessListener(isSuccessful -> onFinishConfirmation(firstName, lastName,
+                                fingerprintAuthRegistration, formattedPhone, imageUrl))
                         .addOnFailureListener(exception -> Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show());
             } else {
-                onFinishConfirmation(firstName, lastName, formattedPhone, imageUrl);
+                onFinishConfirmation(firstName, lastName, fingerprintAuthRegistration, formattedPhone, imageUrl);
             }
         }
     }
 
-    private void onFinishConfirmation(String firstName, String lastName, String formattedPhone, String imageUrl) {
-        editProfileViewModel.editUserProfile(firstName, lastName, formattedPhone, imageUrl);
+    private void onFinishConfirmation(String firstName, String lastName, String fingerprintAuthRegistration, String formattedPhone, String imageUrl) {
+        editProfileViewModel.editUserProfile(firstName, lastName, fingerprintAuthRegistration, formattedPhone, imageUrl);
         startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
         finish();
     }
@@ -99,12 +108,14 @@ public class EditProfileActivity extends BigOwlActivity {
         if (editProfileViewModel.isCurrentUserSet()) {
             editUserFirstName = findViewById(R.id.edit_user_first_name);
             editUserLastName = findViewById(R.id.edit_user_last_name);
+            editFingerprintAuthRegistration = findViewById(R.id.edit_fingerprint_auth_registration);
             editPhoneNumber = findViewById(R.id.edit_user_phone_number);
             editImageURL = findViewById(R.id.edit_user_image_url);
 
             editProfileViewModel.getCurrentUserData().observe(this, user -> {
                 editUserFirstName.setText(user.getFirstName());
                 editUserLastName.setText(user.getLastName());
+                editFingerprintAuthRegistration.setText(user.getFingerprintAuthRegistration());
                 editPhoneNumber.setText(user.getPhoneNumber());
                 editImageURL.setText(user.getProfileImage());
             });
