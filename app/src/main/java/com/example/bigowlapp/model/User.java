@@ -16,6 +16,7 @@ public class User extends Model implements Parcelable {
 
     private String firstName;
     private String lastName;
+    private String fingerprintAuthRegistration = "NO";
     private String phoneNumber;
     private String email;
     private String profileImage;
@@ -34,7 +35,8 @@ public class User extends Model implements Parcelable {
         this.email = email;
     }
 
-    public User(String uid, String firstName, String lastName, String phoneNumber, String email, String profileImage, List<String> memberGroupIdList) {
+    public User(String uid, String firstName, String lastName, String phoneNumber, String email,
+                String profileImage, List<String> memberGroupIdList, String fingerprintAuthRegistration) {
         super(uid);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -42,12 +44,14 @@ public class User extends Model implements Parcelable {
         this.email = email;
         this.profileImage = profileImage;
         this.memberGroupIdList = memberGroupIdList;
+        this.fingerprintAuthRegistration = fingerprintAuthRegistration;
     }
 
     protected User(Parcel in) {
         uid = in.readString();
         firstName = in.readString();
         lastName = in.readString();
+        fingerprintAuthRegistration = in.readString();
         phoneNumber = in.readString();
         email = in.readString();
         profileImage = in.readString();
@@ -59,6 +63,7 @@ public class User extends Model implements Parcelable {
         dest.writeString(uid);
         dest.writeString(firstName);
         dest.writeString(lastName);
+        dest.writeString(fingerprintAuthRegistration);
         dest.writeString(phoneNumber);
         dest.writeString(email);
         dest.writeString(profileImage);
@@ -98,6 +103,11 @@ public class User extends Model implements Parcelable {
         this.lastName = lastName;
     }
 
+    public String getFingerprintAuthRegistration() { return fingerprintAuthRegistration; }
+
+    public void setFingerprintAuthRegistration(String fingerprintAuthRegistration)
+    { this.fingerprintAuthRegistration = fingerprintAuthRegistration; }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -129,6 +139,7 @@ public class User extends Model implements Parcelable {
     public void setMemberGroupIdList(List<String> memberGroupIdList) {
         this.memberGroupIdList = memberGroupIdList;
     }
+
 
     @Exclude
     public String getFullName() {
