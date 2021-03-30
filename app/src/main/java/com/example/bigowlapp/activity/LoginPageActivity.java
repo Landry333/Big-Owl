@@ -52,7 +52,7 @@ public class LoginPageActivity extends AppCompatActivity {
             mAuthStateListener = firebaseAuth -> {
                 FirebaseUser m_FirebaseUser = logInViewModel.getCurrentUser();
                 if (m_FirebaseUser != null) {
-                    Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
                     authListener = new AuthFailureNotificationListener();
                     authListener.listen(this);
@@ -85,7 +85,7 @@ public class LoginPageActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.INVISIBLE);
                                     Intent i;
                                     if (biometricManager.canAuthenticate() != BiometricManager.BIOMETRIC_SUCCESS){
-                                        Toast.makeText(LoginPageActivity.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LoginPageActivity.this, "you are logged in!", Toast.LENGTH_SHORT).show();
                                         i = new Intent(LoginPageActivity.this, HomePageActivity.class);
                                         //i.putExtra("login message","Successfully logged in!");
                                     }

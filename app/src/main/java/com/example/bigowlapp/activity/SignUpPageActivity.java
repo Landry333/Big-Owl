@@ -85,11 +85,11 @@ public class SignUpPageActivity extends AppCompatActivity {
                 signUpViewModel.createUser(email, pass, formattedUserPhone, firstName, lastName)
                         .addOnSuccessListener(isSuccessful -> {
                             progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
-                            //startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class)); ToDo: to remove
+                            Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_LONG).show();
                             Intent i;
                             if (biometricManager.canAuthenticate() != BiometricManager.BIOMETRIC_SUCCESS){
                                 i = new Intent(SignUpPageActivity.this, HomePageActivity.class);
+                                Toast.makeText(SignUpPageActivity.this, "You are logged in", Toast.LENGTH_LONG).show();
                             }
                             else{
                                 i = new Intent(SignUpPageActivity.this, FingerprintAuthenticationActivity.class);
