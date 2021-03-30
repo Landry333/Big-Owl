@@ -23,7 +23,7 @@ public class DateTimeFormatter {
         return doubleDigitFormatter(hourOfDay) + ":" + doubleDigitFormatter(minute);
     }
 
-    public static String dateAndTimeFortmatter(Calendar calendar){
+    public static String dateAndTimeFormatter(Calendar calendar){
         int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
         return (calendar.get(Calendar.MONTH) + 1) + "/" +

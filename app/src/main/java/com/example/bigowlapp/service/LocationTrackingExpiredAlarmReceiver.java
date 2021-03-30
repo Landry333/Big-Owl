@@ -48,15 +48,15 @@ public class LocationTrackingExpiredAlarmReceiver extends BroadcastReceiver {
                 .setContentTitle("Missed Schedule for: " + intent.getStringExtra("schedule_title"))
                 .setStyle(new NotificationCompat.InboxStyle()
                         .addLine("You've missed your schedule starting at:")
-                        .addLine(DateTimeFormatter.dateAndTimeFortmatter(calendar)));
+                        .addLine(DateTimeFormatter.dateAndTimeFormatter(calendar)));
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(1, builder.build());
     }
 
     public void createNotificationChannel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Channel name";
-            String description = "Channel Description";
+            CharSequence name = "Missed schedule";
+            String description = "Notification for when the user missed a schedule he accepted by more than 30 minutes.";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
