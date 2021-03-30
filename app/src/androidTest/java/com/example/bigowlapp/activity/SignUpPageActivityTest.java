@@ -151,13 +151,12 @@ public class SignUpPageActivityTest {
         onView(withId(R.id.edit_text_text_password)).perform(typeText(password), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.edit_text_phone)).perform(typeText("5141234567"), ViewActions.closeSoftKeyboard());
 
-        Mockito.when(mockSignUpViewModel.createUser(email, password, "5141234567", firstName, lastName)).thenReturn(Tasks.forException(new Exception("Failed to sign up")));
+        Mockito.when(mockSignUpViewModel.createUser(any(), any(), any(), any(), any())).thenReturn(Tasks.forException(new Exception("Failed to sign up")));
 
         onView(withId(R.id.button_sign_up))
                 .perform(scrollTo())
                 .check(matches(withText("Sign Up"))).perform(click());
 
-        Espresso.onView(isRoot()).perform(waitFor(1000));
         Espresso.onView(withId(R.id.user_first_name)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.user_last_name)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.edit_text_text_mail_address)).check(matches(isDisplayed()));
@@ -200,25 +199,5 @@ public class SignUpPageActivityTest {
 
         onView(withId(R.id.editTextTextEmailAddress)).check(matches(isDisplayed()));
         onView(withId(R.id.editTextTextPassword)).check(matches(isDisplayed()));
-    }
-
-
-    private ViewAction waitFor(final long ms) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return ViewMatchers.isRoot();
-            }
-
-            @Override
-            public String getDescription() {
-                return "Wait";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                SystemClock.sleep(ms);
-            }
-        };
     }
 }
