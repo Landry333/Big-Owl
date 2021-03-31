@@ -17,8 +17,6 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.example.bigowlapp.viewModel.SignUpViewModel;
 import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
 
 public class SignUpPageActivity extends AppCompatActivity {
     public EditText userEmail, userPassword, userPhone, userFirstName, userLastName;
@@ -87,11 +85,10 @@ public class SignUpPageActivity extends AppCompatActivity {
                             progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_LONG).show();
                             Intent i;
-                            if (biometricManager.canAuthenticate() != BiometricManager.BIOMETRIC_SUCCESS){
+                            if (biometricManager.canAuthenticate() != BiometricManager.BIOMETRIC_SUCCESS) {
                                 i = new Intent(SignUpPageActivity.this, HomePageActivity.class);
                                 Toast.makeText(SignUpPageActivity.this, "You are logged in", Toast.LENGTH_LONG).show();
-                            }
-                            else{
+                            } else {
                                 i = new Intent(SignUpPageActivity.this, FingerprintAuthenticationActivity.class);
                             }
                             startActivity(i);
