@@ -11,7 +11,6 @@ import androidx.lifecycle.LiveData;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.SupervisionRequest;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.NotificationRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.Timestamp;
@@ -33,7 +32,6 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
     String canNotSend = "Can not send ";
     String sendNewRequest = "Send a new request";
     private Button supRequestBtn;
-    private final AuthRepository authRepository = new AuthRepository();
     String requestUID;
     private TextView noteTv;
     private TextView resultNoteTv;
@@ -48,17 +46,20 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_sending_request_to_supervise);
+
+        supRequestBtn = findViewById(R.id.SupRequest);
+        noteTv = findViewById(R.id.note);
+        resultNoteTv = findViewById(R.id.note2);
+
+        RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
+        otherUserNotificationRepository = repositoryFacade.getNotificationRepository(otherUserID);
+
         otherUser = getIntent().getParcelableExtra("user");
         assert otherUser != null;
         otherUserID = otherUser.getUid();
-        otherUserNotificationRepository = RepositoryFacade.getInstance()
-                .getNotificationRepository(otherUserID);
-        supRequestBtn = findViewById(R.id.SupRequest);
-        currentUserID = authRepository.getCurrentUser().getUid();
-        noteTv = findViewById(R.id.note);
-        resultNoteTv = findViewById(R.id.note2);
+        currentUserID = repositoryFacade.getCurrentUserUid();
+
         String contactDetails = getIntent().getStringExtra("contactDetails");
         noteText = "Contact: " + contactDetails + " is already registered to the application.";
         noteTv.setText(noteText);
@@ -94,7 +95,6 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
             otherUserNotificationRepository.removeDocument(requestUID);
             otherUserNotificationRepository.addDocument(supervisionRequest);
         }
-
 
         observeRequests();
     }
