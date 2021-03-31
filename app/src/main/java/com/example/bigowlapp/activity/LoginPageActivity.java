@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -32,7 +33,9 @@ public class LoginPageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        logInViewModel = new ViewModelProvider(this).get(LogInViewModel.class);
+        if(logInViewModel == null){
+            logInViewModel = new ViewModelProvider(this).get(LogInViewModel.class);
+        }
         initialize();
     }
 
@@ -109,5 +112,8 @@ public class LoginPageActivity extends AppCompatActivity {
         }
     }
 
-
+    @VisibleForTesting
+    public void setLogInViewModel(LogInViewModel logInViewModel) {
+        this.logInViewModel = logInViewModel;
+    }
 }
