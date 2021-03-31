@@ -41,7 +41,10 @@ public class Notification extends Model {
      */
     protected Timestamp timeRead;
 
-    protected boolean used = false;
+    /**
+     * Marks a notification as used to verify the user received and/or viewed it
+     */
+    protected boolean used;
 
     public Notification() {
         this(Type.NONE);
@@ -50,6 +53,7 @@ public class Notification extends Model {
     public Notification(Type type) {
         super();
         this.type = type;
+        this.used = false;
     }
 
     @Exclude
@@ -113,9 +117,10 @@ public class Notification extends Model {
 
     public static class Field {
         public static final String TYPE = "type";
-        public static final String TIME = "time";
+        public static final String CREATION_TIME = "creationTime";
         public static final String RECEIVER_UID = "receiverUid";
         public static final String TIME_READ = "timeRead";
+        public static final String USED = "used";
 
         protected Field() {
             // constants class should not be instantiated

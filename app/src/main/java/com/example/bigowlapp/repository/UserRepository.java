@@ -7,7 +7,6 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class UserRepository extends Repository<User> {
-
     public static final String COLLECTION_NAME = "users";
 
     // TODO: Dependency Injection Implementation for Firestore

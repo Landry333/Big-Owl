@@ -71,7 +71,6 @@ public class SupervisionRequest extends Notification {
         public static final String TIME_RESPONSE = "timeResponse";
 
         private Field() {
-            super();
             // constants class should not be instantiated
         }
     }
