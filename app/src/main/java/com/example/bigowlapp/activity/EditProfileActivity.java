@@ -90,6 +90,7 @@ public class EditProfileActivity extends BigOwlActivity {
     private void onFinishConfirmation(String firstName, String lastName, String fingerprintAuthRegistration, String formattedPhone, String imageUrl) {
         editProfileViewModel.editUserProfile(firstName, lastName, fingerprintAuthRegistration, formattedPhone, imageUrl);
         startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
+        Toast.makeText(this, "profile edited successfully", Toast.LENGTH_LONG).show();
         finish();
     }
 
