@@ -43,7 +43,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
     private static final String IS_FINGERPRINT_AUTH_REGISTERED = "You are registered to fingerprint authentication.\n\n" +
             "You can modify your choice on Edit profile";
     private static final String NO_COMPATIBILITY_WITH_PHONE = "Sorry, this additional security service is not available with" +
-            " this phone or with your telephony provider\n\nPhone number on this phone should be the same as in your account";
+            " this phone or with your telephony provider\n\n Make sure sim card_1 phone number on this phone is the same as in your account";
     private static final String NOT_ALLOWED = "You are not allowed to access this account\n\n" +
             "Sim card_1 phone number on this phone should be the same as in your account";
 
