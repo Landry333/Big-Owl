@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -30,7 +31,11 @@ public class SignUpPageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
+
+        if(signUpViewModel == null){
+            signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
+        }
+
         initialize();
     }
 
@@ -98,4 +103,8 @@ public class SignUpPageActivity extends AppCompatActivity {
         });
     }
 
+    @VisibleForTesting
+    public void setSignUpViewModel(SignUpViewModel signUpViewModel) {
+        this.signUpViewModel = signUpViewModel;
+    }
 }
