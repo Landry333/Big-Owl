@@ -13,6 +13,7 @@ import com.example.bigowlapp.model.SupervisionRequest;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.NotificationRepository;
+import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.Timestamp;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
     String superviseAlready = "You already have an accepted request to supervise this user";
     String requestRejected = "Your last request was rejected by this user. You can send a new request";
 
-    NotificationRepository otherUserNotificationRepository;
+    private NotificationRepository otherUserNotificationRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,8 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         otherUser = getIntent().getParcelableExtra("user");
         assert otherUser != null;
         otherUserID = otherUser.getUid();
-        otherUserNotificationRepository = new NotificationRepository(otherUserID);
+        otherUserNotificationRepository = RepositoryFacade.getInstance()
+                .getNotificationRepository(otherUserID);
         supRequestBtn = findViewById(R.id.SupRequest);
         currentUserID = authRepository.getCurrentUser().getUid();
         noteTv = findViewById(R.id.note);
