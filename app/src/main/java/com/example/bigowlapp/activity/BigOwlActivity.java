@@ -27,7 +27,7 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
         super.onCreate(savedInstanceState);
         setContentView(getContentView());
 
-        progressBar = (ProgressBar) findViewById(R.id.database_progress_bar);
+        progressBar = findViewById(R.id.database_progress_bar);
 
         imgBtnOverflow = findViewById(R.id.action_overflow);
         imgBtnOverflow.setOnClickListener(v -> {
@@ -48,9 +48,8 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
         });
 
         imgBtnNotification = findViewById(R.id.action_notification);
-        imgBtnNotification.setOnClickListener(v -> {
-            // TODO startActivity(new Intent(this, Notification? .class));
-        });
+        imgBtnNotification.setOnClickListener(v ->
+                startActivity(new Intent(this, NotificationActivity.class)));
 
         imgBtnBigOwl = findViewById(R.id.action_big_owl);
         imgBtnBigOwl.setOnClickListener(v -> {

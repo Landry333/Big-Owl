@@ -8,6 +8,7 @@ import android.util.Log;
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.RepositoryFacade;
+import com.example.bigowlapp.utils.AuthenticatorByPhoneNumber;
 import com.example.bigowlapp.utils.LocationTrackingExpiredAlarmManager;
 import com.example.bigowlapp.utils.PeriodicLocationCheckAlarmManager;
 import com.google.android.gms.location.Geofence;
@@ -38,6 +39,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
         if (geofencingEvent.hasError()) {
@@ -47,8 +49,6 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         }
 
         // valuable data from geofence result
-        // TODO: if not needed remove, else uncomment for users current location
-        //  Location currentUserLocation = geofencingEvent.getTriggeringLocation();
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
         List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
         List<String> geofenceIdList = triggeringGeofences.stream()
@@ -57,14 +57,14 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                 .collect(Collectors.toList());
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION, context);
             // User was successfully detected in desired location, so no more tracking needed
             this.removeLocationTracking(context, geofenceIdList);
 
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION);
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION, context);
         } else {
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED);
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED, context);
         }
     }
 
@@ -82,29 +82,33 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         return geofencingClient.removeGeofences(geofencesToRemoveIdList);
     }
 
-    private void updateUserLocatedStatus(List<String> scheduleUidList, Attendance.LocatedStatus locatedStatusToAdd) {
+    private void updateUserLocatedStatus(List<String> scheduleUidList, Attendance.LocatedStatus locatedStatusToAdd, Context context) {
         repositoryFacade.getScheduleRepository()
                 .getDocumentsByListOfUid(scheduleUidList, Schedule.class)
                 .observeForever(schedules -> {
-                    String userUid = repositoryFacade.getAuthRepository()
-                            .getCurrentUser().getUid();
-
                     for (Schedule schedule : schedules) {
                         Attendance userAttendance = schedule
                                 .getUserScheduleResponseMap()
-                                .get(userUid)
+                                .get(repositoryFacade.getCurrentUserUid())
                                 .getAttendance();
 
-                        // If the user was already detected to be in the location, no need to
-                        // update the database anymore.
-                        if (userAttendance.getScheduleLocated() == Attendance.LocatedStatus.CORRECT_LOCATION) {
-                            return;
+                        userAttendance.setAuthenticationTime(Timestamp.now());
+
+                        // Avoid marking user as not in correct location if they happen to leave the geofence
+                        // instantly after they are within it.
+                        if (userAttendance.getScheduleLocated() != Attendance.LocatedStatus.CORRECT_LOCATION) {
+                            userAttendance.setScheduleLocated(locatedStatusToAdd);
                         }
 
-                        userAttendance.setScheduleLocated(locatedStatusToAdd);
-                        userAttendance.setAuthenticationTime(Timestamp.now());
                         repositoryFacade.getScheduleRepository()
                                 .updateDocument(schedule.getUid(), schedule);
+
+                        if (userAttendance.getScheduleLocated() == Attendance.LocatedStatus.CORRECT_LOCATION) {
+                            for (String scheduleID : scheduleUidList) {
+                                AuthenticatorByPhoneNumber authenticationByPhoneNumber = new AuthenticatorByPhoneNumber(context);
+                                authenticationByPhoneNumber.authenticate(scheduleID);
+                            }
+                        }
                     }
                 });
     }

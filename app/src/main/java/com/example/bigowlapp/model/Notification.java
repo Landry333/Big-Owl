@@ -1,6 +1,7 @@
 package com.example.bigowlapp.model;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
@@ -8,8 +9,10 @@ public class Notification extends Model {
 
     public enum Type {
         NONE(Notification.class),
+        INVALID(NullNotification.class),
         SUPERVISION_REQUEST(SupervisionRequest.class),
-        SCHEDULE_REQUEST(ScheduleRequest.class);
+        SCHEDULE_REQUEST(ScheduleRequest.class),
+        AUTH_BY_PHONE_NUMBER_FAILURE(AuthByPhoneNumberFailure.class);
 
         public final Class<? extends Notification> typeClass;
 
@@ -26,7 +29,7 @@ public class Notification extends Model {
     /**
      * The date/time the notification was created
      */
-    protected Timestamp time;
+    protected Timestamp creationTime;
 
     /**
      * The database uid of the user who will receive this notification
@@ -38,14 +41,20 @@ public class Notification extends Model {
      */
     protected Timestamp timeRead;
 
+    protected boolean used = false;
+
     public Notification() {
-        super();
-        this.type = Type.NONE;
+        this(Type.NONE);
     }
 
     public Notification(Type type) {
         super();
         this.type = type;
+    }
+
+    @Exclude
+    public static Notification getNotificationSafe(Notification notification) {
+        return notification == null || notification.type == null ? new NullNotification() : notification;
     }
 
     public Type getType() {
@@ -57,12 +66,12 @@ public class Notification extends Model {
         this.type = type;
     }
 
-    public Timestamp getTime() {
-        return time;
+    public Timestamp getCreationTime() {
+        return creationTime;
     }
 
-    public void setTime(Timestamp time) {
-        this.time = time;
+    public void setCreationTime(Timestamp creationTime) {
+        this.creationTime = creationTime;
     }
 
     public String getReceiverUid() {
@@ -79,6 +88,27 @@ public class Notification extends Model {
 
     public void setTimeRead(Timestamp timeRead) {
         this.timeRead = timeRead;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
+
+    @Exclude
+    public boolean isValid() {
+        return true;
+    }
+
+    public long timeSinceCreationMillis() {
+        if (creationTime == null) {
+            return -1L;
+        }
+
+        return Timestamp.now().toDate().getTime() - this.getCreationTime().toDate().getTime();
     }
 
     public static class Field {

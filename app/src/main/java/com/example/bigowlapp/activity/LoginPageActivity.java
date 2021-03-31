@@ -10,13 +10,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.utils.AuthFailureNotificationListener;
 import com.example.bigowlapp.viewModel.LogInViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class LoginPageActivity extends AppCompatActivity {
     public EditText emailId, password;
@@ -24,6 +25,7 @@ public class LoginPageActivity extends AppCompatActivity {
     TextView tvSignUp;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private LogInViewModel logInViewModel;
+    private AuthFailureNotificationListener authListener;
     private ProgressBar progressBar;
 
 
@@ -31,7 +33,9 @@ public class LoginPageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        logInViewModel = new ViewModelProvider(this).get(LogInViewModel.class);
+        if(logInViewModel == null){
+            logInViewModel = new ViewModelProvider(this).get(LogInViewModel.class);
+        }
         initialize();
     }
 
@@ -45,13 +49,14 @@ public class LoginPageActivity extends AppCompatActivity {
             tvSignUp = findViewById(R.id.textView);
 
             mAuthStateListener = firebaseAuth -> {
-                FirebaseUser m_FirebaseUser = logInViewModel.getCurrentUser();
-                if (m_FirebaseUser != null) {
+                if (logInViewModel.isCurrentUserSet()) {
                     Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
+                    authListener = new AuthFailureNotificationListener();
+                    authListener.listen(this);
                     startActivity(i);
                 } else {
-                    Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_LONG).show();
                 }
             };
 
@@ -105,5 +110,10 @@ public class LoginPageActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("Error: ", e.getMessage());
         }
+    }
+
+    @VisibleForTesting
+    public void setLogInViewModel(LogInViewModel logInViewModel) {
+        this.logInViewModel = logInViewModel;
     }
 }

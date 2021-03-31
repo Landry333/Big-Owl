@@ -15,6 +15,9 @@ public class ScheduleRepository extends Repository<Schedule> {
 
     public static final String COLLECTION_NAME = "schedules";
 
+    // TODO: replace this
+    private static final String SUPERVISOR_ID = "groupSupervisorUid";
+
     // TODO: Add dependency injection
     public ScheduleRepository() {
         super(ScheduleRepository.COLLECTION_NAME);
@@ -56,6 +59,13 @@ public class ScheduleRepository extends Repository<Schedule> {
      */
     public Task<QuerySnapshot> getTaskListSchedulesForUser(String userID) {
         return collectionReference.whereArrayContains(Schedule.Field.MEMBER_LIST, userID)
+                .whereGreaterThanOrEqualTo(Schedule.Field.START_TIME, Timestamp.now())
+                .orderBy(Schedule.Field.START_TIME, Query.Direction.ASCENDING)
+                .get();
+    }
+
+    public Task<QuerySnapshot> getTaskListSchedulesForSupervisor(String userID) {
+        return collectionReference.whereEqualTo(SUPERVISOR_ID, userID)
                 .whereGreaterThanOrEqualTo(Schedule.Field.START_TIME, Timestamp.now())
                 .orderBy(Schedule.Field.START_TIME, Query.Direction.ASCENDING)
                 .get();

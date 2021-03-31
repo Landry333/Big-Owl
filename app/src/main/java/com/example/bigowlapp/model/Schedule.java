@@ -1,5 +1,6 @@
 package com.example.bigowlapp.model;
 
+import com.example.bigowlapp.utils.Constants;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.IgnoreExtraProperties;
@@ -11,6 +12,12 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class Schedule extends Model {
+
+    /**
+     * This represent the maximum time a schedule can be tracked before its attendance results are
+     * considered final. After this much time, schedule attendance is not updated.
+     */
+    public static final long MAX_TRACKING_TIME_MILLIS = 30L * Constants.MINUTE_TO_MILLIS;
 
     private String title;
     private String event;
