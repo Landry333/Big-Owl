@@ -36,11 +36,11 @@ public class AuthenticatorByPhoneNumber {
         repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class)
                 .observeForever(schedule -> {
                     repositoryFacade.getUserRepository()
-                            .getDocumentByUid(repositoryFacade.getAuthRepository().getCurrentUser().getUid(), User.class)
+                            .getDocumentByUid(repositoryFacade.getCurrentUserUid(), User.class)
                             .observeForever(user -> {
                                 currentUserPhoneNumber = user.getPhoneNumber();
                                 UserScheduleResponse userScheduleResponse = schedule.getUserScheduleResponseMap()
-                                        .get(repositoryFacade.getAuthRepository().getCurrentUser().getUid());
+                                        .get(repositoryFacade.getCurrentUserUid());
                                 Attendance attendance = userScheduleResponse.getAttendance();
                                 String formattedDevicePhoneNum = null;
                                 try {
@@ -61,7 +61,8 @@ public class AuthenticatorByPhoneNumber {
                                     authByPhoneNumberFailure.setSenderPhoneNum(currentUserPhoneNumber);
                                     authByPhoneNumberFailure.setReceiverUid(schedule.getGroupSupervisorUid());
                                     authByPhoneNumberFailure.setSenderUid(authRepository.getCurrentUser().getUid());
-                                    repositoryFacade.getNotificationRepository().addDocument(authByPhoneNumberFailure);
+                                    repositoryFacade.getNotificationRepository(schedule.getGroupSupervisorUid())
+                                            .addDocument(authByPhoneNumberFailure);
                                 }
                                 attendance.setAttemptedAuthByUserMobileNumber(true);
                                 repositoryFacade.getScheduleRepository().updateDocument(scheduleId, schedule);

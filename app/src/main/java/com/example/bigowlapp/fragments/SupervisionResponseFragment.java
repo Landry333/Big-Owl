@@ -8,10 +8,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.SupervisionRequest;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.RepositoryFacade;
@@ -23,8 +23,6 @@ public class SupervisionResponseFragment extends Fragment {
     private TextView groupName;
     private TextView groupSupervisor;
     private RepositoryFacade repositoryFacade;
-    private LiveData<Group> groupLiveData;
-    private LiveData<User> userLiveData;
     private SupervisionRequest supervisionRequest;
 
     public SupervisionResponseFragment() {
@@ -36,8 +34,7 @@ public class SupervisionResponseFragment extends Fragment {
     }
 
     public static SupervisionResponseFragment newInstance(SupervisionRequest sr) {
-        SupervisionResponseFragment fragment = new SupervisionResponseFragment(sr);
-        return fragment;
+        return new SupervisionResponseFragment(sr);
     }
 
     @Override
@@ -62,11 +59,13 @@ public class SupervisionResponseFragment extends Fragment {
     private void subscribeToData() {
         repositoryFacade = RepositoryFacade.getInstance();
 
-        userLiveData = repositoryFacade.getUserRepository().getDocumentByUid(supervisionRequest.getSenderUid(), User.class);
+        LiveDataWithStatus<User> userLiveData = repositoryFacade.getUserRepository()
+                .getDocumentByUid(supervisionRequest.getSenderUid(), User.class);
 
         userLiveData.observe(getActivity(), supervisor -> {
             groupSupervisor.setText(supervisor.getFullName());
-            groupLiveData = repositoryFacade.getGroupRepository().getDocumentByAttribute("supervisorId", supervisor.getUid(), Group.class);
+            LiveDataWithStatus<Group> groupLiveData = repositoryFacade.getGroupRepository()
+                    .getDocumentByAttribute("supervisorId", supervisor.getUid(), Group.class);
 
             groupLiveData.observe(getActivity(), group -> {
                 groupName.setText(group.getName());
@@ -78,15 +77,14 @@ public class SupervisionResponseFragment extends Fragment {
     }
 
     private void removeNotification() {
-        repositoryFacade.getNotificationRepository().removeDocument(supervisionRequest.getUid());
+        repositoryFacade.getCurrentUserNotificationRepository()
+                .removeDocument(supervisionRequest.getUid());
 
         getActivity().onBackPressed();
     }
 
     private void setupRejectBtn() {
-        rejectBtn.setOnClickListener(view -> {
-            removeNotification();
-        });
+        rejectBtn.setOnClickListener(view -> removeNotification());
     }
 
     private void setupAcceptBtn(Group group) {

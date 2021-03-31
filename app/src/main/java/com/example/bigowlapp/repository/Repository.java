@@ -1,15 +1,15 @@
 package com.example.bigowlapp.repository;
 
-import androidx.annotation.VisibleForTesting;
-
 import com.example.bigowlapp.database.Firestore;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Model;
 import com.example.bigowlapp.repository.exception.DocumentNotFoundException;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -20,26 +20,23 @@ import java.util.List;
 public abstract class Repository<T extends Model> {
 
     protected final FirebaseFirestore mFirebaseFirestore;
-    protected final CollectionReference collectionReference;
+    protected CollectionReference collectionReference;
 
     protected Repository(String collectionName) {
         mFirebaseFirestore = Firestore.getDatabase();
         collectionReference = mFirebaseFirestore.collection(collectionName);
     }
 
-    // TODO: Remove or Modify when dependency injection implemented
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public Repository(FirebaseFirestore mFirebaseFirestore, CollectionReference collectionReference) {
-        this.mFirebaseFirestore = mFirebaseFirestore;
-        this.collectionReference = collectionReference;
+    public ListenerRegistration listenToCollection(EventListener<QuerySnapshot> listener) {
+        return collectionReference.addSnapshotListener(listener);
     }
 
     //===========================================================================================
     // Adding Document
     //===========================================================================================
 
-    public LiveDataWithStatus<T> addDocument(T documentData) {
-        LiveDataWithStatus<T> tData = new LiveDataWithStatus<>();
+    public <X extends T> LiveDataWithStatus<X> addDocument(X documentData) {
+        LiveDataWithStatus<X> tData = new LiveDataWithStatus<>();
         collectionReference
                 .add(documentData)
                 .addOnCompleteListener(task -> {
@@ -52,8 +49,8 @@ public abstract class Repository<T extends Model> {
         return tData;
     }
 
-    public LiveDataWithStatus<T> addDocument(String docUid, T documentData) {
-        LiveDataWithStatus<T> tData = new LiveDataWithStatus<>();
+    public <X extends T> LiveDataWithStatus<X> addDocument(String docUid, X documentData) {
+        LiveDataWithStatus<X> tData = new LiveDataWithStatus<>();
         collectionReference.document(docUid)
                 .set(documentData)
                 .addOnCompleteListener(task -> {
@@ -88,8 +85,8 @@ public abstract class Repository<T extends Model> {
     // Updating Document
     //===========================================================================================
 
-    public LiveDataWithStatus<T> updateDocument(String docUid, T documentData) {
-        LiveDataWithStatus<T> tData = new LiveDataWithStatus<>();
+    public <X extends T> LiveDataWithStatus<X> updateDocument(String docUid, X documentData) {
+        LiveDataWithStatus<X> tData = new LiveDataWithStatus<>();
         collectionReference.document(docUid)
                 .set(documentData, SetOptions.merge())
                 .addOnCompleteListener(task -> {
@@ -106,15 +103,15 @@ public abstract class Repository<T extends Model> {
     // Fetching a Document
     //===========================================================================================
 
-    public LiveDataWithStatus<T> getDocumentByUid(String docUid, Class<? extends T> tClass) {
-        LiveDataWithStatus<T> tData = new LiveDataWithStatus<>();
+    public <X extends T> LiveDataWithStatus<X> getDocumentByUid(String docUid, Class<X> tClass) {
+        LiveDataWithStatus<X> tData = new LiveDataWithStatus<>();
         collectionReference.document(docUid)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot tDoc = task.getResult();
                         if (tDoc != null && tDoc.exists()) {
-                            T t = tDoc.toObject(tClass);
+                            X t = tDoc.toObject(tClass);
                             tData.setSuccess(t);
                         } else {
                             tData.setError(getDocumentNotFoundException(tClass));
@@ -126,9 +123,9 @@ public abstract class Repository<T extends Model> {
         return tData;
     }
 
-    public LiveDataWithStatus<T> getDocumentByAttribute(String attribute, String attrValue,
-                                                        Class<? extends T> tClass) {
-        LiveDataWithStatus<T> tData = new LiveDataWithStatus<>();
+    public <X extends T> LiveDataWithStatus<X> getDocumentByAttribute(String attribute, String attrValue,
+                                                                      Class<X> tClass) {
+        LiveDataWithStatus<X> tData = new LiveDataWithStatus<>();
         collectionReference.whereEqualTo(attribute, attrValue)
                 .limit(1)
                 .get()
@@ -136,7 +133,7 @@ public abstract class Repository<T extends Model> {
                     if (task.isSuccessful()) {
                         QuerySnapshot tDoc = task.getResult();
                         if (tDoc != null && !tDoc.isEmpty()) {
-                            T t = tDoc.getDocuments().get(0).toObject(tClass);
+                            X t = tDoc.getDocuments().get(0).toObject(tClass);
                             tData.setSuccess(t);
                         } else {
                             tData.setError(getDocumentNotFoundException(tClass));
@@ -152,9 +149,9 @@ public abstract class Repository<T extends Model> {
     // Fetching a list of Documents
     //===========================================================================================
 
-    public LiveDataWithStatus<List<T>> getListOfDocumentByAttribute(String attribute, String attrValue,
-                                                                    Class<? extends T> tClass) {
-        LiveDataWithStatus<List<T>> listOfTData = new LiveDataWithStatus<>();
+    public <X extends T> LiveDataWithStatus<List<X>> getListOfDocumentByAttribute(String attribute, String attrValue,
+                                                                                  Class<X> tClass) {
+        LiveDataWithStatus<List<X>> listOfTData = new LiveDataWithStatus<>();
         collectionReference.whereEqualTo(attribute, attrValue)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -172,9 +169,9 @@ public abstract class Repository<T extends Model> {
         return listOfTData;
     }
 
-    public LiveDataWithStatus<List<T>> getListOfDocumentByArrayContains(String attribute, String attrValue,
-                                                                        Class<? extends T> tClass) {
-        LiveDataWithStatus<List<T>> listOfTData = new LiveDataWithStatus<>();
+    public <X extends T> LiveDataWithStatus<List<X>> getListOfDocumentByArrayContains(String attribute, String attrValue,
+                                                                                      Class<X> tClass) {
+        LiveDataWithStatus<List<X>> listOfTData = new LiveDataWithStatus<>();
         collectionReference.whereArrayContains(attribute, attrValue)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -193,8 +190,8 @@ public abstract class Repository<T extends Model> {
         return listOfTData;
     }
 
-    public LiveDataWithStatus<List<T>> getAllDocumentsFromCollection(Class<? extends T> tClass) {
-        LiveDataWithStatus<List<T>> listOfTData = new LiveDataWithStatus<>();
+    public <X extends T> LiveDataWithStatus<List<X>> getAllDocumentsFromCollection(Class<X> tClass) {
+        LiveDataWithStatus<List<X>> listOfTData = new LiveDataWithStatus<>();
         collectionReference.get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -212,9 +209,9 @@ public abstract class Repository<T extends Model> {
     }
 
     // TODO: bug where can only handle 10 items in the list, should allow any size list
-    public LiveDataWithStatus<List<T>> getDocumentsByListOfUid(List<String> docUidList,
-                                                               Class<? extends T> tClass) {
-        LiveDataWithStatus<List<T>> listOfTData = new LiveDataWithStatus<>();
+    public <X extends T> LiveDataWithStatus<List<X>> getDocumentsByListOfUid(List<String> docUidList,
+                                                                             Class<X> tClass) {
+        LiveDataWithStatus<List<X>> listOfTData = new LiveDataWithStatus<>();
         collectionReference.whereIn(FieldPath.documentId(), docUidList)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -232,10 +229,10 @@ public abstract class Repository<T extends Model> {
         return listOfTData;
     }
 
-    protected List<T> extractListOfDataToModel(QuerySnapshot results, Class<? extends T> tClass) {
-        List<T> listOfT = new ArrayList<>();
+    protected <X extends T> List<X> extractListOfDataToModel(QuerySnapshot results, Class<X> tClass) {
+        List<X> listOfT = new ArrayList<>();
         for (QueryDocumentSnapshot doc : results) {
-            T t = doc.toObject(tClass);
+            X t = doc.toObject(tClass);
             listOfT.add(t);
         }
         return listOfT;

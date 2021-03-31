@@ -3,7 +3,6 @@ package com.example.bigowlapp.viewModel;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bigowlapp.repository.RepositoryFacade;
-import com.google.firebase.auth.FirebaseUser;
 
 public abstract class BaseViewModel extends ViewModel {
 
@@ -13,12 +12,8 @@ public abstract class BaseViewModel extends ViewModel {
         repositoryFacade = RepositoryFacade.getInstance();
     }
 
-    public FirebaseUser getCurrentUser() {
-        return repositoryFacade.getAuthRepository().getCurrentUser();
-    }
-
     public String getCurrentUserUid() {
-        return repositoryFacade.getAuthRepository().getCurrentUser().getUid();
+        return repositoryFacade.getCurrentUserUid();
     }
 
     public boolean isCurrentUserSet() {

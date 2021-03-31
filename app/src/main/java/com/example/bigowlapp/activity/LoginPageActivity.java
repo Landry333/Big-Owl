@@ -18,7 +18,6 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.utils.AuthFailureNotificationListener;
 import com.example.bigowlapp.viewModel.LogInViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class LoginPageActivity extends AppCompatActivity {
     public EditText emailId, password;
@@ -50,8 +49,7 @@ public class LoginPageActivity extends AppCompatActivity {
             tvSignUp = findViewById(R.id.textView);
 
             mAuthStateListener = firebaseAuth -> {
-                FirebaseUser m_FirebaseUser = logInViewModel.getCurrentUser();
-                if (m_FirebaseUser != null) {
+                if (logInViewModel.isCurrentUserSet()) {
                     Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
                     authListener = new AuthFailureNotificationListener();

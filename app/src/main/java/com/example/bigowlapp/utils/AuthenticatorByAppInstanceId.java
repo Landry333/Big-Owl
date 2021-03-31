@@ -25,7 +25,7 @@ public class AuthenticatorByAppInstanceId {
         repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class)
                 .observeForever(schedule -> {
                     UserScheduleResponse userScheduleResponse = schedule.getUserScheduleResponseMap()
-                            .get(repositoryFacade.getAuthRepository().getCurrentUser().getUid());
+                            .get(repositoryFacade.getCurrentUserUid());
                     Attendance attendance = userScheduleResponse.getAttendance();
                     String savedAppInstanceId = attendance.getAppInstanceId();
                     appInstanceId = FirebaseInstallations.getInstance().getId().getResult();

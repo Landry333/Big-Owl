@@ -10,4 +10,11 @@ public interface Constants {
     int REQUEST_CODE_LOCATION = 1;
     // Splash screen time out in milliseconds
     int SPLASH_DURATION = 2000;
+
+    /**
+     * Represent the request code value when making a broadcast receiver. By default you just use 0
+     * if you have no other use for it. Define other request codes if a receiver can take and must
+     * hand more than one behaviors at a time.
+     */
+    int DEFAULT_RECEIVER_REQUEST_CODE = 0;
 }

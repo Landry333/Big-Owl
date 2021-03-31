@@ -11,8 +11,8 @@ import androidx.lifecycle.LiveData;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.SupervisionRequest;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.NotificationRepository;
+import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.Timestamp;
 
 import java.util.List;
@@ -32,7 +32,6 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
     String canNotSend = "Can not send ";
     String sendNewRequest = "Send a new request";
     private Button supRequestBtn;
-    private final AuthRepository authRepository = new AuthRepository();
     String requestUID;
     private TextView noteTv;
     private TextView resultNoteTv;
@@ -42,20 +41,25 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
     String superviseAlready = "You already have an accepted request to supervise this user";
     String requestRejected = "Your last request was rejected by this user. You can send a new request";
 
-    NotificationRepository notificationRepository = new NotificationRepository();
+    private NotificationRepository otherUserNotificationRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_sending_request_to_supervise);
+
+        supRequestBtn = findViewById(R.id.SupRequest);
+        noteTv = findViewById(R.id.note);
+        resultNoteTv = findViewById(R.id.note2);
+
+        RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
+        otherUserNotificationRepository = repositoryFacade.getNotificationRepository(otherUserID);
+
         otherUser = getIntent().getParcelableExtra("user");
         assert otherUser != null;
         otherUserID = otherUser.getUid();
-        supRequestBtn = findViewById(R.id.SupRequest);
-        currentUserID = authRepository.getCurrentUser().getUid();
-        noteTv = findViewById(R.id.note);
-        resultNoteTv = findViewById(R.id.note2);
+        currentUserID = repositoryFacade.getCurrentUserUid();
+
         String contactDetails = getIntent().getStringExtra("contactDetails");
         noteText = "Contact: " + contactDetails + " is already registered to the application.";
         noteTv.setText(noteText);
@@ -84,14 +88,13 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         supervisionRequest.setCreationTime(Timestamp.now());
 
         if (!aRequestAlready) {
-            notificationRepository.addDocument(supervisionRequest);
+            otherUserNotificationRepository.addDocument(supervisionRequest);
         } else if (shouldCancelRequest) {
-            notificationRepository.removeDocument(requestUID);
+            otherUserNotificationRepository.removeDocument(requestUID);
         } else if (shouldSendAnOtherRequest) {
-            notificationRepository.removeDocument(requestUID);
-            notificationRepository.addDocument(supervisionRequest);
+            otherUserNotificationRepository.removeDocument(requestUID);
+            otherUserNotificationRepository.addDocument(supervisionRequest);
         }
-
 
         observeRequests();
     }
@@ -101,7 +104,10 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         // in repository until one is found
         supRequestBtn.setText(supBtnSend); // Default setText
         resultNoteTv.setText(noRequest);
-        LiveData<List<SupervisionRequest>> senderRequestsData = notificationRepository.getListOfSupervisionRequestByAttribute("senderUid", currentUserID, SupervisionRequest.class);
+
+        LiveData<List<SupervisionRequest>> senderRequestsData = otherUserNotificationRepository
+                .getListOfDocumentByAttribute("senderUid", currentUserID, SupervisionRequest.class);
+
         senderRequestsData.observe(this, senderRequests -> {
             if (senderRequests == null)
                 return;

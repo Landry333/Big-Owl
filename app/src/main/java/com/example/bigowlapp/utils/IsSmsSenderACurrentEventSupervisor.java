@@ -23,7 +23,6 @@ public class IsSmsSenderACurrentEventSupervisor extends AppCompatActivity {
 
     public Task<List<Schedule>> check(String phoneNumber) {
         RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
-        String currentUserUid = repositoryFacade.getAuthRepository().getCurrentUser().getUid();
 
         Task<QuerySnapshot> gettingUserTask = db.collection("users")
                 .whereEqualTo("phoneNumber", phoneNumber)
@@ -42,7 +41,7 @@ public class IsSmsSenderACurrentEventSupervisor extends AppCompatActivity {
                 User supervisorUser = task.getResult();
                 Task<QuerySnapshot> gettingSchedulesTask = db.collection("schedules")
                         .whereEqualTo("groupSupervisorUid", supervisorUser.getUid())
-                        .whereArrayContains("memberList", currentUserUid)
+                        .whereArrayContains("memberList", repositoryFacade.getCurrentUserUid())
                         .get();
 
                 Task<List<Schedule>> handleSchedulesTask = gettingSchedulesTask.continueWithTask(task2 -> {
