@@ -93,6 +93,7 @@ public class EditProfileViewTest {
         verify(mockEditProfileViewModel, atMostOnce()).editUserProfile(
                 "AfterEditFirstName",
                 "AfterEditLastName",
+                "yes",
                 "+1111111111",
                 "https://simpleicon.com/wp-content/uploads/user1.png"
         );
@@ -122,7 +123,7 @@ public class EditProfileViewTest {
                 .check(matches(withText("Cancel"))).perform(click());
 
         verify(mockEditProfileViewModel, never()).editUserProfile(
-                anyString(), anyString(), anyString(), anyString()
+                anyString(), anyString(), anyString(), anyString(), anyString()
         );
     }
 
