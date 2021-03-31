@@ -20,7 +20,7 @@ import java.util.Objects;
 
 public class EditProfileActivity extends BigOwlActivity {
     Button editButtonCancel, editButtonConfirm;
-    EditText editUserFirstName, editUserLastName, editPhoneNumber, editFingerprintAuthRegistration,editImageURL;
+    EditText editUserFirstName, editUserLastName, editPhoneNumber, editFingerprintAuthRegistration, editImageURL;
     private EditProfileViewModel editProfileViewModel;
 
     @Override
@@ -75,7 +75,7 @@ public class EditProfileActivity extends BigOwlActivity {
         String oldPhoneNumber = Objects.requireNonNull(editProfileViewModel.getCurrentUserData().getValue()).getPhoneNumber();
 
         if (!firstName.isEmpty() && !lastName.isEmpty() && (fingerprintAuthRegistration.equalsIgnoreCase("NO")
-                || fingerprintAuthRegistration.equalsIgnoreCase("YES") )&& formattedPhone != null) {
+                || fingerprintAuthRegistration.equalsIgnoreCase("YES")) && formattedPhone != null) {
             if (!formattedPhone.equals(oldPhoneNumber)) {
                 editProfileViewModel.isPhoneNumberTaken(formattedPhone)
                         .addOnSuccessListener(isSuccessful -> onFinishConfirmation(firstName, lastName,
