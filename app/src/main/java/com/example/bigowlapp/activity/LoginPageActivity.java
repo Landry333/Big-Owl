@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,7 +19,6 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.utils.AuthFailureNotificationListener;
 import com.example.bigowlapp.viewModel.LogInViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class LoginPageActivity extends AppCompatActivity {
     public EditText emailId, password;
@@ -34,7 +34,9 @@ public class LoginPageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        logInViewModel = new ViewModelProvider(this).get(LogInViewModel.class);
+        if (logInViewModel == null) {
+            logInViewModel = new ViewModelProvider(this).get(LogInViewModel.class);
+        }
         initialize();
     }
 
@@ -49,8 +51,9 @@ public class LoginPageActivity extends AppCompatActivity {
             tvSignUp = findViewById(R.id.textView);
 
             mAuthStateListener = firebaseAuth -> {
-                FirebaseUser m_FirebaseUser = logInViewModel.getCurrentUser();
-                if (m_FirebaseUser != null) {
+                if (logInViewModel.isCurrentUserSet()) {
+                    authListener = new AuthFailureNotificationListener();
+                    authListener.listen(this);
                     checkIfCanFingerprintAuthenticate();
                 } else {
                     Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_LONG).show();
@@ -120,4 +123,9 @@ public class LoginPageActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+
+    @VisibleForTesting
+    public void setLogInViewModel(LogInViewModel logInViewModel) {
+        this.logInViewModel = logInViewModel;
+    }
 }

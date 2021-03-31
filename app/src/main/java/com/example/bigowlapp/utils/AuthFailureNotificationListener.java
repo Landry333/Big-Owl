@@ -4,53 +4,54 @@ package com.example.bigowlapp.utils;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.example.bigowlapp.model.AuthByPhoneNumberFailure;
+import com.example.bigowlapp.model.Notification;
+import com.example.bigowlapp.model.Schedule;
+import com.example.bigowlapp.repository.NotificationRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import static com.google.firebase.firestore.DocumentChange.Type.ADDED;
 
 public class AuthFailureNotificationListener {
 
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static final int THIRTY_MINUTES = 1800;
-    RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
-
+    private final RepositoryFacade repositoryFacade;
 
     public AuthFailureNotificationListener() {
-
+        this.repositoryFacade = RepositoryFacade.getInstance();
     }
 
     public void listen(Context context) {
-        db.collection("notifications")
-                //.whereEqualTo("receiverUid", repositoryFacade.getAuthRepository().getCurrentUser().getUid())
-                .addSnapshotListener((snapshots, e) -> {
-                    if (e != null) {
+        repositoryFacade.getCurrentUserNotificationRepository()
+                .listenToCollection((snapshots, error) -> {
+                    if (error != null) {
                         Toast.makeText(context, "BIG OWL notification listener failed: ", Toast.LENGTH_LONG).show();
                         return;
                     }
 
+                    assert snapshots != null;
                     for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                        if (dc.getType().equals(ADDED)) {
-                            if (dc.getDocument().get("type").toString()
-                                    .equalsIgnoreCase("AUTH_BY_PHONE_NUMBER_FAILURE")
-                                    && dc.getDocument().getString("receiverUid")
-                                    .equalsIgnoreCase(repositoryFacade.getAuthRepository().getCurrentUser().getUid())
-                                    && !dc.getDocument().getBoolean("used")
-                                    && ((Timestamp.now().getSeconds()
-                                    - dc.getDocument().getTimestamp("creationTime").getSeconds()) < THIRTY_MINUTES)) {
+                        Notification notification = NotificationRepository.getNotificationFromDocument(dc.getDocument(), Notification.class);
+                        if (!notification.isValid() || !dc.getType().equals(DocumentChange.Type.ADDED)) {
+                            continue;
+                        }
 
-                                db.collection("notifications").document(dc.getDocument()
-                                        .getId()).update("used", true);
-                                String notificationSenderPhoneNum = dc.getDocument().get("senderPhoneNum").toString();
-                                String scheduleId = dc.getDocument().get("scheduleId").toString();
-                                SmsSender.sendSMS(notificationSenderPhoneNum, scheduleId);
-                            }
-
+                        if (notification.getType() == Notification.Type.AUTH_BY_PHONE_NUMBER_FAILURE) {
+                            handleAuthByPhoneNumberFailure((AuthByPhoneNumberFailure) notification);
                         }
                     }
                 });
+    }
 
+    private void handleAuthByPhoneNumberFailure(AuthByPhoneNumberFailure notification) {
+        if (!notification.isUsed()
+                && notification.timeSinceCreationMillis() < Schedule.MAX_TRACKING_TIME_MILLIS) {
+
+            String senderPhoneNum = notification.getSenderPhoneNum();
+            String scheduleId = notification.getScheduleId();
+            SmsSender.sendSMS(senderPhoneNum, scheduleId);
+
+            notification.setUsed(true);
+            repositoryFacade.getCurrentUserNotificationRepository()
+                    .updateDocument(notification.getUid(), notification);
+        }
     }
 }

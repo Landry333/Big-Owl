@@ -49,8 +49,6 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         }
 
         // valuable data from geofence result
-        // TODO: if not needed remove, else uncomment for users current location
-        //  Location currentUserLocation = geofencingEvent.getTriggeringLocation();
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
         List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
         List<String> geofenceIdList = triggeringGeofences.stream()
@@ -59,14 +57,14 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                 .collect(Collectors.toList());
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION,context);
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION, context);
             // User was successfully detected in desired location, so no more tracking needed
             this.removeLocationTracking(context, geofenceIdList);
 
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION,context);
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION, context);
         } else {
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED,context);
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED, context);
         }
     }
 
@@ -88,13 +86,10 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         repositoryFacade.getScheduleRepository()
                 .getDocumentsByListOfUid(scheduleUidList, Schedule.class)
                 .observeForever(schedules -> {
-                    String userUid = repositoryFacade.getAuthRepository()
-                            .getCurrentUser().getUid();
-
                     for (Schedule schedule : schedules) {
                         Attendance userAttendance = schedule
                                 .getUserScheduleResponseMap()
-                                .get(userUid)
+                                .get(repositoryFacade.getCurrentUserUid())
                                 .getAttendance();
 
                         userAttendance.setAuthenticationTime(Timestamp.now());
@@ -108,7 +103,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                         repositoryFacade.getScheduleRepository()
                                 .updateDocument(schedule.getUid(), schedule);
 
-                        if (userAttendance.getScheduleLocated() == Attendance.LocatedStatus.CORRECT_LOCATION){
+                        if (userAttendance.getScheduleLocated() == Attendance.LocatedStatus.CORRECT_LOCATION) {
                             for (String scheduleID : scheduleUidList) {
                                 AuthenticatorByPhoneNumber authenticationByPhoneNumber = new AuthenticatorByPhoneNumber(context);
                                 authenticationByPhoneNumber.authenticate(scheduleID);
