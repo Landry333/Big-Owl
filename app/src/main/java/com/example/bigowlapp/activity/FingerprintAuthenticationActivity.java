@@ -3,17 +3,14 @@ package com.example.bigowlapp.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
@@ -35,9 +32,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
     private TextView fingerprintAuthRegistrationText;
     private BiometricPrompt biometricPrompt;
     private BiometricPrompt.PromptInfo promptInfo;
-    private Executor executor;
     private Button btnStartFingerAuth;
-    private Button btnLogOut;
     private Button btnGoToHomePage;
     private Button btnFingerprintAuthAdd;
     private Button btnFingerprintAuthMaybeLater;
@@ -58,20 +53,18 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fingerprint_authenticaton);
 
         AuthResultText = findViewById(R.id.authentication_result_message);
+        fingerprintAuthRegistrationText = findViewById(R.id.fingerprint_auth_registration_text);
         btnStartFingerAuth = findViewById(R.id.btn_start_authentication);
         btnFingerprintAuthAdd = findViewById(R.id.fingerprint_auth_add_btn);
         btnFingerprintAuthMaybeLater = findViewById(R.id.fingerprint_auth_maybe_later_btn);
         btnGoToHomePage = findViewById(R.id.btn_go_to_home_page);
-        fingerprintAuthRegistrationText = findViewById(R.id.fingerprint_auth_registration_text);
-        btnLogOut = findViewById(R.id.btn_logout);
-        executor = ContextCompat.getMainExecutor(this);
+        Button btnLogOut = findViewById(R.id.btn_logout);
+        Executor executor = ContextCompat.getMainExecutor(this);
         AuthResultText.setVisibility(View.GONE);
         btnStartFingerAuth.setVisibility(View.GONE);
         btnGoToHomePage.setVisibility(View.GONE);
         btnFingerprintAuthAdd.setVisibility(View.GONE);
         btnFingerprintAuthMaybeLater.setVisibility(View.GONE);
-
-        //Toast.makeText(FingerprintAuthenticationActivity.this, "Authenticate fingerprint to get access", Toast.LENGTH_LONG).show();
 
         biometricPrompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
             @Override
@@ -92,22 +85,16 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
-
                 AuthResultText.setText("Failed authentication");
                 AuthResultText.setVisibility(View.VISIBLE);
             }
         });
+
         if (homePageViewModel == null) {
             homePageViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
         }
 
-        btnStartFingerAuth.setOnClickListener(v -> {
-            /*homePageViewModel.signOut();
-            Intent intent = new Intent(HomePageActivity.this, LoginPageActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);*/
-            fingerAuthenticate();
-        });
+        btnStartFingerAuth.setOnClickListener(v -> fingerAuthenticate());
         btnLogOut.setOnClickListener(v -> {
             homePageViewModel.signOut();
             Toast.makeText(FingerprintAuthenticationActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
@@ -130,17 +117,16 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
     }
 
     @SuppressLint("MissingPermission")
+// Permission was already provided by user before sign in step in order to proceed
     private void subscribeToData() {
         if (homePageViewModel.isCurrentUserSet()) {
-
             LiveDataWithStatus<User> currentUserData = homePageViewModel.getCurrentUserData();
-            //setProgressBarVisible();
             currentUserData.observe(this, user -> {
                 TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
                 String devicePhoneNumber = telephonyManager.getLine1Number();
                 if (currentUserData.hasError()) {
                     Toast.makeText(getBaseContext(), currentUserData.getError().getMessage(), Toast.LENGTH_LONG).show();
-                    // TODO: Handle this failure (exist page, modify page, or set up page for error case)
+                    // TODO: Handle this failure (exist page, modify page, or set up page for error case).Same TODO from HomepageActivity
                     return;
                 }
                 String formattedDevicePhoneNum = null;
@@ -149,9 +135,9 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
                 } catch (NumberParseException e) {
                     Toast.makeText(this, "FAILED to format phone number. Process failed", Toast.LENGTH_LONG).show();
                 }
+
                 if (!user.getPhoneNumber().equalsIgnoreCase(formattedDevicePhoneNum)
                         && user.getFingerprintAuthRegistration().equalsIgnoreCase("NO")) {
-                    Log.e("user.getFingerprintAuthRegistration()", user.getFingerprintAuthRegistration());
                     fingerprintAuthRegistrationText.setText(NO_COMPATIBILITY_WITH_PHONE);
                     btnGoToHomePage.setText("Go to home page");
                     btnGoToHomePage.setVisibility(View.VISIBLE);
@@ -190,8 +176,6 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint({"MissingPermission"})
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStart() {
         super.onStart();
