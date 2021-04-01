@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.adapter.ScheduleReportMembersAdapter;
 import com.example.bigowlapp.model.Schedule;
+import com.example.bigowlapp.utils.GeoLocationFormatter;
 import com.example.bigowlapp.viewModel.ScheduleReportViewModel;
 import com.google.firebase.firestore.GeoPoint;
 
@@ -58,7 +59,7 @@ public class ScheduleReportActivity extends BigOwlActivity {
                 scheduleReportTitle.setText(schedule.getTitle());
                 scheduleReportStartTime.setText(schedule.getStartTime().toDate().toString());
                 scheduleReportEndTime.setText(schedule.getEndTime().toDate().toString());
-                scheduleReportLocation.setText(getScheduleLocation(schedule.getLocation()));
+                scheduleReportLocation.setText(GeoLocationFormatter.formatLocation(schedule.getLocation()));
 
                 scheduleReportViewModel.getScheduleMemberNameMap(schedule.getMemberList()).observe(this, memberNameMap -> {
                     if (schedule.scheduleCurrentState() == Schedule.Status.ON_GOING)
@@ -69,19 +70,6 @@ public class ScheduleReportActivity extends BigOwlActivity {
                 });
             }
         });
-    }
-
-    private String getScheduleLocation(GeoPoint geoPoint) {
-        try {
-            return new Geocoder(this).getFromLocation(
-                    geoPoint.getLatitude(),
-                    geoPoint.getLongitude(),
-                    1)
-                    .get(0).getAddressLine(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "ERROR";
     }
 
     @Override
