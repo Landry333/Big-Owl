@@ -150,7 +150,8 @@
 
         <Button
             android:id="@+id/button_accept"
-            android:background="@drawable/rounded_button"
+            android:background="@drawable/rounded_button_light"
+            android:textColor="#2F454D"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="visible"
@@ -160,7 +161,8 @@
 
         <Button
             android:id="@+id/button_reject"
-            android:background="@drawable/rounded_button"
+            android:background="@drawable/rounded_button_redish"
+            android:textColor="#2F454D"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="visible"

@@ -38,6 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="Send a request to supervise this user"
+        android:background="@drawable/rounded_button_redish"
+        android:textColor="#2F454D"
         android:layout_marginTop="450dp"
         tools:ignore="HardcodedText" />
 
