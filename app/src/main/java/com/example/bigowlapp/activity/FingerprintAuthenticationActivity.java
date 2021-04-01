@@ -38,15 +38,15 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
     private Button btnFingerprintAuthMaybeLater;
     private HomePageViewModel homePageViewModel;
     private static final String PROPOSE_FINGERPRINT_AUTH = "Add fingerprint authentication to secure your account?\n\n" +
-            "NOTE: This will also make your account ONLY accessible by a device having sim card_1 phone number same " +
+            "NOTE: This will also make your account ONLY accessible by a device having sim card_1 number same " +
             "as the phone number you saved in your account";
     private static final String IS_FINGERPRINT_AUTH_REGISTERED = "You are registered to fingerprint authentication.\n\n" +
             "You can modify your choice on Edit profile";
     private static final String NO_COMPATIBILITY_WITH_PHONE = "Sorry, this additional security service is not available on" +
             " this number or with your phone and telephony provider\n\n" +
-            " First make sure sim card_1 phone number on this phone is the same as in your account";
+            " First make sure sim card_1 number on this phone is the same as in your account";
     private static final String NOT_ALLOWED = "You are not allowed to access this account\n\n" +
-            "Sim card_1 phone number on this phone should be the same as in your account";
+            "Sim card_1 number on this phone should be the same as in your account";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
