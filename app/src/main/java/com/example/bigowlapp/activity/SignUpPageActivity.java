@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.utils.NotificationListenerManager;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.example.bigowlapp.viewModel.SignUpViewModel;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -26,6 +27,7 @@ public class SignUpPageActivity extends AppCompatActivity {
     TextView tvSignIn;
     private SignUpViewModel signUpViewModel;
     private ProgressBar progressBar;
+    private NotificationListenerManager invitationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +91,8 @@ public class SignUpPageActivity extends AppCompatActivity {
                         .addOnSuccessListener(isSuccessful -> {
                             progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
+                            invitationListener = new NotificationListenerManager();
+                            invitationListener.listen(this);
                             startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
                         })
                         .addOnFailureListener(e -> {

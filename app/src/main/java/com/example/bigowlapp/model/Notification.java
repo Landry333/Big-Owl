@@ -12,7 +12,8 @@ public class Notification extends Model {
         INVALID(NullNotification.class),
         SUPERVISION_REQUEST(SupervisionRequest.class),
         SCHEDULE_REQUEST(ScheduleRequest.class),
-        AUTH_BY_PHONE_NUMBER_FAILURE(AuthByPhoneNumberFailure.class);
+        AUTH_BY_PHONE_NUMBER_FAILURE(AuthByPhoneNumberFailure.class),
+        SMS_INVITATION_REQUEST(SmsInvitationRequest.class);
 
         public final Class<? extends Notification> typeClass;
 

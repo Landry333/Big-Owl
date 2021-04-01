@@ -11,11 +11,11 @@ import com.example.bigowlapp.repository.NotificationRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.firestore.DocumentChange;
 
-public class AuthFailureNotificationListener {
+public class NotificationListenerManager {
 
     private final RepositoryFacade repositoryFacade;
 
-    public AuthFailureNotificationListener() {
+    public NotificationListenerManager() {
         this.repositoryFacade = RepositoryFacade.getInstance();
     }
 

@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.utils.AuthFailureNotificationListener;
+import com.example.bigowlapp.utils.NotificationListenerManager;
 import com.example.bigowlapp.viewModel.LogInViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -25,7 +25,7 @@ public class LoginPageActivity extends AppCompatActivity {
     TextView tvSignUp;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private LogInViewModel logInViewModel;
-    private AuthFailureNotificationListener authListener;
+    private NotificationListenerManager authListener;
     private ProgressBar progressBar;
 
 
@@ -52,7 +52,7 @@ public class LoginPageActivity extends AppCompatActivity {
                 if (logInViewModel.isCurrentUserSet()) {
                     Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
-                    authListener = new AuthFailureNotificationListener();
+                    authListener = new NotificationListenerManager();
                     authListener.listen(this);
                     startActivity(i);
                 } else {
