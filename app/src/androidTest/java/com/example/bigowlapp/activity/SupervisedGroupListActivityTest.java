@@ -3,13 +3,19 @@ package com.example.bigowlapp.activity;
 import android.content.Intent;
 import android.os.SystemClock;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.MutableLiveData;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
+
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
-import com.example.bigowlapp.repository.UserRepository;
 import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -21,13 +27,6 @@ import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.MutableLiveData;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.filters.LargeTest;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -68,7 +67,7 @@ public class SupervisedGroupListActivityTest {
     private SupervisedGroupListActivity currentActivity;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         initMocks(this);
 
         User testUser = new User("abc123", "first", "last", "+911", "test@mail.com", null, null);

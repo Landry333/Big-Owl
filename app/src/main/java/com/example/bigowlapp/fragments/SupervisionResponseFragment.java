@@ -65,7 +65,7 @@ public class SupervisionResponseFragment extends Fragment {
         userLiveData.observe(getActivity(), supervisor -> {
             groupSupervisor.setText(supervisor.getFullName());
             LiveDataWithStatus<Group> groupLiveData = repositoryFacade.getGroupRepository()
-                    .getDocumentByAttribute("supervisorId", supervisor.getUid(), Group.class);
+                    .getDocumentByAttribute(Group.Field.SUPERVISOR_ID, supervisor.getUid(), Group.class);
 
             groupLiveData.observe(getActivity(), group -> {
                 groupName.setText(group.getName());

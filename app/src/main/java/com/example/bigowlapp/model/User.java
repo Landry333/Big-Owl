@@ -141,4 +141,16 @@ public class User extends Model implements Parcelable {
         return getFullName();
     }
 
+    public static class Field {
+        public static final String FIRST_NAME = "firstName";
+        public static final String LAST_NAME = "lastName";
+        public static final String PHONE_NUMBER = "phoneNumber";
+        public static final String EMAIL = "email";
+        public static final String PROFILE_IMAGE = "profileImage";
+        public static final String MEMBER_GROUP_ID_LIST = "memberGroupIdList";
+
+        private Field() {
+            // constants class should not be instantiated
+        }
+    }
 }
