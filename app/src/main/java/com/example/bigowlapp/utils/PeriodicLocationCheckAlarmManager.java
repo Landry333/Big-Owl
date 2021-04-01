@@ -15,13 +15,10 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-// TODO: Might want to create a super AlarmManger given there are multiple now
-
 /**
  * Create alarm that will force a location check periodically.
  */
 public class PeriodicLocationCheckAlarmManager {
-    private static final int REQUEST_CODE = 5;
     private static final int NO_FLAG = 0;
 
     private final Context context;
@@ -43,7 +40,7 @@ public class PeriodicLocationCheckAlarmManager {
 
     private PendingIntent getPendingIntent() {
         Intent intent = new Intent(context, PeriodicLocationCheckAlarmReceiver.class);
-        return PendingIntent.getBroadcast(context, REQUEST_CODE, intent, NO_FLAG);
+        return PendingIntent.getBroadcast(context, Constants.DEFAULT_RECEIVER_REQUEST_CODE, intent, NO_FLAG);
     }
 
     public static class PeriodicLocationCheckAlarmReceiver extends BroadcastReceiver {

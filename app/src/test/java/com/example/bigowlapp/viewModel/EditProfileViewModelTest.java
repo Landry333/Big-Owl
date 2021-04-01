@@ -49,13 +49,13 @@ public class EditProfileViewModelTest {
     public void setUp() {
         when(repositoryFacade.getAuthRepository()).thenReturn(authRepository);
         when(repositoryFacade.getUserRepository()).thenReturn(userRepository);
+        when(repositoryFacade.getCurrentUserUid()).thenReturn("abc123");
 
         testUser = new User("abc123", "first", "last", "+911", "test@mail.com", "url", null);
         testUserData = new LiveDataWithStatus<>(testUser);
 
         when(authRepository.getCurrentUser()).thenReturn(testFirebaseUser);
         when(userRepository.getDocumentByUid(anyString(), eq(User.class))).thenReturn(testUserData);
-        when(testFirebaseUser.getUid()).thenReturn("abc123");
 
         editProfileViewModel = new EditProfileViewModel(repositoryFacade, testUserData);
     }

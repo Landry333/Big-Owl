@@ -55,14 +55,17 @@ public class ScheduleViewRespondViewModel extends BaseViewModel {
     }
 
     public void notifySupervisorScheduleResponse() {
+        String supervisorUid = scheduleData.getValue().getGroupSupervisorUid();
+
         ScheduleRequest newNotification = new ScheduleRequest();
         newNotification.setSenderUid(getCurrentUserUid());
-        newNotification.setReceiverUid(scheduleData.getValue().getGroupSupervisorUid());
+        newNotification.setReceiverUid(supervisorUid);
         newNotification.setGroupUid(scheduleData.getValue().getGroupUid());
         newNotification.setTimeRead(null);
         newNotification.setCreationTime(now());
         newNotification.setSenderResponse(currentUserNewResponse);
-        repositoryFacade.getNotificationRepository().addDocument(newNotification);
+        repositoryFacade.getNotificationRepository(supervisorUid)
+                .addDocument(newNotification);
     }
 
     public boolean isOneMinuteAfterLastResponse() {

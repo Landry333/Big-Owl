@@ -16,15 +16,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 public class UserRepository extends Repository<User> {
+    public static final String COLLECTION_NAME = "users";
 
     // TODO: Dependency Injection Implementation for Firestore
     public UserRepository() {
-        super("users");
+        super(UserRepository.COLLECTION_NAME);
     }
 
     public Task<Void> isPhoneNumberInDatabase(String phoneNumber) {
         Task<QuerySnapshot> taskGetPhoneNumber =
-                collectionReference.whereEqualTo("phoneNumber", phoneNumber)
+                collectionReference.whereEqualTo(User.Field.PHONE_NUMBER, phoneNumber)
                         .limit(1)
                         .get();
 

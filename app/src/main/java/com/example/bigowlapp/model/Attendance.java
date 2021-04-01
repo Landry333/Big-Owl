@@ -19,9 +19,7 @@ public class Attendance {
     private Timestamp authenticationTime;
 
     public Attendance() {
-
         // public no-argument constructor necessary for Firebase data mapping
-
     }
 
     public Attendance(boolean authenticated) {
@@ -81,14 +79,12 @@ public class Attendance {
         this.attemptedAuthByAppUid = attemptedAuthByAppUid;
     }
 
-
     @Exclude
     public boolean didAttend() {
         return authenticated;
         // authenticated begins only for CORRECT_LOCATION,
         // so authenticated is enough to determine attendance
     }
-
 
 }
 

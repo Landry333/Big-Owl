@@ -7,7 +7,6 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 public class SupervisionRequest extends Notification {
 
     private String senderUid;
-    private String receiverUid;
     private String groupUid;
     private Response response;
     private Timestamp timeResponse;
@@ -22,14 +21,6 @@ public class SupervisionRequest extends Notification {
 
     public void setSenderUid(String senderUid) {
         this.senderUid = senderUid;
-    }
-
-    public String getReceiverUid() {
-        return receiverUid;
-    }
-
-    public void setReceiverUid(String receiverUid) {
-        this.receiverUid = receiverUid;
     }
 
     public String getGroupUid() {
@@ -71,5 +62,16 @@ public class SupervisionRequest extends Notification {
                 ", response=" + response +
                 ", timeResponse=" + timeResponse +
                 '}';
+    }
+
+    public static class Field extends Notification.Field {
+        public static final String SENDER_UID = "senderUid";
+        public static final String GROUP_UID = "groupUid";
+        public static final String RESPONSE = "response";
+        public static final String TIME_RESPONSE = "timeResponse";
+
+        private Field() {
+            // constants class should not be instantiated
+        }
     }
 }

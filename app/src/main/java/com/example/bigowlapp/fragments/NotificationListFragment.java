@@ -22,8 +22,6 @@ import java.util.List;
 public class NotificationListFragment extends Fragment implements NotificationAdapter.OnNotificationListener {
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
     private LiveData<List<Notification>> notificationListData;
 
     public NotificationListFragment() {
@@ -31,8 +29,7 @@ public class NotificationListFragment extends Fragment implements NotificationAd
     }
 
     public static NotificationListFragment newInstance() {
-        NotificationListFragment fragment = new NotificationListFragment();
-        return fragment;
+        return new NotificationListFragment();
     }
 
     @Override
@@ -50,12 +47,12 @@ public class NotificationListFragment extends Fragment implements NotificationAd
         super.onStart();
 
         RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
-
-        notificationListData = repositoryFacade.getNotificationRepository().getListOfDocumentByAttribute("receiverUid", repositoryFacade.getAuthRepository().getCurrentUser().getUid(), Notification.class);
+        notificationListData = repositoryFacade.getCurrentUserNotificationRepository()
+                .getAllDocumentsFromCollection(Notification.class);
 
         recyclerView.setHasFixedSize(true);
 
-        layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
         subscribeToData();
@@ -66,7 +63,7 @@ public class NotificationListFragment extends Fragment implements NotificationAd
             if (notifications == null) {
                 notifications = new ArrayList<>();
             }
-            mAdapter = new NotificationAdapter(notifications, this);
+            NotificationAdapter mAdapter = new NotificationAdapter(notifications, this);
             recyclerView.setAdapter(mAdapter);
         });
     }

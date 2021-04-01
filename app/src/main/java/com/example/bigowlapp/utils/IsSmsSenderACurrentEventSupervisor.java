@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.RepositoryFacade;
+import com.example.bigowlapp.repository.ScheduleRepository;
+import com.example.bigowlapp.repository.UserRepository;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,10 +25,9 @@ public class IsSmsSenderACurrentEventSupervisor extends AppCompatActivity {
 
     public Task<List<Schedule>> check(String phoneNumber) {
         RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
-        String currentUserUid = repositoryFacade.getAuthRepository().getCurrentUser().getUid();
 
-        Task<QuerySnapshot> gettingUserTask = db.collection("users")
-                .whereEqualTo("phoneNumber", phoneNumber)
+        Task<QuerySnapshot> gettingUserTask = db.collection(UserRepository.COLLECTION_NAME)
+                .whereEqualTo(User.Field.PHONE_NUMBER, phoneNumber)
                 .get();
         Task<User> userTask = gettingUserTask.continueWithTask(task -> {
             if (task.isSuccessful()) {
@@ -40,9 +41,9 @@ public class IsSmsSenderACurrentEventSupervisor extends AppCompatActivity {
         Task<List<Schedule>> schedulesTask = userTask.continueWithTask(task -> {
             if (task.isSuccessful()) {
                 User supervisorUser = task.getResult();
-                Task<QuerySnapshot> gettingSchedulesTask = db.collection("schedules")
-                        .whereEqualTo("groupSupervisorUid", supervisorUser.getUid())
-                        .whereArrayContains("memberList", currentUserUid)
+                Task<QuerySnapshot> gettingSchedulesTask = db.collection(ScheduleRepository.COLLECTION_NAME)
+                        .whereEqualTo(Schedule.Field.GROUP_SUPERVISOR_UID, supervisorUser.getUid())
+                        .whereArrayContains(Schedule.Field.MEMBER_LIST, repositoryFacade.getCurrentUserUid())
                         .get();
 
                 Task<List<Schedule>> handleSchedulesTask = gettingSchedulesTask.continueWithTask(task2 -> {

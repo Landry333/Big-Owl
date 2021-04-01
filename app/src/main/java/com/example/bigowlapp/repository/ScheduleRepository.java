@@ -12,27 +12,24 @@ import java.util.List;
 
 
 public class ScheduleRepository extends Repository<Schedule> {
-
-    private static final String USER_SCHEDULE_RESPONSE_MAP = "userScheduleResponseMap";
-    private static final String START_TIME = "startTime";
-    private static final String MEMBER_LIST = "memberList";
-    private static final String GROUP_ID = "groupUid";
-    private static final String SUPERVISOR_ID = "groupSupervisorUid";
+    public static final String COLLECTION_NAME = "schedules";
 
     // TODO: Add dependency injection
     public ScheduleRepository() {
-        super("schedules");
+        super(ScheduleRepository.COLLECTION_NAME);
     }
 
     public Task<Void> updateScheduleMemberResponse(String scheduleId, String userUid, UserScheduleResponse currentUserScheduleResponse) {
-        return collectionReference.document(scheduleId).update((USER_SCHEDULE_RESPONSE_MAP + ".").concat(userUid), currentUserScheduleResponse);
+        return collectionReference.document(scheduleId)
+                .update((Schedule.Field.USER_SCHEDULE_RESPONSE_MAP + ".").concat(userUid),
+                        currentUserScheduleResponse);
     }
 
     public LiveDataWithStatus<List<Schedule>> getListSchedulesFromGroupForUser(String groupID, String userID) {
         LiveDataWithStatus<List<Schedule>> listOfTData = new LiveDataWithStatus<>();
-        collectionReference.whereEqualTo(GROUP_ID, groupID)
-                .whereArrayContains(MEMBER_LIST, userID)
-                .orderBy(START_TIME, Query.Direction.ASCENDING)
+        collectionReference.whereEqualTo(Schedule.Field.GROUP_UID, groupID)
+                .whereArrayContains(Schedule.Field.MEMBER_LIST, userID)
+                .orderBy(Schedule.Field.START_TIME, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -57,9 +54,9 @@ public class ScheduleRepository extends Repository<Schedule> {
      * @return A Task that contains the QuerySnapshot of the list of schedule for the given user
      */
     public Task<QuerySnapshot> getTaskListSchedulesForUser(String userID) {
-        return collectionReference.whereArrayContains(MEMBER_LIST, userID)
-                .whereGreaterThanOrEqualTo(START_TIME, Timestamp.now())
-                .orderBy(START_TIME, Query.Direction.ASCENDING)
+        return collectionReference.whereArrayContains(Schedule.Field.MEMBER_LIST, userID)
+                .whereGreaterThanOrEqualTo(Schedule.Field.START_TIME, Timestamp.now())
+                .orderBy(Schedule.Field.START_TIME, Query.Direction.ASCENDING)
                 .get();
     }
 
@@ -84,9 +81,9 @@ public class ScheduleRepository extends Repository<Schedule> {
     }
 
     public Task<QuerySnapshot> getTaskListSchedulesForSupervisor(String userID) {
-        return collectionReference.whereEqualTo(SUPERVISOR_ID, userID)
-                .whereGreaterThanOrEqualTo(START_TIME, Timestamp.now())
-                .orderBy(START_TIME, Query.Direction.ASCENDING)
+        return collectionReference.whereEqualTo(Schedule.Field.GROUP_SUPERVISOR_UID, userID)
+                .whereGreaterThanOrEqualTo(Schedule.Field.START_TIME, Timestamp.now())
+                .orderBy(Schedule.Field.START_TIME, Query.Direction.ASCENDING)
                 .get();
     }
 }
