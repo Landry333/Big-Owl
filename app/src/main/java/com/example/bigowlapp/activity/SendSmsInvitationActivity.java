@@ -28,7 +28,7 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
         String contactDetails = getIntent().getStringExtra("contactDetails");
         String contactNumber = getIntent().getStringExtra("contactNumber");
 
-        noteText = "Contact: " + contactDetails + " is not yet registered to the application. Send her/him this invitation text sms";
+        noteText = "Contact: " + contactDetails + " is not yet registered to the application. Send her/him the bellow invitation by text sms";
 
         noteTv.setText(noteText);
 
