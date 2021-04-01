@@ -38,7 +38,7 @@ public class LocationTrackingExpiredAlarmReceiver extends BroadcastReceiver {
         }
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis()-ScheduledLocationTrackingManager.DEFAULT_TRACKING_EXPIRE_TIME_MILLIS);
+        calendar.setTimeInMillis(System.currentTimeMillis()-ScheduledLocationTrackingManager.TRACKING_EXPIRE_TIME_MILLIS);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
