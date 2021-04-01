@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class AuthRepository {
 
-    private FirebaseAuth mfirebaseAuth;
+    private final FirebaseAuth mfirebaseAuth;
 
     // TODO: Dependency Injection Implementation for Firestore
     public AuthRepository() {

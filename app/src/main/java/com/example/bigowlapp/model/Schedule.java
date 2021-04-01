@@ -1,5 +1,6 @@
 package com.example.bigowlapp.model;
 
+import com.example.bigowlapp.utils.Constants;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.IgnoreExtraProperties;
@@ -11,6 +12,12 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class Schedule extends Model {
+
+    /**
+     * This represent the maximum time a schedule can be tracked before its attendance results are
+     * considered final. After this much time, schedule attendance is not updated.
+     */
+    public static final long MAX_TRACKING_TIME_MILLIS = 30L * Constants.MINUTE_TO_MILLIS;
 
     private String title;
     private String event;
@@ -110,5 +117,21 @@ public class Schedule extends Model {
 
     public void setUserScheduleResponseMap(Map<String, UserScheduleResponse> userScheduleResponseMap) {
         this.userScheduleResponseMap = userScheduleResponseMap;
+    }
+
+    public static class Field {
+        public static final String TITLE = "title";
+        public static final String EVENT = "event";
+        public static final String GROUP_UID = "groupUid";
+        public static final String GROUP_SUPERVISOR_UID = "groupSupervisorUid";
+        public static final String MEMBER_LIST = "memberList";
+        public static final String START_TIME = "startTime";
+        public static final String END_TIME = "endTime";
+        public static final String LOCATION = "location";
+        public static final String USER_SCHEDULE_RESPONSE_MAP = "userScheduleResponseMap";
+
+        private Field() {
+            // constants class should not be instantiated
+        }
     }
 }

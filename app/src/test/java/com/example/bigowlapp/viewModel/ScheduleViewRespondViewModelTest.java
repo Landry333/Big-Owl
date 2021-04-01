@@ -69,9 +69,9 @@ public class ScheduleViewRespondViewModelTest {
         // setup mock responses
         when(mockRepositoryFacade.getAuthRepository()).thenReturn(mockAuthRepository);
         when(mockRepositoryFacade.getScheduleRepository()).thenReturn(mockScheduleRepository);
-        when(mockRepositoryFacade.getNotificationRepository()).thenReturn(mockNotificationRepository);
+        when(mockRepositoryFacade.getNotificationRepository(anyString())).thenReturn(mockNotificationRepository);
+        when(mockRepositoryFacade.getCurrentUserUid()).thenReturn("abc123");
         when(mockAuthRepository.getCurrentUser()).thenReturn(mockTestFirebaseUser);
-        when(mockTestFirebaseUser.getUid()).thenReturn("abc123");
         when(mockScheduleRepository.getDocumentByUid(anyString(), eq(Schedule.class))).thenReturn(testScheduleData);
 
         // setup viewModel to be tested
@@ -145,7 +145,6 @@ public class ScheduleViewRespondViewModelTest {
 
     @Test
     public void notifySupervisorScheduleResponseTest() {
-        when(mockAuthRepository.getCurrentUser().getUid()).thenReturn(testUser.getUid());
         scheduleViewRespondViewModel.notifySupervisorScheduleResponse();
         verify(mockNotificationRepository, times(1)).addDocument(any(ScheduleRequest.class));
     }
