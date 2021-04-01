@@ -59,7 +59,7 @@ public class ScheduleReportActivity extends BigOwlActivity {
                 scheduleReportTitle.setText(schedule.getTitle());
                 scheduleReportStartTime.setText(schedule.getStartTime().toDate().toString());
                 scheduleReportEndTime.setText(schedule.getEndTime().toDate().toString());
-                scheduleReportLocation.setText(GeoLocationFormatter.formatLocation(schedule.getLocation()));
+                scheduleReportLocation.setText(GeoLocationFormatter.formatLocation(this, schedule.getLocation()));
 
                 scheduleReportViewModel.getScheduleMemberNameMap(schedule.getMemberList()).observe(this, memberNameMap -> {
                     if (schedule.scheduleCurrentState() == Schedule.Status.ON_GOING)

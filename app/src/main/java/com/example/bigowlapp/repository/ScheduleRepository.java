@@ -62,8 +62,8 @@ public class ScheduleRepository extends Repository<Schedule> {
 
     public LiveDataWithStatus<List<Schedule>> getAllSchedulesForSupervisor(String currentUserUid) {
         LiveDataWithStatus<List<Schedule>> listOfTData = new LiveDataWithStatus<>();
-        collectionReference.whereEqualTo(SUPERVISOR_ID, currentUserUid)
-                .orderBy(START_TIME, Query.Direction.ASCENDING)
+        collectionReference.whereEqualTo(Schedule.Field.GROUP_SUPERVISOR_UID, currentUserUid)
+                .orderBy(Schedule.Field.START_TIME, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
