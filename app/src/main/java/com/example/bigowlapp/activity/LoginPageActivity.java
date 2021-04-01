@@ -114,11 +114,11 @@ public class LoginPageActivity extends AppCompatActivity {
         BiometricManager biometricManager = BiometricManager.from(this);
         Intent i;
         if (biometricManager.canAuthenticate() != BiometricManager.BIOMETRIC_SUCCESS) {
-            Toast.makeText(LoginPageActivity.this, "you are logged in!", Toast.LENGTH_SHORT).show();
-            i = new Intent(LoginPageActivity.this, HomePageActivity.class);
+            Toast.makeText(this, "you are logged in!", Toast.LENGTH_SHORT).show();
+            i = new Intent(this, HomePageActivity.class);
         } else {
-            Toast.makeText(LoginPageActivity.this, "user ID and password accepted", Toast.LENGTH_SHORT).show();
-            i = new Intent(LoginPageActivity.this, FingerprintAuthenticationActivity.class);
+            Toast.makeText(this, "user ID and password accepted", Toast.LENGTH_SHORT).show();
+            i = new Intent(this, FingerprintAuthenticationActivity.class);
         }
         startActivity(i);
     }

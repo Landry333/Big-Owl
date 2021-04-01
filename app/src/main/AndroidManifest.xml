@@ -21,7 +21,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.FingerprintAuthenticationActivity"></activity>
+        <activity android:name=".activity.FingerprintAuthenticationActivity"/>
         <activity android:name=".activity.SetScheduleActivity" />
         <activity android:name=".activity.ScheduleViewRespondActivity" />
         <activity android:name=".activity.EditProfileActivity" />

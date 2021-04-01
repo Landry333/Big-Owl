@@ -28,7 +28,7 @@ import java.util.concurrent.Executor;
 
 public class FingerprintAuthenticationActivity extends AppCompatActivity {
 
-    private TextView AuthResultText;
+    private TextView authResultText;
     private TextView fingerprintAuthRegistrationText;
     private BiometricPrompt biometricPrompt;
     private BiometricPrompt.PromptInfo promptInfo;
@@ -53,7 +53,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fingerprint_authenticaton);
 
-        AuthResultText = findViewById(R.id.authentication_result_message);
+        authResultText = findViewById(R.id.authentication_result_message);
         fingerprintAuthRegistrationText = findViewById(R.id.fingerprint_auth_registration_text);
         btnStartFingerAuth = findViewById(R.id.btn_start_authentication);
         btnFingerprintAuthAdd = findViewById(R.id.fingerprint_auth_add_btn);
@@ -61,7 +61,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
         btnGoToHomePage = findViewById(R.id.btn_go_to_home_page);
         Button btnLogOut = findViewById(R.id.btn_logout);
         Executor executor = ContextCompat.getMainExecutor(this);
-        AuthResultText.setVisibility(View.GONE);
+        authResultText.setVisibility(View.GONE);
         btnStartFingerAuth.setVisibility(View.GONE);
         btnGoToHomePage.setVisibility(View.GONE);
         btnFingerprintAuthAdd.setVisibility(View.GONE);
@@ -71,8 +71,8 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-                AuthResultText.setText("Error");
-                AuthResultText.setVisibility(View.VISIBLE);
+                authResultText.setText("Error");
+                authResultText.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -86,8 +86,8 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
-                AuthResultText.setText("Failed authentication");
-                AuthResultText.setVisibility(View.VISIBLE);
+                authResultText.setText("Failed authentication");
+                authResultText.setVisibility(View.VISIBLE);
             }
         });
 
@@ -190,7 +190,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
         BiometricManager biometricManager = BiometricManager.from(this);
         if (biometricManager.canAuthenticate() != BiometricManager.BIOMETRIC_SUCCESS) {
 
-            AuthResultText.setText("Biometric Not Supported on this phone");
+            authResultText.setText("Biometric Not Supported on this phone");
             return;
         }
         biometricPrompt.authenticate(promptInfo);
