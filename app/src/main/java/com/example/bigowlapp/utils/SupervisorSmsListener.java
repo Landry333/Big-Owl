@@ -17,7 +17,6 @@ import java.util.Calendar;
 public class SupervisorSmsListener extends BroadcastReceiver {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-    private static final int THIRTY_MINUTES = 1800;
     private String scheduleId;
 
     IsSmsSenderACurrentEventSupervisor isSmsSenderACurrentEventSupervisor = new IsSmsSenderACurrentEventSupervisor();
@@ -53,7 +52,7 @@ public class SupervisorSmsListener extends BroadcastReceiver {
                 isSmsSenderACurrentEventSupervisor.check(formattedSmsSenderNum)
                         .addOnSuccessListener(schedulesList -> {
                             for (Schedule schedule : schedulesList) {
-                                if (Math.abs(schedule.getStartTime().getSeconds() - currentTime.getSeconds()) < THIRTY_MINUTES) {
+                                if (Math.abs(schedule.getStartTime().toDate().getTime() - currentTime.toDate().getTime()) < Schedule.MAX_TRACKING_TIME_MILLIS) {
                                     if (scheduleId.equalsIgnoreCase(schedule.getUid())) {
                                         try {
                                             AuthenticatorByAppInstanceId authenticatorByAppInstanceId = new AuthenticatorByAppInstanceId(context);

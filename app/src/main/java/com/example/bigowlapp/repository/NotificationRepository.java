@@ -1,11 +1,8 @@
 package com.example.bigowlapp.repository;
 
-import android.util.Log;
-
-import androidx.lifecycle.MutableLiveData;
-
 import com.example.bigowlapp.model.Notification;
-import com.example.bigowlapp.model.SupervisionRequest;
+import com.example.bigowlapp.model.NullNotification;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -13,49 +10,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationRepository extends Repository<Notification> {
-
-    private static final String TYPE = "type";
+    public static final String COLLECTION_NAME = "notifications";
 
     // TODO: Dependency Injection Implementation for Firestore
-    public NotificationRepository() {
-        super("notifications");
-    }
-
-    public MutableLiveData<List<SupervisionRequest>> getListOfSupervisionRequestByAttribute(String attribute, String attrValue,
-                                                                                            Class<? extends SupervisionRequest> tClass) {
-        MutableLiveData<List<SupervisionRequest>> listOfTData = new MutableLiveData<>();
-        collectionReference.whereEqualTo(attribute, attrValue)
-                .whereEqualTo(TYPE, Notification.Type.SUPERVISION_REQUEST)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot tDocs = task.getResult();
-                        if (tDocs != null && !tDocs.isEmpty()) {
-                            List<SupervisionRequest> listOfT = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                SupervisionRequest t = doc.toObject(tClass);
-                                listOfT.add(t);
-                            }
-                            listOfTData.setValue(listOfT);
-                        } else {
-                            listOfTData.setValue(null);
-                        }
-                    } else {
-                        Log.e(tClass.getSimpleName(), "Error getting documents: " +
-                                task.getException());
-                    }
-                });
-        return listOfTData;
+    public NotificationRepository(String userUid) {
+        super(UserRepository.COLLECTION_NAME);
+        collectionReference = collectionReference.document(userUid)
+                .collection(NotificationRepository.COLLECTION_NAME);
     }
 
     @Override
-    protected List<Notification> extractListOfDataToModel(QuerySnapshot results, Class<? extends Notification> tClass) {
-        List<Notification> notificationsFromDb = new ArrayList<>();
+    protected <X extends Notification> List<X> extractListOfDataToModel(QuerySnapshot results, Class<X> tClass) {
+        List<X> notificationsFromDb = new ArrayList<>();
         for (QueryDocumentSnapshot doc : results) {
-            Notification.Type type = doc.toObject(Notification.class).getType();
-            Notification t = doc.toObject(type.typeClass);
-            notificationsFromDb.add(t);
+            Notification notification = getNotificationFromDocument(doc, tClass);
+            if (notification.isValid()) {
+                notificationsFromDb.add((X) notification);
+            }
         }
         return notificationsFromDb;
+    }
+
+    public static <X extends Notification> Notification getNotificationFromDocument(DocumentSnapshot doc, Class<X> xClass) {
+        Notification notification = Notification.getNotificationSafe(doc.toObject(Notification.class));
+        Notification.Type type = notification.getType();
+
+        if (xClass == Notification.class || xClass == type.typeClass) {
+            return doc.toObject(type.typeClass);
+        }
+
+        return new NullNotification();
     }
 }

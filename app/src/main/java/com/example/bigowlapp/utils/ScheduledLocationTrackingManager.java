@@ -20,11 +20,10 @@ import com.google.firebase.firestore.GeoPoint;
 
 public class ScheduledLocationTrackingManager {
 
-    private static final int REQUEST_CODE = 2;
-    private static final int DEFAULT_TRACKING_RADIUS_METERS = 300;
-    public static final long DEFAULT_TRACKING_EXPIRE_TIME_MILLIS = 30L * Constants.MINUTE_TO_MILLIS;
+    private static final int TRACKING_RADIUS_METERS = 300;
+    public static final long TRACKING_EXPIRE_TIME_MILLIS = Schedule.MAX_TRACKING_TIME_MILLIS;
     // use 0 for instant response, and allow longer delays for better battery life
-    private static final int DEFAULT_MAX_NOTIFY_DELAY_MILLIS = 3 * Constants.MINUTE_TO_MILLIS;
+    private static final int MAX_NOTIFY_DELAY_MILLIS = 3 * Constants.MINUTE_TO_MILLIS;
 
     private final Context context;
     private final GeofencingClient geofencingClient;
@@ -47,8 +46,8 @@ public class ScheduledLocationTrackingManager {
         return geofencingClient
                 .addGeofences(buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent())
                 .onSuccessTask(aVoid -> {
-                    locationCheckAlarmManager.setAlarm(DEFAULT_MAX_NOTIFY_DELAY_MILLIS);
-                    locationTrackingExpiredAlarmManager.setAlarm(DEFAULT_TRACKING_EXPIRE_TIME_MILLIS, scheduleWithLocationToTrack.getTitle());
+                    locationCheckAlarmManager.setAlarm(MAX_NOTIFY_DELAY_MILLIS);
+                    locationTrackingExpiredAlarmManager.setAlarm(TRACKING_EXPIRE_TIME_MILLIS, scheduleWithLocationToTrack.getTitle());
                     return Tasks.forResult(null);
                 });
     }
@@ -66,9 +65,9 @@ public class ScheduledLocationTrackingManager {
         return new Geofence.Builder()
                 .setRequestId(scheduleWithLocationToTrack.getUid())
                 .setCircularRegion(locationCoords.getLatitude(), locationCoords.getLongitude(),
-                        DEFAULT_TRACKING_RADIUS_METERS)
-                .setExpirationDuration(DEFAULT_TRACKING_EXPIRE_TIME_MILLIS)
-                .setNotificationResponsiveness(DEFAULT_MAX_NOTIFY_DELAY_MILLIS)
+                        TRACKING_RADIUS_METERS)
+                .setExpirationDuration(TRACKING_EXPIRE_TIME_MILLIS)
+                .setNotificationResponsiveness(MAX_NOTIFY_DELAY_MILLIS)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
     }
@@ -79,7 +78,7 @@ public class ScheduledLocationTrackingManager {
         }
 
         Intent intent = new Intent(context, LocationBroadcastReceiver.class);
-        geofencePendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent,
+        geofencePendingIntent = PendingIntent.getBroadcast(context, Constants.DEFAULT_RECEIVER_REQUEST_CODE, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         return geofencePendingIntent;
     }

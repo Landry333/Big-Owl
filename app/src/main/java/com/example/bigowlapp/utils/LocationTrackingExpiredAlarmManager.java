@@ -12,9 +12,6 @@ import com.example.bigowlapp.service.LocationTrackingExpiredAlarmReceiver;
  * the user has not gotten to the expected location on time.
  */
 public class LocationTrackingExpiredAlarmManager {
-
-    private static final int REQUEST_CODE = 6;
-
     private final Context context;
     private final AlarmManager alarmManager;
     private String title;
@@ -34,7 +31,7 @@ public class LocationTrackingExpiredAlarmManager {
     private PendingIntent getPendingIntent() {
         Intent intent = new Intent(context, LocationTrackingExpiredAlarmReceiver.class);
         intent.putExtra("schedule_title", title);
-        return PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(context, Constants.DEFAULT_RECEIVER_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public void cancelExpirationAlarm() {
