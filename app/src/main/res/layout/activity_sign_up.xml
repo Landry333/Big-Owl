@@ -12,7 +12,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:orientation="vertical">
 
             <ImageView
@@ -32,14 +32,14 @@
                 android:indeterminateOnly="true"
                 android:max="100"
                 android:progress="0"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
 
             <EditText
                 android:id="@+id/user_first_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="24dp"
                 android:ems="10"
                 android:hint="@string/user_first_name"
@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="7dp"
                 android:layout_marginEnd="24dp"
                 android:ems="10"
                 android:hint="@string/user_last_name"
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="7dp"
                 android:layout_marginEnd="24dp"
                 android:ems="10"
                 android:hint="@string/hint_email"
@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="7dp"
                 android:layout_marginEnd="24dp"
                 android:ems="10"
                 android:hint="@string/password"
@@ -86,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="7dp"
                 android:layout_marginEnd="24dp"
                 android:ems="10"
                 android:hint="@string/phone"
@@ -103,12 +103,22 @@
                 android:text="@string/sign_up"
                 android:textColor="#FFFFFF" />
 
+
+            <TextView
+                android:id="@+id/text_view_account_already"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Already have an account?" />
+
             <TextView
                 android:id="@+id/text_view_sign_in"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                android:text="@string/have_account_text" />
+                android:layout_gravity="center"
+                android:text="Sign in here"
+                android:textColor="#FF00FF"
+                android:textSize="13dp" />
 
         </LinearLayout>
     </ScrollView>
