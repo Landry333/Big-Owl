@@ -14,16 +14,16 @@
         android:weightSum="5">
 
         <ImageButton
-            android:id="@+id/action_overflow"
+            android:id="@+id/action_home_page"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
+            android:layout_margin="3dp"
+            android:layout_weight="1.3"
             android:background="@color/white"
-            android:tint="?attr/colorPrimary"
-            android:src="@drawable/ic_overflow"
+            android:tint="#160654"
+            android:src="@drawable/ic_menu_home"
             android:scaleType="fitCenter"
-            android:contentDescription="@string/overflow_menu" />
+            android:contentDescription="@string/big_owl" />
 
         <View
             android:layout_width="1dp"
@@ -82,15 +82,16 @@
             android:background="?attr/colorPrimary" />
 
         <ImageButton
-            android:id="@+id/action_big_owl"
+            android:id="@+id/action_overflow"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@color/white"
-            android:src="@drawable/logo_square"
+            android:tint="?attr/colorPrimary"
+            android:src="@drawable/ic_overflow"
             android:scaleType="fitCenter"
-            android:contentDescription="@string/big_owl" />
+            android:contentDescription="@string/overflow_menu" />
 
     </LinearLayout>
 
