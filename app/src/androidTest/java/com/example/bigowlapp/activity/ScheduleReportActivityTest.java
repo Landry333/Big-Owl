@@ -229,6 +229,10 @@ public class ScheduleReportActivityTest {
 
                     TextView memberNameTextView = listView.getChildAt(position).findViewById(R.id.schedule_report_member_name);
                     String memberId = memberNameIdMap.get(memberNameTextView.getText().toString());
+
+                    System.out.println("memberNameIdMap" + memberNameIdMap.toString());
+                    Log.e("memberNameIdMap", memberNameIdMap.toString());
+
                     String memberExpectedAttendanceResult = testSchedule.scheduleMemberResponseAttendanceMap(memberId).get("responseText").toString();
 
                     if (testSchedule.scheduleMemberResponseAttendanceMap(memberId).containsKey("attendanceTime")) {
