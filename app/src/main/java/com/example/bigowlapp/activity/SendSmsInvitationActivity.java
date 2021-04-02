@@ -5,12 +5,18 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.model.SmsInvitationRequest;
+import com.example.bigowlapp.repository.RepositoryFacade;
+import com.example.bigowlapp.repository.SmsInvitationRepository;
+import com.example.bigowlapp.utils.PhoneNumberFormatter;
+import com.google.i18n.phonenumbers.NumberParseException;
 
 public class SendSmsInvitationActivity extends BigOwlActivity {
 
@@ -68,6 +74,7 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
         try {
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(smsNumber, null, smsMessage, null, null);
+            smsInvitationRequest(smsNumber);
             Toast.makeText(this, "Invitation sent", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,5 +100,23 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
             startActivity(intent);
             finish();
         }
+    }
+
+    private void smsInvitationRequest(String number){
+        RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
+        SmsInvitationRepository smsInvitationRepository = repositoryFacade.getSmsInvitationRepository();
+        try{
+            number = PhoneNumberFormatter.formatNumber(number, this);
+
+        }catch (NumberParseException e) {
+            Log.e("Formatting Error: ", e.getMessage());
+            return;
+        }
+
+        SmsInvitationRequest smsInvitationRequest = new SmsInvitationRequest();
+        smsInvitationRequest.setPhoneNumberSent(number);
+        smsInvitationRequest.setSenderUid(repositoryFacade.getCurrentUserUid());
+
+        smsInvitationRepository.addDocument(smsInvitationRequest);
     }
 }

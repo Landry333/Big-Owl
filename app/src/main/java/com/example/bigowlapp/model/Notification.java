@@ -47,6 +47,11 @@ public class Notification extends Model {
      */
     protected boolean used;
 
+    /**
+     * Marks a notification as used to verify the user received and/or viewed it
+     */
+    protected String message;
+
     public Notification() {
         this(Type.NONE);
     }
@@ -103,6 +108,13 @@ public class Notification extends Model {
         this.used = used;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
     @Exclude
     public boolean isValid() {
         return true;

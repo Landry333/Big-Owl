@@ -27,7 +27,6 @@ public class SignUpPageActivity extends AppCompatActivity {
     TextView tvSignIn;
     private SignUpViewModel signUpViewModel;
     private ProgressBar progressBar;
-    private NotificationListenerManager invitationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +90,8 @@ public class SignUpPageActivity extends AppCompatActivity {
                         .addOnSuccessListener(isSuccessful -> {
                             progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
-                            invitationListener = new NotificationListenerManager();
-                            invitationListener.listen(this);
+                            signUpViewModel.verifySmsInvitationsCollection(formattedUserPhone);
+                            signUpViewModel.smsInvitationNotificationListener(this);
                             startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
                         })
                         .addOnFailureListener(e -> {
@@ -106,6 +105,8 @@ public class SignUpPageActivity extends AppCompatActivity {
             startActivity(new Intent(SignUpPageActivity.this, LoginPageActivity.class));
         });
     }
+
+
 
     @VisibleForTesting
     public void setSignUpViewModel(SignUpViewModel signUpViewModel) {
