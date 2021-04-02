@@ -112,26 +112,27 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
 // Permission was already provided by user before sign in step in order to proceed
     private void subscribeToData() {
 
-        if (homePageViewModel.isCurrentUserSet()) {
-            LiveDataWithStatus<User> currentUserData = homePageViewModel.getCurrentUserData();
-            currentUserData.observe(this, user -> {
-                TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-                String devicePhoneNumber = telephonyManager.getLine1Number();
-                if (currentUserData.hasError()) {
-                    Toast.makeText(getBaseContext(), currentUserData.getError().getMessage(), Toast.LENGTH_LONG).show();
-                    // TODO: Handle this failure (exist page, modify page, or set up page for error case).Same TODO from HomepageActivity
-                    return;
-                }
-                String formattedDevicePhoneNum = null;
-                try {
-                    formattedDevicePhoneNum = PhoneNumberFormatter.formatNumber(devicePhoneNumber, this);
-                } catch (NumberParseException e) {
-                    Toast.makeText(this, "FAILED to format phone number. Process failed", Toast.LENGTH_LONG).show();
-                }
-                verifyUserAccessToService(user, formattedDevicePhoneNum);
+        if (!homePageViewModel.isCurrentUserSet())
+            return;
+        LiveDataWithStatus<User> currentUserData = homePageViewModel.getCurrentUserData();
+        currentUserData.observe(this, user -> {
+            TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+            String devicePhoneNumber = telephonyManager.getLine1Number();
+            if (currentUserData.hasError()) {
+                Toast.makeText(getBaseContext(), currentUserData.getError().getMessage(), Toast.LENGTH_LONG).show();
+                // TODO: Handle this failure (exist page, modify page, or set up page for error case).Same TODO from HomepageActivity
+                return;
+            }
+            String formattedDevicePhoneNum = null;
+            try {
+                formattedDevicePhoneNum = PhoneNumberFormatter.formatNumber(devicePhoneNumber, this);
+            } catch (NumberParseException e) {
+                Toast.makeText(this, "FAILED to format phone number. Process failed", Toast.LENGTH_LONG).show();
+            }
+            verifyUserAccessToService(user, formattedDevicePhoneNum);
 
-            });
-        }
+        });
+
     }
 
     @Override
