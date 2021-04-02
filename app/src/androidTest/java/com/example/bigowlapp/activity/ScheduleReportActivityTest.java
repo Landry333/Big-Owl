@@ -56,7 +56,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class ScheduleReportActivityTest {
-    private static final Map<String, String> memberNameIdMap = new LinkedHashMap<>();
+    private static Map<String, String> memberNameIdMap;
     private static ScheduleReportActivity currentActivity;
     private static Schedule testSchedule;
     private final Timestamp timestampNow = Timestamp.now();
@@ -80,6 +80,7 @@ public class ScheduleReportActivityTest {
         memberGroupIdList.add("testGroup001");
         List<String> groupMemberIdList = new ArrayList<>();
         Map<String, String> memberIdNameMap = new LinkedHashMap<>();
+        memberNameIdMap = new LinkedHashMap<>();
         for (int i = 0; i < 6; i++) {
             User testMember = new User(
                     "testMember00".concat(String.valueOf(i)),
@@ -162,7 +163,6 @@ public class ScheduleReportActivityTest {
     }
 
     @Test
-    @Ignore("Fix bug due to arrayList IndexOutOfBoundsException")
     public void scheduleOnGoingTest() {
         testSchedule.setStartTime(new Timestamp(timestampNow.getSeconds() - 3600, 0));
         testSchedule.setEndTime(new Timestamp(timestampNow.getSeconds() + 3600, 0));
@@ -184,7 +184,6 @@ public class ScheduleReportActivityTest {
     }
 
     @Test
-    @Ignore("Fix bug due to arrayList IndexOutOfBoundsException")
     public void scheduleCompletedTest() {
         testSchedule.setStartTime(new Timestamp(timestampNow.getSeconds() - 7200, 0));
         testSchedule.setEndTime(new Timestamp(timestampNow.getSeconds() - 3600, 0));
