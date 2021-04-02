@@ -6,8 +6,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.model.ReceiveScheduleNotification;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
+import com.example.bigowlapp.model.SupervisionRequest;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.RepositoryFacade;
@@ -59,6 +61,10 @@ public class SetScheduleViewModel extends BaseViewModel {
                         memberUid -> new UserScheduleResponse(Response.NEUTRAL, null))
                 );
         schedule.setUserScheduleResponseMap(userResponseMap);
+
+        //#32
+        sendNewScheduleNotificationRequest();
+
         return repositoryFacade.getScheduleRepository().addDocument(schedule);
     }
 
@@ -166,7 +172,7 @@ public class SetScheduleViewModel extends BaseViewModel {
         this.listOfGroupData = listOfGroupData;
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public List<User> getSelectedUsers() {
         return selectedUsers;
     }
@@ -188,5 +194,18 @@ public class SetScheduleViewModel extends BaseViewModel {
 
     private void notifyUi() {
         this.newScheduleData.setValue(this.newScheduleData.getValue());
+    }
+
+    private void sendNewScheduleNotificationRequest() { //#32
+        for (User selectedUser : getSelectedUsers()) {
+            ReceiveScheduleNotification newNotification = new ReceiveScheduleNotification();
+            newNotification.setReceiverUid(selectedUser.getUid());
+            newNotification.setSenderUid(getCurrentUserUid());
+            newNotification.setGroupUid(getSelectedGroup().getUid());
+            newNotification.setCreationTime(Timestamp.now());
+
+
+            repositoryFacade.getNotificationRepository(selectedUser.getUid()).addDocument(newNotification);
+        }
     }
 }

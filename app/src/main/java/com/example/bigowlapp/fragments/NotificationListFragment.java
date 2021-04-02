@@ -1,5 +1,6 @@
 package com.example.bigowlapp.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.activity.ScheduleViewRespondActivity;
 import com.example.bigowlapp.adapter.NotificationAdapter;
+import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.Notification;
+import com.example.bigowlapp.model.ReceiveScheduleNotification;
 import com.example.bigowlapp.model.SupervisionRequest;
 import com.example.bigowlapp.repository.RepositoryFacade;
 
@@ -78,6 +82,16 @@ public class NotificationListFragment extends Fragment implements NotificationAd
                             new SupervisionResponseFragment((SupervisionRequest) selectedNotification))
                     .addToBackStack(null)
                     .commit();
+        }
+
+        // #32
+        if (selectedNotification.getType() == Notification.Type.SCHEDULE_NOTIFICATION) {
+            ReceiveScheduleNotification selectedNotification2 = (ReceiveScheduleNotification) selectedNotification;
+            Intent intent = new Intent(getContext(), ScheduleViewRespondActivity.class);
+            intent.putExtra("scheduleUid", selectedNotification2.getScheduleUid()); //Find the id
+            intent.putExtra("groupName", selectedNotification2.getGroupName());
+            intent.putExtra("supervisorName", selectedNotification2.getSenderUid());
+            startActivity(intent);
         }
     }
 }
