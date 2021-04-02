@@ -118,4 +118,20 @@ public class Schedule extends Model {
     public void setUserScheduleResponseMap(Map<String, UserScheduleResponse> userScheduleResponseMap) {
         this.userScheduleResponseMap = userScheduleResponseMap;
     }
+
+    public static class Field {
+        public static final String TITLE = "title";
+        public static final String EVENT = "event";
+        public static final String GROUP_UID = "groupUid";
+        public static final String GROUP_SUPERVISOR_UID = "groupSupervisorUid";
+        public static final String MEMBER_LIST = "memberList";
+        public static final String START_TIME = "startTime";
+        public static final String END_TIME = "endTime";
+        public static final String LOCATION = "location";
+        public static final String USER_SCHEDULE_RESPONSE_MAP = "userScheduleResponseMap";
+
+        private Field() {
+            // constants class should not be instantiated
+        }
+    }
 }

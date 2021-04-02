@@ -106,7 +106,8 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         resultNoteTv.setText(noRequest);
 
         LiveData<List<SupervisionRequest>> senderRequestsData = otherUserNotificationRepository
-                .getListOfDocumentByAttribute("senderUid", currentUserID, SupervisionRequest.class);
+                .getListOfDocumentByAttribute(SupervisionRequest.Field.SENDER_UID, currentUserID,
+                        SupervisionRequest.class);
 
         senderRequestsData.observe(this, senderRequests -> {
             if (senderRequests == null)

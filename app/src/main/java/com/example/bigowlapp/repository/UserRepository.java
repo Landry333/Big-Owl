@@ -7,22 +7,23 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class UserRepository extends Repository<User> {
+    public static final String COLLECTION_NAME = "users";
 
     // TODO: Dependency Injection Implementation for Firestore
     public UserRepository() {
-        super("users");
+        super(UserRepository.COLLECTION_NAME);
     }
 
     public Task<Void> isPhoneNumberInDatabase(String phoneNumber) {
         Task<QuerySnapshot> taskGetPhoneNumber =
-                collectionReference.whereEqualTo("phoneNumber", phoneNumber)
+                collectionReference.whereEqualTo(User.Field.PHONE_NUMBER, phoneNumber)
                         .limit(1)
                         .get();
 
         return taskCheckIfPhoneNumberExists(taskGetPhoneNumber);
     }
 
-    private Task<Void> taskCheckIfPhoneNumberExists(Task<QuerySnapshot> taskPrevious){
+    private Task<Void> taskCheckIfPhoneNumberExists(Task<QuerySnapshot> taskPrevious) {
         return taskPrevious.continueWithTask(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot tDoc = task.getResult();
