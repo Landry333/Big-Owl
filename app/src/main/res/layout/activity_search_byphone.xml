@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/search_users"
         android:background="@drawable/rounded_button_light"
-        android:textColor="#2F454D"
+        android:textColor="@color/lightBlack"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:text="@string/search_user" />

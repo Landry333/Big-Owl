@@ -74,7 +74,7 @@
             android:layout_marginTop="50dp"
             android:text="my scheduled"
             android:background="@drawable/rounded_button_greenish"
-            android:textColor="#2F454D"
+            android:textColor="@color/lightBlack"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/supervisor_name_layout"

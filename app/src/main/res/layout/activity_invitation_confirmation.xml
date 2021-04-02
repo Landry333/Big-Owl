@@ -37,7 +37,7 @@
         android:layout_height="50dp"
         android:layout_below="@+id/confirmationMessage"
         android:background="@drawable/rounded_button_greenish"
-        android:textColor="#2F454D"
+        android:textColor="@color/lightBlack"
         android:layout_centerHorizontal="true"
         android:text="Return to Home page"
         android:layout_marginTop="74dp"

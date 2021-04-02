@@ -31,7 +31,7 @@
         android:layout_marginTop="50dp"
         android:text="use your contacts list"
         android:background="@drawable/rounded_button_greenish"
-        android:textColor="#2F454D"
+        android:textColor="@color/lightBlack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/invite_user_text" />
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:background="@drawable/rounded_button_greenish"
-        android:textColor="#2F454D"
+        android:textColor="@color/lightBlack"
         android:text="Enter phone number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

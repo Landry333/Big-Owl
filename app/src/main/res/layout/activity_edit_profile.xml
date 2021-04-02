@@ -10,6 +10,17 @@
         layout="@layout/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/fingerprint_auth_screen_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Edit profile"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_app_bar" />
 
     <Button
         android:id="@+id/edit_button_cancel"
@@ -18,7 +29,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/cancel"
         android:background="@drawable/rounded_button_light"
-        android:textColor="#2F454D"
+        android:textColor="@color/lightBlack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +42,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/confirm"
         android:background="@drawable/rounded_button_redish"
-        android:textColor="#2F454D"
+        android:textColor="@color/lightBlack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +60,7 @@
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top_app_bar" />
+        app:layout_constraintTop_toBottomOf="@+id/fingerprint_auth_screen_title" />
 
     <EditText
         android:id="@+id/edit_user_last_name"

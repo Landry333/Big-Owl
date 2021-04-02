@@ -44,7 +44,7 @@
                     android:layout_weight="2"
                     android:text="create schedule"
                     android:background="@drawable/rounded_button_light"
-                    android:textColor="#2F454D"/>
+                    android:textColor="@color/lightBlack"/>
 
             </LinearLayout>
 

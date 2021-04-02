@@ -51,7 +51,7 @@
         android:layout_marginTop="40dp"
         android:text="send sms"
         android:background="@drawable/rounded_button_redish"
-        android:textColor="#2F454D"
+        android:textColor="@color/lightBlack"
         android:layout_gravity="center_horizontal"
         tools:ignore="HardcodedText" />
 
