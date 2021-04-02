@@ -124,7 +124,7 @@ public class SignUpViewModel extends BaseViewModel {
 
         Notification newNotification = new SmsInvitationRequest();
         newNotification.setReceiverUid(senderUid);
-        newNotification.setMessage("User with phone number: " + phoneNumber + "is registered.");
+        newNotification.setMessage("User with phone number: " + phoneNumber + " is registered.");
         newNotification.setCreationTime(Timestamp.now());
 
         repositoryFacade.getNotificationRepository(senderUid).addDocument(newNotification);

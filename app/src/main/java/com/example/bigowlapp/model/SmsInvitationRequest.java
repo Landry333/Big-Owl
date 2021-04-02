@@ -1,5 +1,8 @@
 package com.example.bigowlapp.model;
 
+import com.google.firebase.firestore.IgnoreExtraProperties;
+
+@IgnoreExtraProperties
 public class SmsInvitationRequest extends Notification {
 
     private String senderUid;
@@ -20,5 +23,7 @@ public class SmsInvitationRequest extends Notification {
     public void setPhoneNumberSent(String phoneNumberSent){
         this.phoneNumberSent = phoneNumberSent;
     }
-
+    public String getPhoneNumberSent() {
+        return phoneNumberSent;
+    }
 }

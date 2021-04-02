@@ -71,7 +71,7 @@ public class NotificationListenerManager {
         if (notification.isUsed()) {
             return;
         }
-        String channel = "SMS Invitation";
+        String channel = notification.getTitle();
         createNotificationChannel(context, channel);
 
         notificationBuilder(context, channel, notification);

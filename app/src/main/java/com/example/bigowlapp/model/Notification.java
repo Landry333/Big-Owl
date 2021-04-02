@@ -8,17 +8,19 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 public class Notification extends Model {
 
     public enum Type {
-        NONE(Notification.class),
-        INVALID(NullNotification.class),
-        SUPERVISION_REQUEST(SupervisionRequest.class),
-        SCHEDULE_REQUEST(ScheduleRequest.class),
-        AUTH_BY_PHONE_NUMBER_FAILURE(AuthByPhoneNumberFailure.class),
-        SMS_INVITATION_REQUEST(SmsInvitationRequest.class);
+        NONE(Notification.class, ""),
+        INVALID(NullNotification.class, "Invalid"),
+        SUPERVISION_REQUEST(SupervisionRequest.class, "Supervise request"),
+        SCHEDULE_REQUEST(ScheduleRequest.class, "Schedule request"),
+        AUTH_BY_PHONE_NUMBER_FAILURE(AuthByPhoneNumberFailure.class, "Phone number failed"),
+        SMS_INVITATION_REQUEST(SmsInvitationRequest.class, "SMS invitation");
 
         public final Class<? extends Notification> typeClass;
+        public final String title;
 
-        Type(Class<? extends Notification> typeClass) {
+        Type(Class<? extends Notification> typeClass, String title) {
             this.typeClass = typeClass;
+            this.title = title;
         }
     }
 
@@ -126,6 +128,13 @@ public class Notification extends Model {
         }
 
         return Timestamp.now().toDate().getTime() - this.getCreationTime().toDate().getTime();
+    }
+
+    public String getTitle(){
+        if(this.getType() != null) {
+            return this.getType().title;
+        }
+        return "";
     }
 
     public static class Field {
