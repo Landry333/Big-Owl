@@ -37,16 +37,6 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
     private Button btnFingerprintAuthAdd;
     private Button btnFingerprintAuthMaybeLater;
     private HomePageViewModel homePageViewModel;
-    private static final String PROPOSE_FINGERPRINT_AUTH = "Add fingerprint authentication to secure your account?\n\n" +
-            "NOTE: This will also make your account ONLY accessible by a device having sim card_1 number same " +
-            "as the phone number you saved in your account";
-    private static final String IS_FINGERPRINT_AUTH_REGISTERED = "You are registered to fingerprint authentication.\n\n" +
-            "You can modify your choice on Edit profile";
-    private static final String NO_COMPATIBILITY_WITH_PHONE = "Sorry, this additional security service is not available on" +
-            " this number or with your phone and telephony provider\n\n" +
-            " First make sure sim card_1 number on this phone is the same as in your account";
-    private static final String NOT_ALLOWED = "You are not allowed to access this account\n\n" +
-            "Sim card_1 number on this phone should be the same as in your account";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +86,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
         }
 
         btnStartFingerAuth.setOnClickListener(v -> fingerAuthenticate());
+
         btnLogOut.setOnClickListener(v -> {
             homePageViewModel.signOut();
             Toast.makeText(FingerprintAuthenticationActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
@@ -120,6 +111,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
     @SuppressLint("MissingPermission")
 // Permission was already provided by user before sign in step in order to proceed
     private void subscribeToData() {
+
         if (homePageViewModel.isCurrentUserSet()) {
             LiveDataWithStatus<User> currentUserData = homePageViewModel.getCurrentUserData();
             currentUserData.observe(this, user -> {
@@ -136,42 +128,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
                 } catch (NumberParseException e) {
                     Toast.makeText(this, "FAILED to format phone number. Process failed", Toast.LENGTH_LONG).show();
                 }
-
-                if (!user.getPhoneNumber().equalsIgnoreCase(formattedDevicePhoneNum)
-                        && user.getFingerprintAuthRegistration().equalsIgnoreCase("NO")) {
-                    fingerprintAuthRegistrationText.setText(NO_COMPATIBILITY_WITH_PHONE);
-                    btnGoToHomePage.setText("Go to home page");
-                    btnGoToHomePage.setVisibility(View.VISIBLE);
-                    return;
-                }
-                if (user.getFingerprintAuthRegistration().equalsIgnoreCase("NO")) {
-                    fingerprintAuthRegistrationText.setText(PROPOSE_FINGERPRINT_AUTH);
-                    btnFingerprintAuthAdd.setText("ADD");
-                    btnFingerprintAuthMaybeLater.setText("MAYBE LATER");
-                    btnFingerprintAuthAdd.setVisibility(View.VISIBLE);
-                    btnFingerprintAuthMaybeLater.setVisibility(View.VISIBLE);
-                    btnFingerprintAuthAdd.setOnClickListener(v -> {
-                        user.setFingerprintAuthRegistration("YES");
-                        homePageViewModel.updateUser(user);
-                        fingerprintAuthRegistrationText.setText(IS_FINGERPRINT_AUTH_REGISTERED);
-                        btnFingerprintAuthAdd.setVisibility(View.GONE);
-                        btnFingerprintAuthMaybeLater.setVisibility(View.GONE);
-                        btnStartFingerAuth.setVisibility(View.VISIBLE);
-                        Toast.makeText(this, "You now have the fingerprint authentication", Toast.LENGTH_LONG).show();
-                    });
-
-                } else if (user.getFingerprintAuthRegistration().equalsIgnoreCase("YES")) {
-                    if (user.getPhoneNumber().equalsIgnoreCase(formattedDevicePhoneNum)) {
-                        fingerprintAuthRegistrationText.setText(IS_FINGERPRINT_AUTH_REGISTERED);
-                        btnFingerprintAuthAdd.setVisibility(View.GONE);
-                        btnStartFingerAuth.setVisibility(View.VISIBLE);
-                    } else {
-                        fingerprintAuthRegistrationText.setText(NOT_ALLOWED);
-                    }
-
-                } else {
-                    fingerprintAuthRegistrationText.setText("NOT ALLOWED");
-                }
+                verifyUserAccessToService(user, formattedDevicePhoneNum);
 
             });
         }
@@ -199,5 +156,48 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
     public void goToHomePage() {
         Intent i = new Intent(FingerprintAuthenticationActivity.this, HomePageActivity.class);
         startActivity(i);
+    }
+
+    public void verifyUserAccessToService(User user, String devicePhoneNum) {
+        final String NO_COMPATIBILITY_WITH_PHONE = getString(R.string.no_compatibility_with_phone);
+        final String PROPOSE_FINGERPRINT_AUTH = getString(R.string.propose_fingerprint_auth);
+        final String IS_FINGERPRINT_AUTH_REGISTERED = getString(R.string.is_fingerprint_auth_registered);
+        final String NOT_ALLOWED = getString(R.string.not_allowed);
+
+        if (!user.getPhoneNumber().equalsIgnoreCase(devicePhoneNum)
+                && user.getFingerprintAuthRegistration().equalsIgnoreCase("NO")) {
+            fingerprintAuthRegistrationText.setText(NO_COMPATIBILITY_WITH_PHONE);
+            btnGoToHomePage.setText("Go to home page");
+            btnGoToHomePage.setVisibility(View.VISIBLE);
+            return;
+        }
+        if (user.getFingerprintAuthRegistration().equalsIgnoreCase("NO")) {
+            fingerprintAuthRegistrationText.setText(PROPOSE_FINGERPRINT_AUTH);
+            btnFingerprintAuthAdd.setText("ADD");
+            btnFingerprintAuthMaybeLater.setText("MAYBE LATER");
+            btnFingerprintAuthAdd.setVisibility(View.VISIBLE);
+            btnFingerprintAuthMaybeLater.setVisibility(View.VISIBLE);
+            btnFingerprintAuthAdd.setOnClickListener(v -> {
+                user.setFingerprintAuthRegistration("YES");
+                homePageViewModel.updateUser(user);
+                fingerprintAuthRegistrationText.setText(IS_FINGERPRINT_AUTH_REGISTERED);
+                btnFingerprintAuthAdd.setVisibility(View.GONE);
+                btnFingerprintAuthMaybeLater.setVisibility(View.GONE);
+                btnStartFingerAuth.setVisibility(View.VISIBLE);
+                Toast.makeText(this, "You now have the fingerprint authentication", Toast.LENGTH_LONG).show();
+            });
+
+        } else if (user.getFingerprintAuthRegistration().equalsIgnoreCase("YES")) {
+            if (user.getPhoneNumber().equalsIgnoreCase(devicePhoneNum)) {
+                fingerprintAuthRegistrationText.setText(IS_FINGERPRINT_AUTH_REGISTERED);
+                btnFingerprintAuthAdd.setVisibility(View.GONE);
+                btnStartFingerAuth.setVisibility(View.VISIBLE);
+            } else {
+                fingerprintAuthRegistrationText.setText(NOT_ALLOWED);
+            }
+
+        } else {
+            fingerprintAuthRegistrationText.setText("NOT ALLOWED");
+        }
     }
 }
