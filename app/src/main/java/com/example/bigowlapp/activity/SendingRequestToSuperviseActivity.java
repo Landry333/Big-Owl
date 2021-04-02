@@ -18,7 +18,7 @@ import com.google.firebase.Timestamp;
 import java.util.List;
 
 // TODO: Should be using a viewmodel
-public class SendingRequestToSuperviseActivity extends AppCompatActivity {
+public class SendingRequestToSuperviseActivity extends BigOwlActivity {
     String otherUserID;
     String currentUserID;
     String noteText;
@@ -46,7 +46,6 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sending_request_to_supervise);
 
         supRequestBtn = findViewById(R.id.SupRequest);
         noteTv = findViewById(R.id.note);
@@ -77,6 +76,11 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
                 Log.e("BigOwl", Log.getStackTraceString(e));
             }
         }
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_sending_request_to_supervise;
     }
 
     private void doRequest() {
