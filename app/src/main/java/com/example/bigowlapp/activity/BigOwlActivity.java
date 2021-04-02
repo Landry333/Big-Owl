@@ -44,16 +44,16 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
 
         imgBtnUser = findViewById(R.id.action_user);
         imgBtnUser.setOnClickListener(v -> {
-            // TODO startActivity(new Intent(this, User? .class));
+            startActivity(new Intent(this, EditProfileActivity.class));
         });
 
         imgBtnNotification = findViewById(R.id.action_notification);
         imgBtnNotification.setOnClickListener(v ->
                 startActivity(new Intent(this, NotificationActivity.class)));
 
-        imgBtnBigOwl = findViewById(R.id.action_big_owl);
+        imgBtnBigOwl = findViewById(R.id.action_home_page);
         imgBtnBigOwl.setOnClickListener(v -> {
-            // TODO startActivity(new Intent(this, BigOwl? .class));
+            startActivity(new Intent(this, HomePageActivity.class));
         });
     }
 
