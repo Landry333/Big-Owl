@@ -17,10 +17,9 @@
             android:id="@+id/action_home_page"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="3dp"
+            android:layout_margin="8dp"
             android:layout_weight="1.3"
             android:background="@color/white"
-            android:tint="#160654"
             android:src="@drawable/ic_menu_home"
             android:scaleType="fitCenter"
             android:contentDescription="@string/big_owl" />
