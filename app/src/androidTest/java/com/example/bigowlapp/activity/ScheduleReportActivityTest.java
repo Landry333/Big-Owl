@@ -20,7 +20,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -56,11 +55,12 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class ScheduleReportActivityTest {
-    private static Map<String, String> memberNameIdMap;
     private static ScheduleReportActivity currentActivity;
     private static Schedule testSchedule;
     private final Timestamp timestampNow = Timestamp.now();
     private MutableLiveData<Schedule> testScheduleData;
+    private ListViewMatcher listViewMatcher;
+
     @Mock
     private ScheduleReportViewModel mockScheduleReportViewModel;
 
@@ -80,7 +80,7 @@ public class ScheduleReportActivityTest {
         memberGroupIdList.add("testGroup001");
         List<String> groupMemberIdList = new ArrayList<>();
         Map<String, String> memberIdNameMap = new LinkedHashMap<>();
-        memberNameIdMap = new LinkedHashMap<>();
+        LinkedHashMap<String, String> memberNameIdMap = new LinkedHashMap<>();
         for (int i = 0; i < 6; i++) {
             User testMember = new User(
                     "testMember00".concat(String.valueOf(i)),
@@ -94,6 +94,7 @@ public class ScheduleReportActivityTest {
             memberIdNameMap.put(testMember.getUid(), testMember.getFullName());
             memberNameIdMap.put(testMember.getFullName(), testMember.getUid());
         }
+        listViewMatcher = new ListViewMatcher(memberNameIdMap);
         MutableLiveData<Map<String, String>> memberIdNameMapData = new MutableLiveData<>();
         memberIdNameMapData.postValue(memberIdNameMap);
 
@@ -150,7 +151,8 @@ public class ScheduleReportActivityTest {
         verify(mockScheduleReportViewModel, atMostOnce()).getScheduleMemberNameMap(testSchedule.getMemberList());
         assertEquals(testSchedule.getMemberList().size(), currentActivity.getScheduleReportMembersAdapter().getCount());
 
-        checkIfMemberAndAttendanceResultMatchOnView();
+
+        listViewMatcher.checkAttendanceMatchOnView();
     }
 
     @Test
@@ -159,7 +161,7 @@ public class ScheduleReportActivityTest {
         testSchedule.setEndTime(new Timestamp(timestampNow.getSeconds() + 7200, 0));
         testScheduleData.postValue(testSchedule);
 
-        checkIfMemberAndAttendanceResultMatchOnView();
+        listViewMatcher.checkAttendanceMatchOnView();
     }
 
     @Test
@@ -180,7 +182,7 @@ public class ScheduleReportActivityTest {
                 .inRoot(withDecorView(not(is(currentActivity.getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
 
-        checkIfMemberAndAttendanceResultMatchOnView();
+        listViewMatcher.checkAttendanceMatchOnView();
     }
 
     @Test
@@ -197,19 +199,23 @@ public class ScheduleReportActivityTest {
                         new Attendance(false)));
         testScheduleData.postValue(testSchedule);
 
-        checkIfMemberAndAttendanceResultMatchOnView();
-    }
-
-    private void checkIfMemberAndAttendanceResultMatchOnView() {
-        ListViewMatcher listViewMatcher = new ListViewMatcher();
-        for (int i = 0; i < testSchedule.getUserScheduleResponseMap().size(); i++) {
-            onView(listViewMatcher.atPositionOnView(i)).check(matches(isDisplayed()));
-        }
+        listViewMatcher.checkAttendanceMatchOnView();
     }
 
     private static class ListViewMatcher {
+        private final Map<String, String> memberNameIdMap;
 
-        public Matcher<View> atPositionOnView(int position) {
+        private ListViewMatcher(Map<String, String> memberNameIdMap) {
+            this.memberNameIdMap = memberNameIdMap;
+        }
+
+        private void checkAttendanceMatchOnView() {
+            for (int i = 0; i < testSchedule.getUserScheduleResponseMap().size(); i++) {
+                onView(atPositionOnView(i)).check(matches(isDisplayed()));
+            }
+        }
+
+        private Matcher<View> atPositionOnView(int position) {
 
             return new TypeSafeMatcher<View>() {
                 Resources resources = null;
@@ -229,9 +235,6 @@ public class ScheduleReportActivityTest {
 
                     TextView memberNameTextView = listView.getChildAt(position).findViewById(R.id.schedule_report_member_name);
                     String memberId = memberNameIdMap.get(memberNameTextView.getText().toString());
-
-                    System.out.println("memberNameIdMap" + memberNameIdMap.toString());
-                    Log.e("memberNameIdMap", memberNameIdMap.toString());
 
                     String memberExpectedAttendanceResult = testSchedule.scheduleMemberResponseAttendanceMap(memberId).get("responseText").toString();
 
