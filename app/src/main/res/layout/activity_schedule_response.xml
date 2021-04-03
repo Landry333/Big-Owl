@@ -83,7 +83,7 @@
         android:background="@color/colorAccent" />
 
     <LinearLayout
-        android:id="@+id/linear_layout_response"
+        android:id="@+id/linear_layout_system_response"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/view_divider_below_schedule"
@@ -97,12 +97,19 @@
         android:orientation="vertical"
         android:textColor="@color/black"
         android:textSize="36sp"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <LinearLayout
+            android:id="@+id/linear_layout_member_schedule_response"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -122,7 +129,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/this_schedule_on" />
 
-        </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
             <TextView
                 android:id="@+id/text_view_schedule_user_response_time"
@@ -130,13 +142,38 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold" />
 
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_member_attendance_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/your_attendance_result" />
+
+            <TextView
+                android:id="@+id/text_view_schedule_member_attendance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <View
         android:id="@+id/line_below_response"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/linear_layout_response"
+        android:layout_below="@+id/linear_layout_system_response"
         android:background="@color/colorAccent"
         android:visibility="invisible" />
 

@@ -87,4 +87,5 @@
     <string name="notification_page">Notifications</string>
     <string name="notification_content">Content</string>
     <string name="notification_name">Name</string>
+    <string name="your_attendance_result">Your attendance result:</string>
 </resources>

@@ -7,15 +7,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Response;
+import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.utils.PermissionsHelper;
 import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
+
+import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.ViewModelProvider;
 
 public class ScheduleViewRespondActivity extends BigOwlActivity {
 
@@ -61,12 +64,27 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
             ((TextView) findViewById(R.id.text_view_schedule_end_time)).setText(schedule.getEndTime().toDate().toString());
 
             UserScheduleResponse userScheduleResponse = scheduleViewRespondViewModel.getUserScheduleResponse();
-            if (userScheduleResponse != null && userScheduleResponse.getResponse() != Response.NEUTRAL) {
+            if (schedule.scheduleCurrentState() != Schedule.Status.SCHEDULED) {
+                findViewById(R.id.linear_layout_system_response).setVisibility(View.VISIBLE);
+                findViewById(R.id.layout_member_attendance_result).setVisibility(View.VISIBLE);
+
+                Map<String, Object> map = schedule.scheduleMemberResponseAttendanceMap(scheduleViewRespondViewModel.getCurrentUserUid());
+                ((TextView) findViewById(R.id.text_view_schedule_member_attendance))
+                        .setText((String) map.get("responseText"));
+                ((TextView) findViewById(R.id.text_view_schedule_member_attendance))
+                        .setTextColor((int) map.get("responseColor"));
+
+                setResponseButtonsVisibility(null);
+                findViewById(R.id.line_below_response).setVisibility(View.VISIBLE);
+
+            } else if (userScheduleResponse != null && userScheduleResponse.getResponse() != Response.NEUTRAL) {
+                findViewById(R.id.linear_layout_system_response).setVisibility(View.VISIBLE);
+                findViewById(R.id.linear_layout_member_schedule_response).setVisibility(View.VISIBLE);
+
                 ((TextView) findViewById(R.id.text_view_schedule_user_response_text))
                         .setText(userScheduleResponse.getResponse() == Response.ACCEPT ? "Accepted" : "Rejected");
                 ((TextView) findViewById(R.id.text_view_schedule_user_response_time))
                         .setText(userScheduleResponse.getResponseTime().toDate().toString());
-                (findViewById(R.id.linear_layout_response)).setVisibility(View.VISIBLE);
                 findViewById(R.id.line_below_response).setVisibility(View.VISIBLE);
                 setResponseButtonsVisibility(userScheduleResponse.getResponse());
             }
