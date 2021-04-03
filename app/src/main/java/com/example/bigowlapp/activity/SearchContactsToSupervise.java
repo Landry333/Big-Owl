@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,18 +42,15 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
 
     private static final int MAX_RESULTS = 50;
 
-    // Defines a variable for the search string
-    private String searchString = "";
-    private ListView listContactsView;
-    private List<String> list;
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     private EditText searchUsers;
+    private ListView listContactsView;
 
-    private ArrayAdapter<String> contactsAdapter;
-
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private LoaderManager loaderManager;
-    private Cursor phoneResultsCursor;
+
+    private String searchString = "";
+    private List<String> list;
+
 
     @Override
     public int getContentView() {
@@ -92,12 +88,12 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // Not needed for any purpose in this class
+                // Nothing happens before user search input
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                // Not needed for any purpose in this class
+                // Nothing happens aster user search input
             }
         });
     }
@@ -146,13 +142,10 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
             }
         });
     }
-
-
+    
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
-        Log.e("BigOwl", "gogo");
-
         // Setup Search Query
         Uri contentUri;
 
@@ -178,10 +171,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     }
 
     @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-        Log.e("BigOwl", "name");
-        phoneResultsCursor = cursor;
-
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor phoneResultsCursor) {
         list = new ArrayList<>();
 
         while (phoneResultsCursor.moveToNext()) {
@@ -201,7 +191,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     }
 
     private void updateList() {
-        contactsAdapter = new ArrayAdapter<>(this,
+        ArrayAdapter<String> contactsAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 list);
 
