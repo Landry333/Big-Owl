@@ -140,7 +140,6 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
 
                 }
             }
-
         });
     }
 }
