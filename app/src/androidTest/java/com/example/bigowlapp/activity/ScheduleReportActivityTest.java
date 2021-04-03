@@ -151,9 +151,6 @@ public class ScheduleReportActivityTest {
         verify(mockScheduleReportViewModel, atMostOnce()).getCurrentScheduleData(testSchedule.getUid());
         verify(mockScheduleReportViewModel, atMostOnce()).getScheduleMemberNameMap(testSchedule.getMemberList());
         assertEquals(testSchedule.getMemberList().size(), currentActivity.getScheduleReportMembersAdapter().getCount());
-
-
-        listViewMatcher.checkAttendanceMatchOnView();
     }
 
     @Test
