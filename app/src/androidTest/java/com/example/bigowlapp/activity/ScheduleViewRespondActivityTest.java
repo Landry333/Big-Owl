@@ -69,7 +69,6 @@ public class ScheduleViewRespondActivityTest {
     @Mock
     private FirebaseUser testFirebaseCurrentUser;
 
-    private ActivityScenario<ScheduleViewRespondActivity> activityScenario;
     private Schedule testSchedule;
 
     @Before
@@ -96,8 +95,6 @@ public class ScheduleViewRespondActivityTest {
         Map<String, UserScheduleResponse> testScheduleMembersMap = new HashMap<>();
         testScheduleMembersMap.put(testCurrentUser.getUid(),
                 new UserScheduleResponse(Response.NEUTRAL, null));
-        List<String> testScheduleMemberList = new ArrayList<>();
-        testScheduleMemberList.add(0, testCurrentUser.getUid());
         testSchedule = new Schedule();
         testSchedule.setUid("schedule001");
         testSchedule.setTitle("testSchedule001");
@@ -133,7 +130,7 @@ public class ScheduleViewRespondActivityTest {
             return null;
         }).when(mockScheduleViewRespondViewModel).respondSchedule(any(), any());
 
-        activityScenario = ActivityScenario.launch(testIntent);
+        ActivityScenario<ScheduleViewRespondActivity> activityScenario = ActivityScenario.launch(testIntent);
 
         activityScenario.moveToState(Lifecycle.State.CREATED);
         activityScenario.onActivity(activity ->
@@ -151,7 +148,7 @@ public class ScheduleViewRespondActivityTest {
         onView(withId(R.id.text_view_schedule_start_time)).check(matches(isDisplayed()));
         onView(withId(R.id.text_view_schedule_end_time)).check(matches(isDisplayed()));
         onView(withId(R.id.view_divider_below_schedule)).check(matches(isDisplayed()));
-        onView(withId(R.id.linear_layout_response)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.linear_layout_system_response)).check(matches(not(isDisplayed())));
         onView(withId(R.id.line_below_response)).check(matches(not(isDisplayed())));
         verify(mockScheduleViewRespondViewModel, times(1)).getUserScheduleResponse();
         onView(withId(R.id.button_accept)).check(matches(isDisplayed()));
@@ -167,7 +164,7 @@ public class ScheduleViewRespondActivityTest {
         verify(mockScheduleViewRespondViewModel, times(1)).isOneMinuteAfterLastResponse();
         verify(mockScheduleViewRespondViewModel, times(1)).respondSchedule(testSchedule.getUid(), Response.ACCEPT);
         verify(mockScheduleViewRespondViewModel, times(1)).notifySupervisorScheduleResponse();
-        onView(withId(R.id.linear_layout_response)).check(matches(isDisplayed()));
+        onView(withId(R.id.linear_layout_system_response)).check(matches(isDisplayed()));
         onView(withId(R.id.button_accept)).check(matches(not(isDisplayed())));
         onView(withId(R.id.button_reject)).check(matches(isDisplayed()));
 
@@ -176,7 +173,7 @@ public class ScheduleViewRespondActivityTest {
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, Timestamp.now()));
         onView(withId(R.id.button_reject)).perform(click());
         verify(mockScheduleViewRespondViewModel, times(2)).notifySupervisorScheduleResponse();
-        onView(withId(R.id.linear_layout_response)).check(matches(isDisplayed()));
+        onView(withId(R.id.linear_layout_system_response)).check(matches(isDisplayed()));
         onView(withId(R.id.button_accept)).check(matches(isDisplayed()));
         onView(withId(R.id.button_reject)).check(matches(not(isDisplayed())));
     }
