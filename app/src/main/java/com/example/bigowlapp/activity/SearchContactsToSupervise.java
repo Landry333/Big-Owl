@@ -33,24 +33,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchContactsToSupervise extends BigOwlActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-    private static int INDEX_CONTACT_NAME_NEW = 0;
-    private static int INDEX_CONTACT_NUMBER = 1;
+    private static final int INDEX_CONTACT_NAME = 0;
+    private static final int INDEX_CONTACT_NUMBER = 1;
 
-    private final static String[] PROJECTION = {
+    private final static String[] DATA_COLUMNS_TO_LOAD = {
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
             ContactsContract.CommonDataKinds.Phone.NUMBER,
     };
-
-    private static final String SELECTION =
-            ContactsContract.Contacts.DISPLAY_NAME + " LIKE ?";
 
     private static final int MAX_RESULTS = 50;
 
     // Defines a variable for the search string
     private String searchString = "";
-    // Defines the array to hold values that replace the ?
-    private final String[] selectionArgs = {searchString};
-
     private ListView listContactsView;
     private List<String> list;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -58,7 +52,6 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     private EditText searchUsers;
 
     private ArrayAdapter<String> contactsAdapter;
-    private long selectedContactId;
 
     private LoaderManager loaderManager;
     private Cursor phoneResultsCursor;
@@ -99,10 +92,12 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Not needed for any purpose in this class
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                // Not needed for any purpose in this class
             }
         });
     }
@@ -158,7 +153,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
         Log.e("BigOwl", "gogo");
 
-        // Setup the search parameters
+        // Setup Search Query
         Uri contentUri;
 
         if (searchString.isEmpty()) {
@@ -171,11 +166,11 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
 
         contentUri = contentUri.buildUpon().appendQueryParameter("limit", String.valueOf(MAX_RESULTS)).build();
 
-        // Starts the query
+        // Run Query
         return new CursorLoader(
                 this,
                 contentUri,
-                PROJECTION,
+                DATA_COLUMNS_TO_LOAD,
                 null,
                 null,
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
@@ -190,7 +185,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
         list = new ArrayList<>();
 
         while (phoneResultsCursor.moveToNext()) {
-            String name = phoneResultsCursor.getString(INDEX_CONTACT_NAME_NEW);
+            String name = phoneResultsCursor.getString(INDEX_CONTACT_NAME);
             String number = phoneResultsCursor.getString(INDEX_CONTACT_NUMBER);
             list.add(name + "\n" + number);
         }
