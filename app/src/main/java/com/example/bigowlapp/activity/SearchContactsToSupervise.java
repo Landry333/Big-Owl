@@ -39,7 +39,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     private static final int INDEX_CONTACT_NAME = 0;
     private static final int INDEX_CONTACT_NUMBER = 1;
 
-    private final static String[] DATA_COLUMNS_TO_LOAD = {
+    private static final String[] DATA_COLUMNS_TO_LOAD = {
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
             ContactsContract.CommonDataKinds.Phone.NUMBER,
     };
@@ -188,6 +188,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
                 String formattedNumber = PhoneNumberFormatter.formatNumber(number, this);
                 list.add(name + "\n" + formattedNumber);
             } catch (NumberParseException ignored) {
+                // Invalid numbers are skipped
             }
         }
 
