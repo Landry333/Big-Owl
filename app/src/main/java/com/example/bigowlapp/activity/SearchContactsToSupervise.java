@@ -23,15 +23,19 @@ import androidx.loader.content.Loader;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.UserRepository;
+import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.i18n.phonenumbers.NumberParseException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchContactsToSupervise extends BigOwlActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+    private static final int MAX_RESULTS = 50;
+
     private static final int INDEX_CONTACT_NAME = 0;
     private static final int INDEX_CONTACT_NUMBER = 1;
 
@@ -39,8 +43,6 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
             ContactsContract.CommonDataKinds.Phone.NUMBER,
     };
-
-    private static final int MAX_RESULTS = 50;
 
     private EditText searchUsers;
     private ListView listContactsView;
@@ -142,7 +144,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
             }
         });
     }
-    
+
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
@@ -177,7 +179,12 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
         while (phoneResultsCursor.moveToNext()) {
             String name = phoneResultsCursor.getString(INDEX_CONTACT_NAME);
             String number = phoneResultsCursor.getString(INDEX_CONTACT_NUMBER);
-            list.add(name + "\n" + number);
+
+            try {
+                String formattedNumber = PhoneNumberFormatter.formatNumber(number, this);
+                list.add(name + "\n" + formattedNumber);
+            } catch (NumberParseException ignored) {
+            }
         }
 
         updateList();
