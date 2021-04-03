@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +16,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
@@ -26,24 +31,90 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class SearchContactsToSupervise extends BigOwlActivity {
+public class SearchContactsToSupervise extends BigOwlActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static int INDEX_CONTACT_ID = 0;
+    private static int INDEX_CONTACT_LOOKUP_KEY = 1;
+    private static int INDEX_CONTACT_NAME = 2;
+    private static int INDEX_CONTACT_HAS_NUMBER = 3;
+
+    private final static String[] PROJECTION = {
+            ContactsContract.Contacts._ID,
+            ContactsContract.Contacts.LOOKUP_KEY,
+            ContactsContract.Contacts.DISPLAY_NAME,
+            ContactsContract.Contacts.HAS_PHONE_NUMBER,
+//            ContactsContract.Data.CONTACT_ID,
+    };
+
+    private static final String SELECTION =
+            ContactsContract.Contacts.DISPLAY_NAME + " LIKE ?";
+
+    private static final int MAX_RESULTS = 10;
+
+    // Defines a variable for the search string
+    private String searchString = "";
+    // Defines the array to hold values that replace the ?
+    private final String[] selectionArgs = {searchString};
+
     private ListView listContactsView;
-    private List<String> list, listShow;
+    private List<String> list;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    EditText search_users;
+    private EditText searchUsers;
+
+    private ArrayAdapter<String> contactsAdapter;
+    private long selectedContactId;
+
+    private LoaderManager loaderManager;
+
+    @Override
+    public int getContentView() {
+        return R.layout.activity_search_contacts;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        listContactsView = findViewById(R.id.listContacts);
+        searchUsers = findViewById(R.id.search_users);
+
+        loaderManager = LoaderManager.getInstance(this);
+
         initialize();
     }
 
     protected void initialize() {
-        loadContacts();
+        list = new ArrayList<>();
+        updateList();
+
+        setupContactListClick();
+        setupSearchListener();
+
+        loaderManager.initLoader(0, null, this);
     }
+
+    private void setupSearchListener() {
+        searchUsers.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                searchString = charSequence.toString();
+                loaderManager.restartLoader(0, null, SearchContactsToSupervise.this);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+    }
+
+    private void setupContactListClick() {
+    }
+
 
     private void loadContacts() {
         ContentResolver contentResolver = getContentResolver();
@@ -74,11 +145,6 @@ public class SearchContactsToSupervise extends BigOwlActivity {
             }
         }
         cursor.close();
-
-        listShow = list;
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, listShow);
-        listContactsView = findViewById(R.id.listContacts);
-        listContactsView.setAdapter(adapter);
 
         //Check if users already has the app
         listContactsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -123,38 +189,85 @@ public class SearchContactsToSupervise extends BigOwlActivity {
                         });
             }
         });
+    }
 
-        search_users = findViewById(R.id.search_users);
-        search_users.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchUsers(charSequence.toString().toLowerCase());
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, listShow);
-                listContactsView.setAdapter((adapter));
-            }
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        Log.e("BigOwl", "gogo");
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
+
+        // Puts the search string into the selection criteria
+        selectionArgs[0] = "%" + searchString + "%";
+
+        // Starts the query
+        // TODO: right ow uses selection to search by name only, consider using all possible
+        return new CursorLoader(
+                this,
+                ContactsContract.Data.CONTENT_URI,
+                PROJECTION,
+                SELECTION,
+                selectionArgs,
+                null
+        );
     }
 
     @Override
-    public int getContentView() {
-        return R.layout.activity_search_contacts;
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        Log.e("BigOwl", "name");
+
+        int numResults = 0;
+        list = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            boolean hasNumber = cursor.getInt(INDEX_CONTACT_HAS_NUMBER) == 1;
+            if (!hasNumber) {
+                continue;
+            }
+
+            long contactId = cursor.getLong(INDEX_CONTACT_ID);
+            String name55 = cursor.getString(INDEX_CONTACT_NAME);
+
+            ContentResolver contentResolver = getContentResolver();
+            Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    null,
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                    new String[]{String.valueOf(contactId)},
+                    null);
+
+            while (phones.moveToNext()) {
+                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                String number = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                list.add(name + "\n" + number);
+                ++numResults;
+
+                if (numResults >= MAX_RESULTS) {
+                    phones.close();
+                    cursor.close();
+                    updateList();
+                    return;
+                }
+            }
+
+            phones.close();
+        }
+        cursor.close();
+        updateList();
     }
 
-    private void searchUsers(String s) {
-        List<String> filteredUsers = list.stream().filter(u -> {
-            boolean containInName = u.toLowerCase().contains(s);
-            boolean containInPhone = u.toLowerCase().contains(s);
-            return (containInName || containInPhone);
-        }).collect(Collectors.toList());
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        Log.e("BigOwl", "rest");
+    }
 
-        listShow = filteredUsers;
+    private void updateList() {
+        contactsAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                list);
+
+        listContactsView.setAdapter(contactsAdapter);
+        contactsAdapter.notifyDataSetChanged();
     }
 }
