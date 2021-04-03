@@ -1,6 +1,5 @@
 package com.example.bigowlapp.activity;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -33,18 +32,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchContactsToSupervise extends BigOwlActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-
-    private static int INDEX_CONTACT_ID = 0;
-    private static int INDEX_CONTACT_LOOKUP_KEY = 1;
-    private static int INDEX_CONTACT_NAME = 2;
-    private static int INDEX_CONTACT_HAS_NUMBER = 3;
+    private static int INDEX_CONTACT_NAME_NEW = 0;
+    private static int INDEX_CONTACT_NUMBER = 1;
 
     private final static String[] PROJECTION = {
-            ContactsContract.Contacts._ID,
-            ContactsContract.Contacts.LOOKUP_KEY,
-            ContactsContract.Contacts.DISPLAY_NAME,
-            ContactsContract.Contacts.HAS_PHONE_NUMBER,
-//            ContactsContract.Data.CONTACT_ID,
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone.NUMBER,
     };
 
     private static final String SELECTION =
@@ -67,6 +60,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     private long selectedContactId;
 
     private LoaderManager loaderManager;
+    private Cursor phoneResultsCursor;
 
     @Override
     public int getContentView() {
@@ -113,39 +107,6 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     }
 
     private void setupContactListClick() {
-    }
-
-
-    private void loadContacts() {
-        ContentResolver contentResolver = getContentResolver();
-        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-
-        list = new ArrayList<>();
-
-        if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)));
-
-                if (hasPhoneNumber > 0) {
-                    Cursor cursor2 = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "= ?",
-                            new String[]{id}, null);
-
-                    while (cursor2.moveToNext()) {
-                        String PhoneNumber = cursor2.getString(cursor2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                        list.add(name + "\n" + PhoneNumber);
-                    }
-
-                    cursor2.close();
-                }
-            }
-        }
-        cursor.close();
-
         //Check if users already has the app
         listContactsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             // argument position gives the index of item which is clicked
@@ -176,7 +137,6 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
                                         intent.putExtra("user", user);
                                         intent.putExtra("contactDetails", contactDetails);
                                         startActivity(intent);
-
                                     } else {
                                         Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
@@ -205,56 +165,40 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
         // TODO: right ow uses selection to search by name only, consider using all possible
         return new CursorLoader(
                 this,
-                ContactsContract.Data.CONTENT_URI,
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 PROJECTION,
                 SELECTION,
                 selectionArgs,
-                null
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
         );
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         Log.e("BigOwl", "name");
+        phoneResultsCursor = cursor;
 
         int numResults = 0;
         list = new ArrayList<>();
 
-        while (cursor.moveToNext()) {
-            boolean hasNumber = cursor.getInt(INDEX_CONTACT_HAS_NUMBER) == 1;
-            if (!hasNumber) {
-                continue;
+        while (phoneResultsCursor.moveToNext()) {
+            String name = phoneResultsCursor.getString(INDEX_CONTACT_NAME_NEW);
+            String number = phoneResultsCursor.getString(INDEX_CONTACT_NUMBER);
+
+            list.add(name + "\n" + number);
+            ++numResults;
+
+            if (numResults >= MAX_RESULTS) {
+                updateList();
+                phoneResultsCursor.close();
+                loaderManager.destroyLoader(0);
+                return;
             }
-
-            long contactId = cursor.getLong(INDEX_CONTACT_ID);
-            String name55 = cursor.getString(INDEX_CONTACT_NAME);
-
-            ContentResolver contentResolver = getContentResolver();
-            Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                    null,
-                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                    new String[]{String.valueOf(contactId)},
-                    null);
-
-            while (phones.moveToNext()) {
-                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                String number = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                list.add(name + "\n" + number);
-                ++numResults;
-
-                if (numResults >= MAX_RESULTS) {
-                    phones.close();
-                    cursor.close();
-                    updateList();
-                    return;
-                }
-            }
-
-            phones.close();
         }
-        cursor.close();
+
         updateList();
+        phoneResultsCursor.close();
+        loaderManager.destroyLoader(0);
     }
 
     @Override
