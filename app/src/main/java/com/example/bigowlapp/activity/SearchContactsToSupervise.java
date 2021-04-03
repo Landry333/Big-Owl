@@ -2,6 +2,7 @@ package com.example.bigowlapp.activity;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
@@ -43,7 +44,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     private static final String SELECTION =
             ContactsContract.Contacts.DISPLAY_NAME + " LIKE ?";
 
-    private static final int MAX_RESULTS = 10;
+    private static final int MAX_RESULTS = 50;
 
     // Defines a variable for the search string
     private String searchString = "";
@@ -157,18 +158,26 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
         Log.e("BigOwl", "gogo");
 
+        // Setup the search parameters
+        Uri contentUri;
 
-        // Puts the search string into the selection criteria
-        selectionArgs[0] = "%" + searchString + "%";
+        if (searchString.isEmpty()) {
+            contentUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+        } else {
+            contentUri = Uri.withAppendedPath(
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI,
+                    Uri.encode(searchString));
+        }
+
+        contentUri = contentUri.buildUpon().appendQueryParameter("limit", String.valueOf(MAX_RESULTS)).build();
 
         // Starts the query
-        // TODO: right ow uses selection to search by name only, consider using all possible
         return new CursorLoader(
                 this,
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                contentUri,
                 PROJECTION,
-                SELECTION,
-                selectionArgs,
+                null,
+                null,
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
         );
     }
@@ -178,22 +187,12 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
         Log.e("BigOwl", "name");
         phoneResultsCursor = cursor;
 
-        int numResults = 0;
         list = new ArrayList<>();
 
         while (phoneResultsCursor.moveToNext()) {
             String name = phoneResultsCursor.getString(INDEX_CONTACT_NAME_NEW);
             String number = phoneResultsCursor.getString(INDEX_CONTACT_NUMBER);
-
             list.add(name + "\n" + number);
-            ++numResults;
-
-            if (numResults >= MAX_RESULTS) {
-                updateList();
-                phoneResultsCursor.close();
-                loaderManager.destroyLoader(0);
-                return;
-            }
         }
 
         updateList();
@@ -203,7 +202,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        Log.e("BigOwl", "rest");
+        // Not needed for any purpose in this class
     }
 
     private void updateList() {
