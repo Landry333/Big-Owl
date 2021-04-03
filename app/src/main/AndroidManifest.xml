@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -39,6 +40,7 @@
         <activity android:name=".activity.SendingRequestToSuperviseActivity" />
         <activity android:name=".activity.ListOfScheduleActivity" />
         <activity android:name=".activity.AddUsersActivity" />
+        <activity android:name=".activity.ScheduleReportActivity" />
         <activity android:name=".activity.NotificationActivity" />
         <activity
             android:name=".activity.WelcomePageActivity"

@@ -1,13 +1,18 @@
 package com.example.bigowlapp.model;
 
+import android.graphics.Color;
+
 import com.example.bigowlapp.utils.Constants;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 @IgnoreExtraProperties
@@ -29,6 +34,10 @@ public class Schedule extends Model {
     private GeoPoint location;
     private Map<String, UserScheduleResponse> userScheduleResponseMap;
 
+    public Schedule() {
+        super();
+    }
+
     public static Schedule getPrototypeSchedule() {
         Schedule schedule = new Schedule();
         schedule.title = "";
@@ -41,10 +50,6 @@ public class Schedule extends Model {
         schedule.startTime = new Timestamp(currentTime.getTime());
         schedule.endTime = new Timestamp(oneHourLaterTime.getTime());
         return schedule;
-    }
-
-    public Schedule() {
-        super();
     }
 
     public String getTitle() {
@@ -117,6 +122,63 @@ public class Schedule extends Model {
 
     public void setUserScheduleResponseMap(Map<String, UserScheduleResponse> userScheduleResponseMap) {
         this.userScheduleResponseMap = userScheduleResponseMap;
+    }
+
+    @Exclude
+    public Map<String, Object> scheduleMemberResponseAttendanceMap(String memberId) {
+        UserScheduleResponse userScheduleResponse = this.userScheduleResponseMap.get(memberId);
+        Response memberResponse = Objects.requireNonNull(userScheduleResponse).getResponse();
+        Attendance memberAttendance = userScheduleResponse.getAttendance();
+
+        Map<String, Object> map = new HashMap<>();
+        if (memberAttendance.didAttend()) {
+            map.put("responseText", "ATTENDED");
+            map.put("responseColor", Color.GREEN);
+            map.put("attendanceTime", memberAttendance.getAuthenticationTime().toDate().toString());
+        } else if (memberResponse == Response.REJECT) {
+            map.put("responseText", "REJECTED");
+            map.put("responseColor", Color.RED);
+        } else if (memberResponse == Response.NEUTRAL) {
+            map.put("responseText", "NO RESPONSE");
+            map.put("responseColor", Color.GRAY);
+        } else {
+            switch (scheduleCurrentState()) {
+                case SCHEDULED:
+                    map.put("responseText", "ACCEPTED");
+                    map.put("responseColor", Color.GREEN);
+                    break;
+                case ON_GOING:
+                    map.put("responseText", "PENDING");
+                    map.put("responseColor", Color.BLUE);
+                    break;
+                case COMPLETED:
+                    map.put("responseText", "MISSED");
+                    map.put("responseColor", Color.RED);
+                    break;
+                default:
+                    map.put("responseText", "ERROR");
+                    map.put("responseColor", Color.RED);
+                    break;
+            }
+        }
+        return map;
+    }
+
+    @Exclude
+    public Status scheduleCurrentState() {
+        final int THIRTY_MINUTES = 1800;
+        Timestamp timeNow = Timestamp.now();
+        if (timeNow.compareTo(startTime) < 0) {
+            return Status.SCHEDULED;
+        } else if (timeNow.getSeconds() <= (startTime.getSeconds() + THIRTY_MINUTES)) {
+            return Status.ON_GOING;
+        } else {
+            return Status.COMPLETED;
+        }
+    }
+
+    public enum Status {
+        SCHEDULED, ON_GOING, COMPLETED
     }
 
     public static class Field {
