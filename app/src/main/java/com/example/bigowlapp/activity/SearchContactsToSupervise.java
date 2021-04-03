@@ -161,6 +161,8 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
 
         contentUri = contentUri.buildUpon().appendQueryParameter("limit", String.valueOf(MAX_RESULTS)).build();
 
+        this.setProgressBarVisible();
+
         // Run Query
         return new CursorLoader(
                 this,
@@ -174,6 +176,8 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor phoneResultsCursor) {
+        this.setProgressBarInvisible();
+
         list = new ArrayList<>();
 
         while (phoneResultsCursor.moveToNext()) {
