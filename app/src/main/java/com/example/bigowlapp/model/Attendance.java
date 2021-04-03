@@ -22,6 +22,15 @@ public class Attendance {
         // public no-argument constructor necessary for Firebase data mapping
     }
 
+    public Attendance(boolean authenticated) {
+        this.authenticated = authenticated;
+    }
+
+    public Attendance(boolean authenticated, Timestamp authenticationTime) {
+        this.authenticated = authenticated;
+        this.authenticationTime = authenticationTime;
+    }
+
     public boolean isAuthenticated() {
         return authenticated;
     }
