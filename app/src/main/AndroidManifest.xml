@@ -28,7 +28,9 @@
         <activity android:name=".activity.EditProfileActivity" />
         <activity android:name=".activity.HomePageActivity" />
         <activity android:name=".activity.InvitationConfirmationActivity" />
-        <activity android:name=".activity.LoginPageActivity" />
+        <activity
+            android:name=".activity.LoginPageActivity"
+            android:launchMode='singleTask' />
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.MonitoringGroupPageActivity" />
         <activity android:name=".activity.SearchContactsToSupervise" />
