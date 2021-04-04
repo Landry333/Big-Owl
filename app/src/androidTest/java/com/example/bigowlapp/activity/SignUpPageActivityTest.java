@@ -1,7 +1,5 @@
 package com.example.bigowlapp.activity;
 
-import android.os.SystemClock;
-
 import androidx.lifecycle.Lifecycle;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
@@ -68,12 +66,11 @@ public class SignUpPageActivityTest {
         onView(withId(R.id.button_sign_up))
                 .perform(scrollTo())
                 .check(matches(withText("Sign Up"))).perform(click());
-        SystemClock.sleep(10000);
         onView(withId(R.id.edit_text_phone)).check(matches(hasErrorText("Please enter a valid phone number.")));
     }
 
     @Test
-    public void emptyFirstName(){
+    public void emptyFirstName() {
         //this has to be added so the error for firstName can be display.
         onView(withId(R.id.edit_text_phone)).perform(typeText("5141234567"), ViewActions.closeSoftKeyboard());
 
@@ -86,7 +83,7 @@ public class SignUpPageActivityTest {
     }
 
     @Test
-    public void emptyLastName(){
+    public void emptyLastName() {
         onView(withId(R.id.user_first_name)).perform(typeText(firstName), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.edit_text_phone)).perform(typeText("5141234567"), ViewActions.closeSoftKeyboard());
 
@@ -99,7 +96,7 @@ public class SignUpPageActivityTest {
     }
 
     @Test
-    public void emptyEmail(){
+    public void emptyEmail() {
         onView(withId(R.id.user_first_name)).perform(typeText(firstName), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.user_last_name)).perform(typeText(lastName), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.edit_text_phone)).perform(typeText("5141234567"), ViewActions.closeSoftKeyboard());
@@ -113,7 +110,7 @@ public class SignUpPageActivityTest {
     }
 
     @Test
-    public void emptyPassword(){
+    public void emptyPassword() {
         onView(withId(R.id.user_first_name)).perform(typeText(firstName), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.user_last_name)).perform(typeText(lastName), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.edit_text_text_mail_address)).perform(typeText(email), ViewActions.closeSoftKeyboard());
@@ -176,7 +173,7 @@ public class SignUpPageActivityTest {
     }
 
     @Test
-    public void tvSignInButtonTest(){
+    public void tvSignInButtonTest() {
         onView(withId(R.id.text_view_sign_in))
                 .perform(scrollTo())
                 .check(matches(withText("Already have an account? Sign in here"))).perform(click());
