@@ -130,6 +130,7 @@ public class Notification extends Model {
         return Timestamp.now().toDate().getTime() - this.getCreationTime().toDate().getTime();
     }
 
+    @Exclude
     public String getTitle(){
         if(this.getType() != null) {
             return this.getType().title;
