@@ -186,7 +186,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
             String number = phoneResultsCursor.getString(INDEX_CONTACT_NUMBER);
 
             try {
-                String formattedNumber = PhoneNumberFormatter.formatNumber(number, this);
+                String formattedNumber = new PhoneNumberFormatter(this).formatNumber(number);
                 list.add(name + "\n" + formattedNumber);
             } catch (NumberParseException | EmptyFieldException ignored) {
                 // Invalid numbers are skipped

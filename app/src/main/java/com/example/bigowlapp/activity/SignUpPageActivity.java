@@ -59,7 +59,7 @@ public class SignUpPageActivity extends AppCompatActivity {
 
             String formattedUserPhone;
             try {
-                formattedUserPhone = PhoneNumberFormatter.formatNumber(userPhone, this);
+                formattedUserPhone = new PhoneNumberFormatter(this).formatNumber(userPhone);
             } catch (NumberParseException | EmptyFieldException e) {
                 this.userPhone.setError(e.getMessage());
                 this.userPhone.requestFocus();

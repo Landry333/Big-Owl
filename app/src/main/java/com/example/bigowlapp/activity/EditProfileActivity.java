@@ -86,7 +86,7 @@ public class EditProfileActivity extends BigOwlActivity {
     private String phoneNumberFormatter(String userPhone) {
         String formattedPhone = null;
         try {
-            formattedPhone = PhoneNumberFormatter.formatNumber(userPhone, this);
+            formattedPhone = new PhoneNumberFormatter(this).formatNumber(userPhone);
         } catch (NumberParseException | EmptyFieldException e) {
             editPhoneNumber.setError(e.getMessage());
             editPhoneNumber.requestFocus();

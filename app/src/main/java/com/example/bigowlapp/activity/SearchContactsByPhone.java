@@ -34,7 +34,7 @@ public class SearchContactsByPhone extends BigOwlActivity {
             smsNumber = number.getText().toString();
 
             try {
-                smsNumber = PhoneNumberFormatter.formatNumber(smsNumber, this);
+                smsNumber = new PhoneNumberFormatter(this).formatNumber(smsNumber);
             } catch (NumberParseException | EmptyFieldException e) {
                 number.setError(e.getMessage());
                 number.requestFocus();

@@ -46,7 +46,7 @@ public class AuthenticatorByPhoneNumber {
                                 Attendance attendance = userScheduleResponse.getAttendance();
                                 String formattedDevicePhoneNum = null;
                                 try {
-                                    formattedDevicePhoneNum = PhoneNumberFormatter.formatNumber(devicePhoneNumber, context);
+                                    formattedDevicePhoneNum = new PhoneNumberFormatter(context).formatNumber(devicePhoneNumber);
                                 } catch (NumberParseException | EmptyFieldException e) {
                                     Log.e("BigOwl", Log.getStackTraceString(e));
                                     Toast.makeText(context, "FAILED to format phone number. Process failed", Toast.LENGTH_LONG).show();
