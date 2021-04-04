@@ -2,22 +2,18 @@ package com.example.bigowlapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.UserRepository;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.i18n.phonenumbers.NumberParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +38,20 @@ public class SearchContactsByPhone extends BigOwlActivity {
 
         btnSearch = findViewById(R.id.get_users);
         btnSearch.setOnClickListener(view -> {
-            list.clear();
             smsNumber = number.getText().toString();
 
+            try {
+                smsNumber = PhoneNumberFormatter.formatNumber(smsNumber, this);
+            } catch (NumberParseException e) {
+                number.setError(e.getMessage());
+                number.requestFocus();
+                return;
+            }
+
+            list.clear();
+
             db.collection(UserRepository.COLLECTION_NAME)
-                    .whereEqualTo(User.Field.PHONE_NUMBER, number.getText().toString())
+                    .whereEqualTo(User.Field.PHONE_NUMBER, smsNumber)
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
