@@ -14,11 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.repository.exception.EmptyFieldException;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.example.bigowlapp.viewModel.SignUpViewModel;
 import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
 
 public class SignUpPageActivity extends AppCompatActivity {
     public EditText userEmail, userPassword, userPhone, userFirstName, userLastName;
@@ -32,7 +31,7 @@ public class SignUpPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        if(signUpViewModel == null){
+        if (signUpViewModel == null) {
             signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
         }
 
@@ -61,7 +60,7 @@ public class SignUpPageActivity extends AppCompatActivity {
             String formattedUserPhone;
             try {
                 formattedUserPhone = PhoneNumberFormatter.formatNumber(userPhone, this);
-            } catch (NumberParseException e) {
+            } catch (NumberParseException | EmptyFieldException e) {
                 this.userPhone.setError(e.getMessage());
                 this.userPhone.requestFocus();
                 return;

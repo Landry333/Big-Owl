@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.UserRepository;
+import com.example.bigowlapp.repository.exception.EmptyFieldException;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -34,7 +35,7 @@ public class SearchContactsByPhone extends BigOwlActivity {
 
             try {
                 smsNumber = PhoneNumberFormatter.formatNumber(smsNumber, this);
-            } catch (NumberParseException e) {
+            } catch (NumberParseException | EmptyFieldException e) {
                 number.setError(e.getMessage());
                 number.requestFocus();
                 return;

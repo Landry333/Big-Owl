@@ -11,10 +11,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.repository.exception.EmptyFieldException;
+import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.example.bigowlapp.viewModel.EditProfileViewModel;
 import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.util.Objects;
 
@@ -87,7 +86,7 @@ public class EditProfileActivity extends BigOwlActivity {
     private String phoneNumberFormatter(String userPhone) {
         String formattedPhone = null;
         try {
-            formattedPhone = filteredNUmber(userPhone);
+            formattedPhone = PhoneNumberFormatter.formatNumber(userPhone, this);
         } catch (NumberParseException | EmptyFieldException e) {
             editPhoneNumber.setError(e.getMessage());
             editPhoneNumber.requestFocus();
@@ -120,14 +119,4 @@ public class EditProfileActivity extends BigOwlActivity {
     public void setHomePageViewModel(EditProfileViewModel editProfileViewModel) {
         this.editProfileViewModel = editProfileViewModel;
     }
-
-    public String filteredNUmber(String number) throws NumberParseException, EmptyFieldException {
-        if (number == null || number.isEmpty()) {
-            throw new EmptyFieldException("Please enter a valid phone number.");
-        }
-        PhoneNumberUtil numbUtil = PhoneNumberUtil.getInstance();
-        Phonenumber.PhoneNumber phonenumber = numbUtil.parseAndKeepRawInput(number, getResources().getConfiguration().getLocales().get(0).getCountry());
-        return numbUtil.format(phonenumber, PhoneNumberUtil.PhoneNumberFormat.E164);
-    }
-
 }

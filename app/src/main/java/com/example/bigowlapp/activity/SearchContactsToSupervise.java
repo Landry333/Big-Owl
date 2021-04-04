@@ -23,6 +23,7 @@ import androidx.loader.content.Loader;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.UserRepository;
+import com.example.bigowlapp.repository.exception.EmptyFieldException;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -187,7 +188,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
             try {
                 String formattedNumber = PhoneNumberFormatter.formatNumber(number, this);
                 list.add(name + "\n" + formattedNumber);
-            } catch (NumberParseException ignored) {
+            } catch (NumberParseException | EmptyFieldException ignored) {
                 // Invalid numbers are skipped
             }
         }
