@@ -3,6 +3,7 @@ package com.example.bigowlapp.utils;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import com.example.bigowlapp.repository.exception.EmptyFieldException;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -24,6 +25,11 @@ public class PhoneNumberFormatter {
         PhoneNumberUtil numbUtil = PhoneNumberUtil.getInstance();
         Phonenumber.PhoneNumber phonenumber = numbUtil.parseAndKeepRawInput(number, countryCodeGetter.getCountryCode());
         return numbUtil.format(phonenumber, PhoneNumberUtil.PhoneNumberFormat.E164);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setCountryCodeGetter(CountryCodeGetter countryCodeGetter) {
+        this.countryCodeGetter = countryCodeGetter;
     }
 
     public static class CountryCodeGetter {
