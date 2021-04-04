@@ -17,6 +17,12 @@ public class UserScheduleResponse {
         this.responseTime = responseTime;
     }
 
+    public UserScheduleResponse(Response response, Timestamp responseTime, Attendance attendance) {
+        this.response = response;
+        this.responseTime = responseTime;
+        this.attendance = attendance;
+    }
+
     public Response getResponse() {
         return response;
     }
