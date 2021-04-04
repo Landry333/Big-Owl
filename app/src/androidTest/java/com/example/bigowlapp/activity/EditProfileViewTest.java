@@ -20,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
@@ -105,22 +106,22 @@ public class EditProfileViewTest {
 
     @Test
     public void editProfileWithoutInputtingAnyPrimaryFieldsTest() {
-        onView(withId(R.id.edit_user_first_name)).perform(click()).perform(replaceText(""));
+        onView(withId(R.id.edit_user_first_name)).perform(click()).perform(replaceText(""), closeSoftKeyboard());
         onView(withId(R.id.edit_button_confirm))
                 .check(matches(withText("Confirm"))).perform(click());
         onView(withId(R.id.edit_user_first_name)).check(matches(hasErrorText("Please enter a valid first name.")));
 
-        onView(withId(R.id.edit_user_last_name)).perform(click()).perform(replaceText(""));
+        onView(withId(R.id.edit_user_last_name)).perform(click()).perform(replaceText(""), closeSoftKeyboard());
         onView(withId(R.id.edit_button_confirm))
                 .check(matches(withText("Confirm"))).perform(click());
         onView(withId(R.id.edit_user_last_name)).check(matches(hasErrorText("Please enter a valid last name.")));
 
-        onView(withId(R.id.edit_user_phone_number)).perform(click()).perform(replaceText(""));
+        onView(withId(R.id.edit_user_phone_number)).perform(click()).perform(replaceText(""), closeSoftKeyboard());
         onView(withId(R.id.edit_button_confirm))
                 .check(matches(withText("Confirm"))).perform(click());
         onView(withId(R.id.edit_user_phone_number)).check(matches(hasErrorText("Please enter a valid phone number.")));
 
-        onView(withId(R.id.edit_fingerprint_auth_registration)).perform(click()).perform(replaceText(""));
+        onView(withId(R.id.edit_fingerprint_auth_registration)).perform(click()).perform(replaceText(""), closeSoftKeyboard());
         onView(withId(R.id.edit_button_confirm))
                 .check(matches(withText("Confirm"))).perform(click());
         onView(withId(R.id.edit_fingerprint_auth_registration)).check(matches(hasErrorText("Please enter YES or NO and remove any empty space.")));
