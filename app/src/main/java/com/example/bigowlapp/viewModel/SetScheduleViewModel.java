@@ -53,7 +53,7 @@ public class SetScheduleViewModel extends BaseViewModel {
         newScheduleData = new MutableLiveData<>(Schedule.getPrototypeSchedule());
     }
 
-    public MutableLiveData<Schedule> addSchedule() {
+    public void addSchedule() {
         Schedule schedule = newScheduleData.getValue();
         Map<String, UserScheduleResponse> userResponseMap =
                 schedule.getMemberList().stream().collect(Collectors.toMap(
@@ -61,11 +61,9 @@ public class SetScheduleViewModel extends BaseViewModel {
                         memberUid -> new UserScheduleResponse(Response.NEUTRAL, null))
                 );
         schedule.setUserScheduleResponseMap(userResponseMap);
-
-        //#32
-        sendNewScheduleNotificationRequest();
-
-        return repositoryFacade.getScheduleRepository().addDocument(schedule);
+            repositoryFacade.getScheduleRepository().addDocument(schedule).observeForever(addedSchedule -> {
+            sendNewScheduleNotificationRequest(addedSchedule.getUid());
+        });
     }
 
     public LiveData<List<Group>> getListOfGroup() {
@@ -196,14 +194,14 @@ public class SetScheduleViewModel extends BaseViewModel {
         this.newScheduleData.setValue(this.newScheduleData.getValue());
     }
 
-    private void sendNewScheduleNotificationRequest() { //#32
+    private void sendNewScheduleNotificationRequest(String scheduleUid) {
         for (User selectedUser : getSelectedUsers()) {
             ReceiveScheduleNotification newNotification = new ReceiveScheduleNotification();
             newNotification.setReceiverUid(selectedUser.getUid());
             newNotification.setSenderUid(getCurrentUserUid());
             newNotification.setGroupUid(getSelectedGroup().getUid());
             newNotification.setCreationTime(Timestamp.now());
-
+            newNotification.setScheduleUid(scheduleUid);
 
             repositoryFacade.getNotificationRepository(selectedUser.getUid()).addDocument(newNotification);
         }
