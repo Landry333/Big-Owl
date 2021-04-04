@@ -10,7 +10,6 @@ import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.repository.exception.EmptyFieldException;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.example.bigowlapp.viewModel.EditProfileViewModel;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -87,7 +86,7 @@ public class EditProfileActivity extends BigOwlActivity {
         String formattedPhone = null;
         try {
             formattedPhone = new PhoneNumberFormatter(this).formatNumber(userPhone);
-        } catch (NumberParseException | EmptyFieldException e) {
+        } catch (NumberParseException e) {
             editPhoneNumber.setError(e.getMessage());
             editPhoneNumber.requestFocus();
         }

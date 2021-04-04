@@ -17,7 +17,7 @@ public class PhoneNumberFormatter {
         countryCodeGetter = new CountryCodeGetter(context);
     }
 
-    public String formatNumber(String number) throws NumberParseException, EmptyFieldException {
+    public String formatNumber(String number) throws NumberParseException {
         if (number == null || number.isEmpty()) {
             throw new EmptyFieldException("Please enter a valid phone number.");
         }

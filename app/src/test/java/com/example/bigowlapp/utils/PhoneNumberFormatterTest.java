@@ -28,32 +28,32 @@ public class PhoneNumberFormatterTest {
     }
 
     @Test(expected = EmptyFieldException.class)
-    public void formatNumberNullShouldThrowError() throws NumberParseException, EmptyFieldException {
+    public void formatNumberNullShouldThrowError() throws NumberParseException {
         phoneNumberFormatter.formatNumber(null);
     }
 
     @Test(expected = EmptyFieldException.class)
-    public void formatNumberEmptyShouldThrowError() throws NumberParseException, EmptyFieldException {
+    public void formatNumberEmptyShouldThrowError() throws NumberParseException {
         phoneNumberFormatter.formatNumber("");
     }
 
     @Test(expected = NumberParseException.class)
-    public void formatNumberNotNumberShouldThrowError() throws NumberParseException, EmptyFieldException {
+    public void formatNumberNotNumberShouldThrowError() throws NumberParseException {
         phoneNumberFormatter.formatNumber("letters");
     }
 
     @Test(expected = NumberParseException.class)
-    public void formatNumberTooLongShouldThrowError() throws NumberParseException, EmptyFieldException {
+    public void formatNumberTooLongShouldThrowError() throws NumberParseException {
         phoneNumberFormatter.formatNumber("99999999999999999999999999999999");
     }
 
     @Test(expected = NumberParseException.class)
-    public void formatNumberTooShortShouldThrowError() throws NumberParseException, EmptyFieldException {
+    public void formatNumberTooShortShouldThrowError() throws NumberParseException {
         phoneNumberFormatter.formatNumber("8");
     }
 
     @Test
-    public void formatNumberValidCases() throws NumberParseException, EmptyFieldException {
+    public void formatNumberValidCases() throws NumberParseException {
         String expectedResult = "+15553334444";
         String result;
 

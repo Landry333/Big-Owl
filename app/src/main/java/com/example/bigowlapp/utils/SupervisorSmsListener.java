@@ -9,7 +9,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.bigowlapp.model.Schedule;
-import com.example.bigowlapp.repository.exception.EmptyFieldException;
 import com.google.firebase.Timestamp;
 import com.google.i18n.phonenumbers.NumberParseException;
 
@@ -45,7 +44,7 @@ public class SupervisorSmsListener extends BroadcastReceiver {
                 String formattedSmsSenderNum;
                 try {
                     formattedSmsSenderNum = new PhoneNumberFormatter(context).formatNumber(smsSenderNum);
-                } catch (NumberParseException | EmptyFieldException e) {
+                } catch (NumberParseException e) {
                     Log.e("BigOwl", Log.getStackTraceString(e));
                     Toast.makeText(context, "FAILED to format phone number for next schedule authentication. Process failed", Toast.LENGTH_LONG).show();
                     return;
