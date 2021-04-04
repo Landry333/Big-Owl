@@ -95,7 +95,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
 
             @Override
             public void afterTextChanged(Editable editable) {
-                // Nothing happens aster user search input
+                // Nothing happens after user search input
             }
         });
     }
