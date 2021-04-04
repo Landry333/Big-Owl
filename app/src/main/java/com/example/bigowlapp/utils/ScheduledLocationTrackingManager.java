@@ -19,8 +19,9 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.GeoPoint;
 
 public class ScheduledLocationTrackingManager {
+
     private static final int TRACKING_RADIUS_METERS = 300;
-    private static final long TRACKING_EXPIRE_TIME_MILLIS = Schedule.MAX_TRACKING_TIME_MILLIS;
+    public static final long TRACKING_EXPIRE_TIME_MILLIS = Schedule.MAX_TRACKING_TIME_MILLIS;
     // use 0 for instant response, and allow longer delays for better battery life
     private static final int MAX_NOTIFY_DELAY_MILLIS = 3 * Constants.MINUTE_TO_MILLIS;
 
@@ -46,7 +47,7 @@ public class ScheduledLocationTrackingManager {
                 .addGeofences(buildRequestToTrack(scheduleWithLocationToTrack), getGeofencePendingIntent())
                 .onSuccessTask(aVoid -> {
                     locationCheckAlarmManager.setAlarm(MAX_NOTIFY_DELAY_MILLIS);
-                    locationTrackingExpiredAlarmManager.setAlarm(TRACKING_EXPIRE_TIME_MILLIS);
+                    locationTrackingExpiredAlarmManager.setAlarm(TRACKING_EXPIRE_TIME_MILLIS, scheduleWithLocationToTrack.getTitle());
                     return Tasks.forResult(null);
                 });
     }

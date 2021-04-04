@@ -3,15 +3,14 @@ package com.example.bigowlapp.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
 import com.example.bigowlapp.utils.ScheduledLocationTrackingManager;
 import com.google.firebase.firestore.GeoPoint;
 
-import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LATITUDE;
-import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LONGITUDE;
-import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
+import static com.example.bigowlapp.utils.IntentConstants.*;
 
 /**
  * The purpose of this BroadcastReceiver is to execute code after the time activation of an alarm.
@@ -30,11 +29,12 @@ public class MemberScheduleAlarmReceiver extends BroadcastReceiver {
     }
 
     private Schedule getSchedule(Intent intent) {
-        double defaultValueLatLng = 0.0;
         Schedule schedule = new Schedule();
-        schedule.setUid(intent.getStringExtra(EXTRA_UID));
-        GeoPoint geoPoint = new GeoPoint(intent.getDoubleExtra(EXTRA_LATITUDE, defaultValueLatLng),
-                intent.getDoubleExtra(EXTRA_LONGITUDE, defaultValueLatLng));
+        Bundle bundle = intent.getExtras();
+        schedule.setUid(bundle.getString(EXTRA_UID));
+        schedule.setTitle(bundle.getString(EXTRA_SCHEDULE_TITLE));
+        GeoPoint geoPoint = new GeoPoint(bundle.getDouble(EXTRA_LATITUDE),
+                bundle.getDouble(EXTRA_LONGITUDE));
         schedule.setLocation(geoPoint);
         return schedule;
     }
