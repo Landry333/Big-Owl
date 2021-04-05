@@ -97,6 +97,7 @@
     <string name="no_compatibility_with_phone">
         Sorry, this additional security service is not available on
         this number or with your phone and telephony provider\n\n
+        SERVICE IS NOT ALLOWED\n\n
         First make sure sim card_1 number on this phone is the same as in your account
     </string>
     <string name="is_fingerprint_auth_registered">
