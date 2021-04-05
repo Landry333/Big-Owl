@@ -2,6 +2,9 @@
     <string name="mapbox_public_access_token">pk.eyJ1IjoiYmlnb3dsIiwiYSI6ImNraHZlODJ5YzFjdDMyc295azJ1YTdwZWQifQ.yqOHWYeuQPXphvSkx2NAQA</string>
 
     <string name="app_name">BigOwlApp</string>
+
+    <string name="Find_a_user_to_invite">Find a user to invite to use Big Owl app</string>
+    <string name="send_sms">send sms</string>
     <string name="by">by</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>

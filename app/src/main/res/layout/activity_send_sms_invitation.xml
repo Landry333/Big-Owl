@@ -44,16 +44,37 @@
         android:autofillHints=""
         tools:ignore="HardcodedText,TextFields" />
 
-    <Button
-        android:id="@+id/send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="send sms"
-        android:background="@drawable/rounded_button_redish"
-        android:textColor="@color/lightBlack"
-        android:layout_gravity="center_horizontal"
-        tools:ignore="HardcodedText" />
+    <LinearLayout
+        android:layout_below="@+id/text_view_schedule_response_confirmation"
+        android:gravity="center"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/cancel_sms_invitation"
+            android:background="@drawable/rounded_button_light"
+            android:textColor="@color/lightBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:layout_margin="20dp"
+            android:text="@string/cancel"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/send"
+            android:background="@drawable/rounded_button_redish"
+            android:textColor="@color/lightBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:layout_margin="20dp"
+            android:text="@string/send_sms"
+            tools:ignore="ButtonStyle" />
+
+    </LinearLayout>
 
 
 
