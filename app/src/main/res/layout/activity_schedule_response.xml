@@ -149,7 +149,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginTop="10dp"
         android:text="@string/confirmation_of_schedule_response"
-        android:textSize="17dp" />
+        android:textSize="18dp"/>
 
     <LinearLayout
         android:layout_below="@+id/text_view_schedule_response_confirmation"
