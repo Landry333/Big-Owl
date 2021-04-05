@@ -140,8 +140,19 @@
         android:background="@color/colorAccent"
         android:visibility="invisible" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/text_view_schedule_response_confirmation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/line_below_response"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/confirmation_of_schedule_response"
+        android:textSize="17dp" />
+
+    <LinearLayout
+        android:layout_below="@+id/text_view_schedule_response_confirmation"
         android:gravity="center"
         android:layout_margin="20dp"
         android:layout_width="match_parent"
