@@ -11,14 +11,13 @@ import android.widget.Toast;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.example.bigowlapp.viewModel.SignUpViewModel;
 import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
 
 public class SignUpPageActivity extends AppCompatActivity {
     public EditText userEmail, userPassword, userPhone, userFirstName, userLastName;
@@ -84,12 +83,20 @@ public class SignUpPageActivity extends AppCompatActivity {
                 this.userPhone.setError("please enter a phone number");
                 this.userPhone.requestFocus();
             } else {
+                BiometricManager biometricManager = BiometricManager.from(this);
                 progressBar.setVisibility(View.VISIBLE);
                 signUpViewModel.createUser(email, pass, formattedUserPhone, firstName, lastName)
                         .addOnSuccessListener(isSuccessful -> {
                             progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
+                            Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_LONG).show();
+                            Intent i;
+                            if (biometricManager.canAuthenticate() != BiometricManager.BIOMETRIC_SUCCESS) {
+                                i = new Intent(SignUpPageActivity.this, HomePageActivity.class);
+                                Toast.makeText(SignUpPageActivity.this, "You are logged in", Toast.LENGTH_LONG).show();
+                            } else {
+                                i = new Intent(SignUpPageActivity.this, FingerprintAuthenticationActivity.class);
+                            }
+                            startActivity(i);
                         })
                         .addOnFailureListener(e -> {
                             Toast.makeText(SignUpPageActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
