@@ -43,7 +43,7 @@ public class SupervisorSmsListener extends BroadcastReceiver {
                 Timestamp currentTime = new Timestamp(Calendar.getInstance().getTime());
                 String formattedSmsSenderNum;
                 try {
-                    formattedSmsSenderNum = PhoneNumberFormatter.formatNumber(smsSenderNum,context);
+                    formattedSmsSenderNum = new PhoneNumberFormatter(context).formatNumber(smsSenderNum);
                 } catch (NumberParseException e) {
                     Log.e("BigOwl", Log.getStackTraceString(e));
                     Toast.makeText(context, "FAILED to format phone number for next schedule authentication. Process failed", Toast.LENGTH_LONG).show();

@@ -56,14 +56,15 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
         secondResultNoteTv = findViewById(R.id.note3);
         secondResultNoteTv.setVisibility(View.GONE);
         RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
-        otherUserNotificationRepository = repositoryFacade.getNotificationRepository(otherUserID);
 
+        String contactDetails = getIntent().getStringExtra("contactDetails");
         otherUser = getIntent().getParcelableExtra("user");
-        assert otherUser != null;
+
         otherUserID = otherUser.getUid();
         currentUserID = repositoryFacade.getCurrentUserUid();
 
-        String contactDetails = getIntent().getStringExtra("contactDetails");
+        otherUserNotificationRepository = repositoryFacade.getNotificationRepository(otherUserID);
+
         noteText = "Contact: " + contactDetails + " is already registered to the application.";
         noteTv.setText(noteText);
 
