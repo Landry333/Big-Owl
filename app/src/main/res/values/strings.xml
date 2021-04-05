@@ -115,4 +115,25 @@
         You response has been submitted. You can change it with button below.
         But first wait at least 1 minute
     </string>
+    <string name="use_your_contacts_list">use your contacts list</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="enter_your_choice_yes_or_no">Enter your choice, YES or NO</string>
+    <string name="fingerprint_authentication">Fingerprint authentication</string>
+    <string name="authentication_message">authentication_message</string>
+    <string name="go_to_home_page">go to home page</string>
+    <string name="start_fingerprint_authentication">start fingerprint authentication</string>
+    <string name="authentication_result_message">authentication_result_message</string>
+    <string name="add">add</string>
+    <string name="maybe_later">maybe later</string>
+    <string name="invite_user">invite user</string>
+    <string name="i_supervise">I supervise</string>
+    <string name="supervising_me">supervising me</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="forgot_password_don_t_have_an_account">Forgot password? Don\'t have an account?</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="sign_in_here">Sign in here</string>
+    <string name="supervision_groups">supervision groups</string>
+    <string name="select_a_group_to_see_your_schedule_in_the_group">select a group to see your schedule in the group</string>
 </resources>

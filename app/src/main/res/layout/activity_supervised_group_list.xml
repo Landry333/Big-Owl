@@ -29,7 +29,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:text="supervision groups"
+                    android:text="@string/supervision_groups"
                     android:textColor="@color/black"
                     android:textSize="32sp" />
             </LinearLayout>
@@ -44,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:text="select a group to see your schedule in the group"
+                    android:text="@string/select_a_group_to_see_your_schedule_in_the_group"
                     android:textSize="18sp" />
             </LinearLayout>
 

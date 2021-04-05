@@ -149,7 +149,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:text="@string/confirmation_of_schedule_response"
-        android:textSize="18dp" />
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -175,7 +175,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:background="@drawable/rounded_button_redish"
+            android:background="@drawable/rounded_button_reddish"
             android:text="@string/reject"
             android:textColor="@color/lightBlack"
             android:visibility="visible"

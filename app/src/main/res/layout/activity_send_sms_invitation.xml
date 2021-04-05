@@ -46,7 +46,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_view_schedule_response_confirmation"
         android:layout_margin="20dp"
         android:gravity="center"
         android:orientation="horizontal">
@@ -67,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:background="@drawable/rounded_button_redish"
+            android:background="@drawable/rounded_button_reddish"
             android:text="@string/send_sms"
             android:textColor="@color/lightBlack"
             android:visibility="visible"

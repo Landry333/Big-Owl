@@ -362,7 +362,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:background="@drawable/rounded_button_redish"
+            android:background="@drawable/rounded_button_reddish"
             android:text="@string/set_schedule"
             android:textColor="@color/lightBlack"
             app:layout_constraintEnd_toEndOf="parent"
