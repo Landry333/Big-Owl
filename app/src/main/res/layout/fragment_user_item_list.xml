@@ -19,6 +19,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
         android:layout_weight="0"
         android:gravity="center|bottom"
         android:orientation="horizontal">
@@ -27,7 +28,12 @@
             android:id="@+id/user_item_list_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_weight="1.5"
+            android:background="@drawable/rounded_button_light"
             android:text="@string/cancel"
+            android:textColor="@color/lightBlack"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/user_item_list_confirm"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,11 +43,15 @@
             android:id="@+id/user_item_list_confirm"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_weight="1.5"
+            android:background="@drawable/rounded_button_reddish"
             android:text="@string/confirm"
+            android:textColor="@color/lightBlack"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/user_item_list_cancel"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/user_item_list_cancel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
