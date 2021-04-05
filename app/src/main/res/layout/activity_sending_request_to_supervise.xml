@@ -21,7 +21,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="300dp"
         android:padding="8dp"
-        android:text="noteText"
+        android:text="noteText2"
+        android:textSize="18sp"
+        tools:ignore="HardcodedText" />
+    <TextView
+        android:id="@+id/note3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="385dp"
+        android:padding="8dp"
+        android:text="noteText3"
         android:textSize="18sp"
         tools:ignore="HardcodedText" />
 
