@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 
 import com.example.bigowlapp.R;
@@ -77,7 +76,7 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
             try {
                 observeRequests();
                 supRequestBtn.setOnClickListener(v -> {
-                    doRequest() ;
+                    doRequest();
                     Toast.makeText(this, "request submitted", Toast.LENGTH_SHORT).show();
                 });
             } catch (Exception e) {
