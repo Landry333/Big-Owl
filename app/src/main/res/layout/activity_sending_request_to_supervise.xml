@@ -24,6 +24,7 @@
         android:text="noteText2"
         android:textSize="18sp"
         tools:ignore="HardcodedText" />
+
     <TextView
         android:id="@+id/note3"
         android:layout_width="match_parent"
@@ -46,10 +47,10 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="Send a request to supervise this user"
-        android:background="@drawable/rounded_button_redish"
-        android:textColor="@color/lightBlack"
         android:layout_marginTop="450dp"
+        android:background="@drawable/rounded_button_redish"
+        android:text="Send a request to supervise this user"
+        android:textColor="@color/lightBlack"
         tools:ignore="HardcodedText" />
 
 </RelativeLayout>

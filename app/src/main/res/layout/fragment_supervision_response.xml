@@ -59,8 +59,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:background="@drawable/rounded_button_light"
-            android:textColor="@color/lightBlack"
             android:text="@string/accept"
+            android:textColor="@color/lightBlack"
             android:visibility="visible"
             tools:ignore="ButtonStyle" />
 
@@ -70,8 +70,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:background="@drawable/rounded_button_redish"
-            android:textColor="@color/lightBlack"
             android:text="@string/reject"
+            android:textColor="@color/lightBlack"
             android:visibility="visible"
             tools:ignore="ButtonStyle" />
 

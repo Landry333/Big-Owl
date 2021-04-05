@@ -41,9 +41,9 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:hint="@string/title"
                 android:importantForAutofill="no"
-                android:inputType="text"
-                android:hint="@string/title"/>
+                android:inputType="text" />
 
             <View
                 android:layout_width="match_parent"
@@ -77,8 +77,8 @@
                     android:id="@+id/select_group_image_view"
                     android:layout_width="@dimen/icon_size"
                     android:layout_height="@dimen/icon_size"
-                    android:padding="@dimen/icon_padding"
                     android:contentDescription="@string/group_icon"
+                    android:padding="@dimen/icon_padding"
                     app:srcCompat="@drawable/ic_select_group" />
 
                 <Button
@@ -139,19 +139,19 @@
                     android:backgroundTint="#FFFFFF"
                     android:gravity="center"
                     android:padding="0dp"
-                    android:visibility="visible"
                     android:text="@string/select_users"
-                    android:textAllCaps="false" />
+                    android:textAllCaps="false"
+                    android:visibility="visible" />
 
                 <LinearLayout
                     android:id="@+id/select_users_list_view"
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:focusable="true"
                     android:clickable="true"
+                    android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="vertical"
                     android:visibility="gone" />
 
             </LinearLayout>
@@ -362,8 +362,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:text="@string/set_schedule"
             android:background="@drawable/rounded_button_redish"
+            android:text="@string/set_schedule"
             android:textColor="@color/lightBlack"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

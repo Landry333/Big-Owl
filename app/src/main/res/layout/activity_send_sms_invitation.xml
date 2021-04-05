@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,9 +16,9 @@
         android:id="@+id/note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="8dp"
         android:text="noteText"
         android:textSize="18sp"
-        android:padding="8dp"
         tools:ignore="HardcodedText" />
 
 
@@ -27,55 +26,54 @@
         android:id="@+id/number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Phone Number"
-        android:inputType="phone"
         android:layout_margin="8dp"
         android:autofillHints=""
+        android:hint="Phone Number"
+        android:inputType="phone"
         tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:hint="Type message"
-        android:text="Hi, I want you to register on BigOwl application. Please download it on Google Play store and sign up"
-        android:gravity="center_vertical"
         android:layout_margin="8dp"
         android:autofillHints=""
+        android:gravity="center_vertical"
+        android:hint="Type message"
+        android:text="Hi, I want you to register on BigOwl application. Please download it on Google Play store and sign up"
         tools:ignore="HardcodedText,TextFields" />
 
     <LinearLayout
-        android:layout_below="@+id/text_view_schedule_response_confirmation"
-        android:gravity="center"
-        android:layout_margin="20dp"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_view_schedule_response_confirmation"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/cancel_sms_invitation"
-            android:background="@drawable/rounded_button_light"
-            android:textColor="@color/lightBlack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
             android:layout_margin="20dp"
+            android:background="@drawable/rounded_button_light"
             android:text="@string/cancel"
+            android:textColor="@color/lightBlack"
+            android:visibility="visible"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/send"
-            android:background="@drawable/rounded_button_redish"
-            android:textColor="@color/lightBlack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
             android:layout_margin="20dp"
+            android:background="@drawable/rounded_button_redish"
             android:text="@string/send_sms"
+            android:textColor="@color/lightBlack"
+            android:visibility="visible"
             tools:ignore="ButtonStyle" />
 
     </LinearLayout>
-
 
 
 </LinearLayout>

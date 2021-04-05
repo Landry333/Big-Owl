@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="51dp"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
         android:gravity="center"
+        android:orientation="horizontal"
         android:weightSum="5">
 
         <ImageButton
@@ -20,9 +20,9 @@
             android:layout_margin="8dp"
             android:layout_weight="1.3"
             android:background="@color/white"
-            android:src="@drawable/ic_menu_home"
+            android:contentDescription="@string/big_owl"
             android:scaleType="fitCenter"
-            android:contentDescription="@string/big_owl" />
+            android:src="@drawable/ic_menu_home" />
 
         <View
             android:layout_width="1dp"
@@ -36,10 +36,10 @@
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@color/white"
-            android:tint="?attr/colorPrimary"
-            android:src="@drawable/ic_schedule"
+            android:contentDescription="@string/schedule"
             android:scaleType="fitCenter"
-            android:contentDescription="@string/schedule" />
+            android:src="@drawable/ic_schedule"
+            android:tint="?attr/colorPrimary" />
 
         <View
             android:layout_width="1dp"
@@ -53,10 +53,10 @@
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@color/white"
-            android:tint="?attr/colorPrimary"
-            android:src="@drawable/ic_user"
+            android:contentDescription="@string/user"
             android:scaleType="fitCenter"
-            android:contentDescription="@string/user" />
+            android:src="@drawable/ic_user"
+            android:tint="?attr/colorPrimary" />
 
         <View
             android:layout_width="1dp"
@@ -70,10 +70,10 @@
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@color/white"
-            android:tint="?attr/colorPrimary"
-            android:src="@drawable/ic_notification"
+            android:contentDescription="@string/notification"
             android:scaleType="fitCenter"
-            android:contentDescription="@string/notification" />
+            android:src="@drawable/ic_notification"
+            android:tint="?attr/colorPrimary" />
 
         <View
             android:layout_width="1dp"
@@ -87,10 +87,10 @@
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@color/white"
-            android:tint="?attr/colorPrimary"
-            android:src="@drawable/ic_overflow"
+            android:contentDescription="@string/overflow_menu"
             android:scaleType="fitCenter"
-            android:contentDescription="@string/overflow_menu" />
+            android:src="@drawable/ic_overflow"
+            android:tint="?attr/colorPrimary" />
 
     </LinearLayout>
 
@@ -105,10 +105,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="-6dp"
-        android:max="100"
-        android:progress="0"
-        android:visibility="invisible"
         android:indeterminate="true"
         android:indeterminateOnly="true"
-        />
+        android:max="100"
+        android:progress="0"
+        android:visibility="invisible" />
 </LinearLayout>
