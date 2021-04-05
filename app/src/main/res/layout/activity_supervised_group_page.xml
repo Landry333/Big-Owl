@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:background="@drawable/rounded_button_greenish"
-            android:text="my scheduled"
+            android:text="@string/my_scheduled"
             android:textColor="@color/lightBlack"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

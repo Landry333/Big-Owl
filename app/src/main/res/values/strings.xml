@@ -135,4 +135,5 @@
     <string name="sign_in_here">Sign in here</string>
     <string name="supervision_groups">supervision groups</string>
     <string name="select_a_group_to_see_your_schedule_in_the_group">select a group to see your schedule in the group</string>
+    <string name="my_scheduled">my scheduled</string>
 </resources>
