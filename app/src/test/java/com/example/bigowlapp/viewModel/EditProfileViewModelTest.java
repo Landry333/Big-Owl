@@ -62,14 +62,14 @@ public class EditProfileViewModelTest {
 
     @Test
     public void editUserProfileTest() {
-        editProfileViewModel.editUserProfile("1st", "2nd", "+123", "newUrl");
+        editProfileViewModel.editUserProfile("1st", "2nd", "yes", "+123", "newUrl");
         verify(userRepository).updateDocument("abc123", testUser);
         assertEquals("1st", testUser.getFirstName());
         assertEquals("2nd", testUser.getLastName());
         assertEquals("+123", testUser.getPhoneNumber());
         assertEquals("newUrl", testUser.getProfileImage());
 
-        editProfileViewModel.editUserProfile("1st", "2nd", "+123", "");
+        editProfileViewModel.editUserProfile("1st", "2nd", "yes", "+123", "");
         verify(userRepository, times(2)).updateDocument("abc123", testUser);
         assertEquals("newUrl", testUser.getProfileImage());
     }

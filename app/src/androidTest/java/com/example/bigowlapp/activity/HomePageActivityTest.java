@@ -1,12 +1,11 @@
 package com.example.bigowlapp.activity;
 
-import android.os.SystemClock;
-
 import androidx.lifecycle.Lifecycle;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
+import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
@@ -22,7 +21,9 @@ import org.mockito.MockitoAnnotations;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -68,12 +69,10 @@ public class HomePageActivityTest {
     public void profileViewAtHomePageTest() {
         testUserData.postValue(testUser);
 
-        SystemClock.sleep(5000);
-
-        onView(withText(testUserData.getValue().getFirstName())).check(matches(isDisplayed()));
-        onView(withText(testUserData.getValue().getLastName())).check(matches(isDisplayed()));
-        onView(withText(testUserData.getValue().getPhoneNumber())).check(matches(isDisplayed()));
-        onView(withText(testUserData.getValue().getEmail())).check(matches(isDisplayed()));
+        onView(allOf(withText(testUser.getFirstName()), withId(R.id.user_first_name))).check(matches(isDisplayed()));
+        onView(allOf(withText(testUser.getLastName()), withId(R.id.user_last_name))).check(matches(isDisplayed()));
+        onView(allOf(withText(testUser.getPhoneNumber()), withId(R.id.user_phone_number))).check(matches(isDisplayed()));
+        onView(allOf(withText(testUser.getEmail()), withId(R.id.user_email))).check(matches(isDisplayed()));
     }
 
     @Test

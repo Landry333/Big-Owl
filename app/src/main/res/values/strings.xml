@@ -9,7 +9,7 @@
     <string name="group_name">Group Name</string>
     <string name="have_account_text">Already have an account? Sign in here</string>
     <string name="hint_email">Email</string>
-    <string name="hint_search">Search…</string>
+    <string name="hint_search_user">Search user…</string>
     <string name="home">Home</string>
     <string name="image_url">Image URL</string>
     <string name="last_name">Last name</string>
@@ -71,10 +71,39 @@
         Location access must be set to <b>Allow all the time</b> for background location access.\n\n
         Your location will be verified at the scheduled time without having to worry the app being open.
     </string>
+    <string name="view_schedule">View Schedule</string>
+    <string name="till">till</string>
+    <string name="at">at</string>
+    <string name="member_name">member_name</string>
+    <string name="member_attendance">member_attendance</string>
+    <string name="from">from</string>
+    <string name="schedule_report_title">schedule_report_title</string>
+    <string name="schedule_report_start_time">schedule_report_start_time</string>
+    <string name="schedule_report_end_time">schedule_report_end_time</string>
+    <string name="schedule_report_location">schedule_report_location</string>
+    <string name="member_attendance_time">member_attendance_time</string>
     <string name="wiki_page_manual">Wiki Page Manual</string>
     <string name="wiki_page_manual_uri">"https://github.com/Landry333/Big-Owl/wiki/Manual"</string>
     <string name="notification_time">Time</string>
     <string name="notification_page">Notifications</string>
     <string name="notification_content">Content</string>
     <string name="notification_name">Name</string>
+    <string name="propose_fingerprint_auth">
+        Add fingerprint authentication to secure your account?\n\n
+        NOTE: This will also make your account ONLY accessible by a device having sim
+        card_1 number same as the phone number you saved in your account
+    </string>
+    <string name="no_compatibility_with_phone">
+        Sorry, this additional security service is not available on
+        this number or with your phone and telephony provider\n\n
+        First make sure sim card_1 number on this phone is the same as in your account
+    </string>
+    <string name="is_fingerprint_auth_registered">
+        You are registered to fingerprint authentication.\n\n
+        You can modify your choice on Edit profile
+    </string>
+    <string name="not_allowed">
+        You are not allowed to access this account\n\n
+        Sim card_1 number on this phone should be the same as in your account
+    </string>
 </resources>

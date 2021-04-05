@@ -60,6 +60,26 @@ public class ScheduleRepository extends Repository<Schedule> {
                 .get();
     }
 
+    public LiveDataWithStatus<List<Schedule>> getAllSchedulesForSupervisor(String currentUserUid) {
+        LiveDataWithStatus<List<Schedule>> listOfTData = new LiveDataWithStatus<>();
+        collectionReference.whereEqualTo(Schedule.Field.GROUP_SUPERVISOR_UID, currentUserUid)
+                .orderBy(Schedule.Field.START_TIME, Query.Direction.ASCENDING)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot tDocs = task.getResult();
+                        if (tDocs != null && !tDocs.isEmpty()) {
+                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), Schedule.class));
+                        } else {
+                            listOfTData.setError(getDocumentNotFoundException(Schedule.class));
+                        }
+                    } else {
+                        listOfTData.setError(task.getException());
+                    }
+                });
+        return listOfTData;
+    }
+
     public Task<QuerySnapshot> getTaskListSchedulesForSupervisor(String userID) {
         return collectionReference.whereEqualTo(Schedule.Field.GROUP_SUPERVISOR_UID, userID)
                 .whereGreaterThanOrEqualTo(Schedule.Field.START_TIME, Timestamp.now())

@@ -144,7 +144,6 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
 
                 }
             }
-
         });
     }
 }

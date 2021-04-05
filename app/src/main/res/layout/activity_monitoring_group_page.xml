@@ -23,57 +23,60 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <TextView
+                android:id="@+id/text_view_group_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="@string/group_name"
+                android:textSize="20sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/text_view_group_name"
-                    android:layout_width="500dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:layout_weight="2"
-                    android:text="@string/group_name"
-                    android:textSize="20sp" />
 
                 <Button
                     android:id="@+id/btn_set_schedule"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="create schedule"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_weight="1.5"
+                    android:text="@string/create_schedule"
                     android:background="@drawable/rounded_button_light"
                     android:textColor="@color/lightBlack"/>
 
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/monitoring_group_search_users"
+                <Button
+                    android:id="@+id/btn_view_schedule"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:hint="Search users..."
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:textSize="24sp" />
+                    android:layout_marginStart="40dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_weight="1.5"
+                    android:text="@string/view_schedule"
+                    android:background="@drawable/rounded_button_light"
+                    android:textColor="@color/lightBlack"
+                    style="?android:attr/borderlessButtonStyle" />
+
             </LinearLayout>
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/monitoring_group_search_users"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="4dp"
+                android:hint="@string/hint_search_user"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:textSize="24sp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@android:color/darker_gray" />
-            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorAccent" />
 
             <LinearLayout
                 android:layout_width="match_parent"
