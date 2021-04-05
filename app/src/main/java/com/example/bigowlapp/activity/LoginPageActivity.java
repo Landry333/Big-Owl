@@ -34,7 +34,7 @@ public class LoginPageActivity extends AppCompatActivity {
     TextView tvSignUp;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private LogInViewModel logInViewModel;
-    private NotificationListenerManager noficationListener;
+    private NotificationListenerManager notificationListener;
     private ProgressBar progressBar;
 
 
@@ -62,8 +62,8 @@ public class LoginPageActivity extends AppCompatActivity {
                 if (logInViewModel.isCurrentUserSet()) {
                     Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
-                    noficationListener = new NotificationListenerManager();
-                    noficationListener.listen(this);
+                    notificationListener = new NotificationListenerManager();
+                    notificationListener.listen(this);
                     checkNextAccessWhenIsLoggedIn();
                 } else {
                     Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_SHORT).show();

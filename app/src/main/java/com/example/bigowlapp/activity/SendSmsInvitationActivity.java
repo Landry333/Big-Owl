@@ -106,7 +106,7 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
         RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
         SmsInvitationRepository smsInvitationRepository = repositoryFacade.getSmsInvitationRepository();
         try{
-            number = PhoneNumberFormatter.formatNumber(number, this);
+            number = new PhoneNumberFormatter(this).formatNumber(number);
 
         }catch (NumberParseException e) {
             Log.e("Formatting Error: ", e.getMessage());

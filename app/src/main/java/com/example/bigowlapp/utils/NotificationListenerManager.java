@@ -3,7 +3,9 @@ package com.example.bigowlapp.utils;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.widget.Toast;
 
@@ -11,6 +13,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.activity.NotificationActivity;
 import com.example.bigowlapp.model.AuthByPhoneNumberFailure;
 import com.example.bigowlapp.model.Notification;
 import com.example.bigowlapp.model.Schedule;
@@ -45,9 +48,8 @@ public class NotificationListenerManager {
                         if (notification.getType() == Notification.Type.AUTH_BY_PHONE_NUMBER_FAILURE) {
                             handleAuthByPhoneNumberFailure((AuthByPhoneNumberFailure) notification);
                         }
-
-                        if(notification.getType() == Notification.Type.SMS_INVITATION_REQUEST){
-                            handleSmsInvitationRequest((SmsInvitationRequest) notification, context);
+                        else{
+                            handleNotificationRequest(notification, context);
                         }
                     }
                 });
@@ -67,7 +69,7 @@ public class NotificationListenerManager {
         }
     }
 
-    private void handleSmsInvitationRequest(SmsInvitationRequest notification, Context context){
+    private void handleNotificationRequest(Notification notification, Context context){
         if (notification.isUsed()) {
             return;
         }
@@ -95,6 +97,9 @@ public class NotificationListenerManager {
                 .setContentTitle(channel)
                 .setStyle(new NotificationCompat.InboxStyle()
                         .addLine(notification.getMessage()));
+        PendingIntent contentIntent = PendingIntent.getActivities(context, 0, new Intent[]{new Intent(context, NotificationActivity.class)}, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(contentIntent);
+
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(1, builder.build());
     }
