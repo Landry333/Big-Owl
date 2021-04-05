@@ -2,8 +2,10 @@ package com.example.bigowlapp.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -35,6 +37,7 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
     String requestUID;
     private TextView noteTv;
     private TextView resultNoteTv;
+    private TextView secondResultNoteTv;
     String canCancel = "You currently have a pending request to supervise this user";
     String noRequest = "You presently have NO request to supervise this user ";
     String noSelfRequest = "This contact matches you as a contact. You can't send a request to yourself";
@@ -50,7 +53,9 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
         supRequestBtn = findViewById(R.id.SupRequest);
         noteTv = findViewById(R.id.note);
         resultNoteTv = findViewById(R.id.note2);
-
+        resultNoteTv.setVisibility(View.VISIBLE);
+        secondResultNoteTv = findViewById(R.id.note3);
+        secondResultNoteTv.setVisibility(View.GONE);
         RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
         otherUserNotificationRepository = repositoryFacade.getNotificationRepository(otherUserID);
 
@@ -71,7 +76,10 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
             supRequestBtn.setClickable(true);
             try {
                 observeRequests();
-                supRequestBtn.setOnClickListener(v -> doRequest());
+                supRequestBtn.setOnClickListener(v -> {
+                    doRequest() ;
+                    Toast.makeText(this, "request submitted", Toast.LENGTH_SHORT).show();
+                });
             } catch (Exception e) {
                 Log.e("BigOwl", Log.getStackTraceString(e));
             }
@@ -122,21 +130,27 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
                 } else if (senderRequest.getReceiverUid().equals(otherUser.getUid())) {
 
                     if (senderRequest.getResponse().equals(SupervisionRequest.Response.ACCEPT)) {
-                        supRequestBtn.setText(supBtnAlready);
+                        secondResultNoteTv.setText(supBtnAlready);
+                        secondResultNoteTv.setVisibility(View.VISIBLE);
+                        resultNoteTv.setVisibility(View.GONE);
                         supRequestBtn.setClickable(false);
                         aRequestAlready = true;
                         resultNoteTv.setText(superviseAlready);
                     } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.NEUTRAL)) {
                         supRequestBtn.setText(supBtnCancel);
                         supRequestBtn.setClickable(true);
-                        resultNoteTv.setText(canCancel);
+                        secondResultNoteTv.setText(canCancel);
+                        secondResultNoteTv.setVisibility(View.VISIBLE);
+                        resultNoteTv.setVisibility(View.GONE);
                         aRequestAlready = true;
                         shouldCancelRequest = true;
                         requestUID = senderRequest.getUid();
                     } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.REJECT)) {
                         supRequestBtn.setText(sendNewRequest);
                         supRequestBtn.setClickable(true);
-                        resultNoteTv.setText(requestRejected);
+                        secondResultNoteTv.setText(requestRejected);
+                        secondResultNoteTv.setVisibility(View.VISIBLE);
+                        resultNoteTv.setVisibility(View.GONE);
                         aRequestAlready = true;
                         shouldSendAnOtherRequest = true;
                         requestUID = senderRequest.getUid();
