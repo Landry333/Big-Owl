@@ -148,7 +148,7 @@ public class LoginPageActivity extends AppCompatActivity {
             }
             String formattedDevicePhoneNum = null;
             try {
-                formattedDevicePhoneNum = PhoneNumberFormatter.formatNumber(devicePhoneNumber, this);
+                formattedDevicePhoneNum = new PhoneNumberFormatter(this).formatNumber(devicePhoneNumber);
             } catch (NumberParseException e) {
                 Toast.makeText(this, "FAILED to format phone number. Process failed", Toast.LENGTH_LONG).show();
             }

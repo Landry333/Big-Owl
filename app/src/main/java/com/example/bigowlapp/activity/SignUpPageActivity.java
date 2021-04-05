@@ -31,7 +31,7 @@ public class SignUpPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        if(signUpViewModel == null){
+        if (signUpViewModel == null) {
             signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
         }
 
@@ -59,7 +59,7 @@ public class SignUpPageActivity extends AppCompatActivity {
 
             String formattedUserPhone;
             try {
-                formattedUserPhone = PhoneNumberFormatter.formatNumber(userPhone, this);
+                formattedUserPhone = new PhoneNumberFormatter(this).formatNumber(userPhone);
             } catch (NumberParseException e) {
                 this.userPhone.setError(e.getMessage());
                 this.userPhone.requestFocus();

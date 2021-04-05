@@ -53,14 +53,15 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         resultNoteTv = findViewById(R.id.note2);
 
         RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
-        otherUserNotificationRepository = repositoryFacade.getNotificationRepository(otherUserID);
 
+        String contactDetails = getIntent().getStringExtra("contactDetails");
         otherUser = getIntent().getParcelableExtra("user");
-        assert otherUser != null;
+
         otherUserID = otherUser.getUid();
         currentUserID = repositoryFacade.getCurrentUserUid();
 
-        String contactDetails = getIntent().getStringExtra("contactDetails");
+        otherUserNotificationRepository = repositoryFacade.getNotificationRepository(otherUserID);
+
         noteText = "Contact: " + contactDetails + " is already registered to the application.";
         noteTv.setText(noteText);
 
