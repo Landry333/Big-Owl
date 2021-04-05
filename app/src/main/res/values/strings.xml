@@ -72,6 +72,7 @@
         Your location will be verified at the scheduled time without having to worry the app being open.
     </string>
     <string name="view_schedule">View Schedule</string>
+    <string name="create_schedule">create schedule"</string>
     <string name="till">till</string>
     <string name="at">at</string>
     <string name="member_name">member_name</string>
