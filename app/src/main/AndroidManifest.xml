@@ -22,12 +22,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.FingerprintAuthenticationActivity"/>
         <activity android:name=".activity.SetScheduleActivity" />
         <activity android:name=".activity.ScheduleViewRespondActivity" />
         <activity android:name=".activity.EditProfileActivity" />
         <activity android:name=".activity.HomePageActivity" />
         <activity android:name=".activity.InvitationConfirmationActivity" />
-        <activity android:name=".activity.LoginPageActivity" />
+        <activity
+            android:name=".activity.LoginPageActivity"
+            android:launchMode='singleTask' />
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.MonitoringGroupPageActivity" />
         <activity android:name=".activity.SearchContactsToSupervise" />
@@ -46,6 +49,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
