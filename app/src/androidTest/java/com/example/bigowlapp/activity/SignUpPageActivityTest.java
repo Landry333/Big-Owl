@@ -195,7 +195,7 @@ public class SignUpPageActivityTest {
     public void tvSignInButtonTest(){
         onView(withId(R.id.text_view_sign_in))
                 .perform(scrollTo())
-                .check(matches(withText("Already have an account? Sign in here"))).perform(click());
+                .check(matches(withText("Sign in here"))).perform(click());
 
         onView(withId(R.id.editTextTextEmailAddress)).check(matches(isDisplayed()));
         onView(withId(R.id.editTextTextPassword)).check(matches(isDisplayed()));
