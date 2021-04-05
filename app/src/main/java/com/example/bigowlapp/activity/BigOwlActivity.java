@@ -39,7 +39,7 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
 
         imgBtnSchedule = findViewById(R.id.action_schedule);
         imgBtnSchedule.setOnClickListener(v -> {
-            // TODO startActivity(new Intent(this, Schedule? .class));
+            startActivity(new Intent(this, MonitoringGroupPageActivity.class));
         });
 
         imgBtnUser = findViewById(R.id.action_user);
