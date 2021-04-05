@@ -68,7 +68,6 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                //textView.setText("Success");
                 Toast.makeText(FingerprintAuthenticationActivity.this, "You are logged in", Toast.LENGTH_LONG).show();
                 goToHomePage();
             }
