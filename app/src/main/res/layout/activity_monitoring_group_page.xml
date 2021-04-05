@@ -46,7 +46,8 @@
                     android:layout_weight="1.5"
                     android:background="@drawable/rounded_button_light"
                     android:text="@string/create_schedule"
-                    android:textColor="@color/lightBlack" />
+                    android:textColor="@color/lightBlack"
+                    style="?android:attr/buttonBarButtonStyle"/>
 
 
                 <Button
