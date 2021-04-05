@@ -18,6 +18,7 @@
     <string name="password">Password</string>
     <string name="phone">Phone</string>
     <string name="phone_number">Phone number</string>
+    <string name="Fingerprint_authentication">Fingerprint authentication :</string>
     <string name="refresh">Refresh</string>
     <string name="search_users">Add Users</string>
     <string name="invite_contacts">Invite From Contact List</string>
