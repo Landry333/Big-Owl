@@ -129,7 +129,6 @@
     <string name="i_supervise">I supervise</string>
     <string name="supervising_me">supervising me</string>
     <string name="email">Email</string>
-    <string name="password">Password</string>
     <string name="sign_in">Sign In</string>
     <string name="forgot_password_don_t_have_an_account">Forgot password? Don\'t have an account?</string>
     <string name="already_have_an_account">Already have an account?</string>
