@@ -27,11 +27,10 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
     boolean aRequestAlready;
     boolean shouldCancelRequest = false;
     boolean shouldSendAnOtherRequest = false;
-    String supBtnSend = "Send a request to supervise this user";
-    String supBtnAlready = "You are supervising this user";
-    String supBtnCancel = "You have sent a request already. Cancel request";
+    String supBtnSend = "Send request";
+    String supBtnCancel = "Cancel request";
     String canNotSend = "Can not send ";
-    String sendNewRequest = "Send a new request";
+    String sendNewRequest = "Send new request";
     private Button supRequestBtn;
     String requestUID;
     private TextView noteTv;
@@ -78,7 +77,7 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
                 observeRequests();
                 supRequestBtn.setOnClickListener(v -> {
                     doRequest();
-                    Toast.makeText(this, "request submitted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Action submitted", Toast.LENGTH_SHORT).show();
                 });
             } catch (Exception e) {
                 Log.e("BigOwl", Log.getStackTraceString(e));
@@ -115,7 +114,10 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
         aRequestAlready = false; // A false value allows for search for an existing request with
         // in repository until one is found
         supRequestBtn.setText(supBtnSend); // Default setText
+        supRequestBtn.setClickable(true);
         resultNoteTv.setText(noRequest);
+        secondResultNoteTv.setVisibility(View.GONE);
+        resultNoteTv.setVisibility(View.VISIBLE);
 
         LiveData<List<SupervisionRequest>> senderRequestsData = otherUserNotificationRepository
                 .getListOfDocumentByAttribute(SupervisionRequest.Field.SENDER_UID, currentUserID,
@@ -130,12 +132,12 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
                 } else if (senderRequest.getReceiverUid().equals(otherUser.getUid())) {
 
                     if (senderRequest.getResponse().equals(SupervisionRequest.Response.ACCEPT)) {
-                        secondResultNoteTv.setText(supBtnAlready);
-                        secondResultNoteTv.setVisibility(View.VISIBLE);
-                        resultNoteTv.setVisibility(View.GONE);
+                        resultNoteTv.setText(superviseAlready);
+                        secondResultNoteTv.setVisibility(View.GONE);
+                        resultNoteTv.setVisibility(View.VISIBLE);
+                        supRequestBtn.setText(canNotSend);
                         supRequestBtn.setClickable(false);
                         aRequestAlready = true;
-                        resultNoteTv.setText(superviseAlready);
                     } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.NEUTRAL)) {
                         supRequestBtn.setText(supBtnCancel);
                         supRequestBtn.setClickable(true);
@@ -148,9 +150,9 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
                     } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.REJECT)) {
                         supRequestBtn.setText(sendNewRequest);
                         supRequestBtn.setClickable(true);
-                        secondResultNoteTv.setText(requestRejected);
-                        secondResultNoteTv.setVisibility(View.VISIBLE);
-                        resultNoteTv.setVisibility(View.GONE);
+                        resultNoteTv.setText(requestRejected);
+                        resultNoteTv.setVisibility(View.VISIBLE);
+                        secondResultNoteTv.setVisibility(View.GONE);
                         aRequestAlready = true;
                         shouldSendAnOtherRequest = true;
                         requestUID = senderRequest.getUid();
@@ -161,3 +163,4 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
         });
     }
 }
+
