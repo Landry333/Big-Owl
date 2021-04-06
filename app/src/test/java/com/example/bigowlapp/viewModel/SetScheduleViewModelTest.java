@@ -5,10 +5,12 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.LiveDataWithStatus;
+import com.example.bigowlapp.model.Notification;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.GroupRepository;
+import com.example.bigowlapp.repository.NotificationRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.repository.UserRepository;
@@ -31,6 +33,8 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -52,12 +56,15 @@ public class SetScheduleViewModelTest {
     private GroupRepository groupRepository;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private NotificationRepository notificationRepository;
 
     @Before
     public void setUp() {
         when(repositoryFacade.getScheduleRepository()).thenReturn(scheduleRepository);
         when(repositoryFacade.getGroupRepository()).thenReturn(groupRepository);
         when(repositoryFacade.getUserRepository()).thenReturn(userRepository);
+        when(repositoryFacade.getNotificationRepository(anyString())).thenReturn(notificationRepository);
         when(repositoryFacade.getCurrentUserUid()).thenReturn("123");
 
         setScheduleViewModel = new SetScheduleViewModel(repositoryFacade);
@@ -65,13 +72,31 @@ public class SetScheduleViewModelTest {
 
     @Test
     public void addSchedule() {
+        List<String> memberIds = Arrays.asList("joe", "doe", "john");
+
         Schedule schedule = Schedule.getPrototypeSchedule();
         schedule.setUid("Testing");
-        schedule.setMemberList(Arrays.asList("joe", "doe", "john"));
-
+        schedule.setMemberList(memberIds);
         testScheduleData = new LiveDataWithStatus<>(schedule);
         setScheduleViewModel.setNewScheduleData(testScheduleData);
         when(scheduleRepository.addDocument(schedule)).thenReturn(testScheduleData);
+
+        List<User> userList = new ArrayList<>();
+        for (String userId : memberIds) {
+            User user = new User();
+            user.setUid(userId);
+            user.setFirstName(userId);
+            user.setLastName(userId + "ly");
+            userList.add(user);
+        }
+        setScheduleViewModel.setSelectedUsers(userList);
+
+        Group group = new Group();
+        group.setUid("GroupId");
+        group.setName("Group_Name");
+        group.setSupervisorId("MonitoringId");
+        setScheduleViewModel.setSelectedGroup(group);
+        setScheduleViewModel.setSelectedGroupData(new MutableLiveData<>(group));
 
         Schedule returnedSchedule = setScheduleViewModel.addSchedule().getValue();
 
@@ -85,6 +110,8 @@ public class SetScheduleViewModelTest {
         assertNull(returnedSchedule.getUserScheduleResponseMap().get("joe").getResponseTime());
         assertNull(returnedSchedule.getUserScheduleResponseMap().get("doe").getResponseTime());
         assertNull(returnedSchedule.getUserScheduleResponseMap().get("john").getResponseTime());
+
+        verify(notificationRepository, times(memberIds.size())).addDocument(any(Notification.class));
     }
 
     @Test
