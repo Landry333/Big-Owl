@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.ReceiveScheduleNotification;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
-import com.example.bigowlapp.model.SupervisionRequest;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.RepositoryFacade;
@@ -53,7 +53,7 @@ public class SetScheduleViewModel extends BaseViewModel {
         newScheduleData = new MutableLiveData<>(Schedule.getPrototypeSchedule());
     }
 
-    public void addSchedule() {
+    public LiveDataWithStatus<Schedule> addSchedule() {
         Schedule schedule = newScheduleData.getValue();
         Map<String, UserScheduleResponse> userResponseMap =
                 schedule.getMemberList().stream().collect(Collectors.toMap(
@@ -61,9 +61,14 @@ public class SetScheduleViewModel extends BaseViewModel {
                         memberUid -> new UserScheduleResponse(Response.NEUTRAL, null))
                 );
         schedule.setUserScheduleResponseMap(userResponseMap);
-            repositoryFacade.getScheduleRepository().addDocument(schedule).observeForever(addedSchedule -> {
-            sendNewScheduleNotificationRequest(addedSchedule.getUid());
-        });
+
+        LiveDataWithStatus<Schedule> scheduleData = repositoryFacade.getScheduleRepository()
+                .addDocument(schedule);
+
+        scheduleData.observeForever(addedSchedule ->
+                sendNewScheduleNotificationRequest(addedSchedule.getUid()));
+
+        return scheduleData;
     }
 
     public LiveData<List<Group>> getListOfGroup() {
@@ -173,6 +178,21 @@ public class SetScheduleViewModel extends BaseViewModel {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public List<User> getSelectedUsers() {
         return selectedUsers;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setSelectedUsers(List<User> selectedUsers) {
+        this.selectedUsers = selectedUsers;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setSelectedGroup(Group selectedGroup) {
+        this.selectedGroup = selectedGroup;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setSelectedGroupData(LiveData<Group> selectedGroupData) {
+        this.selectedGroupData = selectedGroupData;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
