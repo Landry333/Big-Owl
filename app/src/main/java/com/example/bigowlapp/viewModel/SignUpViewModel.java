@@ -1,12 +1,20 @@
 package com.example.bigowlapp.viewModel;
 
+import android.content.Context;
+
 import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.model.LiveDataWithStatus;
+import com.example.bigowlapp.model.Notification;
+import com.example.bigowlapp.model.SmsInvitationRequest;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.utils.NotificationListenerManager;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -95,5 +103,34 @@ public class SignUpViewModel extends BaseViewModel {
         final int min = 0;
         int randomNumber = (int) ((random.nextDouble() * (max - min + 1)) + min);
         return String.format(Locale.getDefault(), "%04d", randomNumber);
+    }
+
+    public void verifySmsInvitationsCollection(String phoneNumber){
+        LiveDataWithStatus<List<SmsInvitationRequest>> phoneNumberSent = repositoryFacade.getSmsInvitationRepository().getListOfDocumentByAttribute("phoneNumberSent", phoneNumber, SmsInvitationRequest.class);
+        phoneNumberSent.observeForever(smsInvitationList -> {
+            if(smsInvitationList.isEmpty()){
+                return;
+            }
+
+            for (SmsInvitationRequest smsInvitationRequest : smsInvitationList) {
+                createNotificationObject(smsInvitationRequest.getSenderUid(), phoneNumber);
+            }
+        });
+    }
+
+    public void smsInvitationNotificationListener(Context context){
+        NotificationListenerManager invitationListener = new NotificationListenerManager();
+        invitationListener.listen(context);
+    }
+
+    public void createNotificationObject(String senderUid, String phoneNumber){
+
+        Notification newNotification = new Notification();
+        newNotification.setReceiverUid(senderUid);
+        newNotification.setMessage("User with phone number: " + phoneNumber + " is registered.");
+        newNotification.setCreationTime(Timestamp.now());
+
+        repositoryFacade.getNotificationRepository(senderUid).addDocument(newNotification);
+
     }
 }
