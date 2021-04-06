@@ -75,10 +75,6 @@ public class NotificationListenerManager {
         String channel = notification.getTitle();
         createNotificationChannel(context, channel);
 
-        notification.setUsed(true);
-        repositoryFacade.getCurrentUserNotificationRepository()
-                .updateDocument(notification.getUid(), notification);
-
         notificationBuilder(context, channel, notification);
 
         notification.setUsed(true);
