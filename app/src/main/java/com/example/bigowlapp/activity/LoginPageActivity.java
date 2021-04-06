@@ -19,9 +19,9 @@ import androidx.biometric.BiometricManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.utils.NotificationListenerManager;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.utils.AuthFailureNotificationListener;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.example.bigowlapp.viewModel.LogInViewModel;
@@ -34,7 +34,7 @@ public class LoginPageActivity extends AppCompatActivity {
     TextView tvSignUp;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private LogInViewModel logInViewModel;
-    private AuthFailureNotificationListener authListener;
+    private NotificationListenerManager notificationListener;
     private ProgressBar progressBar;
 
 
@@ -60,8 +60,9 @@ public class LoginPageActivity extends AppCompatActivity {
 
             mAuthStateListener = firebaseAuth -> {
                 if (logInViewModel.isCurrentUserSet()) {
-                    authListener = new AuthFailureNotificationListener();
-                    authListener.listen(this);
+                    Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
+                    notificationListener = new NotificationListenerManager();
+                    notificationListener.listen(this);
                     checkNextAccessWhenIsLoggedIn();
                 } else {
                     Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_SHORT).show();

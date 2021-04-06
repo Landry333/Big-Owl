@@ -32,7 +32,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         }
 
         Notification notification = mNotificationTitles.get(position);
-        holder.getNameTextView().setText(notification.getType().toString());
+        holder.getNameTextView().setText(notification.getTitle());
+        holder.getContentTextView().setText(notification.getMessage() != null ? notification.getMessage() : "");
         holder.getTimeTextView().setText(notification.getCreationTime().toDate().toString());
     }
 

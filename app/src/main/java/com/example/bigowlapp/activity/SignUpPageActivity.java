@@ -89,6 +89,8 @@ public class SignUpPageActivity extends AppCompatActivity {
                         .addOnSuccessListener(isSuccessful -> {
                             progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_LONG).show();
+                            signUpViewModel.verifySmsInvitationsCollection(formattedUserPhone);
+                            signUpViewModel.smsInvitationNotificationListener(this);
                             Intent i;
                             if (biometricManager.canAuthenticate() != BiometricManager.BIOMETRIC_SUCCESS) {
                                 i = new Intent(SignUpPageActivity.this, HomePageActivity.class);
