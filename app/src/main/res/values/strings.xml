@@ -136,4 +136,6 @@
     <string name="supervision_groups">supervision groups</string>
     <string name="select_a_group_to_see_your_schedule_in_the_group">select a group to see your schedule in the group</string>
     <string name="my_scheduled">my scheduled</string>
+    <string name="add_user">add user</string>
+    <string name="choose_a_contact_to_supervise_or_to_invite_for_registration">Choose a contact to supervise or to invite for registration</string>
 </resources>
