@@ -101,6 +101,7 @@ public class NotificationListenerManager {
                 .setStyle(new NotificationCompat.InboxStyle()
                         .addLine(notification.getMessage()));
         PendingIntent contentIntent = PendingIntent.getActivities(context, 0, new Intent[]{new Intent(context, NotificationActivity.class)}, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setAutoCancel(true);
         builder.setContentIntent(contentIntent);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
