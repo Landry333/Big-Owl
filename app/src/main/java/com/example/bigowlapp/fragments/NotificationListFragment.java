@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -18,6 +19,7 @@ import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.Notification;
 import com.example.bigowlapp.model.ReceiveScheduleNotification;
 import com.example.bigowlapp.model.SupervisionRequest;
+import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.RepositoryFacade;
 
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ public class NotificationListFragment extends Fragment implements NotificationAd
 
     private RecyclerView recyclerView;
     private LiveData<List<Notification>> notificationListData;
+    private String supervisorName;
+    private RepositoryFacade repositoryFacade;
 
     public NotificationListFragment() {
         // Required empty public constructor
@@ -49,10 +53,9 @@ public class NotificationListFragment extends Fragment implements NotificationAd
     @Override
     public void onStart() {
         super.onStart();
-
-        RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
+        repositoryFacade = RepositoryFacade.getInstance();
         notificationListData = repositoryFacade.getCurrentUserNotificationRepository()
-                .getAllDocumentsFromCollection(Notification.class);
+                .getNotificationsByAscendingOrder(Notification.class);
 
         recyclerView.setHasFixedSize(true);
 
@@ -76,6 +79,7 @@ public class NotificationListFragment extends Fragment implements NotificationAd
     public void onNotificationClick(int position) {
         Notification selectedNotification = notificationListData.getValue().get(position);
 
+
         if (selectedNotification.getType() == Notification.Type.SUPERVISION_REQUEST) {
             getParentFragmentManager().beginTransaction()
                     .replace(((ViewGroup) getView().getParent()).getId(),
@@ -84,14 +88,20 @@ public class NotificationListFragment extends Fragment implements NotificationAd
                     .commit();
         }
 
-        // #32
         if (selectedNotification.getType() == Notification.Type.SCHEDULE_NOTIFICATION) {
             ReceiveScheduleNotification selectedNotification2 = (ReceiveScheduleNotification) selectedNotification;
-            Intent intent = new Intent(getContext(), ScheduleViewRespondActivity.class);
-            intent.putExtra("scheduleUid", selectedNotification2.getScheduleUid()); //Find the id
-            intent.putExtra("groupName", selectedNotification2.getGroupName());
-            intent.putExtra("supervisorName", selectedNotification2.getSenderUid());
-            startActivity(intent);
+            repositoryFacade.getUserRepository().getDocumentByUid(selectedNotification2.getSenderUid(), User.class).observe(this, supervisor -> {
+                if (supervisor == null) {
+                    return;
+                }
+                Intent intent = new Intent(getContext(), ScheduleViewRespondActivity.class);
+                intent.putExtra("scheduleUid", selectedNotification2.getScheduleUid());
+                intent.putExtra("groupName", selectedNotification2.getGroupName());
+                intent.putExtra("supervisorName", supervisor.getFullName());
+                startActivity(intent);
+            });
+
+
         }
     }
 }

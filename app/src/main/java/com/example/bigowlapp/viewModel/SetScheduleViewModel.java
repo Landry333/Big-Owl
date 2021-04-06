@@ -200,6 +200,7 @@ public class SetScheduleViewModel extends BaseViewModel {
             newNotification.setReceiverUid(selectedUser.getUid());
             newNotification.setSenderUid(getCurrentUserUid());
             newNotification.setGroupUid(getSelectedGroup().getUid());
+            newNotification.setGroupName(getSelectedGroupData().getValue().getName());
             newNotification.setCreationTime(Timestamp.now());
             newNotification.setScheduleUid(scheduleUid);
 
