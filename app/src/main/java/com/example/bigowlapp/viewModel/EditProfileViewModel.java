@@ -17,10 +17,11 @@ public class EditProfileViewModel extends BaseViewModel {
         // used implicitly when ViewModel constructed using ViewModelProvider
     }
 
-    public void editUserProfile(String fName, String lName, String pNum, String imageUrl) {
+    public void editUserProfile(String fName, String lName, String fprintAuthRegis, String pNum, String imageUrl) {
         User userWithNewProfile = getCurrentUserData().getValue();
         userWithNewProfile.setFirstName(fName);
         userWithNewProfile.setLastName(lName);
+        userWithNewProfile.setFingerprintAuthRegistration(fprintAuthRegis);
         userWithNewProfile.setPhoneNumber(pNum);
         if (!imageUrl.equals(""))
             userWithNewProfile.setProfileImage(imageUrl);

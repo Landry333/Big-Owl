@@ -2,6 +2,9 @@
     <string name="mapbox_public_access_token">pk.eyJ1IjoiYmlnb3dsIiwiYSI6ImNraHZlODJ5YzFjdDMyc295azJ1YTdwZWQifQ.yqOHWYeuQPXphvSkx2NAQA</string>
 
     <string name="app_name">BigOwlApp</string>
+
+    <string name="Find_a_user_to_invite">Find a user to invite to use Big Owl app</string>
+    <string name="send_sms">send sms</string>
     <string name="by">by</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
@@ -18,6 +21,7 @@
     <string name="password">Password</string>
     <string name="phone">Phone</string>
     <string name="phone_number">Phone number</string>
+    <string name="Fingerprint_authentication">Fingerprint authentication :</string>
     <string name="refresh">Refresh</string>
     <string name="search_users">Add Users</string>
     <string name="invite_contacts">Invite From Contact List</string>
@@ -71,6 +75,7 @@
         Your location will be verified at the scheduled time without having to worry the app being open.
     </string>
     <string name="view_schedule">View Schedule</string>
+    <string name="create_schedule">create schedule"</string>
     <string name="till">till</string>
     <string name="at">at</string>
     <string name="member_name">member_name</string>
@@ -87,4 +92,48 @@
     <string name="notification_page">Notifications</string>
     <string name="notification_content">Content</string>
     <string name="notification_name">Name</string>
+    <string name="propose_fingerprint_auth">
+        Add fingerprint authentication to secure your account?\n\n
+        NOTE: This will also make your account ONLY accessible by a device having sim
+        card_1 number same as the phone number you saved in your account
+    </string>
+    <string name="no_compatibility_with_phone">
+        Sorry, this additional security service is not available on
+        this number or with your phone and telephony provider\n\n
+        SERVICE IS NOT ALLOWED\n\n
+        First make sure sim card_1 number on this phone is the same as in your account
+    </string>
+    <string name="is_fingerprint_auth_registered">
+        You are registered to fingerprint authentication.\n\n
+        You can modify your choice on Edit profile
+    </string>
+    <string name="not_allowed">
+        You are not allowed to access this account\n\n
+        Sim card_1 number on this phone should be the same as in your account
+    </string>
+    <string name="confirmation_of_schedule_response">
+        You response has been submitted. You can change it with button below.
+        But first wait at least 1 minute
+    </string>
+    <string name="use_your_contacts_list">use your contacts list</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="enter_your_choice_yes_or_no">Enter your choice, YES or NO</string>
+    <string name="fingerprint_authentication">Fingerprint authentication</string>
+    <string name="authentication_message">authentication_message</string>
+    <string name="go_to_home_page">go to home page</string>
+    <string name="start_fingerprint_authentication">start fingerprint authentication</string>
+    <string name="authentication_result_message">authentication_result_message</string>
+    <string name="add">add</string>
+    <string name="maybe_later">maybe later</string>
+    <string name="invite_user">invite user</string>
+    <string name="i_supervise">I supervise</string>
+    <string name="supervising_me">supervising me</string>
+    <string name="email">Email</string>
+    <string name="sign_in">Sign In</string>
+    <string name="forgot_password_don_t_have_an_account">Forgot password? Don\'t have an account?</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="sign_in_here">Sign in here</string>
+    <string name="supervision_groups">supervision groups</string>
+    <string name="select_a_group_to_see_your_schedule_in_the_group">select a group to see your schedule in the group</string>
+    <string name="my_scheduled">my scheduled</string>
 </resources>

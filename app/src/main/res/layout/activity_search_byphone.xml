@@ -18,7 +18,9 @@
         android:layout_below="@+id/search_users"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:text="@string/search_user" />
+        android:background="@drawable/rounded_button_light"
+        android:text="@string/search_user"
+        android:textColor="@color/lightBlack" />
 
     <EditText
         android:id="@+id/search_users"
@@ -26,10 +28,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/top_app_bar"
         android:layout_margin="5dp"
-        android:hint="@string/enter_phone_number"
         android:digits="0123456789+"
-        android:inputType="phone"
-        android:importantForAutofill="no" />
+        android:hint="@string/enter_phone_number"
+        android:importantForAutofill="no"
+        android:inputType="phone" />
 
     <ListView
         android:id="@+id/listContacts"
