@@ -13,7 +13,7 @@ public class Notification extends Model {
         SUPERVISION_REQUEST(SupervisionRequest.class, "Supervise request"),
         SCHEDULE_REQUEST(ScheduleRequest.class, "Schedule request"),
         AUTH_BY_PHONE_NUMBER_FAILURE(AuthByPhoneNumberFailure.class, "Phone number failed"),
-        SMS_INVITATION_REQUEST(SmsInvitationRequest.class, "SMS invitation");
+        SMS_INVITATION_REQUEST(SmsInvitationRequest.class, "SMS invitation"),
         SCHEDULE_NOTIFICATION(ReceiveScheduleNotification.class, "Schedule Notification");
 
 
