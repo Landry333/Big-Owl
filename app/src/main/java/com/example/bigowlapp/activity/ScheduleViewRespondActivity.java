@@ -7,18 +7,22 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.UserScheduleResponse;
+import com.example.bigowlapp.utils.PermissionsHelper;
 import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
-
-import androidx.annotation.VisibleForTesting;
-import androidx.lifecycle.ViewModelProvider;
 
 public class ScheduleViewRespondActivity extends BigOwlActivity {
 
     private String scheduleUid, groupName, supervisorName;
     private ScheduleViewRespondViewModel scheduleViewRespondViewModel;
+    private PermissionsHelper permissionsHelper;
+    private TextView confirmationTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,10 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
         scheduleUid = intent.getStringExtra("scheduleUid");
         groupName = intent.getStringExtra("groupName");
         supervisorName = intent.getStringExtra("supervisorName");
+        confirmationTv = findViewById(R.id.text_view_schedule_response_confirmation);
+        confirmationTv.setVisibility(View.GONE);
+
+        this.permissionsHelper = new PermissionsHelper(this);
     }
 
     @Override
@@ -68,10 +76,17 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
         });
 
         Button btnAccept = findViewById(R.id.button_accept);
-        btnAccept.setOnClickListener(v -> userClickRespondButton(Response.ACCEPT));
+        btnAccept.setOnClickListener(v -> {
+            requestLocationPermissions();
+            userClickRespondButton(Response.ACCEPT);
+        });
 
         Button btnReject = findViewById(R.id.button_reject);
         btnReject.setOnClickListener(v -> userClickRespondButton(Response.REJECT));
+    }
+
+    public void requestLocationPermissions() {
+        permissionsHelper.requestLocationAndBackgroundLocationPermissions();
     }
 
     @Override
@@ -82,6 +97,8 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
     private void userClickRespondButton(Response response) {
         if (scheduleViewRespondViewModel.isOneMinuteAfterLastResponse()) {
             scheduleViewRespondViewModel.respondSchedule(scheduleUid, response);
+            confirmationTv.setVisibility(View.VISIBLE);
+            Toast.makeText(this, "response submitted", Toast.LENGTH_SHORT).show();
         } else
             Toast.makeText(this,
                     "User can only respond to a schedule 1 minute after last response",
@@ -104,6 +121,12 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
             btnAccept.setVisibility(View.GONE);
             btnReject.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        permissionsHelper.handlePermissionResult(requestCode, grantResults);
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

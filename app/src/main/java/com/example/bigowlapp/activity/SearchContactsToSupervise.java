@@ -1,8 +1,8 @@
 package com.example.bigowlapp.activity;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
@@ -10,79 +10,96 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.repository.UserRepository;
+import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class SearchContactsToSupervise extends BigOwlActivity {
+public class SearchContactsToSupervise extends BigOwlActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+    private static final int MAX_RESULTS = 50;
+
+    private static final int INDEX_CONTACT_NAME = 0;
+    private static final int INDEX_CONTACT_NUMBER = 1;
+
+    private static final String[] DATA_COLUMNS_TO_LOAD = {
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone.NUMBER,
+    };
+
+    private EditText searchUsers;
     private ListView listContactsView;
-    private List<String> list, listShow;
-    private Button loadContacts;
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static final ArrayList<QueryDocumentSnapshot> qds = new ArrayList<QueryDocumentSnapshot>();
 
-    EditText search_users;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private LoaderManager loaderManager;
+
+    private String searchString = "";
+    private List<String> list;
+
+
+    @Override
+    public int getContentView() {
+        return R.layout.activity_search_contacts;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        listContactsView = findViewById(R.id.listContacts);
+        searchUsers = findViewById(R.id.search_users);
+
+        loaderManager = LoaderManager.getInstance(this);
+
         initialize();
     }
 
     protected void initialize() {
-        loadContacts();
+        list = new ArrayList<>();
+        updateList();
+
+        setupContactListClick();
+        setupSearchListener();
+
+        loaderManager.initLoader(0, null, this);
     }
 
-    private void loadContacts() {
-        ContentResolver contentResolver = getContentResolver();
-        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-
-        list = new ArrayList<>();
-
-        if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)));
-
-                if (hasPhoneNumber > 0) {
-                    Cursor cursor2 = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "= ?",
-                            new String[]{id}, null);
-
-                    while (cursor2.moveToNext()) {
-                        String PhoneNumber = cursor2.getString(cursor2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                        list.add(name + "\n" + PhoneNumber);
-                    }
-
-                    cursor2.close();
-                }
+    private void setupSearchListener() {
+        searchUsers.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                searchString = charSequence.toString();
+                loaderManager.restartLoader(0, null, SearchContactsToSupervise.this);
             }
-        }
-        cursor.close();
 
-        listShow = list;
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, listShow);
-        listContactsView = findViewById(R.id.listContacts);
-        listContactsView.setAdapter(adapter);
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Nothing happens before user search input
+            }
 
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // Nothing happens after user search input
+            }
+        });
+    }
+
+    private void setupContactListClick() {
         //Check if users already has the app
         listContactsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             // argument position gives the index of item which is clicked
@@ -99,8 +116,8 @@ public class SearchContactsToSupervise extends BigOwlActivity {
                             .replaceAll("[^+0-9]", "");
                 }
 
-                db.collection("users")
-                        .whereEqualTo("phoneNumber", contactNumber)
+                db.collection(UserRepository.COLLECTION_NAME)
+                        .whereEqualTo(User.Field.PHONE_NUMBER, contactNumber)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -113,7 +130,6 @@ public class SearchContactsToSupervise extends BigOwlActivity {
                                         intent.putExtra("user", user);
                                         intent.putExtra("contactDetails", contactDetails);
                                         startActivity(intent);
-
                                     } else {
                                         Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
@@ -126,38 +142,71 @@ public class SearchContactsToSupervise extends BigOwlActivity {
                         });
             }
         });
+    }
 
-        search_users = findViewById(R.id.search_users);
-        search_users.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        // Setup Search Query
+        Uri contentUri;
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchUsers(charSequence.toString().toLowerCase());
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, listShow);
-                listContactsView.setAdapter((adapter));
-            }
+        if (searchString.isEmpty()) {
+            contentUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+        } else {
+            contentUri = Uri.withAppendedPath(
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI,
+                    Uri.encode(searchString));
+        }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
+        contentUri = contentUri.buildUpon().appendQueryParameter("limit", String.valueOf(MAX_RESULTS)).build();
+
+        this.setProgressBarVisible();
+
+        // Run Query
+        return new CursorLoader(
+                this,
+                contentUri,
+                DATA_COLUMNS_TO_LOAD,
+                null,
+                null,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
+        );
     }
 
     @Override
-    public int getContentView() {
-        return R.layout.activity_search_contacts;
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor phoneResultsCursor) {
+        this.setProgressBarInvisible();
+
+        list = new ArrayList<>();
+
+        while (phoneResultsCursor.moveToNext()) {
+            String name = phoneResultsCursor.getString(INDEX_CONTACT_NAME);
+            String number = phoneResultsCursor.getString(INDEX_CONTACT_NUMBER);
+
+            try {
+                String formattedNumber = new PhoneNumberFormatter(this).formatNumber(number);
+                list.add(name + "\n" + formattedNumber);
+            } catch (Exception ignored) {
+                // Invalid numbers are skipped
+            }
+        }
+
+        updateList();
+        phoneResultsCursor.close();
+        loaderManager.destroyLoader(0);
     }
 
-    private void searchUsers(String s) {
-        List<String> filteredUsers = list.stream().filter(u -> {
-            boolean containInName = u.toLowerCase().contains(s);
-            boolean containInPhone = u.toLowerCase().contains(s);
-            return (containInName || containInPhone);
-        }).collect(Collectors.toList());
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        // Not needed for any purpose in this class
+    }
 
-        listShow = filteredUsers;
+    private void updateList() {
+        ArrayAdapter<String> contactsAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                list);
+
+        listContactsView.setAdapter(contactsAdapter);
+        contactsAdapter.notifyDataSetChanged();
     }
 }

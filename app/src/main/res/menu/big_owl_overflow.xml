@@ -14,6 +14,11 @@
         android:title="@string/refresh"
         app:showAsAction="never" />
     <item
+        android:id="@+id/overflow_wiki_page_manual"
+        android:orderInCategory="3"
+        android:title="@string/wiki_page_manual"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/overflow_logout"
         android:orderInCategory="100"
         android:title="@string/log_out"

@@ -3,7 +3,6 @@ package com.example.bigowlapp.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,8 @@ import java.util.ArrayList;
 public class ListOfScheduleActivity extends BigOwlActivity {
     private ListView scheduleListView;
     private ScheduleListViewModel scheduleListViewModel;
-    private String groupID, groupName, supervisorName;
+    private String groupID, groupName, supervisorName, supervisorId;
+    private boolean isUserTheGroupSupervisor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,8 @@ public class ListOfScheduleActivity extends BigOwlActivity {
         groupID = getIntent().getStringExtra("groupID");
         groupName = getIntent().getStringExtra("groupName");
         supervisorName = getIntent().getStringExtra("supervisorName");
+        isUserTheGroupSupervisor = getIntent().getBooleanExtra("isUserTheGroupSupervisor", false);
+        supervisorId = getIntent().getStringExtra("supervisorId");
     }
 
     @Override
@@ -50,31 +52,33 @@ public class ListOfScheduleActivity extends BigOwlActivity {
     }
 
     private void subscribeToData() {
-        try {
-            scheduleListViewModel.getScheduleList(groupID).observe(this, schedules -> {
-                if (schedules != null) {
-                    scheduleListView = findViewById(R.id.schedule_list);
-                    scheduleListView.setAdapter(new ListOfScheduleActivity.ScheduleAdapter(getBaseContext(), new ArrayList<>(schedules)));
+        scheduleListViewModel.getScheduleList(isUserTheGroupSupervisor, groupID).observe(this, schedules -> {
+            if (schedules != null) {
+                scheduleListView = findViewById(R.id.schedule_list);
+                scheduleListView.setAdapter(new ScheduleAdapter(getBaseContext(), new ArrayList<>(schedules)));
 
-                    scheduleListView.setOnItemClickListener((arg0, v, position, arg3) -> {
-                        Intent intent = new Intent(getBaseContext(), ScheduleViewRespondActivity.class);
+                scheduleListView.setOnItemClickListener((arg0, v, position, arg3) -> {
+                    Intent intent;
+                    if (isUserTheGroupSupervisor) {
+                        intent = new Intent(getBaseContext(), ScheduleReportActivity.class);
+                        intent.putExtra("scheduleUid", schedules.get(position).getUid());
+                        intent.putExtra("supervisorId", supervisorId);
+                    } else {
+                        intent = new Intent(getBaseContext(), ScheduleViewRespondActivity.class);
                         intent.putExtra("scheduleUid", schedules.get(position).getUid());
                         intent.putExtra("groupID", groupID);
                         intent.putExtra("groupName", groupName);
                         intent.putExtra("supervisorName", supervisorName);
-                        startActivity(intent);
-                    });
-                } else {
-                    this.noScheduleAlert().show();
-                }
-            });
-        } catch (
-                Exception e) {
-            Log.e("BigOwl", Log.getStackTraceString(e));
-        }
+                    }
+                    startActivity(intent);
+                });
+            } else {
+                this.noScheduleAlert().show();
+            }
+        });
     }
 
-    private class ScheduleAdapter extends ArrayAdapter<Schedule> {
+    private static class ScheduleAdapter extends ArrayAdapter<Schedule> {
 
         public ScheduleAdapter(@NonNull Context context, ArrayList<Schedule> schedules) {
             super(context, 0, schedules);
@@ -97,12 +101,16 @@ public class ListOfScheduleActivity extends BigOwlActivity {
     }
 
     private AlertDialog noScheduleAlert() {
-        return new AlertDialog.Builder(ListOfScheduleActivity.this)
+        AlertDialog alertDialog = new AlertDialog.Builder(ListOfScheduleActivity.this)
                 .setTitle("No schedule found!")
                 .setMessage("You currently have no future schedules")
                 .setPositiveButton("Ok", (dialogInterface, which) -> ListOfScheduleActivity.super.onBackPressed())
                 .setCancelable(false)
                 .create();
+        if (isUserTheGroupSupervisor) alertDialog.setMessage("You have never set a schedule");
+        else alertDialog.setMessage("You currently have no future schedules");
+
+        return alertDialog;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

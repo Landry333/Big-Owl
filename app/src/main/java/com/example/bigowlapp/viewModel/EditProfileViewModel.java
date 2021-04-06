@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.RepositoryFacade;
+import com.google.android.gms.tasks.Task;
 
 public class EditProfileViewModel extends BaseViewModel {
 
@@ -16,10 +17,11 @@ public class EditProfileViewModel extends BaseViewModel {
         // used implicitly when ViewModel constructed using ViewModelProvider
     }
 
-    public void editUserProfile(String fName, String lName, String pNum, String imageUrl) {
+    public void editUserProfile(String fName, String lName, String fprintAuthRegis, String pNum, String imageUrl) {
         User userWithNewProfile = getCurrentUserData().getValue();
         userWithNewProfile.setFirstName(fName);
         userWithNewProfile.setLastName(lName);
+        userWithNewProfile.setFingerprintAuthRegistration(fprintAuthRegis);
         userWithNewProfile.setPhoneNumber(pNum);
         if (!imageUrl.equals(""))
             userWithNewProfile.setProfileImage(imageUrl);
@@ -35,6 +37,10 @@ public class EditProfileViewModel extends BaseViewModel {
             loadUserCurrentProfile();
         }
         return userData;
+    }
+
+    public Task<Void> isPhoneNumberTaken(String phoneNumber) {
+        return repositoryFacade.getUserRepository().isPhoneNumberInDatabase(phoneNumber);
     }
 
     private void loadUserCurrentProfile() {

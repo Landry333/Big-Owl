@@ -8,17 +8,14 @@ import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.ScheduleRepository;
 import com.example.bigowlapp.repository.UserRepository;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.GeoPoint;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -50,31 +47,20 @@ public class SetScheduleViewModelTest {
     @Mock
     private RepositoryFacade repositoryFacade;
     @Mock
-    private AuthRepository authRepository;
-    @Mock
     private ScheduleRepository scheduleRepository;
     @Mock
     private GroupRepository groupRepository;
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private FirebaseUser testFirebaseUser;
 
     @Before
-    public void setUp() throws Exception {
-        when(repositoryFacade.getAuthRepository()).thenReturn(authRepository);
+    public void setUp() {
         when(repositoryFacade.getScheduleRepository()).thenReturn(scheduleRepository);
         when(repositoryFacade.getGroupRepository()).thenReturn(groupRepository);
         when(repositoryFacade.getUserRepository()).thenReturn(userRepository);
+        when(repositoryFacade.getCurrentUserUid()).thenReturn("123");
 
         setScheduleViewModel = new SetScheduleViewModel(repositoryFacade);
-
-        when(authRepository.getCurrentUser()).thenReturn(testFirebaseUser);
-        when(testFirebaseUser.getUid()).thenReturn("123");
-    }
-
-    @After
-    public void tearDown() throws Exception {
     }
 
     @Test
@@ -104,10 +90,10 @@ public class SetScheduleViewModelTest {
     @Test
     public void getListOfGroup() {
         setScheduleViewModel.setListOfGroupData(null);
-        when(groupRepository.getListOfDocumentByAttribute("supervisorId", "123", Group.class)).thenReturn(new LiveDataWithStatus<>());
+        when(groupRepository.getListOfDocumentByAttribute(Group.Field.SUPERVISOR_ID, "123", Group.class)).thenReturn(new LiveDataWithStatus<>());
         assertNotNull(setScheduleViewModel.getListOfGroup());
         assertNotNull(setScheduleViewModel.getListOfGroup());
-        verify(groupRepository, times(1)).getListOfDocumentByAttribute("supervisorId", "123", Group.class);
+        verify(groupRepository, times(1)).getListOfDocumentByAttribute(Group.Field.SUPERVISOR_ID, "123", Group.class);
     }
 
     @Test
@@ -202,9 +188,9 @@ public class SetScheduleViewModelTest {
 
         // case where data was not loaded yet
         setScheduleViewModel.setPreviousSelectedGroup(null);
-        when(userRepository.getListOfDocumentByArrayContains("memberGroupIdList", group.getUid(), User.class)).thenReturn(new LiveDataWithStatus<>(userList));
+        when(userRepository.getListOfDocumentByArrayContains(User.Field.MEMBER_GROUP_ID_LIST, group.getUid(), User.class)).thenReturn(new LiveDataWithStatus<>(userList));
         scheduleUserList = setScheduleViewModel.getListOfUsersFromGroup(group).getValue();
-        verify(userRepository).getListOfDocumentByArrayContains("memberGroupIdList", group.getUid(), User.class);
+        verify(userRepository).getListOfDocumentByArrayContains(User.Field.MEMBER_GROUP_ID_LIST, group.getUid(), User.class);
         assertEquals(userList, scheduleUserList);
 
         // case where the group is empty

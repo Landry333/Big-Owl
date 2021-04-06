@@ -1,5 +1,9 @@
 package com.example.bigowlapp.activity;
 
+import android.content.Intent;
+import android.os.SystemClock;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -12,7 +16,6 @@ import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
-import com.example.bigowlapp.repository.UserRepository;
 import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -26,11 +29,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -52,14 +60,14 @@ public class SupervisedGroupListActivityTest {
     @Mock
     private GroupRepository groupRepository;
     @Mock
-    private UserRepository userRepository;
-    @Mock
     private FirebaseUser testFirebaseUser;
 
     private List<Group> testUserSupervisedGroupList;
+    private LiveDataWithStatus<List<Group>> testUserSupervisedGroupListData;
+    private SupervisedGroupListActivity currentActivity;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         initMocks(this);
 
         User testUser = new User("abc123", "first", "last", "+911", "test@mail.com", null, null);
@@ -68,17 +76,6 @@ public class SupervisedGroupListActivityTest {
 
         testUserSupervisedGroupList = new ArrayList<>();
         for (int i = 1; i < (int) ((Math.random() * 4) + 4); i++) {
-            User groupSupervisor = new User(
-                    "group00".concat(String.valueOf(i)).concat("supervisor"),
-                    "group00".concat(String.valueOf(i)).concat("fName"),
-                    "group00".concat(String.valueOf(i)).concat("lName"),
-                    "+12300".concat(String.valueOf(i)),
-                    "group00".concat(String.valueOf(i)).concat("@mail.com"),
-                    null,
-                    null
-            );
-            LiveDataWithStatus<User> groupSupervisorData = new LiveDataWithStatus<>(groupSupervisor);
-
             List<String> groupSupervisedUserId = new ArrayList<>();
             for (int j = 1; j < (int) ((Math.random() * 2) + 1); j++) {
                 groupSupervisedUserId.add(
@@ -89,16 +86,12 @@ public class SupervisedGroupListActivityTest {
             Group newGroup = new Group(
                     "group00".concat(String.valueOf(i)),
                     "groupName00".concat(String.valueOf(i)),
-                    groupSupervisor.getUid(),
+                    "supervisorId00".concat(String.valueOf(i)),
                     groupSupervisedUserId
             );
             testUserSupervisedGroupList.add(newGroup);
-
-            when(userRepository.getDocumentByUid(groupSupervisor.getUid(), User.class))
-                    .thenReturn(groupSupervisorData);
-            when(supervisedGroupListViewModel.getSupervisor(groupSupervisor.getUid())).thenReturn(groupSupervisorData);
         }
-        LiveDataWithStatus<List<Group>> testUserSupervisedGroupListData = new LiveDataWithStatus<>(testUserSupervisedGroupList);
+        testUserSupervisedGroupListData = new LiveDataWithStatus<>(testUserSupervisedGroupList);
         testUserSupervisedGroupListData.postValue(testUserSupervisedGroupList);
 
         when(testFirebaseUser.getUid()).thenReturn("abc123");
@@ -112,9 +105,21 @@ public class SupervisedGroupListActivityTest {
 
         activityRule.getScenario().moveToState(Lifecycle.State.CREATED);
         activityRule.getScenario().onActivity(activity -> {
+            currentActivity = activity;
             activity.setSupervisedGroupListViewModel(supervisedGroupListViewModel);
+            activity.setAllowIntentForTest(false);
         });
         activityRule.getScenario().moveToState(Lifecycle.State.RESUMED);
+    }
+
+    @Test
+    public void noSupervisedGroupTest() {
+        testUserSupervisedGroupListData.postValue(null);
+        SystemClock.sleep(2000);
+
+        AlertDialog dialog = currentActivity.getNoGroupAlert();
+        assertNotNull(dialog);
+        assertTrue(dialog.isShowing());
     }
 
     @Test
@@ -126,9 +131,24 @@ public class SupervisedGroupListActivityTest {
             // check if the group names are matched and displayed
             onView(allOf(withId(R.id.text_view_group_name), withText(testUserSupervisedGroupList.get(i).getName())))
                     .check(matches(isDisplayed()));
-            // check if the supervisors full names are matched and displayed
-            String supervisorFullName = supervisedGroupListViewModel.getSupervisor(testUserSupervisedGroupList.get(i).getSupervisorId()).getValue().getFullName();
-            onView(allOf(withId(R.id.text_view_group_supervisor), withText(supervisorFullName))).check(matches(isDisplayed()));
         }
+    }
+
+    @Test
+    public void clickOnSupervisedGroupTest() {
+        Intent intentToSupervisedGroup = currentActivity.getIntentToSupervisedGroupForTest();
+        assertNull(intentToSupervisedGroup);
+        Group randomTestGroup = testUserSupervisedGroupList.get((int) ((Math.random() * 3)));
+        onView(allOf(withId(R.id.text_view_group_name), withText(randomTestGroup.getName()))).perform(click());
+
+        Intent testIntent = new Intent(currentActivity, SupervisedGroupPageActivity.class);
+        testIntent.putExtra("groupID", randomTestGroup.getUid());
+        testIntent.putExtra("groupName", randomTestGroup.getName());
+        testIntent.putExtra("supervisorId", randomTestGroup.getSupervisorId());
+
+        intentToSupervisedGroup = currentActivity.getIntentToSupervisedGroupForTest();
+        assertEquals(randomTestGroup.getUid(), intentToSupervisedGroup.getStringExtra("groupID"));
+        assertEquals(randomTestGroup.getName(), intentToSupervisedGroup.getStringExtra("groupName"));
+        assertEquals(randomTestGroup.getSupervisorId(), intentToSupervisedGroup.getStringExtra("supervisorId"));
     }
 }

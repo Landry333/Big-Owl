@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.InvitationConfirmationActivity"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:context=".activity.InvitationConfirmationActivity">
 
     <include
         android:id="@+id/top_app_bar"
@@ -17,8 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/top_app_bar"
-        android:layout_marginTop="50dp"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="32dp"
         android:padding="8dp">
 
@@ -37,8 +37,10 @@
         android:layout_height="50dp"
         android:layout_below="@+id/confirmationMessage"
         android:layout_centerHorizontal="true"
-        android:text="Return to Home page"
         android:layout_marginTop="74dp"
+        android:background="@drawable/rounded_button_greenish"
+        android:text="Return to Home page"
+        android:textColor="@color/lightBlack"
         tools:ignore="HardcodedText" />
 
 </RelativeLayout>

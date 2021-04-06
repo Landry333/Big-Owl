@@ -2,7 +2,6 @@ package com.example.bigowlapp.viewModel;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
@@ -50,27 +49,27 @@ public class EditProfileViewModelTest {
     public void setUp() {
         when(repositoryFacade.getAuthRepository()).thenReturn(authRepository);
         when(repositoryFacade.getUserRepository()).thenReturn(userRepository);
+        when(repositoryFacade.getCurrentUserUid()).thenReturn("abc123");
 
         testUser = new User("abc123", "first", "last", "+911", "test@mail.com", "url", null);
         testUserData = new LiveDataWithStatus<>(testUser);
 
         when(authRepository.getCurrentUser()).thenReturn(testFirebaseUser);
         when(userRepository.getDocumentByUid(anyString(), eq(User.class))).thenReturn(testUserData);
-        when(testFirebaseUser.getUid()).thenReturn("abc123");
 
         editProfileViewModel = new EditProfileViewModel(repositoryFacade, testUserData);
     }
 
     @Test
     public void editUserProfileTest() {
-        editProfileViewModel.editUserProfile("1st", "2nd", "+123", "newUrl");
+        editProfileViewModel.editUserProfile("1st", "2nd", "yes", "+123", "newUrl");
         verify(userRepository).updateDocument("abc123", testUser);
         assertEquals("1st", testUser.getFirstName());
         assertEquals("2nd", testUser.getLastName());
         assertEquals("+123", testUser.getPhoneNumber());
         assertEquals("newUrl", testUser.getProfileImage());
 
-        editProfileViewModel.editUserProfile("1st", "2nd", "+123", "");
+        editProfileViewModel.editUserProfile("1st", "2nd", "yes", "+123", "");
         verify(userRepository, times(2)).updateDocument("abc123", testUser);
         assertEquals("newUrl", testUser.getProfileImage());
     }

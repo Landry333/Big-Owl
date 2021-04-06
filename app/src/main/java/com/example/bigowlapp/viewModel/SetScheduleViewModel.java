@@ -73,7 +73,7 @@ public class SetScheduleViewModel extends BaseViewModel {
     private void loadListOfGroup() {
         String userId = getCurrentUserUid();
         listOfGroupData = repositoryFacade.getGroupRepository()
-                .getListOfDocumentByAttribute("supervisorId", userId, Group.class);
+                .getListOfDocumentByAttribute(Group.Field.SUPERVISOR_ID, userId, Group.class);
     }
 
     public void updateScheduleTitle(String title) {
@@ -153,7 +153,7 @@ public class SetScheduleViewModel extends BaseViewModel {
             return new MutableLiveData<>(new ArrayList<>());
         }
         return repositoryFacade.getUserRepository()
-                .getListOfDocumentByArrayContains("memberGroupIdList", group.getUid(), User.class);
+                .getListOfDocumentByArrayContains(User.Field.MEMBER_GROUP_ID_LIST, group.getUid(), User.class);
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

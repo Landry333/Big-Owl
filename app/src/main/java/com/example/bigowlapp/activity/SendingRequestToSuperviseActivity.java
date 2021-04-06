@@ -2,23 +2,24 @@ package com.example.bigowlapp.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.SupervisionRequest;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.NotificationRepository;
+import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.Timestamp;
 
 import java.util.List;
 
 // TODO: Should be using a viewmodel
-public class SendingRequestToSuperviseActivity extends AppCompatActivity {
+public class SendingRequestToSuperviseActivity extends BigOwlActivity {
     String otherUserID;
     String currentUserID;
     String noteText;
@@ -32,31 +33,38 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
     String canNotSend = "Can not send ";
     String sendNewRequest = "Send a new request";
     private Button supRequestBtn;
-    private final AuthRepository authRepository = new AuthRepository();
     String requestUID;
     private TextView noteTv;
     private TextView resultNoteTv;
+    private TextView secondResultNoteTv;
     String canCancel = "You currently have a pending request to supervise this user";
     String noRequest = "You presently have NO request to supervise this user ";
     String noSelfRequest = "This contact matches you as a contact. You can't send a request to yourself";
     String superviseAlready = "You already have an accepted request to supervise this user";
     String requestRejected = "Your last request was rejected by this user. You can send a new request";
 
-    NotificationRepository notificationRepository = new NotificationRepository();
+    private NotificationRepository otherUserNotificationRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_sending_request_to_supervise);
-        otherUser = getIntent().getParcelableExtra("user");
-        assert otherUser != null;
-        otherUserID = otherUser.getUid();
         supRequestBtn = findViewById(R.id.SupRequest);
-        currentUserID = authRepository.getCurrentUser().getUid();
         noteTv = findViewById(R.id.note);
         resultNoteTv = findViewById(R.id.note2);
+        resultNoteTv.setVisibility(View.VISIBLE);
+        secondResultNoteTv = findViewById(R.id.note3);
+        secondResultNoteTv.setVisibility(View.GONE);
+        RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
+
         String contactDetails = getIntent().getStringExtra("contactDetails");
+        otherUser = getIntent().getParcelableExtra("user");
+
+        otherUserID = otherUser.getUid();
+        currentUserID = repositoryFacade.getCurrentUserUid();
+
+        otherUserNotificationRepository = repositoryFacade.getNotificationRepository(otherUserID);
+
         noteText = "Contact: " + contactDetails + " is already registered to the application.";
         noteTv.setText(noteText);
 
@@ -68,11 +76,19 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
             supRequestBtn.setClickable(true);
             try {
                 observeRequests();
-                supRequestBtn.setOnClickListener(v -> doRequest());
+                supRequestBtn.setOnClickListener(v -> {
+                    doRequest();
+                    Toast.makeText(this, "request submitted", Toast.LENGTH_SHORT).show();
+                });
             } catch (Exception e) {
                 Log.e("BigOwl", Log.getStackTraceString(e));
             }
         }
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_sending_request_to_supervise;
     }
 
     private void doRequest() {
@@ -81,17 +97,16 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         supervisionRequest.setSenderUid(currentUserID);
         supervisionRequest.setResponse(SupervisionRequest.Response.NEUTRAL);
         supervisionRequest.setGroupUid(""); // TODO think about creating and setting group IDs
-        supervisionRequest.setTime(Timestamp.now());
+        supervisionRequest.setCreationTime(Timestamp.now());
 
         if (!aRequestAlready) {
-            notificationRepository.addDocument(supervisionRequest);
+            otherUserNotificationRepository.addDocument(supervisionRequest);
         } else if (shouldCancelRequest) {
-            notificationRepository.removeDocument(requestUID);
+            otherUserNotificationRepository.removeDocument(requestUID);
         } else if (shouldSendAnOtherRequest) {
-            notificationRepository.removeDocument(requestUID);
-            notificationRepository.addDocument(supervisionRequest);
+            otherUserNotificationRepository.removeDocument(requestUID);
+            otherUserNotificationRepository.addDocument(supervisionRequest);
         }
-
 
         observeRequests();
     }
@@ -101,7 +116,11 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
         // in repository until one is found
         supRequestBtn.setText(supBtnSend); // Default setText
         resultNoteTv.setText(noRequest);
-        LiveData<List<SupervisionRequest>> senderRequestsData = notificationRepository.getListOfSupervisionRequestByAttribute("senderUid", currentUserID, SupervisionRequest.class);
+
+        LiveData<List<SupervisionRequest>> senderRequestsData = otherUserNotificationRepository
+                .getListOfDocumentByAttribute(SupervisionRequest.Field.SENDER_UID, currentUserID,
+                        SupervisionRequest.class);
+
         senderRequestsData.observe(this, senderRequests -> {
             if (senderRequests == null)
                 return;
@@ -111,21 +130,27 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
                 } else if (senderRequest.getReceiverUid().equals(otherUser.getUid())) {
 
                     if (senderRequest.getResponse().equals(SupervisionRequest.Response.ACCEPT)) {
-                        supRequestBtn.setText(supBtnAlready);
+                        secondResultNoteTv.setText(supBtnAlready);
+                        secondResultNoteTv.setVisibility(View.VISIBLE);
+                        resultNoteTv.setVisibility(View.GONE);
                         supRequestBtn.setClickable(false);
                         aRequestAlready = true;
                         resultNoteTv.setText(superviseAlready);
                     } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.NEUTRAL)) {
                         supRequestBtn.setText(supBtnCancel);
                         supRequestBtn.setClickable(true);
-                        resultNoteTv.setText(canCancel);
+                        secondResultNoteTv.setText(canCancel);
+                        secondResultNoteTv.setVisibility(View.VISIBLE);
+                        resultNoteTv.setVisibility(View.GONE);
                         aRequestAlready = true;
                         shouldCancelRequest = true;
                         requestUID = senderRequest.getUid();
                     } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.REJECT)) {
                         supRequestBtn.setText(sendNewRequest);
                         supRequestBtn.setClickable(true);
-                        resultNoteTv.setText(requestRejected);
+                        secondResultNoteTv.setText(requestRejected);
+                        secondResultNoteTv.setVisibility(View.VISIBLE);
+                        resultNoteTv.setVisibility(View.GONE);
                         aRequestAlready = true;
                         shouldSendAnOtherRequest = true;
                         requestUID = senderRequest.getUid();
@@ -133,7 +158,6 @@ public class SendingRequestToSuperviseActivity extends AppCompatActivity {
 
                 }
             }
-
         });
     }
 }

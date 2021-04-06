@@ -1,47 +1,129 @@
 package com.example.bigowlapp.model;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class Notification extends Model {
 
-    private String type;
-    private Timestamp time;
+    public enum Type {
+        NONE(Notification.class),
+        INVALID(NullNotification.class),
+        SUPERVISION_REQUEST(SupervisionRequest.class),
+        SCHEDULE_REQUEST(ScheduleRequest.class),
+        AUTH_BY_PHONE_NUMBER_FAILURE(AuthByPhoneNumberFailure.class);
+
+        public final Class<? extends Notification> typeClass;
+
+        Type(Class<? extends Notification> typeClass) {
+            this.typeClass = typeClass;
+        }
+    }
+
+    /**
+     * The type is used to differentiate notifications when storing/retrieving them from the db
+     */
+    protected Type type;
+
+    /**
+     * The date/time the notification was created
+     */
+    protected Timestamp creationTime;
+
+    /**
+     * The database uid of the user who will receive this notification
+     */
+    protected String receiverUid;
+
+    /**
+     * The date/time the notification was viewed by its receiver
+     */
+    protected Timestamp timeRead;
+
+    /**
+     * Marks a notification as used to verify the user received and/or viewed it
+     */
+    protected boolean used;
 
     public Notification() {
+        this(Type.NONE);
+    }
+
+    public Notification(Type type) {
         super();
-    }
-
-    public Notification(String type) {
-        super();
         this.type = type;
+        this.used = false;
     }
 
-    public Notification(String uid, String type) {
-        super(uid);
-        this.type = type;
+    @Exclude
+    public static Notification getNotificationSafe(Notification notification) {
+        return notification == null || notification.type == null ? new NullNotification() : notification;
     }
 
-    public Notification(String uid, String type, Timestamp time) {
-        super(uid);
-        this.type = type;
-        this.time = time;
-    }
-
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    // This private setter is necessary for Firebase data to model mapping
+    private void setType(Type type) {
         this.type = type;
     }
 
-    public Timestamp getTime() {
-        return time;
+    public Timestamp getCreationTime() {
+        return creationTime;
     }
 
-    public void setTime(Timestamp time) {
-        this.time = time;
+    public void setCreationTime(Timestamp creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public String getReceiverUid() {
+        return receiverUid;
+    }
+
+    public void setReceiverUid(String receiverUid) {
+        this.receiverUid = receiverUid;
+    }
+
+    public Timestamp getTimeRead() {
+        return timeRead;
+    }
+
+    public void setTimeRead(Timestamp timeRead) {
+        this.timeRead = timeRead;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
+
+    @Exclude
+    public boolean isValid() {
+        return true;
+    }
+
+    public long timeSinceCreationMillis() {
+        if (creationTime == null) {
+            return -1L;
+        }
+
+        return Timestamp.now().toDate().getTime() - this.getCreationTime().toDate().getTime();
+    }
+
+    public static class Field {
+        public static final String TYPE = "type";
+        public static final String CREATION_TIME = "creationTime";
+        public static final String RECEIVER_UID = "receiverUid";
+        public static final String TIME_READ = "timeRead";
+        public static final String USED = "used";
+
+        protected Field() {
+            // constants class should not be instantiated
+        }
     }
 }

@@ -5,14 +5,22 @@ import com.google.firebase.Timestamp;
 public class UserScheduleResponse {
     private Response response;
     private Timestamp responseTime;
+    private Attendance attendance;
 
     public UserScheduleResponse() {
-
+        this.attendance = new Attendance();
     }
 
     public UserScheduleResponse(Response response, Timestamp responseTime) {
+        this();
         this.response = response;
         this.responseTime = responseTime;
+    }
+
+    public UserScheduleResponse(Response response, Timestamp responseTime, Attendance attendance) {
+        this.response = response;
+        this.responseTime = responseTime;
+        this.attendance = attendance;
     }
 
     public Response getResponse() {
@@ -30,4 +38,15 @@ public class UserScheduleResponse {
     public void setResponseTime(Timestamp responseTime) {
         this.responseTime = responseTime;
     }
+
+    public Attendance getAttendance() {
+        return attendance;
+    }
+
+    public void setAttendance(Attendance attendance) {
+        this.attendance = attendance;
+    }
+
+
 }
+

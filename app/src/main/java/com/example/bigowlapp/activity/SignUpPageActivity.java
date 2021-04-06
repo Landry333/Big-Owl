@@ -2,33 +2,46 @@ package com.example.bigowlapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.example.bigowlapp.viewModel.SignUpViewModel;
+import com.google.i18n.phonenumbers.NumberParseException;
 
 public class SignUpPageActivity extends AppCompatActivity {
     public EditText userEmail, userPassword, userPhone, userFirstName, userLastName;
     Button btnSignUp;
     TextView tvSignIn;
     private SignUpViewModel signUpViewModel;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
+
+        if (signUpViewModel == null) {
+            signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
+        }
+
         initialize();
     }
 
     protected void initialize() {
         //Authentication with firebase
+        progressBar = (ProgressBar) findViewById(R.id.sign_up_progress_bar);
+
         userFirstName = findViewById(R.id.user_first_name);
         userLastName = findViewById(R.id.user_last_name);
         userEmail = findViewById(R.id.edit_text_text_mail_address);
@@ -44,6 +57,14 @@ public class SignUpPageActivity extends AppCompatActivity {
             String firstName = userFirstName.getText().toString();
             String lastName = userLastName.getText().toString();
 
+            String formattedUserPhone;
+            try {
+                formattedUserPhone = new PhoneNumberFormatter(this).formatNumber(userPhone);
+            } catch (NumberParseException e) {
+                this.userPhone.setError(e.getMessage());
+                this.userPhone.requestFocus();
+                return;
+            }
 
             //Error handling
             if (firstName.isEmpty()) {
@@ -62,17 +83,35 @@ public class SignUpPageActivity extends AppCompatActivity {
                 this.userPhone.setError("please enter a phone number");
                 this.userPhone.requestFocus();
             } else {
-                signUpViewModel.createUser(email, pass, userPhone, firstName, lastName)
+                BiometricManager biometricManager = BiometricManager.from(this);
+                progressBar.setVisibility(View.VISIBLE);
+                signUpViewModel.createUser(email, pass, formattedUserPhone, firstName, lastName)
                         .addOnSuccessListener(isSuccessful -> {
-                            Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(SignUpPageActivity.this, HomePageActivity.class));
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(SignUpPageActivity.this, "Successfully registered!", Toast.LENGTH_LONG).show();
+                            Intent i;
+                            if (biometricManager.canAuthenticate() != BiometricManager.BIOMETRIC_SUCCESS) {
+                                i = new Intent(SignUpPageActivity.this, HomePageActivity.class);
+                                Toast.makeText(SignUpPageActivity.this, "You are logged in", Toast.LENGTH_LONG).show();
+                            } else {
+                                i = new Intent(SignUpPageActivity.this, FingerprintAuthenticationActivity.class);
+                            }
+                            startActivity(i);
                         })
-                        .addOnFailureListener(e -> Toast.makeText(SignUpPageActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(SignUpPageActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.INVISIBLE);
+                        });
             }
         });
 
         tvSignIn.setOnClickListener(v -> {
             startActivity(new Intent(SignUpPageActivity.this, LoginPageActivity.class));
         });
+    }
+
+    @VisibleForTesting
+    public void setSignUpViewModel(SignUpViewModel signUpViewModel) {
+        this.signUpViewModel = signUpViewModel;
     }
 }

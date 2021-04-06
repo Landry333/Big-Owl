@@ -1,20 +1,15 @@
 package com.example.bigowlapp.model;
 
-import com.example.bigowlapp.utils.Constants;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class ScheduleRequest extends Notification {
     private String senderUid;
-    private String receiverUid;
     private String groupUid;
-    private Timestamp timeRead;
     private UserScheduleResponse senderResponse;
 
     public ScheduleRequest() {
-        super();
-        this.setType(Constants.SCHEDULE_TYPE);
+        super(Type.SCHEDULE_REQUEST);
     }
 
     public String getSenderUid() {
@@ -25,14 +20,6 @@ public class ScheduleRequest extends Notification {
         this.senderUid = senderUid;
     }
 
-    public String getReceiverUid() {
-        return receiverUid;
-    }
-
-    public void setReceiverUid(String receiverUid) {
-        this.receiverUid = receiverUid;
-    }
-
     public String getGroupUid() {
         return groupUid;
     }
@@ -41,19 +28,21 @@ public class ScheduleRequest extends Notification {
         this.groupUid = groupUid;
     }
 
-    public Timestamp getTimeRead() {
-        return timeRead;
-    }
-
-    public void setTimeRead(Timestamp timeRead) {
-        this.timeRead = timeRead;
-    }
-
     public UserScheduleResponse getSenderResponse() {
         return senderResponse;
     }
 
     public void setSenderResponse(UserScheduleResponse senderResponse) {
         this.senderResponse = senderResponse;
+    }
+
+    public static class Field extends Notification.Field {
+        public static final String SENDER_UID = "senderUid";
+        public static final String GROUP_UID = "groupUid";
+        public static final String SENDER_RESPONSE = "senderResponse";
+
+        private Field() {
+            // constants class should not be instantiated
+        }
     }
 }
