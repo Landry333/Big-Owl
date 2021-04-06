@@ -36,7 +36,7 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
     private TextView noteTv;
     private TextView resultNoteTv;
     private TextView secondResultNoteTv;
-    String canCancel = "You currently have a pending request to supervise this user";
+    String canCancel = "You request is pending. You can cancel it";
     String noRequest = "You presently have NO request to supervise this user ";
     String noSelfRequest = "This contact matches you as a contact. You can't send a request to yourself";
     String superviseAlready = "You already have an accepted request to supervise this user";
@@ -77,7 +77,7 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
                 observeRequests();
                 supRequestBtn.setOnClickListener(v -> {
                     doRequest();
-                    Toast.makeText(this, "Action submitted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Action submitted", Toast.LENGTH_LONG).show();
                 });
             } catch (Exception e) {
                 Log.e("BigOwl", Log.getStackTraceString(e));
