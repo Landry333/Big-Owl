@@ -52,7 +52,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/rounded_button_greenish"
-                        android:text="@string/invite_user"
+                        android:text="@string/add_user"
                         android:textColor="@color/lightBlack" />
 
                 </TableRow>
