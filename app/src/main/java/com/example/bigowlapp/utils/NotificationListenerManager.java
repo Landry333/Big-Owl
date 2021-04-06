@@ -80,6 +80,10 @@ public class NotificationListenerManager {
                 .updateDocument(notification.getUid(), notification);
 
         notificationBuilder(context, channel, notification);
+
+        notification.setUsed(true);
+        repositoryFacade.getCurrentUserNotificationRepository()
+                .updateDocument(notification.getUid(), notification);
     }
 
     private void createNotificationChannel(Context context, String channelId) {
