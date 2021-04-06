@@ -1,8 +1,10 @@
 package com.example.bigowlapp.repository;
 
+import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Notification;
 import com.example.bigowlapp.model.NullNotification;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -30,6 +32,28 @@ public class NotificationRepository extends Repository<Notification> {
         }
         return notificationsFromDb;
     }
+
+
+    public <X extends Notification> LiveDataWithStatus<List<X>> getNotificationsByAscendingOrder(Class<X> tClass) {
+        LiveDataWithStatus<List<X>> listOfTData = new LiveDataWithStatus<>();
+        collectionReference
+                .orderBy(Notification.Field.CREATION_TIME, Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot tDocs = task.getResult();
+                        if (tDocs != null && !tDocs.isEmpty()) {
+                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), tClass));
+                        } else {
+                            listOfTData.setError(getDocumentNotFoundException(tClass));
+                        }
+                    } else {
+                        listOfTData.setError(task.getException());
+                    }
+                });
+        return listOfTData;
+    }
+
 
     public static <X extends Notification> Notification getNotificationFromDocument(DocumentSnapshot doc, Class<X> xClass) {
         Notification notification = Notification.getNotificationSafe(doc.toObject(Notification.class));

@@ -41,6 +41,7 @@ public abstract class Repository<T extends Model> {
                 .add(documentData)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        documentData.setUid(task.getResult().getId());
                         tData.setSuccess(documentData);
                     } else {
                         tData.setError(task.getException());
