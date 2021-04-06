@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.utils.Constants;
 import com.example.bigowlapp.utils.PermissionsHelper;
+import com.google.firebase.installations.FirebaseInstallations;
+import com.smartlook.sdk.smartlook.Smartlook;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +26,11 @@ public class WelcomePageActivity extends AppCompatActivity implements Constants 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Smartlook.SetupOptionsBuilder builder = new Smartlook
+                .SetupOptionsBuilder("9d3ab256069247765d1f5a4028b31d00edce197f")
+                .startNewSession();
+        Smartlook.setUserIdentifier(FirebaseInstallations.getInstance().getId().getResult());
+        Smartlook.setupAndStartRecording(builder.build());
         setContentView(R.layout.activity_welcome);
 
         PermissionsHelper permissionsHelper = new PermissionsHelper(this);

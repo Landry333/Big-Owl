@@ -25,6 +25,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://sdk.smartlook.com/android/release" }
     }
 
     tasks.withType(JavaCompile) {
