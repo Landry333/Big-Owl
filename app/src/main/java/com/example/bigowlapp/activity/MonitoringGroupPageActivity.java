@@ -35,7 +35,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
     private TextView groupName;
     private List<User> mUsers, mUsersShow;
     private User contextMenuSelectedUser;
-    private Button btnSetSchedule;
+    private Button btnSetSchedule, btnViewSchedule;
     private AlertDialog alertDialog;
     private MonitoringGroupPageViewModel mGroupPageViewModel;
 
@@ -92,6 +92,16 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
                     registerForContextMenu(usersListView);
                 });
             }
+
+            btnViewSchedule = findViewById(R.id.btn_view_schedule);
+            btnViewSchedule.setOnClickListener(v -> {
+                Intent intentToScheduleList = new Intent(this, ListOfScheduleActivity.class);
+                intentToScheduleList.putExtra("groupID", group.getUid());
+                intentToScheduleList.putExtra("groupName", group.getName());
+                intentToScheduleList.putExtra("supervisorId", group.getSupervisorId());
+                intentToScheduleList.putExtra("isUserTheGroupSupervisor", true);
+                startActivity(intentToScheduleList);
+            });
             setProgressBarInvisible();
         });
     }
