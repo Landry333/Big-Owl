@@ -17,7 +17,6 @@ import com.example.bigowlapp.activity.NotificationActivity;
 import com.example.bigowlapp.model.AuthByPhoneNumberFailure;
 import com.example.bigowlapp.model.Notification;
 import com.example.bigowlapp.model.Schedule;
-import com.example.bigowlapp.model.SmsInvitationRequest;
 import com.example.bigowlapp.repository.NotificationRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.firestore.DocumentChange;

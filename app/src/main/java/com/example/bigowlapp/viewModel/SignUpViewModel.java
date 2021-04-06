@@ -125,7 +125,7 @@ public class SignUpViewModel extends BaseViewModel {
 
     public void createNotificationObject(String senderUid, String phoneNumber){
 
-        Notification newNotification = new Notification();
+        Notification newNotification = new Notification(Notification.Type.SMS_INVITATION_REQUEST);
         newNotification.setReceiverUid(senderUid);
         newNotification.setMessage("User with phone number: " + phoneNumber + " is registered.");
         newNotification.setCreationTime(Timestamp.now());

@@ -61,7 +61,6 @@ public class LoginPageActivity extends AppCompatActivity {
             mAuthStateListener = firebaseAuth -> {
                 if (logInViewModel.isCurrentUserSet()) {
                     Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(LoginPageActivity.this, HomePageActivity.class);
                     notificationListener = new NotificationListenerManager();
                     notificationListener.listen(this);
                     checkNextAccessWhenIsLoggedIn();
