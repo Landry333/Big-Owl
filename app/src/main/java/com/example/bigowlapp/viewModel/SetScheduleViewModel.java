@@ -6,8 +6,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.example.bigowlapp.model.Group;
+import com.example.bigowlapp.model.ReceiveScheduleNotification;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
+import com.example.bigowlapp.model.SupervisionRequest;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.RepositoryFacade;
@@ -51,7 +53,7 @@ public class SetScheduleViewModel extends BaseViewModel {
         newScheduleData = new MutableLiveData<>(Schedule.getPrototypeSchedule());
     }
 
-    public MutableLiveData<Schedule> addSchedule() {
+    public void addSchedule() {
         Schedule schedule = newScheduleData.getValue();
         Map<String, UserScheduleResponse> userResponseMap =
                 schedule.getMemberList().stream().collect(Collectors.toMap(
@@ -59,7 +61,9 @@ public class SetScheduleViewModel extends BaseViewModel {
                         memberUid -> new UserScheduleResponse(Response.NEUTRAL, null))
                 );
         schedule.setUserScheduleResponseMap(userResponseMap);
-        return repositoryFacade.getScheduleRepository().addDocument(schedule);
+            repositoryFacade.getScheduleRepository().addDocument(schedule).observeForever(addedSchedule -> {
+            sendNewScheduleNotificationRequest(addedSchedule.getUid());
+        });
     }
 
     public LiveData<List<Group>> getListOfGroup() {
@@ -166,7 +170,7 @@ public class SetScheduleViewModel extends BaseViewModel {
         this.listOfGroupData = listOfGroupData;
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public List<User> getSelectedUsers() {
         return selectedUsers;
     }
@@ -188,5 +192,19 @@ public class SetScheduleViewModel extends BaseViewModel {
 
     private void notifyUi() {
         this.newScheduleData.setValue(this.newScheduleData.getValue());
+    }
+
+    private void sendNewScheduleNotificationRequest(String scheduleUid) {
+        for (User selectedUser : getSelectedUsers()) {
+            ReceiveScheduleNotification newNotification = new ReceiveScheduleNotification();
+            newNotification.setReceiverUid(selectedUser.getUid());
+            newNotification.setSenderUid(getCurrentUserUid());
+            newNotification.setGroupUid(getSelectedGroup().getUid());
+            newNotification.setGroupName(getSelectedGroupData().getValue().getName());
+            newNotification.setCreationTime(Timestamp.now());
+            newNotification.setScheduleUid(scheduleUid);
+
+            repositoryFacade.getNotificationRepository(selectedUser.getUid()).addDocument(newNotification);
+        }
     }
 }
