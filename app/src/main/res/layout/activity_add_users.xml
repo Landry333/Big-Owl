@@ -19,7 +19,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="20dp"
-        android:text="@string/Find_a_user_to_invite"
+        android:text="@string/choose_a_contact_to_supervise_or_to_invite_for_registration"
         android:textSize="19sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
