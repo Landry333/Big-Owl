@@ -22,6 +22,7 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
 
     private EditText number, message;
     private Button send;
+    private Button cancel;
     private String smsNumber, smsMessage, noteText;
     private TextView noteTv;
 
@@ -34,7 +35,7 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
         String contactDetails = getIntent().getStringExtra("contactDetails");
         String contactNumber = getIntent().getStringExtra("contactNumber");
 
-        noteText = "Contact: " + contactDetails + " is not yet registered to the application. Send her/him this invitation text sms";
+        noteText = "Contact: " + contactDetails + " is not yet registered to the application. Send her/him the invitation below by text sms";
 
         noteTv.setText(noteText);
 
@@ -43,11 +44,17 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
 
         message = findViewById(R.id.message);
         send = findViewById(R.id.send);
+        cancel = findViewById(R.id.cancel_sms_invitation);
 
         initialize();
     }
 
     protected void initialize() {
+        cancel.setOnClickListener(view -> {
+            Intent intent = new Intent(SendSmsInvitationActivity.this, AddUsersActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         try {
             send.setOnClickListener(view -> {

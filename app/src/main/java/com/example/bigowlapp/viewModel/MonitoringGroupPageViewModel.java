@@ -49,7 +49,11 @@ public class MonitoringGroupPageViewModel extends BaseViewModel {
         Group groupWithRemovedUser = getGroup().getValue();
         Objects.requireNonNull(groupWithRemovedUser).getMemberIdList().remove(userToBeRemoved.getUid());
 
+        userToBeRemoved.getMemberGroupIdList().remove(groupWithRemovedUser.getUid());
+
         repositoryFacade.getGroupRepository()
                 .updateDocument(groupWithRemovedUser.getUid(), groupWithRemovedUser);
+        repositoryFacade.getUserRepository()
+                .updateDocument(userToBeRemoved.getUid(), userToBeRemoved);
     }
 }

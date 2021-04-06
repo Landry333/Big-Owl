@@ -15,6 +15,7 @@ import com.google.firebase.auth.AuthResult;
 
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class SignUpViewModel extends BaseViewModel {
@@ -76,6 +77,8 @@ public class SignUpViewModel extends BaseViewModel {
         user.setPhoneNumber(phoneNumber);
         user.setFirstName(firstName);
         user.setLastName(lastName);
+        user.setMemberGroupIdList(new ArrayList<>());
+        user.setProfileImage("");
         // TODO: Can't capture error b/c it's a livedata call; need to change repo structure
         repositoryFacade.getUserRepository().addDocument(uid, user);
         return Tasks.forResult(null);
