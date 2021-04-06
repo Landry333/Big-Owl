@@ -14,12 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.utils.Constants;
 import com.example.bigowlapp.utils.PermissionsHelper;
+import com.uxcam.UXCam;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.uxcam.UXCam;
 
 public class WelcomePageActivity extends AppCompatActivity implements Constants {
 
@@ -27,7 +26,7 @@ public class WelcomePageActivity extends AppCompatActivity implements Constants 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        UXCam.startWithKey("u5kc5hd96a2m2vm");
+        UXCam.startWithKey("vsmf28o15ozil0j");
 
         PermissionsHelper permissionsHelper = new PermissionsHelper(this);
 
