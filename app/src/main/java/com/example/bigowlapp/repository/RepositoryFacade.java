@@ -10,6 +10,7 @@ public class RepositoryFacade {
     private UserRepository userRepository;
     private ScheduleRepository scheduleRepository;
     private GroupRepository groupRepository;
+    private SmsInvitationRepository smsInvitationRepository;
 
     private static final RepositoryFacade instance = new RepositoryFacade();
 
@@ -59,5 +60,12 @@ public class RepositoryFacade {
 
     public NotificationRepository getNotificationRepository(String userUid) {
         return new NotificationRepository(userUid);
+    }
+
+    public SmsInvitationRepository getSmsInvitationRepository(){
+        if(smsInvitationRepository == null){
+            smsInvitationRepository = new SmsInvitationRepository();
+        }
+        return smsInvitationRepository;
     }
 }
