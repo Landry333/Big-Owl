@@ -14,7 +14,6 @@ import java.util.List;
 public class ScheduleRepository extends Repository<Schedule> {
     public static final String COLLECTION_NAME = "schedules";
 
-    // TODO: Add dependency injection
     public ScheduleRepository() {
         super(ScheduleRepository.COLLECTION_NAME);
     }

@@ -12,7 +12,6 @@ public class EditProfileViewModel extends BaseViewModel {
 
     private MutableLiveData<User> userData;
 
-    // TODO: Dependency Injection
     public EditProfileViewModel() {
         // used implicitly when ViewModel constructed using ViewModelProvider
     }

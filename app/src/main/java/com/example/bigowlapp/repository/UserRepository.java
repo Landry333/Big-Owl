@@ -18,7 +18,6 @@ import java.util.Map;
 public class UserRepository extends Repository<User> {
     public static final String COLLECTION_NAME = "users";
 
-    // TODO: Dependency Injection Implementation for Firestore
     public UserRepository() {
         super(UserRepository.COLLECTION_NAME);
     }

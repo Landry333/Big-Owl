@@ -15,7 +15,7 @@ import com.example.bigowlapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 public abstract class BigOwlActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
-    private ImageButton imgBtnOverflow;
+    ImageButton imgBtnOverflow;
     private ImageButton imgBtnSchedule;
     private ImageButton imgBtnUser;
     private ImageButton imgBtnNotification;

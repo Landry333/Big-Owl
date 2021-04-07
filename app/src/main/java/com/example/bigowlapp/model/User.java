@@ -22,8 +22,6 @@ public class User extends Model implements Parcelable {
     private String profileImage;
     private List<String> memberGroupIdList;
 
-    // TODO: Create a builder (possibly for all models)
-
     public User() {
         super();
     }

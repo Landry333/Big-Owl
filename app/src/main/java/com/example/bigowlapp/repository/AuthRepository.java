@@ -9,7 +9,6 @@ public class AuthRepository {
 
     private final FirebaseAuth mfirebaseAuth;
 
-    // TODO: Dependency Injection Implementation for Firestore
     public AuthRepository() {
         mfirebaseAuth = FirebaseAuth.getInstance();
     }
@@ -24,11 +23,6 @@ public class AuthRepository {
 
     public Task<AuthResult> signInUser(String email, String password) {
         return mfirebaseAuth.signInWithEmailAndPassword(email, password);
-    }
-
-    // TODO: When deleting a user, other entries in the database should be deleted
-    public Task<Void> deleteUser() {
-        return mfirebaseAuth.getCurrentUser().delete();
     }
 
     public void signOutUser() {

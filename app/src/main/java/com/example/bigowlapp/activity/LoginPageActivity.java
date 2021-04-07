@@ -145,7 +145,6 @@ public class LoginPageActivity extends AppCompatActivity {
             String devicePhoneNumber = telephonyManager.getLine1Number();
             if (currentUserData.hasError()) {
                 Toast.makeText(getBaseContext(), currentUserData.getError().getMessage(), Toast.LENGTH_LONG).show();
-                // TODO: Handle this failure (exist page, modify page, or set up page for error case).Same TODO from HomepageActivity
                 return;
             }
             String formattedDevicePhoneNum = null;

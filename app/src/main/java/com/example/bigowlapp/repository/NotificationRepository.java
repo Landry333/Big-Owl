@@ -13,8 +13,7 @@ import java.util.List;
 
 public class NotificationRepository extends Repository<Notification> {
     public static final String COLLECTION_NAME = "notifications";
-
-    // TODO: Dependency Injection Implementation for Firestore
+    
     public NotificationRepository(String userUid) {
         super(UserRepository.COLLECTION_NAME);
         collectionReference = collectionReference.document(userUid)

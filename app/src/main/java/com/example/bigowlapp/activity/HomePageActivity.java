@@ -1,8 +1,6 @@
 package com.example.bigowlapp.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +11,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
@@ -51,8 +48,6 @@ public class HomePageActivity extends BigOwlActivity {
         initialize();
     }
 
-    @SuppressLint({"MissingPermission"})
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStart() {
         super.onStart();
@@ -126,7 +121,6 @@ public class HomePageActivity extends BigOwlActivity {
             currentUserData.observe(this, user -> {
                 if (currentUserData.hasError()) {
                     Toast.makeText(getBaseContext(), currentUserData.getError().getMessage(), Toast.LENGTH_LONG).show();
-                    // TODO: Handle this failure (exist page, modify page, or set up page for error case)
                     return;
                 }
 
@@ -147,11 +141,6 @@ public class HomePageActivity extends BigOwlActivity {
             initAlarmManager();
             initSupervisorAlarmManager();
         }
-        /*  TODO: find a way to uncomment out below lines and allow HomePageActivityTest to pass
-        else {
-            this.noSignedInAlert().show();
-        }
-         */
     }
 
     /**

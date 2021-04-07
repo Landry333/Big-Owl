@@ -18,7 +18,6 @@ import com.google.firebase.Timestamp;
 
 import java.util.List;
 
-// TODO: Should be using a viewmodel
 public class SendingRequestToSuperviseActivity extends BigOwlActivity {
     String otherUserID;
     String currentUserID;
@@ -95,7 +94,7 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
         supervisionRequest.setReceiverUid(otherUserID);
         supervisionRequest.setSenderUid(currentUserID);
         supervisionRequest.setResponse(SupervisionRequest.Response.NEUTRAL);
-        supervisionRequest.setGroupUid(""); // TODO think about creating and setting group IDs
+        supervisionRequest.setGroupUid("");
         supervisionRequest.setCreationTime(Timestamp.now());
 
         if (!aRequestAlready) {

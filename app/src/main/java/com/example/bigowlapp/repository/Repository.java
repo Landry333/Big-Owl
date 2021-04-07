@@ -209,7 +209,7 @@ public abstract class Repository<T extends Model> {
         return listOfTData;
     }
 
-    // TODO: bug where can only handle 10 items in the list, should allow any size list
+    // Can only handle 10 items in the list, so use for loop to get more results
     public <X extends T> LiveDataWithStatus<List<X>> getDocumentsByListOfUid(List<String> docUidList,
                                                                              Class<X> tClass) {
         LiveDataWithStatus<List<X>> listOfTData = new LiveDataWithStatus<>();

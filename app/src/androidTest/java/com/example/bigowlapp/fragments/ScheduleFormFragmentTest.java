@@ -151,7 +151,6 @@ public class ScheduleFormFragmentTest {
         assertEquals("Please select a group", scheduleFormFragment.getGroupButton().getError().toString());
         assertEquals("Please select at least one user", scheduleFormFragment.getSelectUserButton().getError().toString());
         assertEquals("Please select a location", scheduleFormFragment.getEditLocation().getError().toString());
-        // TODO: check for toast
     }
 
     @Test

@@ -21,7 +21,6 @@ public class ScheduleViewRespondViewModel extends BaseViewModel {
     private UserScheduleResponse currentUserNewResponse;
     private static final int ONE_MINUTE = 60000;
 
-    // TODO: Dependency Injection
     public ScheduleViewRespondViewModel() {
         // used implicitly when ViewModel constructed using ViewModelProvider
     }

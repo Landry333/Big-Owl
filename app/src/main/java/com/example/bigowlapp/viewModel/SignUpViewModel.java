@@ -20,12 +20,10 @@ import java.util.Locale;
 
 public class SignUpViewModel extends BaseViewModel {
 
-    // TODO: Dependency Injection
     public SignUpViewModel() {
         // used implicitly when ViewModel constructed using ViewModelProvider
     }
 
-    // TODO: Handle exceptions concerning the failure of the "user" database collection
     public Task<Void> createUser(String email, String password, String phoneNumber, String firstName, String lastName) {
 
         // Check for phone number if it's in database and unique
@@ -79,7 +77,6 @@ public class SignUpViewModel extends BaseViewModel {
         user.setLastName(lastName);
         user.setMemberGroupIdList(new ArrayList<>());
         user.setProfileImage("");
-        // TODO: Can't capture error b/c it's a livedata call; need to change repo structure
         repositoryFacade.getUserRepository().addDocument(uid, user);
         return Tasks.forResult(null);
     }
@@ -88,7 +85,6 @@ public class SignUpViewModel extends BaseViewModel {
         Group group = new Group();
         group.setSupervisorId(getCurrentUserUid());
         group.setName(getFullName(firstName, lastName) + "'s group " + "#" + randomNumberStringGenerator());
-        // TODO: Can't capture error b/c it's a livedata call; need to change repo structure
         repositoryFacade.getGroupRepository().addDocument(group);
         return Tasks.forResult(null);
     }

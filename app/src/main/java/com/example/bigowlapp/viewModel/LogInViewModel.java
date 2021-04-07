@@ -6,7 +6,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LogInViewModel extends BaseViewModel {
 
-    // TODO: Dependency Injection
     public LogInViewModel() {
         // used implicitly when ViewModel constructed using ViewModelProvider
     }
