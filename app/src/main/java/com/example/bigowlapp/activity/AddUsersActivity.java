@@ -18,7 +18,7 @@ import com.example.bigowlapp.R;
 
 
 public class AddUsersActivity extends BigOwlActivity {
-    private final int CONTACT_PERMISSION_CODE = 1;
+    private static final int CONTACT_PERMISSION_CODE = 1;
     private Button btnContacts;
     private Button btnPhone;
 
