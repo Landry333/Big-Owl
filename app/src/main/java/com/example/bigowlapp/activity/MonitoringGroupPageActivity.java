@@ -33,9 +33,11 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
     private EditText searchUsers;
     private ListView usersListView;
     private TextView groupName;
-    private List<User> mUsers, mUsersShow;
+    private List<User> mUsers;
+    private List<User> mUsersShow;
     private User contextMenuSelectedUser;
-    private Button btnSetSchedule, btnViewSchedule;
+    private Button btnSetSchedule;
+    private Button btnViewSchedule;
     private AlertDialog alertDialog;
     private MonitoringGroupPageViewModel mGroupPageViewModel;
 

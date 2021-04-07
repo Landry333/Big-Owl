@@ -24,7 +24,10 @@ import java.util.ArrayList;
 public class ListOfScheduleActivity extends BigOwlActivity {
     private ListView scheduleListView;
     private ScheduleListViewModel scheduleListViewModel;
-    private String groupID, groupName, supervisorName, supervisorId;
+    private String groupID;
+    private String groupName;
+    private String supervisorName;
+    private String supervisorId;
     private boolean isUserTheGroupSupervisor;
 
     @Override

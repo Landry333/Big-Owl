@@ -19,7 +19,9 @@ import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
 
 public class ScheduleViewRespondActivity extends BigOwlActivity {
 
-    private String scheduleUid, groupName, supervisorName;
+    private String scheduleUid;
+    private String groupName;
+    private String supervisorName;
     private ScheduleViewRespondViewModel scheduleViewRespondViewModel;
     private PermissionsHelper permissionsHelper;
     private TextView confirmationTv;

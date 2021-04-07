@@ -15,8 +15,12 @@ import com.example.bigowlapp.utils.GeoLocationFormatter;
 import com.example.bigowlapp.viewModel.ScheduleReportViewModel;
 
 public class ScheduleReportActivity extends BigOwlActivity {
-    private String scheduleUid, supervisorId;
-    private TextView scheduleReportTitle, scheduleReportStartTime, scheduleReportEndTime, scheduleReportLocation;
+    private String scheduleUid;
+    private String supervisorId;
+    private TextView scheduleReportTitle;
+    private TextView scheduleReportStartTime;
+    private TextView scheduleReportEndTime;
+    private TextView scheduleReportLocation;
     private ScheduleReportViewModel scheduleReportViewModel;
     private ListView scheduleReportMemberListView;
     private ScheduleReportMembersAdapter scheduleReportMembersAdapter;

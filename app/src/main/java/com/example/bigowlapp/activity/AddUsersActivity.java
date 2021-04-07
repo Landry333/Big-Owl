@@ -19,7 +19,8 @@ import com.example.bigowlapp.R;
 
 public class AddUsersActivity extends BigOwlActivity {
     private final int CONTACT_PERMISSION_CODE = 1;
-    Button btnContacts, btnPhone;
+    private Button btnContacts;
+    private Button btnPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -29,9 +29,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.i18n.phonenumbers.NumberParseException;
 
 public class LoginPageActivity extends AppCompatActivity {
-    public EditText emailId, password;
-    Button btnSignIn;
-    TextView tvSignUp;
+    private EditText emailId;
+    private EditText password;
+    private Button btnSignIn;
+    private TextView tvSignUp;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private LogInViewModel logInViewModel;
     private NotificationListenerManager notificationListener;

@@ -17,8 +17,13 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import java.util.Objects;
 
 public class EditProfileActivity extends BigOwlActivity {
-    Button editButtonCancel, editButtonConfirm;
-    EditText editUserFirstName, editUserLastName, editPhoneNumber, editFingerprintAuthRegistration, editImageURL;
+    private Button editButtonCancel;
+    private Button editButtonConfirm;
+    private EditText editUserFirstName;
+    private EditText editUserLastName;
+    private EditText editPhoneNumber;
+    private EditText editFingerprintAuthRegistration;
+    private EditText editImageURL;
     private EditProfileViewModel editProfileViewModel;
 
     @Override
