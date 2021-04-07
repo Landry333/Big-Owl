@@ -40,7 +40,7 @@ public class SignUpPageActivity extends AppCompatActivity {
 
     protected void initialize() {
         //Authentication with firebase
-        progressBar = (ProgressBar) findViewById(R.id.sign_up_progress_bar);
+        progressBar = findViewById(R.id.sign_up_progress_bar);
 
         userFirstName = findViewById(R.id.user_first_name);
         userLastName = findViewById(R.id.user_last_name);
@@ -107,9 +107,7 @@ public class SignUpPageActivity extends AppCompatActivity {
             }
         });
 
-        tvSignIn.setOnClickListener(v -> {
-            startActivity(new Intent(SignUpPageActivity.this, LoginPageActivity.class));
-        });
+        tvSignIn.setOnClickListener(v -> startActivity(new Intent(SignUpPageActivity.this, LoginPageActivity.class)));
     }
 
     @VisibleForTesting
