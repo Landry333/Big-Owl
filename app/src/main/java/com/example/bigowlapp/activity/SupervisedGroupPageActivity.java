@@ -11,7 +11,10 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.viewModel.SupervisedGroupPageViewModel;
 
 public class SupervisedGroupPageActivity extends BigOwlActivity {
-    private String groupID, groupName, supervisorName, supervisorId;
+    private String groupID;
+    private String groupName;
+    private String supervisorName;
+    private String supervisorId;
     private Intent arrivingIntent;
     private Intent intentToScheduleList;
     private SupervisedGroupPageViewModel supervisedGroupPageViewModel;

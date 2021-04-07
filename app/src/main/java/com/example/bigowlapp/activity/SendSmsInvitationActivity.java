@@ -23,7 +23,9 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
     private EditText number, message;
     private Button send;
     private Button cancel;
-    private String smsNumber, smsMessage, noteText;
+    private String smsNumber;
+    private String smsMessage;
+    private String noteText;
     private TextView noteTv;
 
     @Override

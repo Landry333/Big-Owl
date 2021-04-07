@@ -20,9 +20,13 @@ import com.example.bigowlapp.viewModel.SignUpViewModel;
 import com.google.i18n.phonenumbers.NumberParseException;
 
 public class SignUpPageActivity extends AppCompatActivity {
-    public EditText userEmail, userPassword, userPhone, userFirstName, userLastName;
-    Button btnSignUp;
-    TextView tvSignIn;
+    private EditText userEmail;
+    private EditText userPassword;
+    private EditText userPhone;
+    private EditText userFirstName;
+    private EditText userLastName;
+    private Button btnSignUp;
+    private TextView tvSignIn;
     private SignUpViewModel signUpViewModel;
     private ProgressBar progressBar;
 
