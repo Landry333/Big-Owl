@@ -20,6 +20,7 @@ import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.viewModel.ScheduleListViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListOfScheduleActivity extends BigOwlActivity {
     private ListView scheduleListView;
@@ -83,7 +84,7 @@ public class ListOfScheduleActivity extends BigOwlActivity {
 
     private static class ScheduleAdapter extends ArrayAdapter<Schedule> {
 
-        public ScheduleAdapter(@NonNull Context context, ArrayList<Schedule> schedules) {
+        public ScheduleAdapter(@NonNull Context context, List<Schedule> schedules) {
             super(context, 0, schedules);
         }
 

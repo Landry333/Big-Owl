@@ -19,13 +19,14 @@ import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SupervisedGroupListActivity extends BigOwlActivity {
     private ListView supervisedGroupsListView;
     private SupervisedGroupListViewModel supervisedGroupListViewModel;
     private AlertDialog noGroupAlert;
     private Intent intentToSupervisedGroup;
-    private Boolean allowIntentForTest = true;
+    private boolean allowIntentForTest = true;
 
     @Override
     protected void onStart() {
@@ -77,7 +78,7 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
 
     private class SupervisedGroupAdaptor extends ArrayAdapter<Group> {
 
-        public SupervisedGroupAdaptor(@NonNull Context context, ArrayList<Group> groups) {
+        public SupervisedGroupAdaptor(@NonNull Context context, List<Group> groups) {
             super(context, 0, groups);
         }
 
@@ -112,7 +113,7 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public void setAllowIntentForTest(Boolean allowIntentForTest) {
+    public void setAllowIntentForTest(boolean allowIntentForTest) {
         this.allowIntentForTest = allowIntentForTest;
     }
 }
