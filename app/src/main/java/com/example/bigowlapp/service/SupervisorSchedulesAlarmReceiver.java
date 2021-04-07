@@ -34,8 +34,8 @@ public class SupervisorSchedulesAlarmReceiver extends BroadcastReceiver {
                     } else {
                         for (String scheduleMemberUid : supervisorSchedule.getMemberList()) {
                             if ((supervisorSchedule.getUserScheduleResponseMap().get(scheduleMemberUid)
-                                    .getAttendance().getScheduleLocated() == Attendance.LocatedStatus.NOT_DETECTED) && supervisorSchedule.getUserScheduleResponseMap().get(scheduleMemberUid)
-                                    .getAttendance().isAuthenticated() == false && (supervisorSchedule.getUserScheduleResponseMap().get(scheduleMemberUid).getResponse()==Response.ACCEPT)) {
+                                    .getAttendance().getScheduleLocated() == Attendance.LocatedStatus.NOT_DETECTED) && !supervisorSchedule.getUserScheduleResponseMap().get(scheduleMemberUid)
+                                    .getAttendance().isAuthenticated() && (supervisorSchedule.getUserScheduleResponseMap().get(scheduleMemberUid).getResponse()==Response.ACCEPT)) {
                                 repositoryFacade.getUserRepository()
                                         .getDocumentByUid(scheduleMemberUid, User.class)
                                         .observeForever(scheduleMember -> {

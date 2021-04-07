@@ -25,17 +25,17 @@ public class SupervisorSmsListener extends BroadcastReceiver {
         if (receiverIntent.getAction().equals(SMS_RECEIVED)) {
             Bundle bundle = receiverIntent.getExtras();
             if (bundle != null) {
-                // retrieving any PDUs as objects
-                Object[] pdus = (Object[]) bundle.get("pdus"); // getting  the value
-                // of the key "pdus" from the bundle. Here the pdus(protocol data units) is a SMS
+                // Get PDUs and format of the key PDU
+                Object[] pdus = (Object[]) bundle.get("pdus");
+                String format = bundle.getString("format");
                 if (pdus.length == 0) {
                     return;
                 }
-                // getting messages from the pdus
+                // Get message from PDU
                 SmsMessage[] messages = new SmsMessage[pdus.length];
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < pdus.length; i++) {
-                    messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
+                    messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i], format);
                     sb.append(messages[i].getMessageBody());
                 }
                 String smsSenderNum = messages[0].getOriginatingAddress();
@@ -65,9 +65,7 @@ public class SupervisorSmsListener extends BroadcastReceiver {
                                 }
                             }
                         });
-
             }
         }
     }
-
 }
