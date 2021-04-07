@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.bigowlapp.R;
-import com.example.bigowlapp.viewModel.SupervisedGroupPageViewModel;
-
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.example.bigowlapp.R;
+import com.example.bigowlapp.viewModel.SupervisedGroupPageViewModel;
 
 public class SupervisedGroupPageActivity extends BigOwlActivity {
     private String groupID, groupName, supervisorName, supervisorId;

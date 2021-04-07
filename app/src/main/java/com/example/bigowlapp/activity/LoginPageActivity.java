@@ -19,9 +19,9 @@ import androidx.biometric.BiometricManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.utils.NotificationListenerManager;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.utils.NotificationListenerManager;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
 import com.example.bigowlapp.viewModel.LogInViewModel;

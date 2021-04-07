@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.activity.ScheduleViewRespondActivity;
 import com.example.bigowlapp.adapter.NotificationAdapter;
-import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.Notification;
 import com.example.bigowlapp.model.ReceiveScheduleNotification;
 import com.example.bigowlapp.model.SupervisionRequest;

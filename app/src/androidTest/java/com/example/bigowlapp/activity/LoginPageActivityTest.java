@@ -1,13 +1,7 @@
 package com.example.bigowlapp.activity;
 
-import android.os.SystemClock;
-import android.view.View;
-
 import androidx.lifecycle.Lifecycle;
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -16,7 +10,6 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.viewModel.LogInViewModel;
 import com.google.android.gms.tasks.Tasks;
 
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,7 +26,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest

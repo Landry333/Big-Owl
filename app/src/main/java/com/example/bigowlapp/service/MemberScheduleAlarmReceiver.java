@@ -10,7 +10,10 @@ import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
 import com.example.bigowlapp.utils.ScheduledLocationTrackingManager;
 import com.google.firebase.firestore.GeoPoint;
 
-import static com.example.bigowlapp.utils.IntentConstants.*;
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LATITUDE;
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LONGITUDE;
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_SCHEDULE_TITLE;
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
 
 /**
  * The purpose of this BroadcastReceiver is to execute code after the time activation of an alarm.

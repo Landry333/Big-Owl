@@ -1,22 +1,18 @@
 package com.example.bigowlapp.activity;
 
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.adapter.ScheduleReportMembersAdapter;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.utils.GeoLocationFormatter;
 import com.example.bigowlapp.viewModel.ScheduleReportViewModel;
-import com.google.firebase.firestore.GeoPoint;
-
-import java.io.IOException;
-
-import androidx.annotation.VisibleForTesting;
-import androidx.lifecycle.ViewModelProvider;
 
 public class ScheduleReportActivity extends BigOwlActivity {
     private String scheduleUid, supervisorId;

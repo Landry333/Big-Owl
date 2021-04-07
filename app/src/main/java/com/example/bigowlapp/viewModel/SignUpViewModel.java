@@ -14,8 +14,8 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 
 import java.security.SecureRandom;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class SignUpViewModel extends BaseViewModel {
