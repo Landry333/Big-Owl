@@ -41,7 +41,7 @@ public class SetScheduleViewModel extends BaseViewModel {
     public SetScheduleViewModel() {
         newScheduleData = new MutableLiveData<>(Schedule.getPrototypeSchedule());
         selectedGroupData = Transformations.map(newScheduleData, schedule -> selectedGroup);
-        listOfUserInGroupData = Transformations.switchMap(selectedGroupData, group -> getListOfUsersFromGroup(group));
+        listOfUserInGroupData = Transformations.switchMap(selectedGroupData, this::getListOfUsersFromGroup);
         selectedUsers = new ArrayList<>();
         listOfSelectedUsersData = Transformations.map(newScheduleData, schedule -> selectedUsers);
         selectedLocationData = Transformations.map(newScheduleData, schedule -> selectedLocation);
