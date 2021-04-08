@@ -23,7 +23,7 @@ public class LocationTrackingExpiredAlarmManager {
 
     public void setAlarm(long expireTimeMillis, String title) {
         this.title = title;
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME,
+        alarmManager.setExact(AlarmManager.ELAPSED_REALTIME,
                 SystemClock.elapsedRealtime() + expireTimeMillis,
                 getPendingIntent());
     }
