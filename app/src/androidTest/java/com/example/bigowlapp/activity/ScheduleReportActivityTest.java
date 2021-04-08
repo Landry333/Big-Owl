@@ -96,6 +96,7 @@ public class ScheduleReportActivityTest {
         memberIdNameMapData.postValue(memberIdNameMap);
 
         testSchedule = new Schedule();
+        testSchedule.setTimeNow(timestampNow);
         testSchedule.setUid("schedule001");
         testSchedule.setTitle("testSchedule001");
         testSchedule.setEvent("testEvent001");
@@ -176,7 +177,7 @@ public class ScheduleReportActivityTest {
 //                .inRoot(withDecorView(not(is(currentActivity.getWindow().getDecorView()))))
 //                .check(matches(isDisplayed()));
 
-//        listViewMatcher.checkAttendanceMatchOnView();
+        listViewMatcher.checkAttendanceMatchOnView();
     }
 
     @Test
