@@ -1,21 +1,14 @@
-package com.example.bigowlapp.viewModel;
+package com.example.bigowlapp.view_model;
 
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 
-public class LogInViewModel extends BaseViewModel {
+public class HomePageViewModel extends BaseViewModel {
 
     private LiveDataWithStatus<User> user;
 
-    public LogInViewModel() {
+    public HomePageViewModel() {
         // used implicitly when ViewModel constructed using ViewModelProvider
-    }
-
-    public Task<AuthResult> logInUser(String email, String password) {
-        return repositoryFacade.getAuthRepository().signInUser(email, password);
     }
 
     public LiveDataWithStatus<User> getCurrentUserData() {
@@ -26,8 +19,8 @@ public class LogInViewModel extends BaseViewModel {
         return user;
     }
 
-    public void addAuthStateListenerToDatabase(FirebaseAuth.AuthStateListener authStateListener) {
-        repositoryFacade.getAuthRepository().addAuthStateListener(authStateListener);
+    public void updateUser(User user){
+        repositoryFacade.getUserRepository().updateDocument(user.getUid(), user);
     }
 
     private void loadUserCurrentProfile() {
@@ -35,4 +28,7 @@ public class LogInViewModel extends BaseViewModel {
                 .getDocumentByUid(getCurrentUserUid(), User.class);
     }
 
+    public void signOut() {
+        repositoryFacade.getAuthRepository().signOutUser();
+    }
 }

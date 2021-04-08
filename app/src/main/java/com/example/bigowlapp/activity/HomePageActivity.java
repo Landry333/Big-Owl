@@ -20,7 +20,7 @@ import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
 import com.example.bigowlapp.utils.SupervisorSchedulesAlarmManager;
-import com.example.bigowlapp.viewModel.HomePageViewModel;
+import com.example.bigowlapp.view_model.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
 

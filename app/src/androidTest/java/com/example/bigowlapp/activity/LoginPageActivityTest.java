@@ -7,7 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.viewModel.LogInViewModel;
+import com.example.bigowlapp.view_model.LogInViewModel;
 import com.google.android.gms.tasks.Tasks;
 
 import org.junit.Before;

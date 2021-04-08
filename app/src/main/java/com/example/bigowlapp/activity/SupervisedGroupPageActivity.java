@@ -8,7 +8,7 @@ import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.viewModel.SupervisedGroupPageViewModel;
+import com.example.bigowlapp.view_model.SupervisedGroupPageViewModel;
 
 public class SupervisedGroupPageActivity extends BigOwlActivity {
     private String groupID;

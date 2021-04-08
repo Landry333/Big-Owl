@@ -19,7 +19,7 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
-import com.example.bigowlapp.viewModel.HomePageViewModel;
+import com.example.bigowlapp.view_model.HomePageViewModel;
 
 import java.util.concurrent.Executor;
 

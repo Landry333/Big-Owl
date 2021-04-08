@@ -13,7 +13,7 @@ import androidx.test.filters.LargeTest;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.viewModel.MonitoringGroupPageViewModel;
+import com.example.bigowlapp.view_model.MonitoringGroupPageViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;

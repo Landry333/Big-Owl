@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
-import com.example.bigowlapp.viewModel.EditProfileViewModel;
+import com.example.bigowlapp.view_model.EditProfileViewModel;
 import com.google.i18n.phonenumbers.NumberParseException;
 
 import java.util.Objects;

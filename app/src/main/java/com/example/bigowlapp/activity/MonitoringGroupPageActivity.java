@@ -21,7 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.viewModel.MonitoringGroupPageViewModel;
+import com.example.bigowlapp.view_model.MonitoringGroupPageViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

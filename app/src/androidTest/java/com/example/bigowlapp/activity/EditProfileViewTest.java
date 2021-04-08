@@ -8,7 +8,7 @@ import androidx.test.filters.LargeTest;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.viewModel.EditProfileViewModel;
+import com.example.bigowlapp.view_model.EditProfileViewModel;
 import com.google.android.gms.tasks.Tasks;
 
 import org.junit.Before;

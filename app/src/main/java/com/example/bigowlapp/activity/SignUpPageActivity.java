@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
-import com.example.bigowlapp.viewModel.SignUpViewModel;
+import com.example.bigowlapp.view_model.SignUpViewModel;
 import com.google.i18n.phonenumbers.NumberParseException;
 
 public class SignUpPageActivity extends AppCompatActivity {

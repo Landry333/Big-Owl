@@ -28,7 +28,7 @@ import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.Constants;
 import com.example.bigowlapp.utils.GroupRecyclerViewListener;
 import com.example.bigowlapp.utils.UserFragmentListener;
-import com.example.bigowlapp.viewModel.SetScheduleViewModel;
+import com.example.bigowlapp.view_model.SetScheduleViewModel;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;

@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Schedule;
-import com.example.bigowlapp.viewModel.ScheduleListViewModel;
+import com.example.bigowlapp.view_model.ScheduleListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

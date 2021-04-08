@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
-import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
+import com.example.bigowlapp.view_model.SupervisedGroupListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -15,7 +15,7 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.utils.PermissionsHelper;
-import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
+import com.example.bigowlapp.view_model.ScheduleViewRespondViewModel;
 
 public class ScheduleViewRespondActivity extends BigOwlActivity {
 

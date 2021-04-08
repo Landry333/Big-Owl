@@ -21,7 +21,7 @@ import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.NotificationListenerManager;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
-import com.example.bigowlapp.viewModel.LogInViewModel;
+import com.example.bigowlapp.view_model.LogInViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginPageActivity extends AppCompatActivity {

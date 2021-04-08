@@ -12,7 +12,7 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.adapter.ScheduleReportMembersAdapter;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.utils.GeoLocationFormatter;
-import com.example.bigowlapp.viewModel.ScheduleReportViewModel;
+import com.example.bigowlapp.view_model.ScheduleReportViewModel;
 
 public class ScheduleReportActivity extends BigOwlActivity {
     private String scheduleUid;
