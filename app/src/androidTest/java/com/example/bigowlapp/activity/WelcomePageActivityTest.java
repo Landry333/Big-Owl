@@ -14,7 +14,6 @@ import androidx.test.filters.LargeTest;
 import com.example.bigowlapp.R;
 
 import org.hamcrest.Matcher;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +22,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-@Ignore
+
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class WelcomePageActivityTest {

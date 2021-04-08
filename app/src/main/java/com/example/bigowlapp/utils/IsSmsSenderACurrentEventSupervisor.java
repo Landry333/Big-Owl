@@ -18,7 +18,11 @@ import java.util.List;
 
 public class IsSmsSenderACurrentEventSupervisor extends AppCompatActivity {
 
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db;
+
+    public IsSmsSenderACurrentEventSupervisor() {
+        db = FirebaseFirestore.getInstance();
+    }
 
     public Task<List<Schedule>> check(String phoneNumber) {
         RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();

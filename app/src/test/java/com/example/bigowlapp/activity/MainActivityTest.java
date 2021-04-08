@@ -3,7 +3,6 @@ package com.example.bigowlapp.activity;
 import android.content.Intent;
 import android.os.Build;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -13,7 +12,7 @@ import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.assertTrue;
 import static org.robolectric.Shadows.shadowOf;
-@Ignore
+
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.N_MR1)
 public class MainActivityTest {

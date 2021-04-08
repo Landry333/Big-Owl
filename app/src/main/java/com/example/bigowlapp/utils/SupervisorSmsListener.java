@@ -19,7 +19,6 @@ public class SupervisorSmsListener extends BroadcastReceiver {
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     private String scheduleId;
 
-    IsSmsSenderACurrentEventSupervisor isSmsSenderACurrentEventSupervisor = new IsSmsSenderACurrentEventSupervisor();
 
     public void onReceive(Context context, Intent receiverIntent) {
         if (receiverIntent.getAction().equals(SMS_RECEIVED)) {
@@ -55,6 +54,7 @@ public class SupervisorSmsListener extends BroadcastReceiver {
     }
 
     private void authenticateIfSenderIsSupervisor(Context context, Timestamp currentTime, String formattedSmsSenderNum) {
+        IsSmsSenderACurrentEventSupervisor isSmsSenderACurrentEventSupervisor = new IsSmsSenderACurrentEventSupervisor();
         isSmsSenderACurrentEventSupervisor.check(formattedSmsSenderNum)
                 .addOnSuccessListener(schedulesList -> {
                     for (Schedule schedule : schedulesList) {
