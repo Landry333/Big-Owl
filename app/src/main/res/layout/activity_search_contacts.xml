@@ -17,8 +17,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/top_app_bar"
         android:layout_margin="5dp"
-        android:hint="Search..."
-        android:inputType="text" />
+        android:hint="@string/search"
+        android:inputType="text"
+        android:autofillHints="name" />
 
     <ListView
         android:id="@+id/listContacts"

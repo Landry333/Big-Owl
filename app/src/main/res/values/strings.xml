@@ -128,4 +128,6 @@
     <string name="my_scheduled">my scheduled</string>
     <string name="add_user">add user</string>
     <string name="choose_a_contact_to_supervise_or_to_invite_for_registration">Choose a contact to supervise or to invite for registration</string>
+    <string name="search">Search…</string>
+    <string name="description_bigowl_logo">BigOwl Logo</string>
 </resources>

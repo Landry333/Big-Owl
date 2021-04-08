@@ -22,7 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.FingerprintAuthenticationActivity"/>
+        <activity android:name=".activity.FingerprintAuthenticationActivity" />
         <activity android:name=".activity.SetScheduleActivity" />
         <activity android:name=".activity.ScheduleViewRespondActivity" />
         <activity android:name=".activity.EditProfileActivity" />
@@ -54,7 +54,9 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".utils.SupervisorSmsListener">
+        <receiver
+            android:name=".utils.SupervisorSmsListener"
+            android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
