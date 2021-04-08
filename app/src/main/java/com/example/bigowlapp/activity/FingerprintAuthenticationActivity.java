@@ -1,6 +1,5 @@
 package com.example.bigowlapp.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -104,8 +103,6 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("MissingPermission")
-// Permission was already provided by user before sign in step in order to proceed
     private void subscribeToData() {
         if (!homePageViewModel.isCurrentUserSet()) {
             return;

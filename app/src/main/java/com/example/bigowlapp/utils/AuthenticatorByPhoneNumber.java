@@ -11,7 +11,6 @@ import com.example.bigowlapp.model.AuthByPhoneNumberFailure;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
-import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.Timestamp;
 import com.google.firebase.installations.FirebaseInstallations;
@@ -22,11 +21,11 @@ public class AuthenticatorByPhoneNumber {
     private String devicePhoneNumber;
     private String currentUserPhoneNumber;
     private final Context context;
-    private final AuthRepository authRepository = new AuthRepository();
-    private final RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
+    private final RepositoryFacade repositoryFacade;
 
     public AuthenticatorByPhoneNumber(Context context) {
         this.context = context;
+        repositoryFacade = RepositoryFacade.getInstance();
     }
 
     @SuppressLint("MissingPermission")
@@ -60,7 +59,7 @@ public class AuthenticatorByPhoneNumber {
                                 authByPhoneNumberFailure.setCreationTime(Timestamp.now());
                                 authByPhoneNumberFailure.setSenderPhoneNum(currentUserPhoneNumber);
                                 authByPhoneNumberFailure.setReceiverUid(schedule.getGroupSupervisorUid());
-                                authByPhoneNumberFailure.setSenderUid(authRepository.getCurrentUser().getUid());
+                                authByPhoneNumberFailure.setSenderUid(repositoryFacade.getCurrentUserUid());
                                 repositoryFacade.getNotificationRepository(schedule.getGroupSupervisorUid())
                                         .addDocument(authByPhoneNumberFailure);
                             }

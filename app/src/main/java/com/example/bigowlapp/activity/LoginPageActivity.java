@@ -1,6 +1,5 @@
 package com.example.bigowlapp.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -119,8 +118,6 @@ public class LoginPageActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @SuppressLint("MissingPermission")
-    // Permission was already provided by user before sign in step in order to proceed
     public void checkNextAccessWhenIsLoggedIn() {
         LiveDataWithStatus<User> currentUserData = logInViewModel.getCurrentUserData();
         currentUserData.observe(this, user -> {

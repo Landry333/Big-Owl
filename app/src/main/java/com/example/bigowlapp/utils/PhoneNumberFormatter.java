@@ -14,7 +14,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
 public class PhoneNumberFormatter {
-    private Context context;
+    private final Context context;
     private CountryCodeGetter countryCodeGetter;
 
     public PhoneNumberFormatter(Context context) {
@@ -38,6 +38,7 @@ public class PhoneNumberFormatter {
     }
 
     @SuppressLint("MissingPermission")
+    // Permission was already provided by user before sign in step in order to proceed
     public String getFormattedSMSNumber() {
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         String devicePhoneNumber = telephonyManager.getLine1Number();
