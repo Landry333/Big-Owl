@@ -1,7 +1,6 @@
 package com.example.bigowlapp.model;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import com.example.bigowlapp.utils.Constants;
 import com.google.firebase.Timestamp;
@@ -127,51 +126,44 @@ public class Schedule extends Model {
 
     @Exclude
     public Map<String, Object> scheduleMemberResponseAttendanceMap(String memberId) {
-        try {
-            UserScheduleResponse userScheduleResponse = this.userScheduleResponseMap.get(memberId);
-            Response memberResponse = Objects.requireNonNull(userScheduleResponse).getResponse();
-            Attendance memberAttendance = userScheduleResponse.getAttendance();
-            String responseText = "responseText";
-            String responseColor = "responseColor";
-            Map<String, Object> map = new HashMap<>();
+        UserScheduleResponse userScheduleResponse = this.userScheduleResponseMap.get(memberId);
+        Response memberResponse = Objects.requireNonNull(userScheduleResponse).getResponse();
+        Attendance memberAttendance = userScheduleResponse.getAttendance();
+        String responseText = "responseText";
+        String responseColor = "responseColor";
+        Map<String, Object> map = new HashMap<>();
 
-            if (memberAttendance.didAttend()) {
-                map.put(responseText, "ATTENDED");
-                map.put(responseColor, Color.GREEN);
-                map.put("attendanceTime", memberAttendance.getAuthenticationTime().toDate().toString());
-            } else if (memberResponse == Response.REJECT) {
-                map.put(responseText, "REJECTED");
-                map.put(responseColor, Color.RED);
-            } else if (memberResponse == Response.NEUTRAL) {
-                map.put(responseText, "NO RESPONSE");
-                map.put(responseColor, Color.GRAY);
-            } else {
-                switch (scheduleCurrentState()) {
-                    case SCHEDULED:
-                        map.put(responseText, "ACCEPTED");
-                        map.put(responseColor, Color.GREEN);
-                        break;
-                    case ON_GOING:
-                        map.put(responseText, "PENDING");
-                        map.put(responseColor, Color.BLUE);
-                        break;
-                    case COMPLETED:
-                        map.put(responseText, "MISSED");
-                        map.put(responseColor, Color.RED);
-                        break;
-                    default:
-                        map.put(responseText, "ERROR");
-                        map.put(responseColor, Color.RED);
-                        break;
-                }
+        if (memberAttendance.didAttend()) {
+            map.put(responseText, "ATTENDED");
+            map.put(responseColor, Color.GREEN);
+            map.put("attendanceTime", memberAttendance.getAuthenticationTime().toDate().toString());
+        } else if (memberResponse == Response.REJECT) {
+            map.put(responseText, "REJECTED");
+            map.put(responseColor, Color.RED);
+        } else if (memberResponse == Response.NEUTRAL) {
+            map.put(responseText, "NO RESPONSE");
+            map.put(responseColor, Color.GRAY);
+        } else {
+            switch (scheduleCurrentState()) {
+                case SCHEDULED:
+                    map.put(responseText, "ACCEPTED");
+                    map.put(responseColor, Color.GREEN);
+                    break;
+                case ON_GOING:
+                    map.put(responseText, "PENDING");
+                    map.put(responseColor, Color.BLUE);
+                    break;
+                case COMPLETED:
+                    map.put(responseText, "MISSED");
+                    map.put(responseColor, Color.RED);
+                    break;
+                default:
+                    map.put(responseText, "ERROR");
+                    map.put(responseColor, Color.RED);
+                    break;
             }
-            return map;
-        } catch (Exception e) {
-            Log.e("kek1", Log.getStackTraceString(e));
-            e.printStackTrace();
-            System.err.println("kek1");
-            return null;
         }
+        return map;
     }
 
     @Exclude

@@ -1,11 +1,14 @@
 package com.example.bigowlapp.activity;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
@@ -19,6 +22,9 @@ import com.example.bigowlapp.view_model.ScheduleReportViewModel;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +36,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -37,7 +44,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,11 +52,11 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class ScheduleReportActivityTest {
-    private  ScheduleReportActivity currentActivity;
-    private  Schedule testSchedule;
+    private static ScheduleReportActivity currentActivity;
+    private static Schedule testSchedule;
     private final Timestamp timestampNow = Timestamp.now();
     private MutableLiveData<Schedule> testScheduleData;
-//    private ListViewMatcher listViewMatcher;
+    private ListViewMatcher listViewMatcher;
 
     @Mock
     private ScheduleReportViewModel mockScheduleReportViewModel;
@@ -85,7 +91,7 @@ public class ScheduleReportActivityTest {
             memberIdNameMap.put(testMember.getUid(), testMember.getFullName());
             memberNameIdMap.put(testMember.getFullName(), testMember.getUid());
         }
-//        listViewMatcher = new ListViewMatcher(memberNameIdMap);
+        listViewMatcher = new ListViewMatcher(memberNameIdMap);
         MutableLiveData<Map<String, String>> memberIdNameMapData = new MutableLiveData<>();
         memberIdNameMapData.postValue(memberIdNameMap);
 
@@ -112,9 +118,9 @@ public class ScheduleReportActivityTest {
 
         when(mockScheduleReportViewModel.isCurrentUserSupervisor(testSupervisor.getUid())).thenReturn(true);
         when(mockScheduleReportViewModel.getCurrentScheduleData(testSchedule.getUid())).thenReturn(testScheduleData);
-        when(mockScheduleReportViewModel.getScheduleMemberNameMap(anyList())).thenReturn(memberIdNameMapData);
+        when(mockScheduleReportViewModel.getScheduleMemberNameMap(testSchedule.getMemberList())).thenReturn(memberIdNameMapData);
 
-        Intent testArrivingIntent = new Intent(ApplicationProvider.getApplicationContext(), ScheduleReportActivity.class);
+        Intent testArrivingIntent = new Intent(getApplicationContext(), ScheduleReportActivity.class);
         testArrivingIntent.putExtra("scheduleUid", testSchedule.getUid());
         testArrivingIntent.putExtra("supervisorId", testSupervisor.getUid());
 
@@ -133,7 +139,7 @@ public class ScheduleReportActivityTest {
         onView(allOf(withId(R.id.schedule_report_title), withText(testSchedule.getTitle()))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.schedule_report_start_time), withText(String.valueOf(testSchedule.getStartTime().toDate())))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.schedule_report_end_time), withText(String.valueOf(testSchedule.getEndTime().toDate())))).check(matches(isDisplayed()));
-        String CONCORDIA_ADDRESS = "memeLocation";
+        String CONCORDIA_ADDRESS = "SUPER_FAKE_LOCATION";
         onView(allOf(withId(R.id.schedule_report_location), withText(CONCORDIA_ADDRESS))).check(matches(isDisplayed()));
         onView(withId(R.id.divider)).check(matches(isDisplayed()));
         onView(withId(R.id.schedule_report_member_list)).check(matches(isDisplayed()));
@@ -149,7 +155,7 @@ public class ScheduleReportActivityTest {
         testSchedule.setEndTime(new Timestamp(timestampNow.getSeconds() + 7200, 0));
         testScheduleData.postValue(testSchedule);
 
-//        listViewMatcher.checkAttendanceMatchOnView();
+        listViewMatcher.checkAttendanceMatchOnView();
     }
 
     @Test
@@ -170,7 +176,7 @@ public class ScheduleReportActivityTest {
 //                .inRoot(withDecorView(not(is(currentActivity.getWindow().getDecorView()))))
 //                .check(matches(isDisplayed()));
 
-//        listViewMatcher.checkAttendanceMatchOnView();
+        listViewMatcher.checkAttendanceMatchOnView();
     }
 
     @Test
@@ -187,55 +193,56 @@ public class ScheduleReportActivityTest {
                         new Attendance(false)));
         testScheduleData.postValue(testSchedule);
 
-//        listViewMatcher.checkAttendanceMatchOnView();
+        listViewMatcher.checkAttendanceMatchOnView();
     }
 
-//    private static class ListViewMatcher {
-//        private final Map<String, String> memberNameIdMap;
-//
-//        private ListViewMatcher(Map<String, String> memberNameIdMap) {
-//            this.memberNameIdMap = memberNameIdMap;
-//        }
-//
-//        private void checkAttendanceMatchOnView() {
-//            for (int i = 0; i < testSchedule.getUserScheduleResponseMap().size(); i++) {
-//                onView(atPositionOnView(i)).check(matches(isDisplayed()));
-//            }
-//        }
+    private static class ListViewMatcher {
+        private final Map<String, String> memberNameIdMap;
 
-//        private Matcher<View> atPositionOnView(int position) {
-//
-//            return new TypeSafeMatcher<View>() {
-//                Resources resources = null;
-//
-//                @Override
-//                public void describeTo(Description description) {
-//                    description.appendText("with id: " + this.resources.getResourceName(R.id.schedule_report_member_list));
-//                }
-//
-//                @Override
-//                protected boolean matchesSafely(View view) {
-//                    this.resources = view.getResources();
-//                    ListView listView = currentActivity.findViewById(R.id.schedule_report_member_list);
-//
-//                    TextView attendanceResultTextView = listView.getChildAt(position).findViewById(R.id.schedule_report_member_attendance);
-//                    String memberAttendanceResult = attendanceResultTextView.getText().toString();
-//
-//                    TextView memberNameTextView = listView.getChildAt(position).findViewById(R.id.schedule_report_member_name);
-//                    String memberId = memberNameIdMap.get(memberNameTextView.getText().toString());
-//
-//                    String memberExpectedAttendanceResult = testSchedule.scheduleMemberResponseAttendanceMap(memberId).get("responseText").toString();
-//
-//                    if (testSchedule.scheduleMemberResponseAttendanceMap(memberId).containsKey("attendanceTime")) {
-//                        TextView attendanceTimeTextView = listView.getChildAt(position).findViewById(R.id.schedule_report_member_attendance_time);
-//                        String memberAttendanceTime = attendanceTimeTextView.getText().toString();
-//                        String memberExpectedAttendanceTime = testSchedule.scheduleMemberResponseAttendanceMap(memberId).get("attendanceTime").toString();
-//                        return view == listView
-//                                && memberAttendanceResult.equals(memberExpectedAttendanceResult)
-//                                && memberAttendanceTime.equals(memberExpectedAttendanceTime);
-//                    } else
-//                        return view == listView && memberAttendanceResult.equals(memberExpectedAttendanceResult);
-//                }
-//            };
-//        }
+        private ListViewMatcher(Map<String, String> memberNameIdMap) {
+            this.memberNameIdMap = memberNameIdMap;
+        }
+
+        private void checkAttendanceMatchOnView() {
+            for (int i = 0; i < testSchedule.getUserScheduleResponseMap().size(); i++) {
+                onView(atPositionOnView(i)).check(matches(isDisplayed()));
+            }
+        }
+
+        private Matcher<View> atPositionOnView(int position) {
+
+            return new TypeSafeMatcher<View>() {
+                Resources resources = null;
+
+                @Override
+                public void describeTo(Description description) {
+                    description.appendText("with id: " + this.resources.getResourceName(R.id.schedule_report_member_list));
+                }
+
+                @Override
+                protected boolean matchesSafely(View view) {
+                    this.resources = view.getResources();
+                    ListView listView = currentActivity.findViewById(R.id.schedule_report_member_list);
+
+                    TextView attendanceResultTextView = listView.getChildAt(position).findViewById(R.id.schedule_report_member_attendance);
+                    String memberAttendanceResult = attendanceResultTextView.getText().toString();
+
+                    TextView memberNameTextView = listView.getChildAt(position).findViewById(R.id.schedule_report_member_name);
+                    String memberId = memberNameIdMap.get(memberNameTextView.getText().toString());
+
+                    String memberExpectedAttendanceResult = testSchedule.scheduleMemberResponseAttendanceMap(memberId).get("responseText").toString();
+
+                    if (testSchedule.scheduleMemberResponseAttendanceMap(memberId).containsKey("attendanceTime")) {
+                        TextView attendanceTimeTextView = listView.getChildAt(position).findViewById(R.id.schedule_report_member_attendance_time);
+                        String memberAttendanceTime = attendanceTimeTextView.getText().toString();
+                        String memberExpectedAttendanceTime = testSchedule.scheduleMemberResponseAttendanceMap(memberId).get("attendanceTime").toString();
+                        return view == listView
+                                && memberAttendanceResult.equals(memberExpectedAttendanceResult)
+                                && memberAttendanceTime.equals(memberExpectedAttendanceTime);
+                    } else
+                        return view == listView && memberAttendanceResult.equals(memberExpectedAttendanceResult);
+                }
+            };
+        }
     }
+}
