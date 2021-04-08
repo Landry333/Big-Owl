@@ -20,7 +20,6 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -91,7 +90,6 @@ public class ScheduleReportActivityTest {
         memberIdNameMapData.postValue(memberIdNameMap);
 
         testSchedule = new Schedule();
-//        testSchedule.setTimeNow(timestampNow);
         testSchedule.setUid("schedule001");
         testSchedule.setTitle("testSchedule001");
         testSchedule.setEvent("testEvent001");
@@ -154,7 +152,6 @@ public class ScheduleReportActivityTest {
 //        listViewMatcher.checkAttendanceMatchOnView();
     }
 
-    @Ignore("TODO")
     @Test
     public void scheduleOnGoingTest() {
         testSchedule.setStartTime(new Timestamp(timestampNow.getSeconds() - 3600, 0));
