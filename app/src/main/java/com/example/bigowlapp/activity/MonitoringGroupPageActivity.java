@@ -117,7 +117,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
         searchUsers.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                // Nothing needs to be done before the text is changed
             }
 
             @Override
@@ -128,6 +128,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                // Nothing needs to be done after the text is changed
             }
         });
 
