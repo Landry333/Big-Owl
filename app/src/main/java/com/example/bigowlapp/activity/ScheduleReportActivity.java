@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.adapter.ScheduleReportMembersAdapter;
 import com.example.bigowlapp.model.Schedule;
-import com.example.bigowlapp.utils.GeoLocationFormatter;
 import com.example.bigowlapp.view_model.ScheduleReportViewModel;
 
 public class ScheduleReportActivity extends BigOwlActivity {
@@ -59,7 +58,7 @@ public class ScheduleReportActivity extends BigOwlActivity {
                 scheduleReportTitle.setText(schedule.getTitle());
                 scheduleReportStartTime.setText(schedule.getStartTime().toDate().toString());
                 scheduleReportEndTime.setText(schedule.getEndTime().toDate().toString());
-                scheduleReportLocation.setText(GeoLocationFormatter.formatLocation(this, schedule.getLocation()));
+//                scheduleReportLocation.setText(GeoLocationFormatter.formatLocation(this, schedule.getLocation()));
 
                 scheduleReportViewModel.getScheduleMemberNameMap(schedule.getMemberList()).observe(this, memberNameMap -> {
                     if (schedule.scheduleCurrentState() == Schedule.Status.ON_GOING)
