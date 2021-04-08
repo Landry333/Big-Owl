@@ -176,7 +176,7 @@ public class ScheduleReportActivityTest {
 //                .inRoot(withDecorView(not(is(currentActivity.getWindow().getDecorView()))))
 //                .check(matches(isDisplayed()));
 
-        listViewMatcher.checkAttendanceMatchOnView();
+//        listViewMatcher.checkAttendanceMatchOnView();
     }
 
     @Test
