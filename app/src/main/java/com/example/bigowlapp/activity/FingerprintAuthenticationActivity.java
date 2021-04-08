@@ -58,7 +58,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-                authResultText.setText("Error");
+                authResultText.setText(R.string.auth_result_error);
                 authResultText.setVisibility(View.VISIBLE);
             }
 
@@ -72,7 +72,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
-                authResultText.setText("Failed authentication");
+                authResultText.setText(R.string.failed_auth);
                 authResultText.setVisibility(View.VISIBLE);
             }
         });
@@ -137,7 +137,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
         BiometricManager biometricManager = BiometricManager.from(this);
         if (biometricManager.canAuthenticate() != BiometricManager.BIOMETRIC_SUCCESS) {
 
-            authResultText.setText("Biometric Not Supported on this phone");
+            authResultText.setText(R.string.biometric_not_supported);
             return;
         }
         biometricPrompt.authenticate(promptInfo);
@@ -157,14 +157,14 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
         if (!user.getPhoneNumber().equalsIgnoreCase(devicePhoneNum)
                 && user.getFingerprintAuthRegistration().equalsIgnoreCase("NO")) {
             fingerprintAuthRegistrationText.setText(NO_COMPATIBILITY_WITH_PHONE);
-            btnGoToHomePage.setText("Go to home page");
+            btnGoToHomePage.setText(R.string.go_to_home_page);
             btnGoToHomePage.setVisibility(View.VISIBLE);
             return;
         }
         if (user.getFingerprintAuthRegistration().equalsIgnoreCase("NO")) {
             fingerprintAuthRegistrationText.setText(PROPOSE_FINGERPRINT_AUTH);
-            btnFingerprintAuthAdd.setText("ADD");
-            btnFingerprintAuthMaybeLater.setText("MAYBE LATER");
+            btnFingerprintAuthAdd.setText(getString(R.string.add));
+            btnFingerprintAuthMaybeLater.setText(getString(R.string.maybe_later));
             btnFingerprintAuthAdd.setVisibility(View.VISIBLE);
             btnFingerprintAuthMaybeLater.setVisibility(View.VISIBLE);
             btnFingerprintAuthAdd.setOnClickListener(v -> {
@@ -187,7 +187,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
             }
 
         } else {
-            fingerprintAuthRegistrationText.setText("NOT ALLOWED");
+            fingerprintAuthRegistrationText.setText(R.string.not_allowed_error);
         }
     }
 }
