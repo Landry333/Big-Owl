@@ -1,10 +1,8 @@
 package com.example.bigowlapp.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +20,6 @@ import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.example.bigowlapp.viewModel.HomePageViewModel;
-import com.google.i18n.phonenumbers.NumberParseException;
 
 import java.util.concurrent.Executor;
 
@@ -110,23 +107,17 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
     @SuppressLint("MissingPermission")
 // Permission was already provided by user before sign in step in order to proceed
     private void subscribeToData() {
-
-        if (!homePageViewModel.isCurrentUserSet())
+        if (!homePageViewModel.isCurrentUserSet()) {
             return;
+        }
         LiveDataWithStatus<User> currentUserData = homePageViewModel.getCurrentUserData();
         currentUserData.observe(this, user -> {
-            TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-            String devicePhoneNumber = telephonyManager.getLine1Number();
             if (currentUserData.hasError()) {
                 Toast.makeText(getBaseContext(), currentUserData.getError().getMessage(), Toast.LENGTH_LONG).show();
                 return;
             }
-            String formattedDevicePhoneNum = null;
-            try {
-                formattedDevicePhoneNum = new PhoneNumberFormatter(this).formatNumber(devicePhoneNumber);
-            } catch (NumberParseException e) {
-                Toast.makeText(this, "FAILED to format phone number. Process failed", Toast.LENGTH_LONG).show();
-            }
+            PhoneNumberFormatter phoneNumberFormatter = new PhoneNumberFormatter(this);
+            String formattedDevicePhoneNum = phoneNumberFormatter.getFormattedSMSNumber();
             verifyUserAccessToService(user, formattedDevicePhoneNum);
 
         });
