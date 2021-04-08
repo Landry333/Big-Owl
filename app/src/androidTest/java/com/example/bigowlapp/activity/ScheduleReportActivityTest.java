@@ -20,7 +20,6 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -134,7 +133,7 @@ public class ScheduleReportActivityTest {
         onView(allOf(withId(R.id.schedule_report_title), withText(testSchedule.getTitle()))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.schedule_report_start_time), withText(String.valueOf(testSchedule.getStartTime().toDate())))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.schedule_report_end_time), withText(String.valueOf(testSchedule.getEndTime().toDate())))).check(matches(isDisplayed()));
-        String CONCORDIA_ADDRESS = "1571 Rue Mackay, Montréal, QC H3G 2H6, Canada";
+        String CONCORDIA_ADDRESS = "memeLocation";
         onView(allOf(withId(R.id.schedule_report_location), withText(CONCORDIA_ADDRESS))).check(matches(isDisplayed()));
         onView(withId(R.id.divider)).check(matches(isDisplayed()));
         onView(withId(R.id.schedule_report_member_list)).check(matches(isDisplayed()));
@@ -153,7 +152,6 @@ public class ScheduleReportActivityTest {
 //        listViewMatcher.checkAttendanceMatchOnView();
     }
 
-    @Ignore
     @Test
     public void scheduleOnGoingTest() {
         testSchedule.setStartTime(new Timestamp(timestampNow.getSeconds() - 3600, 0));

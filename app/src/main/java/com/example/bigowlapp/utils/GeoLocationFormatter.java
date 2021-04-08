@@ -24,6 +24,8 @@ public class GeoLocationFormatter {
                     .get(0).getAddressLine(0);
         } catch (IOException e) {
             Log.e("BigOwl", "GeoPoint formatter exception", e);
+            Log.e("kek11", Log.getStackTraceString(e));
+            e.printStackTrace();
         }
         return "ERROR";
     }
