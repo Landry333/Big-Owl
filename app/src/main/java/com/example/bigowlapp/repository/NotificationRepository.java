@@ -38,18 +38,7 @@ public class NotificationRepository extends Repository<Notification> {
         collectionReference
                 .orderBy(Notification.Field.CREATION_TIME, Query.Direction.DESCENDING)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot tDocs = task.getResult();
-                        if (tDocs != null && !tDocs.isEmpty()) {
-                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), tClass));
-                        } else {
-                            listOfTData.setError(getDocumentNotFoundException(tClass));
-                        }
-                    } else {
-                        listOfTData.setError(task.getException());
-                    }
-                });
+                .addOnCompleteListener(task -> resolveTaskWithListResult(task, listOfTData, tClass));
         return listOfTData;
     }
 

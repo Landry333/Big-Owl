@@ -30,18 +30,7 @@ public class ScheduleRepository extends Repository<Schedule> {
                 .whereArrayContains(Schedule.Field.MEMBER_LIST, userID)
                 .orderBy(Schedule.Field.START_TIME, Query.Direction.ASCENDING)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot tDocs = task.getResult();
-                        if (tDocs != null && !tDocs.isEmpty()) {
-                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), Schedule.class));
-                        } else {
-                            listOfTData.setError(getDocumentNotFoundException(Schedule.class));
-                        }
-                    } else {
-                        listOfTData.setError(task.getException());
-                    }
-                });
+                .addOnCompleteListener(task -> resolveTaskWithListResult(task, listOfTData, Schedule.class));
         return listOfTData;
     }
 
@@ -64,18 +53,7 @@ public class ScheduleRepository extends Repository<Schedule> {
         collectionReference.whereEqualTo(Schedule.Field.GROUP_SUPERVISOR_UID, currentUserUid)
                 .orderBy(Schedule.Field.START_TIME, Query.Direction.ASCENDING)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot tDocs = task.getResult();
-                        if (tDocs != null && !tDocs.isEmpty()) {
-                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), Schedule.class));
-                        } else {
-                            listOfTData.setError(getDocumentNotFoundException(Schedule.class));
-                        }
-                    } else {
-                        listOfTData.setError(task.getException());
-                    }
-                });
+                .addOnCompleteListener(task -> resolveTaskWithListResult(task, listOfTData, Schedule.class));
         return listOfTData;
     }
 
