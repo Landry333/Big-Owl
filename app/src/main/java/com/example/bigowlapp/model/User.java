@@ -44,18 +44,6 @@ public class User extends Model implements Parcelable {
         this.memberGroupIdList = memberGroupIdList;
     }
 
-    public User(String uid, String firstName, String lastName, String phoneNumber, String email,
-                String profileImage, List<String> memberGroupIdList, String fingerprintAuthRegistration) {
-        super(uid);
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.profileImage = profileImage;
-        this.memberGroupIdList = memberGroupIdList;
-        this.fingerprintAuthRegistration = fingerprintAuthRegistration;
-    }
-
     protected User(Parcel in) {
         uid = in.readString();
         firstName = in.readString();

@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -172,19 +171,6 @@ public class HomePageActivity extends BigOwlActivity {
         }
         return super.onMenuItemClick(item);
     }
-
-    private AlertDialog noSignedInAlert() {
-        return new AlertDialog.Builder(this)
-                .setTitle("You are not logged in!")
-                .setMessage("Please log in or register an account!")
-                .setPositiveButton("Ok", (dialogInterface, which) -> {
-                    startActivity(new Intent(this, LoginPageActivity.class));
-                    finish();
-                })
-                .setCancelable(false)
-                .create();
-    }
-
 
     @VisibleForTesting
     public void setHomePageViewModel(HomePageViewModel homePageViewModel) {

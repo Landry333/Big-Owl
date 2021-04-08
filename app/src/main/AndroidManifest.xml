@@ -45,11 +45,11 @@
         <activity android:name=".activity.ScheduleReportActivity" />
         <activity android:name=".activity.NotificationActivity" />
         <activity
+            android:exported="true"
             android:name=".activity.WelcomePageActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -55,8 +55,8 @@ public class EditProfileViewTest {
                 "+1234567890",
                 "tester@mail.com",
                 null,
-                null,
-                "yes");
+                null);
+        testUser.setFingerprintAuthRegistration("yes");
         MutableLiveData<User> testUserData = new MutableLiveData<>();
 
         when(mockEditProfileViewModel.isCurrentUserSet()).thenReturn(true);
