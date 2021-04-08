@@ -2,6 +2,7 @@ package com.example.bigowlapp.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,9 +66,8 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
                                 }
                                 setProgressBarInvisible();
                             }));
-        } catch (
-                Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Log.e("Error: ", e.getMessage());
         }
     }
 

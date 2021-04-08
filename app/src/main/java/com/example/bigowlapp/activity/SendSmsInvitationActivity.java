@@ -76,11 +76,9 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
                 } else {
                     requestPermissions(new String[]{Manifest.permission.SEND_SMS}, 1);
                 }
-
             });
-
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("Error: ", e.getMessage());
         }
     }
 
@@ -96,7 +94,6 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
             smsInvitationRequest(smsNumber);
             Toast.makeText(this, "Invitation sent", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            e.printStackTrace();
             Toast.makeText(this, "Error, Message not sent", Toast.LENGTH_SHORT).show();
         }
     }
