@@ -50,64 +50,53 @@ public class LoginPageActivity extends AppCompatActivity {
     }
 
     protected void initialize() {
+        progressBar = findViewById(R.id.login_progress_bar);
 
-        try {
-            progressBar = (ProgressBar) findViewById(R.id.login_progress_bar);
+        emailId = findViewById(R.id.editTextTextEmailAddress);
+        password = findViewById(R.id.editTextTextPassword);
+        btnSignIn = findViewById(R.id.button);
+        tvSignUp = findViewById(R.id.textView);
 
-            emailId = findViewById(R.id.editTextTextEmailAddress);
-            password = findViewById(R.id.editTextTextPassword);
-            btnSignIn = findViewById(R.id.button);
-            tvSignUp = findViewById(R.id.textView);
+        mAuthStateListener = firebaseAuth -> {
+            if (logInViewModel.isCurrentUserSet()) {
+                Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
+                notificationListener = new NotificationListenerManager();
+                notificationListener.listen(this);
+                checkNextAccessWhenIsLoggedIn();
+            } else {
+                Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_SHORT).show();
+            }
+        };
 
-            mAuthStateListener = firebaseAuth -> {
-                if (logInViewModel.isCurrentUserSet()) {
-                    Toast.makeText(LoginPageActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
-                    notificationListener = new NotificationListenerManager();
-                    notificationListener.listen(this);
-                    checkNextAccessWhenIsLoggedIn();
-                } else {
-                    Toast.makeText(LoginPageActivity.this, "Please login", Toast.LENGTH_SHORT).show();
-                }
-            };
+        btnSignIn.setOnClickListener(v -> {
+            String email = emailId.getText().toString();
+            String pass = password.getText().toString();
+            if (email.isEmpty()) {
+                emailId.setError("Please enter a valid email");
+                emailId.requestFocus();
+            } else if (pass.isEmpty()) {
+                password.setError("Please enter your password");
+                password.requestFocus();
+            } else if (!(email.isEmpty() && pass.isEmpty())) {
+                progressBar.setVisibility(View.VISIBLE);
+                logInViewModel.logInUser(email, pass)
+                        .addOnSuccessListener(isSuccessful -> {
+                            progressBar.setVisibility(View.INVISIBLE);
+                            checkIfCanFingerprintAuthenticate();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(LoginPageActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.INVISIBLE);
+                        });
+            } else {
+                Toast.makeText(LoginPageActivity.this, "An error has occurred", Toast.LENGTH_LONG).show();
+            }
+        });
 
-            btnSignIn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String email = emailId.getText().toString();
-                    String pass = password.getText().toString();
-                    if (email.isEmpty()) {
-                        emailId.setError("Please enter a valid email");
-                        emailId.requestFocus();
-                    } else if (pass.isEmpty()) {
-                        password.setError("Please enter your password");
-                        password.requestFocus();
-                    } else if (!(email.isEmpty() && pass.isEmpty())) {
-                        progressBar.setVisibility(View.VISIBLE);
-                        logInViewModel.logInUser(email, pass)
-                                .addOnSuccessListener(isSuccessful -> {
-                                    progressBar.setVisibility(View.INVISIBLE);
-                                    checkIfCanFingerprintAuthenticate();
-                                })
-                                .addOnFailureListener(e -> {
-                                    Toast.makeText(LoginPageActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                                    progressBar.setVisibility(View.INVISIBLE);
-                                });
-                    } else {
-                        Toast.makeText(LoginPageActivity.this, "An error has occurred", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-
-            tvSignUp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(LoginPageActivity.this, SignUpPageActivity.class);
-                    startActivity(i);
-                }
-            });
-        } catch (Exception ex) {
-
-        }
+        tvSignUp.setOnClickListener(v -> {
+            Intent i = new Intent(LoginPageActivity.this, SignUpPageActivity.class);
+            startActivity(i);
+        });
     }
 
     @Override
@@ -135,7 +124,7 @@ public class LoginPageActivity extends AppCompatActivity {
     }
 
     @SuppressLint("MissingPermission")
-// Permission was already provided by user before sign in step in order to proceed
+    // Permission was already provided by user before sign in step in order to proceed
     public void checkNextAccessWhenIsLoggedIn() {
         HomePageViewModel homePageViewModel;
         homePageViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);

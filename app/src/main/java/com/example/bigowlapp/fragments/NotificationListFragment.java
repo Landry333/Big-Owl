@@ -27,7 +27,6 @@ public class NotificationListFragment extends Fragment implements NotificationAd
 
     private RecyclerView recyclerView;
     private LiveData<List<Notification>> notificationListData;
-    private String supervisorName;
     private RepositoryFacade repositoryFacade;
 
     public NotificationListFragment() {

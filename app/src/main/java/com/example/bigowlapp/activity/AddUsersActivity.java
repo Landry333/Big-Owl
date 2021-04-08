@@ -1,11 +1,9 @@
 package com.example.bigowlapp.activity;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -31,27 +29,20 @@ public class AddUsersActivity extends BigOwlActivity {
     protected void initialize() {
         btnContacts = findViewById(R.id.btnContacts);
 
-        btnContacts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(AddUsersActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                    //Toast.makeText(HomePageActivity.this, "This permission is already granted", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(AddUsersActivity.this, SearchContactsToSupervise.class);
-                    startActivity(i);
-                } else {
-                    requestContactPermission();
-                }
+        btnContacts.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(AddUsersActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                Intent i = new Intent(AddUsersActivity.this, SearchContactsToSupervise.class);
+                startActivity(i);
+            } else {
+                requestContactPermission();
             }
         });
 
         btnPhone = findViewById(R.id.btnPhone);
 
-        btnPhone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(AddUsersActivity.this, SearchContactsByPhone.class);
-                startActivity(i);
-            }
+        btnPhone.setOnClickListener(v -> {
+            Intent i = new Intent(AddUsersActivity.this, SearchContactsByPhone.class);
+            startActivity(i);
         });
     }
 
@@ -65,18 +56,9 @@ public class AddUsersActivity extends BigOwlActivity {
             new AlertDialog.Builder(this)
                     .setTitle("Permission needed")
                     .setMessage("Permission is required to read phone Contacts")
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int which) {
-                            ActivityCompat.requestPermissions(AddUsersActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, CONTACT_PERMISSION_CODE);
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
+                    .setPositiveButton("Ok", (dialogInterface, which) ->
+                            ActivityCompat.requestPermissions(AddUsersActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, CONTACT_PERMISSION_CODE))
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                     .create().show();
 
         } else {
