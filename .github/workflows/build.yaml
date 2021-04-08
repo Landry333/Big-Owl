@@ -31,17 +31,14 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Build the app/gradle
-        run: ./gradlew build
-
-      - name: Run android lint
-        run: ./gradlew lint
+        run: ./gradlew assemble
 
       - name: Run app on an emulator
         uses: ReactiveCircus/android-emulator-runner@v2.14.3
         with:
           api-level: 29
           arch: x86
-          script: ./gradlew connectedCheck connectedDebugAndroidTest --info
+          script: ./gradlew connectedCheck connectedDebugAndroidTest --scan
 
       - name: Codecov
         uses: codecov/codecov-action@v1.0.13
