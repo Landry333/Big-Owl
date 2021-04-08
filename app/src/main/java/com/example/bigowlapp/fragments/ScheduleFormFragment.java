@@ -1,5 +1,6 @@
 package com.example.bigowlapp.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +16,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.DialogFragment;
@@ -25,7 +28,6 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.utils.Constants;
 import com.example.bigowlapp.utils.GroupRecyclerViewListener;
 import com.example.bigowlapp.utils.UserFragmentListener;
 import com.example.bigowlapp.view_model.SetScheduleViewModel;
@@ -37,7 +39,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static android.app.Activity.RESULT_OK;
 import static com.example.bigowlapp.utils.DateTimeFormatter.dateFormatter;
 import static com.example.bigowlapp.utils.DateTimeFormatter.timeFormatter;
 
@@ -67,6 +68,7 @@ public class ScheduleFormFragment extends Fragment
     private DialogFragment groupDialogFragment;
 
     private SetScheduleViewModel setScheduleViewModel;
+    private ActivityResultLauncher<Intent> onLocationResultLauncher;
 
     public static ScheduleFormFragment newInstance() {
         return new ScheduleFormFragment();
@@ -74,6 +76,12 @@ public class ScheduleFormFragment extends Fragment
 
     public ScheduleFormFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        onLocationResultLauncher = this.registerOnLocationResultLauncher();
     }
 
     @Override
@@ -163,10 +171,12 @@ public class ScheduleFormFragment extends Fragment
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // Nothing needs to be checked before the title's change
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 // Nothing needs to be checked after the title's change
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 setScheduleViewModel.updateScheduleTitle(s.toString());
@@ -360,24 +370,22 @@ public class ScheduleFormFragment extends Fragment
                     .accessToken(getResources().getString(R.string.mapbox_public_access_token))
                     .placeOptions(placeOptions)
                     .build(getActivity());
-
-            startActivityForResult(locationIntent, Constants.REQUEST_CODE_LOCATION);
+            onLocationResultLauncher.launch(locationIntent);
         });
     }
 
     private void handleLocationSelection(int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             CarmenFeature location = PlaceAutocomplete.getPlace(data);
             setScheduleViewModel.updateScheduleLocation(location);
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == Constants.REQUEST_CODE_LOCATION) {
-            handleLocationSelection(resultCode, data);
-        }
-        super.onActivityResult(requestCode, resultCode, data);
+    public ActivityResultLauncher<Intent> registerOnLocationResultLauncher() {
+        return registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> handleLocationSelection(result.getResultCode(), result.getData())
+        );
     }
 
     @Override
@@ -405,7 +413,7 @@ public class ScheduleFormFragment extends Fragment
         return editLocation;
     }
 
-    public void confirmationScreen (Schedule schedule){
+    public void confirmationScreen(Schedule schedule) {
         Group group = setScheduleViewModel.getSelectedGroupData().getValue();
         List<User> userList = setScheduleViewModel.getListOfSelectedUsersData().getValue();
         CarmenFeature location = setScheduleViewModel.getSelectedLocationData().getValue();
@@ -424,7 +432,7 @@ public class ScheduleFormFragment extends Fragment
         scheduleConfirmation.show();
     }
 
-    public String confirmationString (Group group, List<User> userList, Schedule schedule, CarmenFeature location){
+    public String confirmationString(Group group, List<User> userList, Schedule schedule, CarmenFeature location) {
         String title = schedule.getTitle();
         String groupName = group.getName();
         StringBuilder selectedMembers = new StringBuilder();
@@ -440,7 +448,7 @@ public class ScheduleFormFragment extends Fragment
 
         String selectedLocation = (location.placeName() == null) ? location.address() : location.placeName();
 
-        return ("Please confirm the new Schedule info: \n\nTitle:\n" + title + "\n\nGroup name:\n"+ groupName + "\n\nSelected members:\n"+ selectedMembers + "\nStart date:\n" + startDate + "\n"+ startTime + "\n\nEnd date\n" + endDate + "\n" + endTime + "\n\nSelected Location:\n" + selectedLocation);
+        return ("Please confirm the new Schedule info: \n\nTitle:\n" + title + "\n\nGroup name:\n" + groupName + "\n\nSelected members:\n" + selectedMembers + "\nStart date:\n" + startDate + "\n" + startTime + "\n\nEnd date\n" + endDate + "\n" + endTime + "\n\nSelected Location:\n" + selectedLocation);
     }
 
 }
