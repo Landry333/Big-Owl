@@ -41,7 +41,7 @@ jobs:
         with:
           api-level: 29
           arch: x86
-          script: ./gradlew connectedCheck jacocoTestReport --stacktrace createDebugCoverageReport
+          script: ./gradlew connectedCheck connectedDebugAndroidTest --info
 
       - name: Codecov
         uses: codecov/codecov-action@v1.0.13

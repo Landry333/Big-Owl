@@ -2,8 +2,6 @@ package com.example.bigowlapp.model;
 
 import android.graphics.Color;
 
-import androidx.annotation.VisibleForTesting;
-
 import com.example.bigowlapp.utils.Constants;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.Exclude;
@@ -35,7 +33,7 @@ public class Schedule extends Model {
     private Timestamp endTime;
     private GeoPoint location;
     private Map<String, UserScheduleResponse> userScheduleResponseMap;
-    private Timestamp timeNow;
+//    private Timestamp timeNow;
 
     public Schedule() {
         super();
@@ -172,7 +170,8 @@ public class Schedule extends Model {
     @Exclude
     public Status scheduleCurrentState() {
         final int THIRTY_MINUTES = 1800;
-        Timestamp timeNow = this.timeNow == null ? Timestamp.now() : this.timeNow;
+        Timestamp timeNow = Timestamp.now();
+        //        Timestamp timeNow = this.timeNow == null ? Timestamp.now() : this.timeNow;
         if (timeNow.compareTo(startTime) < 0) {
             return Status.SCHEDULED;
         } else if (timeNow.getSeconds() <= (startTime.getSeconds() + THIRTY_MINUTES)) {
@@ -182,11 +181,11 @@ public class Schedule extends Model {
         }
     }
 
-    @Exclude
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public void setTimeNow(Timestamp timeNow) {
-        this.timeNow = timeNow;
-    }
+//    @Exclude
+//    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+//    public void setTimeNow(Timestamp timeNow) {
+//        this.timeNow = timeNow;
+//    }
 
     public enum Status {
         SCHEDULED, ON_GOING, COMPLETED
