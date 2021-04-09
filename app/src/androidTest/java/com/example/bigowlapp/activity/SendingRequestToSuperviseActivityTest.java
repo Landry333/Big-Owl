@@ -90,8 +90,7 @@ public class SendingRequestToSuperviseActivityTest {
         SupervisionRequest supervisionRequest = createDefaultSupervisionRequest();
         ArrayList<SupervisionRequest> srList = new ArrayList<>();
         srList.add(supervisionRequest);
-        MutableLiveData<List<SupervisionRequest>> srListData = new MutableLiveData<>(srList);
-        return srListData;
+        return new MutableLiveData<>(srList);
     }
 
     private LiveData<List<SupervisionRequest>> createRejectedSupervisionRequestData() {
@@ -99,8 +98,7 @@ public class SendingRequestToSuperviseActivityTest {
         supervisionRequest.setResponse(SupervisionRequest.Response.REJECT);
         ArrayList<SupervisionRequest> srList = new ArrayList<>();
         srList.add(supervisionRequest);
-        MutableLiveData<List<SupervisionRequest>> srListData = new MutableLiveData<>(srList);
-        return srListData;
+        return new MutableLiveData<>(srList);
     }
 
     private LiveData<List<SupervisionRequest>> createAcceptedSupervisionRequestData() {
@@ -108,8 +106,7 @@ public class SendingRequestToSuperviseActivityTest {
         supervisionRequest.setResponse(SupervisionRequest.Response.ACCEPT);
         ArrayList<SupervisionRequest> srList = new ArrayList<>();
         srList.add(supervisionRequest);
-        MutableLiveData<List<SupervisionRequest>> srListData = new MutableLiveData<>(srList);
-        return srListData;
+        return new MutableLiveData<>(srList);
     }
 
     private LiveData<List<SupervisionRequest>> createEmptySupervisionRequestData() {
