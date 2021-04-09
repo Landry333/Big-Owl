@@ -20,6 +20,8 @@ import org.mockito.MockitoAnnotations;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -78,7 +80,10 @@ public class HomePageActivityTest {
     @Test
     public void clickOnLogout() {
         onView(withId(R.id.btn_logout)).check(matches(withText("Log out")));
-        onView(withId(R.id.btn_logout)).perform(click());
+        closeSoftKeyboard();
+        onView(withId(R.id.btn_logout))
+                .perform(scrollTo())
+                .perform(click());
     }
 
     @Test
