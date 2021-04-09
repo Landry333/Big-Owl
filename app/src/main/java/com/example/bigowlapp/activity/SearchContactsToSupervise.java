@@ -170,6 +170,11 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor phoneResultsCursor) {
         this.setProgressBarInvisible();
 
+        if (phoneResultsCursor == null) {
+            loaderManager.destroyLoader(0);
+            return;
+        }
+
         list = new ArrayList<>();
 
         while (phoneResultsCursor.moveToNext()) {
