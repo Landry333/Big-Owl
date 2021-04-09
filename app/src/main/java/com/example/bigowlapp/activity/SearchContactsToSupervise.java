@@ -41,12 +41,11 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     private EditText searchUsers;
     private ListView listContactsView;
 
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
     private LoaderManager loaderManager;
 
     private String searchString = "";
     private List<String> list;
-
 
     @Override
     public int getContentView() {
@@ -64,12 +63,18 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
         initialize();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        db = FirebaseFirestore.getInstance();
+    }
+
     protected void initialize() {
         list = new ArrayList<>();
         updateList();
 
-        setupContactListClick();
         setupSearchListener();
+        setupContactListClick();
 
         loaderManager.initLoader(0, null, this);
     }
@@ -113,22 +118,20 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
             db.collection(UserRepository.COLLECTION_NAME)
                     .whereEqualTo(User.Field.PHONE_NUMBER, contactNumber)
                     .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            if (!task.getResult().isEmpty()) {
-                                Toast.makeText(SearchContactsToSupervise.this, "This user has the app already. Please choose another user", Toast.LENGTH_SHORT).show();
-                                User user = task.getResult().toObjects(User.class).get(0);
-                                Intent intent = new Intent(SearchContactsToSupervise.this, SendingRequestToSuperviseActivity.class);
-                                intent.putExtra("user", user);
-                                intent.putExtra("contactDetails", contactDetails);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
-                                intent.putExtra("contactDetails", contactDetails);
-                                intent.putExtra("contactNumber", contactNumber);
-                                startActivity(intent);
-                            }
+                    .addOnSuccessListener(result -> {
+                        if (!result.isEmpty()) {
+                            Toast.makeText(SearchContactsToSupervise.this, "This user has the app already. Please choose another user", Toast.LENGTH_SHORT).show();
+                            User user = result.toObjects(User.class).get(0);
+                            Intent intent = new Intent(SearchContactsToSupervise.this, SendingRequestToSuperviseActivity.class);
+                            intent.putExtra("user", user);
+                            intent.putExtra("contactDetails", contactDetails);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
+                            intent.putExtra("contactDetails", contactDetails);
+                            intent.putExtra("contactNumber", contactNumber);
+                            startActivity(intent);
                         }
                     });
         });
