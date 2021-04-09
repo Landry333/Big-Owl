@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -64,7 +65,6 @@ public class HomePageActivityTest {
         activityRule.getScenario().moveToState(Lifecycle.State.RESUMED);
     }
 
-
     @Test
     public void profileViewAtHomePageTest() {
         testUserData.postValue(testUser);
@@ -73,6 +73,36 @@ public class HomePageActivityTest {
         onView(allOf(withText(testUser.getLastName()), withId(R.id.user_last_name))).check(matches(isDisplayed()));
         onView(allOf(withText(testUser.getPhoneNumber()), withId(R.id.user_phone_number))).check(matches(isDisplayed()));
         onView(allOf(withText(testUser.getEmail()), withId(R.id.user_email))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void clickOnLogout() {
+        onView(withId(R.id.btn_logout)).check(matches(withText("Log out")));
+        onView(withId(R.id.btn_logout)).perform(click());
+    }
+
+    @Test
+    public void clickOnAddUser() {
+        onView(withId(R.id.btn_add_users)).check(matches(withText("add user")));
+        onView(withId(R.id.btn_add_users)).perform(click());
+    }
+
+    @Test
+    public void clickOnMonitoringGroup() {
+        onView(withId(R.id.btn_monitoring_group)).check(matches(withText("I supervise")));
+        onView(withId(R.id.btn_monitoring_group)).perform(click());
+    }
+
+    @Test
+    public void clickOnSupervisedGroup() {
+        onView(withId(R.id.btn_supervised_group)).check(matches(withText("supervising me")));
+        onView(withId(R.id.btn_supervised_group)).perform(click());
+    }
+
+    @Test
+    public void clickOnOverflowMenu() {
+        onView(withId(R.id.action_overflow)).check(matches(isDisplayed()));
+        onView(withId(R.id.action_overflow)).perform(click());
     }
 
     @Test
