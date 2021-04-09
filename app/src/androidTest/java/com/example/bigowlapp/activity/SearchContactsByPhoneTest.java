@@ -18,6 +18,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.ArgumentMatchers.any;
@@ -65,5 +66,16 @@ public class SearchContactsByPhoneTest {
         onView(withId(R.id.search_users)).perform(replaceText("+14388760079"));
         onView(withId(R.id.get_users)).perform(click());
         onView(withId(R.id.sup_request)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void searchWithImpossibleNumberShowsError() {
+        userToAddData.postValue(null);
+
+        String notAPhoneNumber = "";
+        onView(withId(R.id.search_users)).perform(replaceText(notAPhoneNumber));
+        onView(withId(R.id.get_users)).perform(click());
+        onView(withId(R.id.search_users))
+                .check(matches(hasErrorText("Please enter a valid phone number.")));
     }
 }
