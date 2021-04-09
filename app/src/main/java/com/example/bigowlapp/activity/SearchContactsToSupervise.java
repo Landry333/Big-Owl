@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
@@ -179,5 +180,10 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
 
         listContactsView.setAdapter(contactsAdapter);
         contactsAdapter.notifyDataSetChanged();
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setSearchContactsToSuperviseViewModel(SearchContactsToSuperviseViewModel searchContactsToSuperviseViewModel) {
+        this.searchContactsToSuperviseViewModel = searchContactsToSuperviseViewModel;
     }
 }

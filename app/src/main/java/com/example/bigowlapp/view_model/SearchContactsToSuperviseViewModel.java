@@ -6,20 +6,17 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.example.bigowlapp.activity.SearchContactsToSupervise;
-import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchContactsToSuperviseViewModel extends BaseViewModel {
 
-    private LiveDataWithStatus<User> userToAddData;
-
     public LiveData<User> getUserToAdd(String number) {
-        userToAddData = repositoryFacade.getUserRepository()
+        return repositoryFacade.getUserRepository()
                 .getDocumentByAttribute(User.Field.PHONE_NUMBER, number, User.class);
-        return userToAddData;
     }
 
     @NonNull
@@ -37,7 +34,7 @@ public class SearchContactsToSuperviseViewModel extends BaseViewModel {
         return contactNumber;
     }
 
-    public ArrayList<String> populateContactsList(PhoneNumberFormatter formatter, Cursor phoneResultsCursor) {
+    public List<String> populateContactsList(PhoneNumberFormatter formatter, Cursor phoneResultsCursor) {
         ArrayList<String> contactsDataList = new ArrayList<>();
 
         while (phoneResultsCursor.moveToNext()) {

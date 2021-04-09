@@ -42,27 +42,37 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
     String requestRejected = "Your last request was rejected by this user. You can send a new request";
 
     private NotificationRepository otherUserNotificationRepository;
+    private RepositoryFacade repositoryFacade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        supRequestBtn = findViewById(R.id.SupRequest);
+        supRequestBtn = findViewById(R.id.sup_request);
         noteTv = findViewById(R.id.note);
         resultNoteTv = findViewById(R.id.note2);
         resultNoteTv.setVisibility(View.VISIBLE);
         secondResultNoteTv = findViewById(R.id.note3);
         secondResultNoteTv.setVisibility(View.GONE);
-        RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
+        repositoryFacade = RepositoryFacade.getInstance();
 
-        String contactDetails = getIntent().getStringExtra("contactDetails");
         otherUser = getIntent().getParcelableExtra("user");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(repositoryFacade.getAuthRepository().getCurrentUser() == null) {
+            return;
+        }
 
         otherUserID = otherUser.getUid();
         currentUserID = repositoryFacade.getCurrentUserUid();
 
         otherUserNotificationRepository = repositoryFacade.getNotificationRepository(otherUserID);
 
+        String contactDetails = getIntent().getStringExtra("contactDetails");
         noteText = "Contact: " + contactDetails + " is already registered to the application.";
         noteTv.setText(noteText);
 
