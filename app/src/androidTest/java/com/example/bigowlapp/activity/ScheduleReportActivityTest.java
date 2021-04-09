@@ -63,7 +63,7 @@ public class ScheduleReportActivityTest {
     private final Timestamp timestampNow = Timestamp.now();
     private MutableLiveData<Schedule> testScheduleData;
     private ListViewMatcher listViewMatcher;
-    private String CONCORDIA_ADDRESS = "1571 Rue Mackay, Montréal, QC H3G 2H6, Canada";
+    private final String CONCORDIA_ADDRESS = "1571 Rue Mackay, Montréal, QC H3G 2H6, Canada";
 
     @Mock
     private ScheduleReportViewModel mockScheduleReportViewModel;
@@ -151,7 +151,6 @@ public class ScheduleReportActivityTest {
         onView(allOf(withId(R.id.schedule_report_title), withText(testSchedule.getTitle()))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.schedule_report_start_time), withText(String.valueOf(testSchedule.getStartTime().toDate())))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.schedule_report_end_time), withText(String.valueOf(testSchedule.getEndTime().toDate())))).check(matches(isDisplayed()));
-        String CONCORDIA_ADDRESS = "1571 Rue Mackay, Montréal, QC H3G 2H6, Canada";
         onView(allOf(withId(R.id.schedule_report_location), withText(CONCORDIA_ADDRESS))).check(matches(isDisplayed()));
         onView(withId(R.id.divider)).check(matches(isDisplayed()));
         onView(withId(R.id.schedule_report_member_list)).check(matches(isDisplayed()));
