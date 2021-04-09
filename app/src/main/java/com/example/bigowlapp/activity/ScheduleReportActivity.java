@@ -63,10 +63,6 @@ public class ScheduleReportActivity extends BigOwlActivity {
             scheduleReportStartTime.setText(schedule.getStartTime().toDate().toString());
             scheduleReportEndTime.setText(schedule.getEndTime().toDate().toString());
 
-            if (geoLocationFormatter == null) {
-                geoLocationFormatter = new GeoLocationFormatter();
-            }
-
             scheduleReportLocation.setText(geoLocationFormatter.formatLocation(this, schedule.getLocation()));
 
             scheduleReportViewModel.getScheduleMemberNameMap(schedule.getMemberList()).observe(this, memberNameMap -> {
