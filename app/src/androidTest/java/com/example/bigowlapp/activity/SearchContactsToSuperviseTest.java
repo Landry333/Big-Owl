@@ -10,7 +10,7 @@ import androidx.test.rule.GrantPermissionRule;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.view_model.SearchContactsToSuperviseViewModel;
+import com.example.bigowlapp.view_model.SearchContactsViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -41,7 +41,7 @@ public class SearchContactsToSuperviseTest {
             Manifest.permission.READ_CONTACTS);
 
     @Mock
-    private SearchContactsToSuperviseViewModel mockViewModel;
+    private SearchContactsViewModel mockViewModel;
 
     LiveDataWithStatus<User> userToAddData;
 
@@ -57,7 +57,7 @@ public class SearchContactsToSuperviseTest {
 
         ActivityScenario<SearchContactsToSupervise> scenario = ActivityScenario.launch(SearchContactsToSupervise.class);
         scenario.onActivity(activity ->
-                activity.setSearchContactsToSuperviseViewModel(mockViewModel));
+                activity.setSearchContactsViewModel(mockViewModel));
     }
 
     @Test

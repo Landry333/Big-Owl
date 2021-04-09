@@ -22,7 +22,7 @@ import androidx.loader.content.Loader;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
-import com.example.bigowlapp.view_model.SearchContactsToSuperviseViewModel;
+import com.example.bigowlapp.view_model.SearchContactsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
 
     private LoaderManager loaderManager;
     private PhoneNumberFormatter phoneNumberFormatter;
-    private SearchContactsToSuperviseViewModel searchContactsToSuperviseViewModel;
+    private SearchContactsViewModel searchContactsViewModel;
 
     @Override
     public int getContentView() {
@@ -69,9 +69,9 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     protected void onStart() {
         super.onStart();
 
-        if (searchContactsToSuperviseViewModel == null) {
-            searchContactsToSuperviseViewModel = new ViewModelProvider(this)
-                    .get(SearchContactsToSuperviseViewModel.class);
+        if (searchContactsViewModel == null) {
+            searchContactsViewModel = new ViewModelProvider(this)
+                    .get(SearchContactsViewModel.class);
         }
     }
 
@@ -109,9 +109,9 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
         // Check if users already has the app
         listContactsView.setOnItemClickListener((arg0, v, position, arg3) -> {
             String contactDetails = (String) listContactsView.getItemAtPosition(position);
-            String contactNumber = searchContactsToSuperviseViewModel.getNumberFromContactDataList(contactDetails);
+            String contactNumber = searchContactsViewModel.getNumberFromContactDataList(contactDetails);
 
-            searchContactsToSuperviseViewModel.getUserToAdd(contactNumber).observe(this, user -> {
+            searchContactsViewModel.getUserToAdd(contactNumber).observe(this, user -> {
                 Intent intent;
                 if (user == null) {
                     Toast.makeText(this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
@@ -163,7 +163,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor phoneResultsCursor) {
         this.setProgressBarInvisible();
-        list = searchContactsToSuperviseViewModel.populateContactsList(phoneNumberFormatter, phoneResultsCursor);
+        list = searchContactsViewModel.populateContactsList(phoneNumberFormatter, phoneResultsCursor);
         updateList();
         phoneResultsCursor.close();
         loaderManager.destroyLoader(0);
@@ -184,7 +184,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public void setSearchContactsToSuperviseViewModel(SearchContactsToSuperviseViewModel searchContactsToSuperviseViewModel) {
-        this.searchContactsToSuperviseViewModel = searchContactsToSuperviseViewModel;
+    public void setSearchContactsViewModel(SearchContactsViewModel searchContactsViewModel) {
+        this.searchContactsViewModel = searchContactsViewModel;
     }
 }

@@ -12,7 +12,7 @@ import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchContactsToSuperviseViewModel extends BaseViewModel {
+public class SearchContactsViewModel extends BaseViewModel {
 
     public LiveData<User> getUserToAdd(String number) {
         return repositoryFacade.getUserRepository()

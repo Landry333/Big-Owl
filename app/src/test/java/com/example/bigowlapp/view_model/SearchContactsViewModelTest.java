@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SearchContactsToSuperviseViewModelTest {
+public class SearchContactsViewModelTest {
     @Mock
     private Cursor mockContactsCursor;
     private final int numContacts = 5;
@@ -34,7 +34,7 @@ public class SearchContactsToSuperviseViewModelTest {
     @Mock
     private PhoneNumberFormatter mockPhoneNumberFormatter;
 
-    private SearchContactsToSuperviseViewModel viewModel;
+    private SearchContactsViewModel viewModel;
 
     @Before
     public void setUp() throws Exception {
@@ -51,7 +51,7 @@ public class SearchContactsToSuperviseViewModelTest {
 
         when(mockPhoneNumberFormatter.formatNumber(any())).then(returnsFirstArg());
 
-        viewModel = new SearchContactsToSuperviseViewModel();
+        viewModel = new SearchContactsViewModel();
     }
 
     @Test

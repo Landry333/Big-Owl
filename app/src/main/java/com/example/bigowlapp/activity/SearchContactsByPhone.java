@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
-import com.example.bigowlapp.view_model.SearchContactsToSuperviseViewModel;
+import com.example.bigowlapp.view_model.SearchContactsViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.i18n.phonenumbers.NumberParseException;
 
@@ -20,7 +20,7 @@ public class SearchContactsByPhone extends BigOwlActivity {
     private EditText number;
     private String smsNumber;
 
-    private SearchContactsToSuperviseViewModel searchContactsToSuperviseViewModel;
+    private SearchContactsViewModel searchContactsViewModel;
     private PhoneNumberFormatter phoneNumberFormatter;
 
 
@@ -44,9 +44,9 @@ public class SearchContactsByPhone extends BigOwlActivity {
     protected void onStart() {
         super.onStart();
 
-        if (searchContactsToSuperviseViewModel == null) {
-            searchContactsToSuperviseViewModel = new ViewModelProvider(this)
-                    .get(SearchContactsToSuperviseViewModel.class);
+        if (searchContactsViewModel == null) {
+            searchContactsViewModel = new ViewModelProvider(this)
+                    .get(SearchContactsViewModel.class);
         }
     }
 
@@ -62,7 +62,7 @@ public class SearchContactsByPhone extends BigOwlActivity {
                 return;
             }
 
-            searchContactsToSuperviseViewModel.getUserToAdd(smsNumber).observe(this, user -> {
+            searchContactsViewModel.getUserToAdd(smsNumber).observe(this, user -> {
                 Intent intent;
                 if (user == null) {
                     Toast.makeText(this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
