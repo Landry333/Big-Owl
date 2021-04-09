@@ -111,6 +111,38 @@ public class HomePageActivityTest {
     }
 
     @Test
+    public void clickOnEditProfileInOverflowMenu() {
+        onView(withId(R.id.action_overflow)).check(matches(isDisplayed()));
+        onView(withId(R.id.action_overflow)).perform(click());
+        onView(withText("Edit Profile")).check(matches(isDisplayed()));
+        onView(withText("Edit Profile")).perform(click());
+    }
+
+    @Test
+    public void clickOnHomeInOverflowMenu() {
+        onView(withId(R.id.action_overflow)).check(matches(isDisplayed()));
+        onView(withId(R.id.action_overflow)).perform(click());
+        onView(withText(R.string.home)).check(matches(isDisplayed()));
+        onView(withText(R.string.home)).perform(click());
+    }
+
+    @Test
+    public void clickOnRefreshInOverflowMenu() {
+        onView(withId(R.id.action_overflow)).check(matches(isDisplayed()));
+        onView(withId(R.id.action_overflow)).perform(click());
+        onView(withText(R.string.refresh)).check(matches(isDisplayed()));
+        onView(withText(R.string.refresh)).perform(click());
+    }
+
+    @Test
+    public void clickOnLogoutInOverflowMenu() {
+        onView(withId(R.id.action_overflow)).check(matches(isDisplayed()));
+        onView(withId(R.id.action_overflow)).perform(click());
+        onView(withText(R.string.log_out)).check(matches(isDisplayed()));
+        onView(withText(R.string.log_out)).perform(click());
+    }
+
+    @Test
     public void isAlarmSetForBroadcastReceiver() {
         verify(memberScheduleAlarmManager).setAlarms(testUser.getUid());
     }
