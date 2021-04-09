@@ -117,6 +117,7 @@ public class SendingRequestToSuperviseActivityTest {
     // HomePageActivity because it overrides the onClickListener of BigOwlActivity
     @Test
     public void clickOnOverflowMenu() {
+        resumeActivity();
         onView(withId(R.id.action_overflow)).check(matches(isDisplayed()));
         onView(withId(R.id.action_overflow)).perform(click());
     }
@@ -128,9 +129,9 @@ public class SendingRequestToSuperviseActivityTest {
         resumeActivity();
 
         // Button shouldn't be clickable
-        onView(withId(R.id.SupRequest)).check(matches(isDisplayed()));
-        onView(withId(R.id.SupRequest)).check(matches(not(isClickable())));
-        onView(withId(R.id.SupRequest)).check(matches(withText("Can not send ")));
+        onView(withId(R.id.sup_request)).check(matches(isDisplayed()));
+        onView(withId(R.id.sup_request)).check(matches(not(isClickable())));
+        onView(withId(R.id.sup_request)).check(matches(withText("Can not send ")));
     }
 
     @Test
@@ -141,15 +142,15 @@ public class SendingRequestToSuperviseActivityTest {
         resumeActivity();
 
         // Sender Request data at this point should be null
-        onView(withId(R.id.SupRequest)).check(matches(isDisplayed()));
-        onView(withId(R.id.SupRequest)).check(matches(isClickable()));
-        onView(withId(R.id.SupRequest)).check(matches(withText("Send request")));
+        onView(withId(R.id.sup_request)).check(matches(isDisplayed()));
+        onView(withId(R.id.sup_request)).check(matches(isClickable()));
+        onView(withId(R.id.sup_request)).check(matches(withText("Send request")));
 
         // Sending request data should contain a supervision request data at this point
         when(sRTSViewModelMock.getRequestsDataFromOtherUser(otherUserId, currentUserId))
                 .thenReturn(createDefaultSupervisionRequestData());
-        onView(withId(R.id.SupRequest)).perform(click());
-        onView(withId(R.id.SupRequest)).check(matches(withText("Cancel request")));
+        onView(withId(R.id.sup_request)).perform(click());
+        onView(withId(R.id.sup_request)).check(matches(withText("Cancel request")));
     }
 
     @Test
@@ -160,15 +161,15 @@ public class SendingRequestToSuperviseActivityTest {
         resumeActivity();
 
         // Sending request data should contain a supervision request data at this point
-        onView(withId(R.id.SupRequest)).check(matches(isDisplayed()));
-        onView(withId(R.id.SupRequest)).check(matches(isClickable()));
-        onView(withId(R.id.SupRequest)).check(matches(withText("Cancel request")));
+        onView(withId(R.id.sup_request)).check(matches(isDisplayed()));
+        onView(withId(R.id.sup_request)).check(matches(isClickable()));
+        onView(withId(R.id.sup_request)).check(matches(withText("Cancel request")));
 
         // Sender Request data at this point should be null
         when(sRTSViewModelMock.getRequestsDataFromOtherUser(otherUserId, currentUserId))
                 .thenReturn(createEmptySupervisionRequestData());
-        onView(withId(R.id.SupRequest)).perform(click());
-        onView(withId(R.id.SupRequest)).check(matches(withText("Send request")));
+        onView(withId(R.id.sup_request)).perform(click());
+        onView(withId(R.id.sup_request)).check(matches(withText("Send request")));
 
     }
 
@@ -180,9 +181,9 @@ public class SendingRequestToSuperviseActivityTest {
         resumeActivity();
 
         // Button shouldn't be clickable
-        onView(withId(R.id.SupRequest)).check(matches(isDisplayed()));
-        onView(withId(R.id.SupRequest)).check(matches(not(isClickable())));
-        onView(withId(R.id.SupRequest)).check(matches(withText("Can not send ")));
+        onView(withId(R.id.sup_request)).check(matches(isDisplayed()));
+        onView(withId(R.id.sup_request)).check(matches(not(isClickable())));
+        onView(withId(R.id.sup_request)).check(matches(withText("Can not send ")));
     }
 
 
@@ -195,14 +196,14 @@ public class SendingRequestToSuperviseActivityTest {
         resumeActivity();
 
         // Sending request data should contain a rejected supervision request data at this point
-        onView(withId(R.id.SupRequest)).check(matches(isDisplayed()));
-        onView(withId(R.id.SupRequest)).check(matches(isClickable()));
-        onView(withId(R.id.SupRequest)).check(matches(withText("Send new request")));
+        onView(withId(R.id.sup_request)).check(matches(isDisplayed()));
+        onView(withId(R.id.sup_request)).check(matches(isClickable()));
+        onView(withId(R.id.sup_request)).check(matches(withText("Send new request")));
 
         // Sending request data should contain a neutral supervision request data at this point
         when(sRTSViewModelMock.getRequestsDataFromOtherUser(otherUserId, currentUserId))
                 .thenReturn(createDefaultSupervisionRequestData());
-        onView(withId(R.id.SupRequest)).perform(click());
-        onView(withId(R.id.SupRequest)).check(matches(withText("Cancel request")));
+        onView(withId(R.id.sup_request)).perform(click());
+        onView(withId(R.id.sup_request)).check(matches(withText("Cancel request")));
     }
 }
