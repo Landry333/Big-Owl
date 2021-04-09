@@ -79,6 +79,7 @@ dependencies {
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.18'
 
     implementation 'com.google.android.gms:play-services-location:17.1.0'
+    implementation 'androidx.biometric:biometric:1.0.1'
 
     // Declare local unit testing dependencies
     testImplementation 'junit:junit:4.13.1'

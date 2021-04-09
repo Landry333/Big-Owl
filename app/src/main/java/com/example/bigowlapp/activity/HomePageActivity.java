@@ -1,9 +1,7 @@
 package com.example.bigowlapp.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,7 +13,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
@@ -74,6 +71,7 @@ public class HomePageActivity extends BigOwlActivity {
 
         btnLogOut.setOnClickListener(v -> {
             homePageViewModel.signOut();
+            Toast.makeText(HomePageActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(HomePageActivity.this, LoginPageActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);

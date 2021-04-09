@@ -25,6 +25,7 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
     private String scheduleUid, groupName, supervisorName;
     private ScheduleViewRespondViewModel scheduleViewRespondViewModel;
     private PermissionsHelper permissionsHelper;
+    private TextView confirmationTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,8 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
         scheduleUid = intent.getStringExtra("scheduleUid");
         groupName = intent.getStringExtra("groupName");
         supervisorName = intent.getStringExtra("supervisorName");
+        confirmationTv = findViewById(R.id.text_view_schedule_response_confirmation);
+        confirmationTv.setVisibility(View.GONE);
 
         this.permissionsHelper = new PermissionsHelper(this);
     }
@@ -112,6 +115,8 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
     private void userClickRespondButton(Response response) {
         if (scheduleViewRespondViewModel.isOneMinuteAfterLastResponse()) {
             scheduleViewRespondViewModel.respondSchedule(scheduleUid, response);
+            confirmationTv.setVisibility(View.VISIBLE);
+            Toast.makeText(this, "response submitted", Toast.LENGTH_SHORT).show();
         } else
             Toast.makeText(this,
                     "User can only respond to a schedule 1 minute after last response",

@@ -136,11 +136,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/text_view_schedule_user_response_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold" />
+        <TextView
+            android:id="@+id/text_view_schedule_user_response_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -177,32 +177,45 @@
         android:background="@color/colorAccent"
         android:visibility="invisible" />
 
-    <LinearLayout
-        android:layout_below="@+id/line_below_response"
-        android:gravity="center"
-        android:layout_margin="20dp"
+    <TextView
+        android:id="@+id/text_view_schedule_response_confirmation"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/line_below_response"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/confirmation_of_schedule_response"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_view_schedule_response_confirmation"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_accept"
-            android:background="@drawable/rounded_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
             android:layout_margin="20dp"
+            android:background="@drawable/rounded_button_light"
             android:text="@string/accept"
+            android:textColor="@color/lightBlack"
+            android:visibility="visible"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/button_reject"
-            android:background="@drawable/rounded_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
             android:layout_margin="20dp"
+            android:background="@drawable/rounded_button_reddish"
             android:text="@string/reject"
+            android:textColor="@color/lightBlack"
+            android:visibility="visible"
             tools:ignore="ButtonStyle" />
 
     </LinearLayout>

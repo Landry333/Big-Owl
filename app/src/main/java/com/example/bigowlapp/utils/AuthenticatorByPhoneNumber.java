@@ -3,6 +3,7 @@ package com.example.bigowlapp.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.bigowlapp.model.Attendance;
@@ -44,9 +45,9 @@ public class AuthenticatorByPhoneNumber {
                                 Attendance attendance = userScheduleResponse.getAttendance();
                                 String formattedDevicePhoneNum = null;
                                 try {
-                                    formattedDevicePhoneNum = PhoneNumberFormatter.formatNumber(devicePhoneNumber, context);
+                                    formattedDevicePhoneNum = new PhoneNumberFormatter(context).formatNumber(devicePhoneNumber);
                                 } catch (NumberParseException e) {
-                                    e.printStackTrace();
+                                    Log.e("BigOwl", Log.getStackTraceString(e));
                                     Toast.makeText(context, "FAILED to format phone number. Process failed", Toast.LENGTH_LONG).show();
                                 }
                                 if (currentUserPhoneNumber.equalsIgnoreCase(formattedDevicePhoneNum)) {

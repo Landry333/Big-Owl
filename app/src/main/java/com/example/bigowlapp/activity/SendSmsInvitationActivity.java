@@ -5,17 +5,24 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.model.SmsInvitationRequest;
+import com.example.bigowlapp.repository.RepositoryFacade;
+import com.example.bigowlapp.repository.SmsInvitationRepository;
+import com.example.bigowlapp.utils.PhoneNumberFormatter;
+import com.google.i18n.phonenumbers.NumberParseException;
 
 public class SendSmsInvitationActivity extends BigOwlActivity {
 
     private EditText number, message;
     private Button send;
+    private Button cancel;
     private String smsNumber, smsMessage, noteText;
     private TextView noteTv;
 
@@ -28,7 +35,7 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
         String contactDetails = getIntent().getStringExtra("contactDetails");
         String contactNumber = getIntent().getStringExtra("contactNumber");
 
-        noteText = "Contact: " + contactDetails + " is not yet registered to the application. Send her/him this invitation text sms";
+        noteText = "Contact: " + contactDetails + " is not yet registered to the application. Send her/him the invitation below by text sms";
 
         noteTv.setText(noteText);
 
@@ -37,11 +44,17 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
 
         message = findViewById(R.id.message);
         send = findViewById(R.id.send);
+        cancel = findViewById(R.id.cancel_sms_invitation);
 
         initialize();
     }
 
     protected void initialize() {
+        cancel.setOnClickListener(view -> {
+            Intent intent = new Intent(SendSmsInvitationActivity.this, AddUsersActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         try {
             send.setOnClickListener(view -> {
@@ -68,6 +81,7 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
         try {
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(smsNumber, null, smsMessage, null, null);
+            smsInvitationRequest(smsNumber);
             Toast.makeText(this, "Invitation sent", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,5 +107,23 @@ public class SendSmsInvitationActivity extends BigOwlActivity {
             startActivity(intent);
             finish();
         }
+    }
+
+    private void smsInvitationRequest(String number){
+        RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
+        SmsInvitationRepository smsInvitationRepository = repositoryFacade.getSmsInvitationRepository();
+        try{
+            number = new PhoneNumberFormatter(this).formatNumber(number);
+
+        }catch (NumberParseException e) {
+            Log.e("Formatting Error: ", e.getMessage());
+            return;
+        }
+
+        SmsInvitationRequest smsInvitationRequest = new SmsInvitationRequest();
+        smsInvitationRequest.setPhoneNumberSent(number);
+        smsInvitationRequest.setSenderUid(repositoryFacade.getCurrentUserUid());
+
+        smsInvitationRepository.addDocument(smsInvitationRequest);
     }
 }

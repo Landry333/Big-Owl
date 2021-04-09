@@ -37,7 +37,7 @@
                 android:id="@+id/table_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="60dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/table_row_1">
@@ -49,57 +49,51 @@
 
                     <Button
                         android:id="@+id/btn_add_users"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/search_users" />
+                        android:background="@drawable/rounded_button_greenish"
+                        android:text="@string/add_user"
+                        android:textColor="@color/lightBlack" />
 
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="35dp"
                     android:gravity="center">
 
                     <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="10dp"
                         android:gravity="center">
 
                         <Button
                             android:id="@+id/btn_monitoring_group"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/monitoring_group" />
+                            android:background="@drawable/rounded_button_greenish"
+                            android:text="@string/i_supervise"
+                            android:textColor="@color/lightBlack" />
                     </TableRow>
 
                     <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
+                        android:layout_marginStart="30dp"
                         android:gravity="center">
 
                         <Button
                             android:id="@+id/btn_supervised_group"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/supervised_group" />
+                            android:background="@drawable/rounded_button_greenish"
+                            android:text="@string/supervising_me"
+                            android:textColor="@color/lightBlack" />
                     </TableRow>
 
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center">
-
-                    <Button
-                        android:id="@+id/btn_logout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/log_out" />
                 </TableRow>
 
             </TableLayout>
@@ -168,6 +162,17 @@
                     android:text="@string/user_email"
                     android:textSize="18sp" />
             </TableRow>
+
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="190dp"
+                android:background="#BFDFEF"
+                android:text="@string/log_out"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/table_layout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
