@@ -17,14 +17,18 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Schedule;
-import com.example.bigowlapp.viewModel.ScheduleListViewModel;
+import com.example.bigowlapp.view_model.ScheduleListViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListOfScheduleActivity extends BigOwlActivity {
     private ListView scheduleListView;
     private ScheduleListViewModel scheduleListViewModel;
-    private String groupID, groupName, supervisorName, supervisorId;
+    private String groupID;
+    private String groupName;
+    private String supervisorName;
+    private String supervisorId;
     private boolean isUserTheGroupSupervisor;
 
     @Override
@@ -80,7 +84,7 @@ public class ListOfScheduleActivity extends BigOwlActivity {
 
     private static class ScheduleAdapter extends ArrayAdapter<Schedule> {
 
-        public ScheduleAdapter(@NonNull Context context, ArrayList<Schedule> schedules) {
+        public ScheduleAdapter(@NonNull Context context, List<Schedule> schedules) {
             super(context, 0, schedules);
         }
 

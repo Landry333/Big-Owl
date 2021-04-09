@@ -8,7 +8,7 @@ import androidx.test.filters.LargeTest;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.viewModel.EditProfileViewModel;
+import com.example.bigowlapp.view_model.EditProfileViewModel;
 import com.google.android.gms.tasks.Tasks;
 
 import org.junit.Before;
@@ -55,8 +55,8 @@ public class EditProfileViewTest {
                 "+1234567890",
                 "tester@mail.com",
                 null,
-                null,
-                "yes");
+                null);
+        testUser.setFingerprintAuthRegistration("yes");
         MutableLiveData<User> testUserData = new MutableLiveData<>();
 
         when(mockEditProfileViewModel.isCurrentUserSet()).thenReturn(true);

@@ -46,8 +46,7 @@ public class NotificationListenerManager {
 
                         if (notification.getType() == Notification.Type.AUTH_BY_PHONE_NUMBER_FAILURE) {
                             handleAuthByPhoneNumberFailure((AuthByPhoneNumberFailure) notification);
-                        }
-                        else{
+                        } else {
                             handleNotificationRequest(notification, context);
                         }
                     }
@@ -60,7 +59,7 @@ public class NotificationListenerManager {
 
             String senderPhoneNum = notification.getSenderPhoneNum();
             String scheduleId = notification.getScheduleId();
-            SmsSender.sendSMS(senderPhoneNum, scheduleId);
+            new SmsSender().sendSMS(senderPhoneNum, scheduleId);
 
             notification.setUsed(true);
             repositoryFacade.getCurrentUserNotificationRepository()
@@ -68,7 +67,7 @@ public class NotificationListenerManager {
         }
     }
 
-    private void handleNotificationRequest(Notification notification, Context context){
+    private void handleNotificationRequest(Notification notification, Context context) {
         if (notification.isUsed()) {
             return;
         }
@@ -94,7 +93,7 @@ public class NotificationListenerManager {
         }
     }
 
-    private void notificationBuilder(Context context, String channel, Notification notification){
+    private void notificationBuilder(Context context, String channel, Notification notification) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channel)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(channel)

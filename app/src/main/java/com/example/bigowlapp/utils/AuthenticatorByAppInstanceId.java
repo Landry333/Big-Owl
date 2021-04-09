@@ -1,6 +1,5 @@
 package com.example.bigowlapp.utils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -14,13 +13,13 @@ public class AuthenticatorByAppInstanceId {
 
     private String appInstanceId;
     private final Context context;
-    RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
+    private RepositoryFacade repositoryFacade;
 
     public AuthenticatorByAppInstanceId(Context context) {
         this.context = context;
+        this.repositoryFacade = RepositoryFacade.getInstance();
     }
 
-    @SuppressLint("MissingPermission")
     public void authenticate(String scheduleId) {
         repositoryFacade.getScheduleRepository().getDocumentByUid(scheduleId, Schedule.class)
                 .observeForever(schedule -> {

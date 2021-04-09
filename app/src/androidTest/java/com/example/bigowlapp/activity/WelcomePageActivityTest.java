@@ -1,8 +1,10 @@
 package com.example.bigowlapp.activity;
 
+import android.Manifest;
 import android.os.SystemClock;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
@@ -10,23 +12,45 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
+import androidx.test.rule.GrantPermissionRule;
 
 import com.example.bigowlapp.R;
 
 import org.hamcrest.Matcher;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-@Ignore
+
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class WelcomePageActivityTest {
+
+    @Rule
+    public final GrantPermissionRule permissionRule = getGrantPermissions();
+
+    @NonNull
+    private GrantPermissionRule getGrantPermissions() {
+        List<String> permissionsToGrant = new ArrayList<>(Arrays.asList(
+                Manifest.permission.SEND_SMS,
+                Manifest.permission.RECEIVE_SMS,
+                Manifest.permission.READ_SMS,
+                Manifest.permission.READ_PHONE_STATE));
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            permissionsToGrant.add(Manifest.permission.READ_PHONE_NUMBERS);
+        }
+
+        return GrantPermissionRule.grant(permissionsToGrant.toArray(new String[0]));
+    }
 
     @Rule
     public ActivityScenarioRule<WelcomePageActivity> mActivityScenario

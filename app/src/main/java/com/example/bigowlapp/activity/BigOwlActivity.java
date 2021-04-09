@@ -16,10 +16,10 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public abstract class BigOwlActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     ImageButton imgBtnOverflow;
-    ImageButton imgBtnSchedule;
-    ImageButton imgBtnUser;
-    ImageButton imgBtnNotification;
-    ImageButton imgBtnBigOwl;
+    private ImageButton imgBtnSchedule;
+    private ImageButton imgBtnUser;
+    private ImageButton imgBtnNotification;
+    private ImageButton imgBtnBigOwl;
     private ProgressBar progressBar;
 
     @Override
@@ -38,23 +38,16 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
         });
 
         imgBtnSchedule = findViewById(R.id.action_schedule);
-        imgBtnSchedule.setOnClickListener(v -> {
-            startActivity(new Intent(this, MonitoringGroupPageActivity.class));
-        });
+        imgBtnSchedule.setOnClickListener(v -> startActivity(new Intent(this, MonitoringGroupPageActivity.class)));
 
         imgBtnUser = findViewById(R.id.action_user);
-        imgBtnUser.setOnClickListener(v -> {
-            startActivity(new Intent(this, EditProfileActivity.class));
-        });
+        imgBtnUser.setOnClickListener(v -> startActivity(new Intent(this, EditProfileActivity.class)));
 
         imgBtnNotification = findViewById(R.id.action_notification);
-        imgBtnNotification.setOnClickListener(v ->
-                startActivity(new Intent(this, NotificationActivity.class)));
+        imgBtnNotification.setOnClickListener(v -> startActivity(new Intent(this, NotificationActivity.class)));
 
         imgBtnBigOwl = findViewById(R.id.action_home_page);
-        imgBtnBigOwl.setOnClickListener(v -> {
-            startActivity(new Intent(this, HomePageActivity.class));
-        });
+        imgBtnBigOwl.setOnClickListener(v -> startActivity(new Intent(this, HomePageActivity.class)));
     }
 
     protected void setProgressBarVisible() {

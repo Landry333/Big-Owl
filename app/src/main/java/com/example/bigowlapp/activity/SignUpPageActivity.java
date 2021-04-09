@@ -16,13 +16,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
-import com.example.bigowlapp.viewModel.SignUpViewModel;
+import com.example.bigowlapp.view_model.SignUpViewModel;
 import com.google.i18n.phonenumbers.NumberParseException;
 
 public class SignUpPageActivity extends AppCompatActivity {
-    public EditText userEmail, userPassword, userPhone, userFirstName, userLastName;
-    Button btnSignUp;
-    TextView tvSignIn;
+    private EditText userEmail;
+    private EditText userPassword;
+    private EditText userPhone;
+    private EditText userFirstName;
+    private EditText userLastName;
+    private Button btnSignUp;
+    private TextView tvSignIn;
     private SignUpViewModel signUpViewModel;
     private ProgressBar progressBar;
 
@@ -40,7 +44,7 @@ public class SignUpPageActivity extends AppCompatActivity {
 
     protected void initialize() {
         //Authentication with firebase
-        progressBar = (ProgressBar) findViewById(R.id.sign_up_progress_bar);
+        progressBar = findViewById(R.id.sign_up_progress_bar);
 
         userFirstName = findViewById(R.id.user_first_name);
         userLastName = findViewById(R.id.user_last_name);
@@ -107,9 +111,7 @@ public class SignUpPageActivity extends AppCompatActivity {
             }
         });
 
-        tvSignIn.setOnClickListener(v -> {
-            startActivity(new Intent(SignUpPageActivity.this, LoginPageActivity.class));
-        });
+        tvSignIn.setOnClickListener(v -> startActivity(new Intent(SignUpPageActivity.this, LoginPageActivity.class)));
     }
 
     @VisibleForTesting

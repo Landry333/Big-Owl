@@ -8,7 +8,12 @@ import com.google.firebase.firestore.GeoPoint;
 
 
 public class GeoLocationFormatter {
-    public String formatLocation(Context context, GeoPoint geoPoint) {
+
+    private GeoLocationFormatter() {
+        // Only needs one instance of this class; and it's not used as an object
+    }
+
+    public static String formatLocation(Context context, GeoPoint geoPoint) {
         try {
             return new Geocoder(context).getFromLocation(
                     geoPoint.getLatitude(),
