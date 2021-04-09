@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -62,6 +63,9 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
         if (sRTSViewModel == null) {
             sRTSViewModel = new ViewModelProvider(this).get(SendingRequestToSuperviseViewModel.class);
         }
+        if (!sRTSViewModel.isCurrentUserSet()) {
+            return;
+        }
         String contactDetails = getIntent().getStringExtra("contactDetails");
         otherUser = getIntent().getParcelableExtra("user");
 
@@ -109,9 +113,7 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
         } else if (shouldSendAnOtherRequest) {
             sRTSViewModel.removeSupervisionRequestFromOtherUser(otherUserID, requestUID);
             sRTSViewModel.sendSupervisionRequestToOtherUser(otherUserID, supervisionRequest);
-            ;
         }
-
         observeRequests();
     }
 
@@ -135,7 +137,6 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
                 if (aRequestAlready) {
                     break;
                 } else if (senderRequest.getReceiverUid().equals(otherUser.getUid())) {
-
                     if (senderRequest.getResponse().equals(SupervisionRequest.Response.ACCEPT)) {
                         resultNoteTv.setText(superviseAlready);
                         secondResultNoteTv.setVisibility(View.GONE);
@@ -167,5 +168,11 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
             }
         });
     }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setsRTSViewModel(SendingRequestToSuperviseViewModel sRTSViewModel) {
+        this.sRTSViewModel = sRTSViewModel;
+    }
+
 }
 
