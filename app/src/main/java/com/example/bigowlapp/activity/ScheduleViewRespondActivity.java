@@ -2,6 +2,7 @@ package com.example.bigowlapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,9 +12,12 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
+import com.example.bigowlapp.utils.GeoLocationFormatter;
 import com.example.bigowlapp.utils.PermissionsHelper;
 import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -22,10 +26,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class ScheduleViewRespondActivity extends BigOwlActivity {
 
-    private String scheduleUid, groupName, supervisorName;
+    private String scheduleUid;
+    private String groupName;
+    private String supervisorName;
     private ScheduleViewRespondViewModel scheduleViewRespondViewModel;
     private PermissionsHelper permissionsHelper;
-    private TextView confirmationTv;
+    private GeoLocationFormatter geoLocationFormatter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +40,6 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
         scheduleUid = intent.getStringExtra("scheduleUid");
         groupName = intent.getStringExtra("groupName");
         supervisorName = intent.getStringExtra("supervisorName");
-        confirmationTv = findViewById(R.id.text_view_schedule_response_confirmation);
-        confirmationTv.setVisibility(View.GONE);
 
         this.permissionsHelper = new PermissionsHelper(this);
     }
@@ -62,9 +66,15 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
             }
 
             ((TextView) findViewById(R.id.text_view_group_uid)).setText(groupName);
+            ((TextView) findViewById(R.id.text_view_schedule_title)).setText(schedule.getTitle());
             ((TextView) findViewById(R.id.text_view_group_supervisor_name)).setText(supervisorName);
-            ((TextView) findViewById(R.id.text_view_schedule_start_time)).setText(schedule.getStartTime().toDate().toString());
-            ((TextView) findViewById(R.id.text_view_schedule_end_time)).setText(schedule.getEndTime().toDate().toString());
+            ((TextView) findViewById(R.id.text_view_schedule_start_time)).setText(formatTime(schedule.getStartTime().toDate()));
+            ((TextView) findViewById(R.id.text_view_schedule_end_time)).setText(formatTime(schedule.getEndTime().toDate()));
+
+            if (geoLocationFormatter == null)
+                geoLocationFormatter = new GeoLocationFormatter();
+
+            ((TextView) findViewById(R.id.text_view_schedule_location)).setText(geoLocationFormatter.formatLocation(this, schedule.getLocation()));
 
             UserScheduleResponse userScheduleResponse = scheduleViewRespondViewModel.getUserScheduleResponse();
             if (schedule.scheduleCurrentState() != Schedule.Status.SCHEDULED) {
@@ -103,6 +113,10 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
         btnReject.setOnClickListener(v -> userClickRespondButton(Response.REJECT));
     }
 
+    private String formatTime(Date time) {
+        return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM).format(time);
+    }
+
     public void requestLocationPermissions() {
         permissionsHelper.requestLocationAndBackgroundLocationPermissions();
     }
@@ -115,8 +129,6 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
     private void userClickRespondButton(Response response) {
         if (scheduleViewRespondViewModel.isOneMinuteAfterLastResponse()) {
             scheduleViewRespondViewModel.respondSchedule(scheduleUid, response);
-            confirmationTv.setVisibility(View.VISIBLE);
-            Toast.makeText(this, "response submitted", Toast.LENGTH_SHORT).show();
         } else
             Toast.makeText(this,
                     "User can only respond to a schedule 1 minute after last response",
@@ -150,5 +162,10 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setScheduleViewRespondViewModel(ScheduleViewRespondViewModel scheduleViewRespondViewModel) {
         this.scheduleViewRespondViewModel = scheduleViewRespondViewModel;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setGeoLocationFormatter(GeoLocationFormatter geoLocationFormatter) {
+        this.geoLocationFormatter = geoLocationFormatter;
     }
 }
