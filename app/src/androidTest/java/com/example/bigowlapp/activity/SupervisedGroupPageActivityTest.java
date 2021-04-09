@@ -11,7 +11,7 @@ import androidx.test.filters.LargeTest;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.viewModel.SupervisedGroupPageViewModel;
+import com.example.bigowlapp.view_model.SupervisedGroupPageViewModel;
 
 import org.junit.Before;
 import org.junit.Ignore;

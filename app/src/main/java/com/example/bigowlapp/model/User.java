@@ -22,8 +22,6 @@ public class User extends Model implements Parcelable {
     private String profileImage;
     private List<String> memberGroupIdList;
 
-    // TODO: Create a builder (possibly for all models)
-
     public User() {
         super();
     }
@@ -44,18 +42,6 @@ public class User extends Model implements Parcelable {
         this.email = email;
         this.profileImage = profileImage;
         this.memberGroupIdList = memberGroupIdList;
-    }
-
-    public User(String uid, String firstName, String lastName, String phoneNumber, String email,
-                String profileImage, List<String> memberGroupIdList, String fingerprintAuthRegistration) {
-        super(uid);
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.profileImage = profileImage;
-        this.memberGroupIdList = memberGroupIdList;
-        this.fingerprintAuthRegistration = fingerprintAuthRegistration;
     }
 
     protected User(Parcel in) {

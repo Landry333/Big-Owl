@@ -1,5 +1,8 @@
 package com.example.bigowlapp.repository;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.exception.PhoneNumberTakenException;
 import com.google.android.gms.tasks.Task;
@@ -12,13 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 public class UserRepository extends Repository<User> {
     public static final String COLLECTION_NAME = "users";
 
-    // TODO: Dependency Injection Implementation for Firestore
     public UserRepository() {
         super(UserRepository.COLLECTION_NAME);
     }

@@ -2,6 +2,7 @@ package com.example.bigowlapp.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +17,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
-import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
+import com.example.bigowlapp.view_model.SupervisedGroupListViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SupervisedGroupListActivity extends BigOwlActivity {
     private ListView supervisedGroupsListView;
     private SupervisedGroupListViewModel supervisedGroupListViewModel;
     private AlertDialog noGroupAlert;
     private Intent intentToSupervisedGroup;
-    private Boolean allowIntentForTest = true;
+    private boolean allowIntentForTest = true;
 
     @Override
     protected void onStart() {
@@ -64,9 +66,8 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
                                 }
                                 setProgressBarInvisible();
                             }));
-        } catch (
-                Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Log.e("Error: ", e.getMessage());
         }
     }
 
@@ -77,7 +78,7 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
 
     private class SupervisedGroupAdaptor extends ArrayAdapter<Group> {
 
-        public SupervisedGroupAdaptor(@NonNull Context context, ArrayList<Group> groups) {
+        public SupervisedGroupAdaptor(@NonNull Context context, List<Group> groups) {
             super(context, 0, groups);
         }
 
@@ -112,7 +113,7 @@ public class SupervisedGroupListActivity extends BigOwlActivity {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public void setAllowIntentForTest(Boolean allowIntentForTest) {
+    public void setAllowIntentForTest(boolean allowIntentForTest) {
         this.allowIntentForTest = allowIntentForTest;
     }
 }

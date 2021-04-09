@@ -18,7 +18,7 @@ import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.NotificationRepository;
-import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
+import com.example.bigowlapp.view_model.ScheduleViewRespondViewModel;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.GeoPoint;

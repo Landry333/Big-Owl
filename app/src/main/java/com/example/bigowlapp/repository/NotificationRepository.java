@@ -13,8 +13,7 @@ import java.util.List;
 
 public class NotificationRepository extends Repository<Notification> {
     public static final String COLLECTION_NAME = "notifications";
-
-    // TODO: Dependency Injection Implementation for Firestore
+    
     public NotificationRepository(String userUid) {
         super(UserRepository.COLLECTION_NAME);
         collectionReference = collectionReference.document(userUid)
@@ -39,18 +38,7 @@ public class NotificationRepository extends Repository<Notification> {
         collectionReference
                 .orderBy(Notification.Field.CREATION_TIME, Query.Direction.DESCENDING)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot tDocs = task.getResult();
-                        if (tDocs != null && !tDocs.isEmpty()) {
-                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), tClass));
-                        } else {
-                            listOfTData.setError(getDocumentNotFoundException(tClass));
-                        }
-                    } else {
-                        listOfTData.setError(task.getException());
-                    }
-                });
+                .addOnCompleteListener(task -> resolveTaskWithListResult(task, listOfTData, tClass));
         return listOfTData;
     }
 

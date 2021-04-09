@@ -1,6 +1,9 @@
 package com.example.bigowlapp.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
@@ -11,9 +14,11 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
 public class PhoneNumberFormatter {
-    CountryCodeGetter countryCodeGetter;
+    private final Context context;
+    private CountryCodeGetter countryCodeGetter;
 
     public PhoneNumberFormatter(Context context) {
+        this.context = context;
         countryCodeGetter = new CountryCodeGetter(context);
     }
 
@@ -30,6 +35,20 @@ public class PhoneNumberFormatter {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setCountryCodeGetter(CountryCodeGetter countryCodeGetter) {
         this.countryCodeGetter = countryCodeGetter;
+    }
+
+    @SuppressLint("MissingPermission")
+    // Permission was already provided by user before sign in step in order to proceed
+    public String getFormattedSMSNumber() {
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        String devicePhoneNumber = telephonyManager.getLine1Number();
+        String formattedDevicePhoneNum = null;
+        try {
+            formattedDevicePhoneNum = this.formatNumber(devicePhoneNumber);
+        } catch (NumberParseException e) {
+            Toast.makeText(context, "FAILED to format phone number. Process failed", Toast.LENGTH_LONG).show();
+        }
+        return formattedDevicePhoneNum;
     }
 
     public static class CountryCodeGetter {

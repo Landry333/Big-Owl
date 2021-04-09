@@ -19,23 +19,22 @@ public class SupervisorSmsListener extends BroadcastReceiver {
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     private String scheduleId;
 
-    IsSmsSenderACurrentEventSupervisor isSmsSenderACurrentEventSupervisor = new IsSmsSenderACurrentEventSupervisor();
 
     public void onReceive(Context context, Intent receiverIntent) {
         if (receiverIntent.getAction().equals(SMS_RECEIVED)) {
             Bundle bundle = receiverIntent.getExtras();
             if (bundle != null) {
-                // retrieving any PDUs as objects
-                Object[] pdus = (Object[]) bundle.get("pdus"); // getting  the value
-                // of the key "pdus" from the bundle. Here the pdus(protocol data units) is a SMS
+                // Get PDUs and format of the key PDU
+                Object[] pdus = (Object[]) bundle.get("pdus");
+                String format = bundle.getString("format");
                 if (pdus.length == 0) {
                     return;
                 }
-                // getting messages from the pdus
+                // Get message from PDU
                 SmsMessage[] messages = new SmsMessage[pdus.length];
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < pdus.length; i++) {
-                    messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
+                    messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i], format);
                     sb.append(messages[i].getMessageBody());
                 }
                 String smsSenderNum = messages[0].getOriginatingAddress();
@@ -49,25 +48,28 @@ public class SupervisorSmsListener extends BroadcastReceiver {
                     Toast.makeText(context, "FAILED to format phone number for next schedule authentication. Process failed", Toast.LENGTH_LONG).show();
                     return;
                 }
-                isSmsSenderACurrentEventSupervisor.check(formattedSmsSenderNum)
-                        .addOnSuccessListener(schedulesList -> {
-                            for (Schedule schedule : schedulesList) {
-                                if (Math.abs(schedule.getStartTime().toDate().getTime() - currentTime.toDate().getTime()) < Schedule.MAX_TRACKING_TIME_MILLIS) {
-                                    if (scheduleId.equalsIgnoreCase(schedule.getUid())) {
-                                        try {
-                                            AuthenticatorByAppInstanceId authenticatorByAppInstanceId = new AuthenticatorByAppInstanceId(context);
-                                            authenticatorByAppInstanceId.authenticate(scheduleId);
-                                        } catch (Exception e) {
-                                            Log.e("exception", "the message", e);
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                        });
-
+                authenticateIfSenderIsSupervisor(context, currentTime, formattedSmsSenderNum);
             }
         }
     }
 
+    private void authenticateIfSenderIsSupervisor(Context context, Timestamp currentTime, String formattedSmsSenderNum) {
+        IsSmsSenderACurrentEventSupervisor isSmsSenderACurrentEventSupervisor = new IsSmsSenderACurrentEventSupervisor();
+        isSmsSenderACurrentEventSupervisor.check(formattedSmsSenderNum)
+                .addOnSuccessListener(schedulesList -> {
+                    for (Schedule schedule : schedulesList) {
+                        if (Math.abs(schedule.getStartTime().toDate().getTime() - currentTime.toDate().getTime()) < Schedule.MAX_TRACKING_TIME_MILLIS) {
+                            if (scheduleId.equalsIgnoreCase(schedule.getUid())) {
+                                try {
+                                    AuthenticatorByAppInstanceId authenticatorByAppInstanceId = new AuthenticatorByAppInstanceId(context);
+                                    authenticatorByAppInstanceId.authenticate(scheduleId);
+                                } catch (Exception e) {
+                                    Log.e("exception", "the message", e);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                });
+    }
 }

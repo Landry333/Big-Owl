@@ -16,7 +16,7 @@ import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
-import com.example.bigowlapp.viewModel.SupervisedGroupListViewModel;
+import com.example.bigowlapp.view_model.SupervisedGroupListViewModel;
 import com.google.firebase.auth.FirebaseUser;
 
 import org.junit.Before;

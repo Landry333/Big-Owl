@@ -1,6 +1,7 @@
 package com.example.bigowlapp.utils;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bigowlapp.model.Schedule;
@@ -17,10 +18,10 @@ import java.util.List;
 
 public class IsSmsSenderACurrentEventSupervisor extends AppCompatActivity {
 
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db;
 
     public IsSmsSenderACurrentEventSupervisor() {
-
+        db = FirebaseFirestore.getInstance();
     }
 
     public Task<List<Schedule>> check(String phoneNumber) {
@@ -29,42 +30,37 @@ public class IsSmsSenderACurrentEventSupervisor extends AppCompatActivity {
         Task<QuerySnapshot> gettingUserTask = db.collection(UserRepository.COLLECTION_NAME)
                 .whereEqualTo(User.Field.PHONE_NUMBER, phoneNumber)
                 .get();
-        Task<User> userTask = gettingUserTask.continueWithTask(task -> {
-            if (task.isSuccessful()) {
-                if (!task.getResult().isEmpty()) {
-                    List<User> listOfUsers = task.getResult().toObjects(User.class);
-                    return Tasks.forResult(listOfUsers.get(0));
-                } else throw task.getException();
-            } else throw task.getException();
-        });
+        Task<User> userTask = getUserTask(gettingUserTask);
 
-        Task<List<Schedule>> schedulesTask = userTask.continueWithTask(task -> {
-            if (task.isSuccessful()) {
-                User supervisorUser = task.getResult();
-                Task<QuerySnapshot> gettingSchedulesTask = db.collection(ScheduleRepository.COLLECTION_NAME)
-                        .whereEqualTo(Schedule.Field.GROUP_SUPERVISOR_UID, supervisorUser.getUid())
-                        .whereArrayContains(Schedule.Field.MEMBER_LIST, repositoryFacade.getCurrentUserUid())
-                        .get();
+        return userTask.onSuccessTask(user ->
+                getSchedulesFromUserTask(repositoryFacade.getCurrentUserUid(), user));
+    }
 
-                Task<List<Schedule>> handleSchedulesTask = gettingSchedulesTask.continueWithTask(task2 -> {
-                    if (task2.isSuccessful()) {
-                        if (!task2.getResult().isEmpty()) {
-                            List<Schedule> listOfSchedules = task2.getResult().toObjects(Schedule.class);
-                            return Tasks.forResult(listOfSchedules);
-                        } else {
-                            throw task2.getException();
-                        }
-                    } else {
-                        throw task2.getException();
-                    }
-                });
-
-                return handleSchedulesTask;
+    @NonNull
+    private Task<User> getUserTask(Task<QuerySnapshot> gettingUserTask) {
+        return gettingUserTask.continueWithTask(task -> {
+            if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                List<User> listOfUsers = task.getResult().toObjects(User.class);
+                return Tasks.forResult(listOfUsers.get(0));
             } else {
                 throw task.getException();
             }
-
         });
-        return schedulesTask;
+    }
+
+    @NonNull
+    private Task<List<Schedule>> getSchedulesFromUserTask(String currentUserUid, User supervisorUser) {
+        Task<QuerySnapshot> gettingSchedulesTask = db.collection(ScheduleRepository.COLLECTION_NAME)
+                .whereEqualTo(Schedule.Field.GROUP_SUPERVISOR_UID, supervisorUser.getUid())
+                .whereArrayContains(Schedule.Field.MEMBER_LIST, currentUserUid)
+                .get();
+        return gettingSchedulesTask.continueWithTask(task2 -> {
+            if (task2.isSuccessful() && !task2.getResult().isEmpty()) {
+                List<Schedule> listOfSchedules = task2.getResult().toObjects(Schedule.class);
+                return Tasks.forResult(listOfSchedules);
+            } else {
+                throw task2.getException();
+            }
+        });
     }
 }

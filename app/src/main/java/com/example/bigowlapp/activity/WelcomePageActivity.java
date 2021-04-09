@@ -12,14 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.utils.Constants;
 import com.example.bigowlapp.utils.PermissionsHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class WelcomePageActivity extends AppCompatActivity implements Constants {
+import static com.example.bigowlapp.utils.Constants.SPLASH_DURATION;
+
+public class WelcomePageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class WelcomePageActivity extends AppCompatActivity implements Constants 
 
         boolean granted = true;
         for (int grantResult : grantResults) {
-            if(grantResult != PackageManager.PERMISSION_GRANTED) {
+            if (grantResult != PackageManager.PERMISSION_GRANTED) {
                 granted = false;
                 break;
             }
