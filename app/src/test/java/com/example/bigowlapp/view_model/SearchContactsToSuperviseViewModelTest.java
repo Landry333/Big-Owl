@@ -1,15 +1,13 @@
-package com.example.bigowlapp.activity;
+package com.example.bigowlapp.view_model;
 
 import android.database.Cursor;
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-
+import com.example.bigowlapp.activity.SearchContactsToSupervise;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.google.i18n.phonenumbers.NumberParseException;
 
 import org.hamcrest.MatcherAssert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -26,21 +24,17 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SearchContactsToSuperviseTest {
-
-    @Rule
-    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
-
-    private SearchContactsToSupervise activity;
-
+public class SearchContactsToSuperviseViewModelTest {
     @Mock
     private Cursor mockContactsCursor;
-    private int numContacts = 5;
+    private final int numContacts = 5;
     private int cursorindex;
     private List<String[]> contactsData;
 
     @Mock
     private PhoneNumberFormatter mockPhoneNumberFormatter;
+
+    private SearchContactsToSuperviseViewModel viewModel;
 
     @Before
     public void setUp() throws Exception {
@@ -57,13 +51,12 @@ public class SearchContactsToSuperviseTest {
 
         when(mockPhoneNumberFormatter.formatNumber(any())).then(returnsFirstArg());
 
-        activity = new SearchContactsToSupervise(mockPhoneNumberFormatter);
-        activity.setList(new ArrayList<>());
+        viewModel = new SearchContactsToSuperviseViewModel();
     }
 
     @Test
     public void populateContactsList() throws NumberParseException {
-        List<String> result = activity.populateContactsList(mockContactsCursor);
+        List<String> result = viewModel.populateContactsList(mockPhoneNumberFormatter, mockContactsCursor);
         assertEquals(contactsData.size(), result.size());
         assertEquals("Joe Doe0\n+14381234560", result.get(0));
         assertEquals("Joe Doe4\n+14381234564", result.get(4));
@@ -76,7 +69,7 @@ public class SearchContactsToSuperviseTest {
                 .thenThrow(new NumberParseException(NumberParseException.ErrorType.NOT_A_NUMBER, ""));
 
         cursorindex = -1;
-        result = activity.populateContactsList(mockContactsCursor);
+        result = viewModel.populateContactsList(mockPhoneNumberFormatter, mockContactsCursor);
         assertEquals(contactsData.size() - 1, result.size());
         assertEquals("Joe Doe0\n+14381234560", result.get(0));
         assertEquals("Joe Doe4\n+14381234564", result.get(3));
@@ -86,10 +79,10 @@ public class SearchContactsToSuperviseTest {
     @Test
     public void getNumberFromContactDataList() {
         String normalDetails = "Joe Doe0\n+14381234560";
-        assertEquals("+14381234560", activity.getNumberFromContactDataList(normalDetails));
+        assertEquals("+14381234560", viewModel.getNumberFromContactDataList(normalDetails));
 
         String noNameDetails = "+14381234560";
-        assertEquals("+14381234560", activity.getNumberFromContactDataList(noNameDetails));
+        assertEquals("+14381234560", viewModel.getNumberFromContactDataList(noNameDetails));
     }
 
     private List<String[]> getFakeContactsData() {

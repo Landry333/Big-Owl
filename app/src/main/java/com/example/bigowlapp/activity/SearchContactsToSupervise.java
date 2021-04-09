@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
@@ -47,10 +46,6 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     private LoaderManager loaderManager;
     private PhoneNumberFormatter phoneNumberFormatter;
     private SearchContactsToSuperviseViewModel searchContactsToSuperviseViewModel;
-
-    public SearchContactsToSupervise() {
-        super();
-    }
 
     @Override
     public int getContentView() {
@@ -113,7 +108,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
         // Check if users already has the app
         listContactsView.setOnItemClickListener((arg0, v, position, arg3) -> {
             String contactDetails = (String) listContactsView.getItemAtPosition(position);
-            String contactNumber = getNumberFromContactDataList(contactDetails);
+            String contactNumber = searchContactsToSuperviseViewModel.getNumberFromContactDataList(contactDetails);
 
             searchContactsToSuperviseViewModel.getUserToAdd(contactNumber).observe(this, user -> {
                 if (user == null) {
@@ -132,22 +127,6 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
             });
 
         });
-    }
-
-    @NonNull
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    public String getNumberFromContactDataList(String contactDetails) {
-        String contactNumber;
-        if (contactDetails.split("\\n").length < 2) {
-            contactNumber = contactDetails
-                    .split("\\n")[0]
-                    .replaceAll("[^+0-9]", "");
-        } else {
-            contactNumber = contactDetails
-                    .split("\\n")[1]
-                    .replaceAll("[^+0-9]", "");
-        }
-        return contactNumber;
     }
 
     @NonNull
@@ -182,7 +161,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor phoneResultsCursor) {
         this.setProgressBarInvisible();
-        list = populateContactsList(phoneResultsCursor);
+        list = searchContactsToSuperviseViewModel.populateContactsList(phoneNumberFormatter, phoneResultsCursor);
         updateList();
         phoneResultsCursor.close();
         loaderManager.destroyLoader(0);
@@ -200,34 +179,5 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
 
         listContactsView.setAdapter(contactsAdapter);
         contactsAdapter.notifyDataSetChanged();
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    public ArrayList<String> populateContactsList(Cursor phoneResultsCursor) {
-        ArrayList<String> contactsDataList = new ArrayList<>();
-
-        while (phoneResultsCursor.moveToNext()) {
-            String name = phoneResultsCursor.getString(INDEX_CONTACT_NAME);
-            String number = phoneResultsCursor.getString(INDEX_CONTACT_NUMBER);
-
-            try {
-                String formattedNumber = phoneNumberFormatter.formatNumber(number);
-                contactsDataList.add(name + "\n" + formattedNumber);
-            } catch (Exception ignored) {
-                // Invalid numbers are skipped
-            }
-        }
-
-        return contactsDataList;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public void setList(List<String> list) {
-        this.list = list;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public SearchContactsToSupervise(PhoneNumberFormatter phoneNumberFormatter) {
-        this.phoneNumberFormatter = phoneNumberFormatter;
     }
 }
