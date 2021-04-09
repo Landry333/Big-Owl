@@ -108,16 +108,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
         // argument position gives the index of item which is clicked
         listContactsView.setOnItemClickListener((arg0, v, position, arg3) -> {
             String contactDetails = (String) listContactsView.getItemAtPosition(position);
-            String contactNumber;
-            if (contactDetails.split("\\n").length < 2) {
-                contactNumber = contactDetails
-                        .split("\\n")[0]
-                        .replaceAll("[^+0-9]", "");
-            } else {
-                contactNumber = contactDetails
-                        .split("\\n")[1]
-                        .replaceAll("[^+0-9]", "");
-            }
+            String contactNumber = getNumberFromContactDataList(contactDetails);
 
             db.collection(UserRepository.COLLECTION_NAME)
                     .whereEqualTo(User.Field.PHONE_NUMBER, contactNumber)
@@ -139,6 +130,22 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
                         }
                     });
         });
+    }
+
+    @NonNull
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public String getNumberFromContactDataList(String contactDetails) {
+        String contactNumber;
+        if (contactDetails.split("\\n").length < 2) {
+            contactNumber = contactDetails
+                    .split("\\n")[0]
+                    .replaceAll("[^+0-9]", "");
+        } else {
+            contactNumber = contactDetails
+                    .split("\\n")[1]
+                    .replaceAll("[^+0-9]", "");
+        }
+        return contactNumber;
     }
 
     @NonNull

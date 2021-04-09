@@ -31,7 +31,7 @@ public class SearchContactsToSuperviseTest {
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
-    private SearchContactsToSupervise searchContactsToSuperviseActivity;
+    private SearchContactsToSupervise activity;
 
     @Mock
     private Cursor mockContactsCursor;
@@ -57,13 +57,13 @@ public class SearchContactsToSuperviseTest {
 
         when(mockPhoneNumberFormatter.formatNumber(any())).then(returnsFirstArg());
 
-        searchContactsToSuperviseActivity = new SearchContactsToSupervise(mockPhoneNumberFormatter);
-        searchContactsToSuperviseActivity.setList(new ArrayList<>());
+        activity = new SearchContactsToSupervise(mockPhoneNumberFormatter);
+        activity.setList(new ArrayList<>());
     }
 
     @Test
     public void populateContactsList() throws NumberParseException {
-        List<String> result = searchContactsToSuperviseActivity.populateContactsList(mockContactsCursor);
+        List<String> result = activity.populateContactsList(mockContactsCursor);
         assertEquals(contactsData.size(), result.size());
         assertEquals("Joe Doe0\n+14381234560", result.get(0));
         assertEquals("Joe Doe4\n+14381234564", result.get(4));
@@ -76,11 +76,20 @@ public class SearchContactsToSuperviseTest {
                 .thenThrow(new NumberParseException(NumberParseException.ErrorType.NOT_A_NUMBER, ""));
 
         cursorindex = -1;
-        result = searchContactsToSuperviseActivity.populateContactsList(mockContactsCursor);
+        result = activity.populateContactsList(mockContactsCursor);
         assertEquals(contactsData.size() - 1, result.size());
         assertEquals("Joe Doe0\n+14381234560", result.get(0));
         assertEquals("Joe Doe4\n+14381234564", result.get(3));
         MatcherAssert.assertThat(result, not(hasItem("Joe Doe2\n+14381234562")));
+    }
+
+    @Test
+    public void getNumberFromContactDataList() {
+        String normalDetails = "Joe Doe0\n+14381234560";
+        assertEquals("+14381234560", activity.getNumberFromContactDataList(normalDetails));
+
+        String noNameDetails = "+14381234560";
+        assertEquals("+14381234560", activity.getNumberFromContactDataList(noNameDetails));
     }
 
     private List<String[]> getFakeContactsData() {
