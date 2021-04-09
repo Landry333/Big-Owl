@@ -1,5 +1,6 @@
 package com.example.bigowlapp.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.example.bigowlapp.model.Response;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
+import com.example.bigowlapp.utils.GeoLocationFormatter;
 import com.example.bigowlapp.viewModel.ScheduleReportViewModel;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
@@ -20,7 +22,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -48,6 +49,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -61,9 +63,13 @@ public class ScheduleReportActivityTest {
     private final Timestamp timestampNow = Timestamp.now();
     private MutableLiveData<Schedule> testScheduleData;
     private ListViewMatcher listViewMatcher;
+    private String CONCORDIA_ADDRESS = "1571 Rue Mackay, Montréal, QC H3G 2H6, Canada";
 
     @Mock
     private ScheduleReportViewModel mockScheduleReportViewModel;
+
+    @Mock
+    private GeoLocationFormatter mockGeoLocationFormatter;
 
     @Before
     public void setUp() {
@@ -123,6 +129,7 @@ public class ScheduleReportActivityTest {
         when(mockScheduleReportViewModel.isCurrentUserSupervisor(testSupervisor.getUid())).thenReturn(true);
         when(mockScheduleReportViewModel.getCurrentScheduleData(testSchedule.getUid())).thenReturn(testScheduleData);
         when(mockScheduleReportViewModel.getScheduleMemberNameMap(testSchedule.getMemberList())).thenReturn(memberIdNameMapData);
+        when(mockGeoLocationFormatter.formatLocation(any(Context.class), any(GeoPoint.class))).thenReturn(CONCORDIA_ADDRESS);
 
         Intent testArrivingIntent = new Intent(getApplicationContext(), ScheduleReportActivity.class);
         testArrivingIntent.putExtra("scheduleUid", testSchedule.getUid());
@@ -131,14 +138,14 @@ public class ScheduleReportActivityTest {
         ActivityScenario<ScheduleReportActivity> activityScenario = ActivityScenario.launch(testArrivingIntent);
         activityScenario.moveToState(Lifecycle.State.CREATED);
         activityScenario.onActivity(activity -> {
-            currentActivity = activity;
             activity.setScheduleReportViewModel(mockScheduleReportViewModel);
+            activity.setGeoLocationFormatter(mockGeoLocationFormatter);
+            currentActivity = activity;
         });
         activityScenario.moveToState(Lifecycle.State.RESUMED);
     }
 
     @Test
-    @Ignore("Always fail abnormally on android CI")
     public void displayTest() {
         onView(withId(R.id.top_app_bar)).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.schedule_report_title), withText(testSchedule.getTitle()))).check(matches(isDisplayed()));
@@ -155,7 +162,6 @@ public class ScheduleReportActivityTest {
     }
 
     @Test
-    @Ignore("Always fail abnormally on android CI")
     public void scheduleScheduledInOneHourTest() {
         testSchedule.setStartTime(new Timestamp(timestampNow.getSeconds() + 3600, 0));
         testSchedule.setEndTime(new Timestamp(timestampNow.getSeconds() + 7200, 0));
@@ -165,7 +171,6 @@ public class ScheduleReportActivityTest {
     }
 
     @Test
-    @Ignore("Always fail abnormally on android CI")
     public void scheduleOnGoingTest() {
         testSchedule.setStartTime(new Timestamp(timestampNow.getSeconds() - 3600, 0));
         testSchedule.setEndTime(new Timestamp(timestampNow.getSeconds() + 3600, 0));
@@ -187,7 +192,6 @@ public class ScheduleReportActivityTest {
     }
 
     @Test
-    @Ignore("Always fail abnormally on android CI")
     public void scheduleCompletedTest() {
         testSchedule.setStartTime(new Timestamp(timestampNow.getSeconds() - 7200, 0));
         testSchedule.setEndTime(new Timestamp(timestampNow.getSeconds() - 3600, 0));

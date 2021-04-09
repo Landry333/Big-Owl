@@ -10,7 +10,7 @@ import java.io.IOException;
 
 
 public class GeoLocationFormatter {
-    public static String formatLocation(Context context, GeoPoint geoPoint) {
+    public String formatLocation(Context context, GeoPoint geoPoint) {
         try {
             return new Geocoder(context).getFromLocation(
                     geoPoint.getLatitude(),
