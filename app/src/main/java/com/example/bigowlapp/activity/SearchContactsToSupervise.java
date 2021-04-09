@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -30,8 +31,8 @@ import java.util.List;
 public class SearchContactsToSupervise extends BigOwlActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int MAX_RESULTS = 50;
 
-    private static final int INDEX_CONTACT_NAME = 0;
-    private static final int INDEX_CONTACT_NUMBER = 1;
+    public static final int INDEX_CONTACT_NAME = 0;
+    public static final int INDEX_CONTACT_NUMBER = 1;
 
     private static final String[] DATA_COLUMNS_TO_LOAD = {
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
@@ -47,6 +48,8 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     private String searchString = "";
     private List<String> list;
 
+    private PhoneNumberFormatter phoneNumberFormatter;
+
     @Override
     public int getContentView() {
         return R.layout.activity_search_contacts;
@@ -59,6 +62,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
         searchUsers = findViewById(R.id.search_users);
 
         loaderManager = LoaderManager.getInstance(this);
+        phoneNumberFormatter = new PhoneNumberFormatter(this);
 
         initialize();
     }
@@ -169,26 +173,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor phoneResultsCursor) {
         this.setProgressBarInvisible();
-
-        if (phoneResultsCursor == null) {
-            loaderManager.destroyLoader(0);
-            return;
-        }
-
-        list = new ArrayList<>();
-
-        while (phoneResultsCursor.moveToNext()) {
-            String name = phoneResultsCursor.getString(INDEX_CONTACT_NAME);
-            String number = phoneResultsCursor.getString(INDEX_CONTACT_NUMBER);
-
-            try {
-                String formattedNumber = new PhoneNumberFormatter(this).formatNumber(number);
-                list.add(name + "\n" + formattedNumber);
-            } catch (Exception ignored) {
-                // Invalid numbers are skipped
-            }
-        }
-
+        list = populateContactsList(phoneResultsCursor);
         updateList();
         phoneResultsCursor.close();
         loaderManager.destroyLoader(0);
@@ -206,5 +191,34 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
 
         listContactsView.setAdapter(contactsAdapter);
         contactsAdapter.notifyDataSetChanged();
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public ArrayList<String> populateContactsList(Cursor phoneResultsCursor) {
+        ArrayList<String> contactsDataList = new ArrayList<>();
+
+        while (phoneResultsCursor.moveToNext()) {
+            String name = phoneResultsCursor.getString(INDEX_CONTACT_NAME);
+            String number = phoneResultsCursor.getString(INDEX_CONTACT_NUMBER);
+
+            try {
+                String formattedNumber = phoneNumberFormatter.formatNumber(number);
+                contactsDataList.add(name + "\n" + formattedNumber);
+            } catch (Exception ignored) {
+                // Invalid numbers are skipped
+            }
+        }
+
+        return contactsDataList;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setList(List<String> list) {
+        this.list = list;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public SearchContactsToSupervise(PhoneNumberFormatter phoneNumberFormatter) {
+        this.phoneNumberFormatter = phoneNumberFormatter;
     }
 }
