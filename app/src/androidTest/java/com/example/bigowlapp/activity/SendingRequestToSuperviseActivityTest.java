@@ -113,6 +113,14 @@ public class SendingRequestToSuperviseActivityTest {
         return new MutableLiveData<>(null);
     }
 
+    // This test could be in any class, but I need to add this test outside of the
+    // HomePageActivity because it overrides the onClickListener of BigOwlActivity
+    @Test
+    public void clickOnOverflowMenu() {
+        onView(withId(R.id.action_overflow)).check(matches(isDisplayed()));
+        onView(withId(R.id.action_overflow)).perform(click());
+    }
+
     @Test
     public void sendingRequestToYourself() {
         currentUserId = otherUserId;
