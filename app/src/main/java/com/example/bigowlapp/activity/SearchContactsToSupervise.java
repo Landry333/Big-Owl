@@ -15,15 +15,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.UserRepository;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.bigowlapp.view_model.SearchContactsToSuperviseViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +41,16 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     private EditText searchUsers;
     private ListView listContactsView;
 
-    private FirebaseFirestore db;
-    private LoaderManager loaderManager;
-
     private String searchString = "";
     private List<String> list;
 
+    private LoaderManager loaderManager;
     private PhoneNumberFormatter phoneNumberFormatter;
+    private SearchContactsToSuperviseViewModel searchContactsToSuperviseViewModel;
+
+    public SearchContactsToSupervise() {
+        super();
+    }
 
     @Override
     public int getContentView() {
@@ -70,7 +72,11 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     @Override
     protected void onStart() {
         super.onStart();
-        db = FirebaseFirestore.getInstance();
+
+        if (searchContactsToSuperviseViewModel == null) {
+            searchContactsToSuperviseViewModel = new ViewModelProvider(this)
+                    .get(SearchContactsToSuperviseViewModel.class);
+        }
     }
 
     protected void initialize() {
@@ -104,31 +110,27 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     }
 
     private void setupContactListClick() {
-        //Check if users already has the app
-        // argument position gives the index of item which is clicked
+        // Check if users already has the app
         listContactsView.setOnItemClickListener((arg0, v, position, arg3) -> {
             String contactDetails = (String) listContactsView.getItemAtPosition(position);
             String contactNumber = getNumberFromContactDataList(contactDetails);
 
-            db.collection(UserRepository.COLLECTION_NAME)
-                    .whereEqualTo(User.Field.PHONE_NUMBER, contactNumber)
-                    .get()
-                    .addOnSuccessListener(result -> {
-                        if (!result.isEmpty()) {
-                            Toast.makeText(SearchContactsToSupervise.this, "This user has the app already. Please choose another user", Toast.LENGTH_SHORT).show();
-                            User user = result.toObjects(User.class).get(0);
-                            Intent intent = new Intent(SearchContactsToSupervise.this, SendingRequestToSuperviseActivity.class);
-                            intent.putExtra("user", user);
-                            intent.putExtra("contactDetails", contactDetails);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
-                            intent.putExtra("contactDetails", contactDetails);
-                            intent.putExtra("contactNumber", contactNumber);
-                            startActivity(intent);
-                        }
-                    });
+            searchContactsToSuperviseViewModel.getUserToAdd(contactNumber).observe(this, user -> {
+                if (user == null) {
+                    Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
+                    intent.putExtra("contactDetails", contactDetails);
+                    intent.putExtra("contactNumber", contactNumber);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(SearchContactsToSupervise.this, "This user has the app already. Please choose another user", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(SearchContactsToSupervise.this, SendingRequestToSuperviseActivity.class);
+                    intent.putExtra("user", user);
+                    intent.putExtra("contactDetails", contactDetails);
+                    startActivity(intent);
+                }
+            });
+
         });
     }
 
