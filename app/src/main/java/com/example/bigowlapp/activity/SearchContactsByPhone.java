@@ -6,17 +6,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
 import com.example.bigowlapp.view_model.SearchContactsViewModel;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.i18n.phonenumbers.NumberParseException;
 
 public class SearchContactsByPhone extends BigOwlActivity {
     private Button btnSearch;
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private EditText number;
     private String smsNumber;
 
@@ -78,5 +77,10 @@ public class SearchContactsByPhone extends BigOwlActivity {
                 startActivity(intent);
             });
         });
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setSearchContactsViewModel(SearchContactsViewModel searchContactsViewModel) {
+        this.searchContactsViewModel = searchContactsViewModel;
     }
 }
