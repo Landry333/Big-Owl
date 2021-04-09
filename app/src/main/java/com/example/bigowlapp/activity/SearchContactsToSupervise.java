@@ -112,19 +112,20 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
             String contactNumber = searchContactsToSuperviseViewModel.getNumberFromContactDataList(contactDetails);
 
             searchContactsToSuperviseViewModel.getUserToAdd(contactNumber).observe(this, user -> {
+                Intent intent;
                 if (user == null) {
-                    Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
+                    Toast.makeText(this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(this, SendSmsInvitationActivity.class);
                     intent.putExtra("contactDetails", contactDetails);
                     intent.putExtra("contactNumber", contactNumber);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(SearchContactsToSupervise.this, "This user has the app already. Please choose another user", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SearchContactsToSupervise.this, SendingRequestToSuperviseActivity.class);
+                    Toast.makeText(this, "This user has the app already. Please choose another user", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(this, SendingRequestToSuperviseActivity.class);
                     intent.putExtra("user", user);
                     intent.putExtra("contactDetails", contactDetails);
-                    startActivity(intent);
                 }
+                startActivity(intent);
             });
 
         });
