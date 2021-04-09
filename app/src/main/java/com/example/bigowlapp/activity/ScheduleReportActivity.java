@@ -1,6 +1,5 @@
 package com.example.bigowlapp.activity;
 
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -11,9 +10,6 @@ import com.example.bigowlapp.adapter.ScheduleReportMembersAdapter;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.utils.GeoLocationFormatter;
 import com.example.bigowlapp.viewModel.ScheduleReportViewModel;
-import com.google.firebase.firestore.GeoPoint;
-
-import java.io.IOException;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,6 +20,7 @@ public class ScheduleReportActivity extends BigOwlActivity {
     private ScheduleReportViewModel scheduleReportViewModel;
     private ListView scheduleReportMemberListView;
     private ScheduleReportMembersAdapter scheduleReportMembersAdapter;
+    private GeoLocationFormatter geoLocationFormatter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +56,12 @@ public class ScheduleReportActivity extends BigOwlActivity {
                 scheduleReportTitle.setText(schedule.getTitle());
                 scheduleReportStartTime.setText(schedule.getStartTime().toDate().toString());
                 scheduleReportEndTime.setText(schedule.getEndTime().toDate().toString());
-                scheduleReportLocation.setText(GeoLocationFormatter.formatLocation(this, schedule.getLocation()));
+
+                if (geoLocationFormatter == null) {
+                    geoLocationFormatter = new GeoLocationFormatter();
+                }
+
+                scheduleReportLocation.setText(geoLocationFormatter.formatLocation(this, schedule.getLocation()));
 
                 scheduleReportViewModel.getScheduleMemberNameMap(schedule.getMemberList()).observe(this, memberNameMap -> {
                     if (schedule.scheduleCurrentState() == Schedule.Status.ON_GOING)
@@ -86,5 +88,10 @@ public class ScheduleReportActivity extends BigOwlActivity {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public ScheduleReportMembersAdapter getScheduleReportMembersAdapter() {
         return scheduleReportMembersAdapter;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setGeoLocationFormatter(GeoLocationFormatter geoLocationFormatter) {
+        this.geoLocationFormatter = geoLocationFormatter;
     }
 }
