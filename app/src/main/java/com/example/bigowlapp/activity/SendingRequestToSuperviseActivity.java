@@ -8,40 +8,41 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.SupervisionRequest;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.NotificationRepository;
-import com.example.bigowlapp.repository.RepositoryFacade;
+import com.example.bigowlapp.view_model.SendingRequestToSuperviseViewModel;
 import com.google.firebase.Timestamp;
 
 import java.util.List;
 
 public class SendingRequestToSuperviseActivity extends BigOwlActivity {
-    String otherUserID;
-    String currentUserID;
-    String noteText;
-    User otherUser;
-    boolean aRequestAlready;
-    boolean shouldCancelRequest = false;
-    boolean shouldSendAnOtherRequest = false;
-    String supBtnSend = "Send request";
-    String supBtnCancel = "Cancel request";
-    String canNotSend = "Can not send ";
-    String sendNewRequest = "Send new request";
+    private String otherUserID;
+    private String currentUserID;
+    private String noteText;
+    private User otherUser;
+    private boolean aRequestAlready;
+    private boolean shouldCancelRequest = false;
+    private boolean shouldSendAnOtherRequest = false;
     private Button supRequestBtn;
-    String requestUID;
+    private String requestUID;
     private TextView noteTv;
     private TextView resultNoteTv;
     private TextView secondResultNoteTv;
-    String canCancel = "You request is pending. You can cancel it";
-    String noRequest = "You presently have NO request to supervise this user ";
-    String noSelfRequest = "This contact matches you as a contact. You can't send a request to yourself";
-    String superviseAlready = "You already have an accepted request to supervise this user";
-    String requestRejected = "Your last request was rejected by this user. You can send a new request";
 
-    private NotificationRepository otherUserNotificationRepository;
+    private static final String supBtnSend = "Send request";
+    private static final String supBtnCancel = "Cancel request";
+    private static final String canNotSend = "Can not send ";
+    private static final String sendNewRequest = "Send new request";
+    private static final String canCancel = "You request is pending. You can cancel it";
+    private static final String noRequest = "You presently have NO request to supervise this user ";
+    private static final String noSelfRequest = "This contact matches you as a contact. You can't send a request to yourself";
+    private static final String superviseAlready = "You already have an accepted request to supervise this user";
+    private static final String requestRejected = "Your last request was rejected by this user. You can send a new request";
+
+    private SendingRequestToSuperviseViewModel sRTSViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +54,19 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
         resultNoteTv.setVisibility(View.VISIBLE);
         secondResultNoteTv = findViewById(R.id.note3);
         secondResultNoteTv.setVisibility(View.GONE);
-        RepositoryFacade repositoryFacade = RepositoryFacade.getInstance();
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (sRTSViewModel == null) {
+            sRTSViewModel = new ViewModelProvider(this).get(SendingRequestToSuperviseViewModel.class);
+        }
         String contactDetails = getIntent().getStringExtra("contactDetails");
         otherUser = getIntent().getParcelableExtra("user");
 
         otherUserID = otherUser.getUid();
-        currentUserID = repositoryFacade.getCurrentUserUid();
-
-        otherUserNotificationRepository = repositoryFacade.getNotificationRepository(otherUserID);
+        currentUserID = sRTSViewModel.getCurrentUserUid();
 
         noteText = "Contact: " + contactDetails + " is already registered to the application.";
         noteTv.setText(noteText);
@@ -98,29 +103,30 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
         supervisionRequest.setCreationTime(Timestamp.now());
 
         if (!aRequestAlready) {
-            otherUserNotificationRepository.addDocument(supervisionRequest);
+            sRTSViewModel.sendSupervisionRequestToOtherUser(otherUserID, supervisionRequest);
         } else if (shouldCancelRequest) {
-            otherUserNotificationRepository.removeDocument(requestUID);
+            sRTSViewModel.removeSupervisionRequestFromOtherUser(otherUserID, requestUID);
         } else if (shouldSendAnOtherRequest) {
-            otherUserNotificationRepository.removeDocument(requestUID);
-            otherUserNotificationRepository.addDocument(supervisionRequest);
+            sRTSViewModel.removeSupervisionRequestFromOtherUser(otherUserID, requestUID);
+            sRTSViewModel.sendSupervisionRequestToOtherUser(otherUserID, supervisionRequest);
+            ;
         }
 
         observeRequests();
     }
 
     private void observeRequests() {
-        aRequestAlready = false; // A false value allows for search for an existing request with
-        // in repository until one is found
-        supRequestBtn.setText(supBtnSend); // Default setText
+        // A false value allows for search for an existing request within repository until one is found
+        aRequestAlready = false;
+        // Default setText
+        supRequestBtn.setText(supBtnSend);
         supRequestBtn.setClickable(true);
         resultNoteTv.setText(noRequest);
         secondResultNoteTv.setVisibility(View.GONE);
         resultNoteTv.setVisibility(View.VISIBLE);
 
-        LiveData<List<SupervisionRequest>> senderRequestsData = otherUserNotificationRepository
-                .getListOfDocumentByAttribute(SupervisionRequest.Field.SENDER_UID, currentUserID,
-                        SupervisionRequest.class);
+        LiveData<List<SupervisionRequest>> senderRequestsData = sRTSViewModel
+                .getRequestsDataFromOtherUser(otherUserID, currentUserID);
 
         senderRequestsData.observe(this, senderRequests -> {
             if (senderRequests == null)
