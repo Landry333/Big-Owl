@@ -24,6 +24,7 @@ public class ScheduleReportActivity extends BigOwlActivity {
     private ScheduleReportViewModel scheduleReportViewModel;
     private ListView scheduleReportMemberListView;
     private ScheduleReportMembersAdapter scheduleReportMembersAdapter;
+    private GeoLocationFormatter geoLocationFormatter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +37,10 @@ public class ScheduleReportActivity extends BigOwlActivity {
     protected void onStart() {
         super.onStart();
 
-        if (scheduleReportViewModel == null) {
+        if (scheduleReportViewModel == null)
             scheduleReportViewModel = new ViewModelProvider(this).get(ScheduleReportViewModel.class);
-        }
+        if (geoLocationFormatter == null)
+            geoLocationFormatter = new GeoLocationFormatter();
 
         subscribeToData();
     }
@@ -49,26 +51,28 @@ public class ScheduleReportActivity extends BigOwlActivity {
         }
 
         scheduleReportViewModel.getCurrentScheduleData(scheduleUid).observe(this, schedule -> {
-            if (schedule != null) {
-                scheduleReportTitle = findViewById(R.id.schedule_report_title);
-                scheduleReportStartTime = findViewById(R.id.schedule_report_start_time);
-                scheduleReportEndTime = findViewById(R.id.schedule_report_end_time);
-                scheduleReportLocation = findViewById(R.id.schedule_report_location);
-                scheduleReportMemberListView = findViewById(R.id.schedule_report_member_list);
-
-                scheduleReportTitle.setText(schedule.getTitle());
-                scheduleReportStartTime.setText(schedule.getStartTime().toDate().toString());
-                scheduleReportEndTime.setText(schedule.getEndTime().toDate().toString());
-                scheduleReportLocation.setText(GeoLocationFormatter.formatLocation(this, schedule.getLocation()));
-
-                scheduleReportViewModel.getScheduleMemberNameMap(schedule.getMemberList()).observe(this, memberNameMap -> {
-                    if (schedule.scheduleCurrentState() == Schedule.Status.ON_GOING)
-                        Toast.makeText(this, "Schedule is ongoing and attendance results are subject to change", Toast.LENGTH_LONG).show();
-
-                    scheduleReportMembersAdapter = new ScheduleReportMembersAdapter(this, memberNameMap, schedule);
-                    scheduleReportMemberListView.setAdapter(scheduleReportMembersAdapter);
-                });
+            if (schedule == null) {
+                return;
             }
+            scheduleReportTitle = findViewById(R.id.schedule_report_title);
+            scheduleReportStartTime = findViewById(R.id.schedule_report_start_time);
+            scheduleReportEndTime = findViewById(R.id.schedule_report_end_time);
+            scheduleReportLocation = findViewById(R.id.schedule_report_location);
+            scheduleReportMemberListView = findViewById(R.id.schedule_report_member_list);
+
+            scheduleReportTitle.setText(schedule.getTitle());
+            scheduleReportStartTime.setText(schedule.getStartTime().toDate().toString());
+            scheduleReportEndTime.setText(schedule.getEndTime().toDate().toString());
+
+            scheduleReportLocation.setText(geoLocationFormatter.formatLocation(this, schedule.getLocation()));
+
+            scheduleReportViewModel.getScheduleMemberNameMap(schedule.getMemberList()).observe(this, memberNameMap -> {
+                if (schedule.scheduleCurrentState() == Schedule.Status.ON_GOING)
+                    Toast.makeText(this, "Schedule is ongoing and attendance results are subject to change", Toast.LENGTH_LONG).show();
+
+                scheduleReportMembersAdapter = new ScheduleReportMembersAdapter(this, memberNameMap, schedule);
+                scheduleReportMemberListView.setAdapter(scheduleReportMembersAdapter);
+            });
         });
     }
 
@@ -86,5 +90,10 @@ public class ScheduleReportActivity extends BigOwlActivity {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public ScheduleReportMembersAdapter getScheduleReportMembersAdapter() {
         return scheduleReportMembersAdapter;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setGeoLocationFormatter(GeoLocationFormatter geoLocationFormatter) {
+        this.geoLocationFormatter = geoLocationFormatter;
     }
 }
