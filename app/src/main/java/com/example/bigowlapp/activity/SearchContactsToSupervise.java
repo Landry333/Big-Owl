@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -24,10 +22,7 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.repository.UserRepository;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,46 +96,41 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
 
     private void setupContactListClick() {
         //Check if users already has the app
-        listContactsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            // argument position gives the index of item which is clicked
-            public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
-                String contactDetails = (String) listContactsView.getItemAtPosition(position);
-                String contactNumber;
-                if (contactDetails.split("\\n").length < 2) {
-                    contactNumber = contactDetails
-                            .split("\\n")[0]
-                            .replaceAll("[^+0-9]", "");
-                } else {
-                    contactNumber = contactDetails
-                            .split("\\n")[1]
-                            .replaceAll("[^+0-9]", "");
-                }
-
-                db.collection(UserRepository.COLLECTION_NAME)
-                        .whereEqualTo(User.Field.PHONE_NUMBER, contactNumber)
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    if (!task.getResult().isEmpty()) {
-                                        Toast.makeText(SearchContactsToSupervise.this, "This user has the app already. Please choose another user", Toast.LENGTH_SHORT).show();
-                                        User user = task.getResult().toObjects(User.class).get(0);
-                                        Intent intent = new Intent(SearchContactsToSupervise.this, SendingRequestToSuperviseActivity.class);
-                                        intent.putExtra("user", user);
-                                        intent.putExtra("contactDetails", contactDetails);
-                                        startActivity(intent);
-                                    } else {
-                                        Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
-                                        intent.putExtra("contactDetails", contactDetails);
-                                        intent.putExtra("contactNumber", contactNumber);
-                                        startActivity(intent);
-                                    }
-                                }
-                            }
-                        });
+        // argument position gives the index of item which is clicked
+        listContactsView.setOnItemClickListener((arg0, v, position, arg3) -> {
+            String contactDetails = (String) listContactsView.getItemAtPosition(position);
+            String contactNumber;
+            if (contactDetails.split("\\n").length < 2) {
+                contactNumber = contactDetails
+                        .split("\\n")[0]
+                        .replaceAll("[^+0-9]", "");
+            } else {
+                contactNumber = contactDetails
+                        .split("\\n")[1]
+                        .replaceAll("[^+0-9]", "");
             }
+
+            db.collection(UserRepository.COLLECTION_NAME)
+                    .whereEqualTo(User.Field.PHONE_NUMBER, contactNumber)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            if (!task.getResult().isEmpty()) {
+                                Toast.makeText(SearchContactsToSupervise.this, "This user has the app already. Please choose another user", Toast.LENGTH_SHORT).show();
+                                User user = task.getResult().toObjects(User.class).get(0);
+                                Intent intent = new Intent(SearchContactsToSupervise.this, SendingRequestToSuperviseActivity.class);
+                                intent.putExtra("user", user);
+                                intent.putExtra("contactDetails", contactDetails);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
+                                intent.putExtra("contactDetails", contactDetails);
+                                intent.putExtra("contactNumber", contactNumber);
+                                startActivity(intent);
+                            }
+                        }
+                    });
         });
     }
 

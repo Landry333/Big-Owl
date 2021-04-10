@@ -1,4 +1,4 @@
-package com.example.bigowlapp.viewModel;
+package com.example.bigowlapp.view_model;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;

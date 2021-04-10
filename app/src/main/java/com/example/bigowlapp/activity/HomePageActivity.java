@@ -1,8 +1,6 @@
 package com.example.bigowlapp.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,9 +11,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -24,7 +20,7 @@ import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.utils.MemberScheduleAlarmManager;
 import com.example.bigowlapp.utils.SupervisorSchedulesAlarmManager;
-import com.example.bigowlapp.viewModel.HomePageViewModel;
+import com.example.bigowlapp.view_model.HomePageViewModel;
 import com.squareup.picasso.Picasso;
 
 
@@ -51,8 +47,6 @@ public class HomePageActivity extends BigOwlActivity {
         initialize();
     }
 
-    @SuppressLint({"MissingPermission"})
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStart() {
         super.onStart();
@@ -126,7 +120,6 @@ public class HomePageActivity extends BigOwlActivity {
             currentUserData.observe(this, user -> {
                 if (currentUserData.hasError()) {
                     Toast.makeText(getBaseContext(), currentUserData.getError().getMessage(), Toast.LENGTH_LONG).show();
-                    // TODO: Handle this failure (exist page, modify page, or set up page for error case)
                     return;
                 }
 
@@ -147,11 +140,6 @@ public class HomePageActivity extends BigOwlActivity {
             initAlarmManager();
             initSupervisorAlarmManager();
         }
-        /*  TODO: find a way to uncomment out below lines and allow HomePageActivityTest to pass
-        else {
-            this.noSignedInAlert().show();
-        }
-         */
     }
 
     /**
@@ -183,19 +171,6 @@ public class HomePageActivity extends BigOwlActivity {
         }
         return super.onMenuItemClick(item);
     }
-
-    private AlertDialog noSignedInAlert() {
-        return new AlertDialog.Builder(this)
-                .setTitle("You are not logged in!")
-                .setMessage("Please log in or register an account!")
-                .setPositiveButton("Ok", (dialogInterface, which) -> {
-                    startActivity(new Intent(this, LoginPageActivity.class));
-                    finish();
-                })
-                .setCancelable(false)
-                .create();
-    }
-
 
     @VisibleForTesting
     public void setHomePageViewModel(HomePageViewModel homePageViewModel) {

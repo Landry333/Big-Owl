@@ -15,27 +15,29 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.viewModel.MonitoringGroupPageViewModel;
+import com.example.bigowlapp.view_model.MonitoringGroupPageViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.ViewModelProvider;
-
 
 public class MonitoringGroupPageActivity extends BigOwlActivity {
     private EditText searchUsers;
     private ListView usersListView;
     private TextView groupName;
-    private List<User> mUsers, mUsersShow;
+    private List<User> mUsers;
+    private List<User> mUsersShow;
     private User contextMenuSelectedUser;
-    private Button btnSetSchedule, btnViewSchedule;
+    private Button btnSetSchedule;
+    private Button btnViewSchedule;
     private AlertDialog alertDialog;
     private MonitoringGroupPageViewModel mGroupPageViewModel;
 
@@ -115,7 +117,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
         searchUsers.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                // Nothing needs to be done before the text is changed
             }
 
             @Override
@@ -126,6 +128,7 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                // Nothing needs to be done after the text is changed
             }
         });
 

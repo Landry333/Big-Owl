@@ -1,4 +1,4 @@
-package com.example.bigowlapp.viewModel;
+package com.example.bigowlapp.view_model;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
@@ -12,7 +12,6 @@ public class EditProfileViewModel extends BaseViewModel {
 
     private MutableLiveData<User> userData;
 
-    // TODO: Dependency Injection
     public EditProfileViewModel() {
         // used implicitly when ViewModel constructed using ViewModelProvider
     }

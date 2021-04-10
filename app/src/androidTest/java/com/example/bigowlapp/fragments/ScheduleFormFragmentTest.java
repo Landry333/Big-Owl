@@ -16,7 +16,7 @@ import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.viewModel.SetScheduleViewModel;
+import com.example.bigowlapp.view_model.SetScheduleViewModel;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
@@ -151,7 +151,6 @@ public class ScheduleFormFragmentTest {
         assertEquals("Please select a group", scheduleFormFragment.getGroupButton().getError().toString());
         assertEquals("Please select at least one user", scheduleFormFragment.getSelectUserButton().getError().toString());
         assertEquals("Please select a location", scheduleFormFragment.getEditLocation().getError().toString());
-        // TODO: check for toast
     }
 
     @Test

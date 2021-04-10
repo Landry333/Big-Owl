@@ -7,6 +7,12 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.MutableLiveData;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
+
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Attendance;
 import com.example.bigowlapp.model.Response;
@@ -14,7 +20,7 @@ import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.utils.GeoLocationFormatter;
-import com.example.bigowlapp.viewModel.ScheduleReportViewModel;
+import com.example.bigowlapp.view_model.ScheduleReportViewModel;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
@@ -32,12 +38,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.MutableLiveData;
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.filters.LargeTest;
-
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -49,7 +49,10 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -123,8 +126,7 @@ public class ScheduleReportActivityTest {
         testScheduleMembersMap.put("testMember005", new UserScheduleResponse(Response.NEUTRAL, null));
         testSchedule.setUserScheduleResponseMap(testScheduleMembersMap);
         testSchedule.setLocation(new GeoPoint(45.49661075, -73.57853574999999));
-        testScheduleData = new MutableLiveData<>(testSchedule);
-        testScheduleData.postValue(testSchedule);
+        testScheduleData = new MutableLiveData<>();
 
         when(mockScheduleReportViewModel.isCurrentUserSupervisor(testSupervisor.getUid())).thenReturn(true);
         when(mockScheduleReportViewModel.getCurrentScheduleData(testSchedule.getUid())).thenReturn(testScheduleData);
@@ -147,6 +149,7 @@ public class ScheduleReportActivityTest {
 
     @Test
     public void displayTest() {
+        testScheduleData.postValue(testSchedule);
         onView(withId(R.id.top_app_bar)).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.schedule_report_title), withText(testSchedule.getTitle()))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.schedule_report_start_time), withText(String.valueOf(testSchedule.getStartTime().toDate())))).check(matches(isDisplayed()));
@@ -161,6 +164,18 @@ public class ScheduleReportActivityTest {
     }
 
     @Test
+    public void emptyScheduleTest() {
+        testScheduleData.postValue(null);
+
+        onView(allOf(withId(R.id.schedule_report_title), withText("schedule_report_title"))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.schedule_report_start_time), withText("schedule_report_start_time"))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.schedule_report_end_time), withText("schedule_report_end_time"))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.schedule_report_location), withText("schedule_report_location"))).check(matches(isDisplayed()));
+        verify(mockScheduleReportViewModel, atMost(0)).getScheduleMemberNameMap(anyList());
+        assertNull(currentActivity.getScheduleReportMembersAdapter());
+    }
+
+    @Test
     public void scheduleScheduledInOneHourTest() {
         testSchedule.setStartTime(new Timestamp(timestampNow.getSeconds() + 3600, 0));
         testSchedule.setEndTime(new Timestamp(timestampNow.getSeconds() + 7200, 0));
@@ -171,7 +186,7 @@ public class ScheduleReportActivityTest {
 
     @Test
     public void scheduleOnGoingTest() {
-        testSchedule.setStartTime(new Timestamp(timestampNow.getSeconds() - 3600, 0));
+        testSchedule.setStartTime(new Timestamp(timestampNow.getSeconds() - 900, 0));
         testSchedule.setEndTime(new Timestamp(timestampNow.getSeconds() + 3600, 0));
         testSchedule.getUserScheduleResponseMap().put("testMember000",
                 new UserScheduleResponse(Response.ACCEPT,

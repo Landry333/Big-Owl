@@ -1,4 +1,4 @@
-package com.example.bigowlapp.viewModel;
+package com.example.bigowlapp.view_model;
 
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;

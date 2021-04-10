@@ -16,7 +16,10 @@ import com.google.android.gms.tasks.Tasks;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.bigowlapp.utils.IntentConstants.*;
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LATITUDE;
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_LONGITUDE;
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_SCHEDULE_TITLE;
+import static com.example.bigowlapp.utils.IntentConstants.EXTRA_UID;
 
 /**
  * The purpose of this class is to set/define alarms for member schedules that the app will set.

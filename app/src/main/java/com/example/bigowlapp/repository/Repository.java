@@ -4,6 +4,7 @@ import com.example.bigowlapp.database.Firestore;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Model;
 import com.example.bigowlapp.repository.exception.DocumentNotFoundException;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -155,18 +156,7 @@ public abstract class Repository<T extends Model> {
         LiveDataWithStatus<List<X>> listOfTData = new LiveDataWithStatus<>();
         collectionReference.whereEqualTo(attribute, attrValue)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot tDocs = task.getResult();
-                        if (tDocs != null && !tDocs.isEmpty()) {
-                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), tClass));
-                        } else {
-                            listOfTData.setError(getDocumentNotFoundException(tClass));
-                        }
-                    } else {
-                        listOfTData.setError(task.getException());
-                    }
-                });
+                .addOnCompleteListener(task -> resolveTaskWithListResult(task, listOfTData, tClass));
         return listOfTData;
     }
 
@@ -175,58 +165,17 @@ public abstract class Repository<T extends Model> {
         LiveDataWithStatus<List<X>> listOfTData = new LiveDataWithStatus<>();
         collectionReference.whereArrayContains(attribute, attrValue)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot tDocs = task.getResult();
-                        if (tDocs != null && !tDocs.isEmpty()) {
-                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), tClass));
-                        } else {
-                            listOfTData.setError(getDocumentNotFoundException(tClass));
-                        }
-
-                    } else {
-                        listOfTData.setError(task.getException());
-                    }
-                });
+                .addOnCompleteListener(task -> resolveTaskWithListResult(task, listOfTData, tClass));
         return listOfTData;
     }
 
-    public <X extends T> LiveDataWithStatus<List<X>> getAllDocumentsFromCollection(Class<X> tClass) {
-        LiveDataWithStatus<List<X>> listOfTData = new LiveDataWithStatus<>();
-        collectionReference.get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot tDocs = task.getResult();
-                        if (tDocs != null && !tDocs.isEmpty()) {
-                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), tClass));
-                        } else {
-                            listOfTData.setError(getDocumentNotFoundException(tClass));
-                        }
-                    } else {
-                        listOfTData.setError(task.getException());
-                    }
-                });
-        return listOfTData;
-    }
-
-    // TODO: bug where can only handle 10 items in the list, should allow any size list
+    // Can only handle 10 items in the list, so use for loop to get more results
     public <X extends T> LiveDataWithStatus<List<X>> getDocumentsByListOfUid(List<String> docUidList,
                                                                              Class<X> tClass) {
         LiveDataWithStatus<List<X>> listOfTData = new LiveDataWithStatus<>();
         collectionReference.whereIn(FieldPath.documentId(), docUidList)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot tDocs = task.getResult();
-                        if (tDocs != null && !tDocs.isEmpty()) {
-                            listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), tClass));
-                        } else {
-                            listOfTData.setError(getDocumentNotFoundException(tClass));
-                        }
-                    } else {
-                        listOfTData.setError(task.getException());
-                    }
-                });
+                .addOnCompleteListener(task -> resolveTaskWithListResult(task, listOfTData, tClass));
         return listOfTData;
     }
 
@@ -237,6 +186,19 @@ public abstract class Repository<T extends Model> {
             listOfT.add(t);
         }
         return listOfT;
+    }
+
+    protected  <X extends T> void resolveTaskWithListResult(Task<QuerySnapshot> task, LiveDataWithStatus<List<X>> listOfTData, Class<X> tClass) {
+        if (task.isSuccessful()) {
+            QuerySnapshot tDocs = task.getResult();
+            if (tDocs != null && !tDocs.isEmpty()) {
+                listOfTData.setSuccess(this.extractListOfDataToModel(task.getResult(), tClass));
+            } else {
+                listOfTData.setError(getDocumentNotFoundException(tClass));
+            }
+        } else {
+            listOfTData.setError(task.getException());
+        }
     }
 
     /**

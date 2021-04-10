@@ -1,12 +1,12 @@
-package com.example.bigowlapp.viewModel;
+package com.example.bigowlapp.view_model;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.model.Schedule;
 
 import java.util.List;
 import java.util.Map;
-
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 public class ScheduleReportViewModel extends BaseViewModel {
     private MutableLiveData<Schedule> scheduleData;

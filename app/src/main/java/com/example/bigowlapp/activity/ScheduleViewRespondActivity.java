@@ -13,7 +13,7 @@ import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.example.bigowlapp.utils.GeoLocationFormatter;
 import com.example.bigowlapp.utils.PermissionsHelper;
-import com.example.bigowlapp.viewModel.ScheduleViewRespondViewModel;
+import com.example.bigowlapp.view_model.ScheduleViewRespondViewModel;
 
 import java.text.DateFormat;
 import java.util.Date;

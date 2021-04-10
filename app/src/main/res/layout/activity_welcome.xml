@@ -4,7 +4,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#285294"
+    style="@style/WelcomePageTheme"
     android:gravity="center"
     android:orientation="horizontal"
     tools:context=".activity.WelcomePageActivity">
@@ -14,6 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="centerInside"
-        android:src="@drawable/logo" />
+        android:src="@drawable/logo"
+        android:contentDescription="@string/description_bigowl_logo" />
 
 </LinearLayout>

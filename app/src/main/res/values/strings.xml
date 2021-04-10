@@ -3,31 +3,23 @@
 
     <string name="app_name">BigOwlApp</string>
 
-    <string name="Find_a_user_to_invite">Find a user to invite to use Big Owl app</string>
     <string name="send_sms">send sms</string>
     <string name="by">by</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="first_name">First Name</string>
     <string name="group_name">Group Name</string>
-    <string name="have_account_text">Already have an account? Sign in here</string>
     <string name="hint_email">Email</string>
     <string name="hint_search_user">Search user…</string>
     <string name="home">Home</string>
     <string name="image_url">Image URL</string>
     <string name="last_name">Last name</string>
-    <string name="list_of_supervised_group">List of supervised group</string>
-    <string name="monitoring_group">Monitoring Group</string>
     <string name="password">Password</string>
     <string name="phone">Phone</string>
     <string name="phone_number">Phone number</string>
     <string name="Fingerprint_authentication">Fingerprint authentication :</string>
     <string name="refresh">Refresh</string>
-    <string name="search_users">Add Users</string>
-    <string name="invite_contacts">Invite From Contact List</string>
-    <string name="invite_phone">Invite By Phone Number</string>
     <string name="sign_up">Sign Up</string>
-    <string name="supervised_group">Supervised Group</string>
     <string name="supervisor_name">supervisor_name</string>
     <string name="user_avatar">User Avatar</string>
     <string name="user_email">user_email</string>
@@ -39,7 +31,6 @@
     <string name="end_date">End Date</string>
     <string name="start_date">Start Date</string>
     <string name="title">Title</string>
-    <string name="location">Location</string>
     <string name="hh_mm">hh:mm</string>
     <string name="select_group">Select Group</string>
     <string name="users_icon">users_icon</string>
@@ -116,12 +107,11 @@
     <string name="enter_your_choice_yes_or_no">Enter your choice, YES or NO</string>
     <string name="fingerprint_authentication">Fingerprint authentication</string>
     <string name="authentication_message">authentication_message</string>
-    <string name="go_to_home_page">go to home page</string>
+    <string name="go_to_home_page">Go to home page</string>
     <string name="start_fingerprint_authentication">start fingerprint authentication</string>
     <string name="authentication_result_message">authentication_result_message</string>
-    <string name="add">add</string>
-    <string name="maybe_later">maybe later</string>
-    <string name="invite_user">invite user</string>
+    <string name="add">ADD</string>
+    <string name="maybe_later">MAYBE LATER</string>
     <string name="i_supervise">I supervise</string>
     <string name="supervising_me">supervising me</string>
     <string name="email">Email</string>
@@ -138,4 +128,10 @@
     <string name="supervisor">Supervisor</string>
     <string name="starts">Starts</string>
     <string name="ends">Ends</string>
+    <string name="search">Search…</string>
+    <string name="description_bigowl_logo">BigOwl Logo</string>
+    <string name="biometric_not_supported">Biometric Not Supported on this phone</string>
+    <string name="not_allowed_error">NOT ALLOWED</string>
+    <string name="failed_auth">Failed authentication</string>
+    <string name="auth_result_error">Error</string>
 </resources>

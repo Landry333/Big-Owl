@@ -25,7 +25,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/logo" />
+                app:srcCompat="@drawable/logo"
+                android:contentDescription="@string/description_bigowl_logo" />
 
             <ProgressBar
                 android:id="@+id/login_progress_bar"
@@ -56,7 +57,8 @@
                 app:layout_constraintHorizontal_bias="0.507"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.457" />
+                app:layout_constraintVertical_bias="0.457"
+                android:autofillHints="emailAddress" />
 
             <EditText
                 android:id="@+id/editTextTextPassword"
@@ -74,7 +76,8 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/editTextTextEmailAddress"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.56" />
+                app:layout_constraintVertical_bias="0.56"
+                android:autofillHints="password" />
 
             <Button
                 android:id="@+id/button"

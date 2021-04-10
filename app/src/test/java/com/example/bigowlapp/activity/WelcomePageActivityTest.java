@@ -14,7 +14,8 @@ import org.robolectric.shadows.ShadowLooper;
 
 import static org.junit.Assert.assertTrue;
 import static org.robolectric.Shadows.shadowOf;
-@Ignore
+
+@Ignore("Failing Test")
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.N_MR1)
 public class WelcomePageActivityTest {
