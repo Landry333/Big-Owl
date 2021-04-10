@@ -207,7 +207,7 @@ public class ScheduleFormFragmentTest {
         Calendar newEndTime = Calendar.getInstance();
         newEndTime.set(2023, Calendar.JUNE, 15);
         // --> do modification
-        editStartDate.perform(click());
+        editEndDate.perform(click());
         onView(withClassName((Matchers.equalTo(DatePicker.class.getName())))).perform(PickerActions.setDate(2023, 6, 15));
         onView(withText("OK")).perform(click());
         fakeSchedule.setEndTime(new Timestamp(newEndTime.getTime()));
@@ -292,7 +292,7 @@ public class ScheduleFormFragmentTest {
         Calendar newEndTime = Calendar.getInstance();
         newEndTime.set(2023, Calendar.JUNE, 15);
         // --> do modification
-        editStartDate.perform(click());
+        editEndDate.perform(click());
         onView(withClassName((Matchers.equalTo(DatePicker.class.getName())))).perform(PickerActions.setDate(2023, 6, 15));
         onView(withText("OK")).perform(click());
         fakeSchedule.setEndTime(new Timestamp(newEndTime.getTime()));
@@ -309,6 +309,11 @@ public class ScheduleFormFragmentTest {
         verify(mockSetScheduleViewModel).updateScheduleEndTime(newEndTime.getTime());
         fakeSchedule.setEndTime(new Timestamp(newEndTime.getTime()));
         newScheduleData.postValue(fakeSchedule);
+
+        editStartDate.check(matches(hasTextColor(R.color.error)));
+        editStartTime.check(matches(hasTextColor(R.color.error)));
+
+        confirmSetSchedule.perform(click());
 
         editStartDate.check(matches(hasTextColor(R.color.error)));
         editStartTime.check(matches(hasTextColor(R.color.error)));

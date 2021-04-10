@@ -263,10 +263,6 @@ public class ScheduleFormFragment extends Fragment
 
             boolean hasError = false;
 
-            if (scheduleToAdd == null) {
-                hasError = true;
-            }
-
             if (scheduleToAdd.getTitle().trim().isEmpty()) {
                 editTitle.setError("Please enter title.");
                 hasError = true;
