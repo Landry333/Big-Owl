@@ -20,7 +20,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="51dp"
-        android:layout_marginBottom="20dp"
         android:orientation="vertical"
         android:textColor="@color/black">
 
@@ -43,7 +42,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="4dp"
                 android:orientation="horizontal">
@@ -52,18 +51,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:maxLines="1"
-                    android:text="@string/group"
+                    android:text="@string/title"
                     android:textColor="@color/colorAccent"
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/text_view_group_uid"
+                    android:id="@+id/text_view_schedule_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 
@@ -94,7 +91,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="4dp"
                 android:orientation="horizontal">
@@ -103,18 +100,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:maxLines="1"
-                    android:text="@string/title"
+                    android:text="@string/group"
                     android:textColor="@color/colorAccent"
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/text_view_schedule_title"
+                    android:id="@+id/text_view_group_uid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 
@@ -145,7 +140,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="4dp"
                 android:orientation="horizontal">
@@ -154,7 +149,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:maxLines="1"
                     android:text="@string/supervisor"
                     android:textColor="@color/colorAccent"
                     android:textSize="20sp" />
@@ -165,7 +159,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 
@@ -195,7 +188,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="4dp"
                 android:orientation="horizontal">
@@ -204,7 +197,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:maxLines="1"
                     android:text="@string/starts"
                     android:textColor="@color/colorAccent"
                     android:textSize="20sp" />
@@ -215,7 +207,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 
@@ -245,7 +236,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="4dp"
                 android:orientation="horizontal">
@@ -254,7 +245,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:maxLines="1"
                     android:text="@string/ends"
                     android:textColor="@color/colorAccent"
                     android:textSize="20sp" />
@@ -265,7 +255,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:maxLines="1"
+                    android:maxLines="2"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 
@@ -323,11 +313,6 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/lightGray" />
-
     </LinearLayout>
 
     <View
@@ -344,58 +329,68 @@
         android:layout_below="@+id/view_divider_below_schedule"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
+        android:padding="8dp"
         android:orientation="vertical"
-        android:textColor="@color/black"
-        android:textSize="36sp"
-        android:visibility="gone">
+        android:textColor="@color/colorAccent"
+        android:textSize="36sp">
 
         <LinearLayout
             android:id="@+id/linear_layout_member_schedule_response"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:contentDescription="@string/users_icon"
+                android:src="@drawable/ic_notification_i"
+                app:tint="#ffcc39" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/you_last" />
-
-                <TextView
-                    android:id="@+id/text_view_schedule_user_response_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="4dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/this_schedule_on" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/text_view_schedule_user_response_time"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:layout_marginEnd="4dp"
+                        android:text="@string/you_last" />
+
+                    <TextView
+                        android:id="@+id/text_view_schedule_user_response_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="4dp"
+                        android:text="@string/this_schedule_on" />
+
+                </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/text_view_schedule_user_response_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -405,37 +400,53 @@
             android:id="@+id/layout_member_attendance_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/your_attendance_result" />
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:contentDescription="@string/users_icon"
+                android:src="@drawable/ic_notification_i"
+                app:tint="#ffcc39" />
 
-            <TextView
-                android:id="@+id/text_view_schedule_member_attendance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_marginStart="4dp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/your_attendance_result" />
+
+                <TextView
+                    android:id="@+id/text_view_schedule_member_attendance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
 
     <View
-        android:id="@+id/line_below_response"
+        android:id="@+id/line_below_system_response"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/linear_layout_system_response"
-        android:background="@color/colorAccent"
-        android:visibility="gone" />
+        android:background="@color/colorAccent" />
 
     <LinearLayout
-        android:layout_below="@+id/line_below_response"
+        android:layout_below="@+id/line_below_system_response"
         android:gravity="center"
-        android:padding="20dp"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_height="wrap_content">
@@ -445,8 +456,7 @@
             android:background="@drawable/rounded_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
-            android:layout_marginEnd="20dp"
+            android:layout_margin="20dp"
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
             android:text="@string/reject"
@@ -460,14 +470,13 @@
             android:background="@drawable/rounded_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
-            android:layout_marginStart="20dp"
+            android:layout_margin="20dp"
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
             android:text="@string/accept"
             android:textSize="18sp"
             android:textColor="@color/white"
-            android:backgroundTint="@android:color/holo_green_light"
+            android:backgroundTint="#5cdb5c"
             tools:ignore="ButtonStyle" />
 
     </LinearLayout>
