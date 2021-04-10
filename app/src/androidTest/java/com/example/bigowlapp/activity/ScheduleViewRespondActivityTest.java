@@ -177,14 +177,14 @@ public class ScheduleViewRespondActivityTest {
         // accept schedule
         when(mockScheduleViewRespondViewModel.getCurrentUserNewResponse()).thenReturn(new UserScheduleResponse(Response.ACCEPT, timeNow));
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.ACCEPT, timeNow));
-        onData(allOf(withId(R.id.button_accept), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());
+        onView(allOf(withId(R.id.button_accept), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());
         verify(mockScheduleViewRespondViewModel, times(1)).isOneMinuteAfterLastResponse();
         verify(mockScheduleViewRespondViewModel, times(1)).respondSchedule(testSchedule.getUid(), Response.ACCEPT);
         verify(mockScheduleViewRespondViewModel, times(1)).notifySupervisorScheduleResponse();
 
         when(mockScheduleViewRespondViewModel.getCurrentUserNewResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, timeNow));
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, timeNow));
-        onData(allOf(withId(R.id.button_reject), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());
+        onView(allOf(withId(R.id.button_reject), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());
         verify(mockScheduleViewRespondViewModel, times(2)).notifySupervisorScheduleResponse();
     }
 
@@ -194,6 +194,6 @@ public class ScheduleViewRespondActivityTest {
         testSchedule.setEndTime(new Timestamp(timeNow.getSeconds() - 2 * ONE_HOUR_SECONDS, 0));
         testScheduleData.postValue(testSchedule);
 
-        onData(allOf(withId(R.id.text_view_schedule_member_attendance), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(withText("NO RESPONSE")));
+        onView(allOf(withId(R.id.text_view_schedule_member_attendance), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(withText("NO RESPONSE")));
     }
 }
