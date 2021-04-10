@@ -96,9 +96,22 @@ public class NotificationListFragmentTest {
 
     @Test
     public void clickingScheduleNotifGoesToScheduleViewRespondActivity() {
-        // TODO: complete
         onView(withText(Notification.Type.SCHEDULE_NOTIFICATION.title)).perform(click());
         onView(withId(R.id.title_group_name)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void clickingScheduleNotifDoesNothingIfSupervisorNotFound() {
+        when(mockViewModel.getSenderUserData(anyString())).thenReturn(new LiveDataWithStatus<>(null));
+
+        onView(withText(Notification.Type.SCHEDULE_NOTIFICATION.title)).perform(click());
+        onView(withId(R.id.notification_recyclerview_title)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void noNotificationsDoesNotCauseCrash() {
+        userNotificationListData.postValue(null);
+        onView(withId(R.id.notification_recyclerview_title)).check(matches(isDisplayed()));
     }
 
     private List<Notification> getNotificationList() {
