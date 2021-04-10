@@ -3,7 +3,6 @@ package com.example.bigowlapp.view_model;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.AuthRepository;
 import com.example.bigowlapp.repository.GroupRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.UserRepository;
@@ -32,9 +31,6 @@ public class MonitoringGroupPageViewModelTest {
     @Mock
     private GroupRepository groupRepositoryMock;
 
-    @Mock
-    private AuthRepository authRepositoryMock;
-
     private MonitoringGroupPageViewModel monitoringGroupPageViewModel;
 
     private String userUid = "UserUid";
@@ -45,7 +41,6 @@ public class MonitoringGroupPageViewModelTest {
         monitoringGroupPageViewModel = new MonitoringGroupPageViewModel();
         monitoringGroupPageViewModel.setRepositoryFacade(repositoryFacadeMock);
         when(repositoryFacadeMock.getGroupRepository()).thenReturn(groupRepositoryMock);
-        when(repositoryFacadeMock.getAuthRepository()).thenReturn(authRepositoryMock);
         when(repositoryFacadeMock.getUserRepository()).thenReturn(userRepositoryMock);
         when(repositoryFacadeMock.getCurrentUserUid()).thenReturn(userUid);
     }
