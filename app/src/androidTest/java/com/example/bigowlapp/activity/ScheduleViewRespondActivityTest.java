@@ -175,7 +175,7 @@ public class ScheduleViewRespondActivityTest {
     }
 
     @Test
-    public void respondScheduledScheduleTest() {
+    public void acceptScheduledScheduleTest() {
         // accept schedule
         when(mockScheduleViewRespondViewModel.getCurrentUserNewResponse()).thenReturn(new UserScheduleResponse(Response.ACCEPT, timeNow));
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.ACCEPT, timeNow));
@@ -183,14 +183,16 @@ public class ScheduleViewRespondActivityTest {
         verify(mockScheduleViewRespondViewModel, atMost(1)).isOneMinuteAfterLastResponse();
         verify(mockScheduleViewRespondViewModel, atMostOnce()).respondSchedule(testSchedule.getUid(), Response.ACCEPT);
         verify(mockScheduleViewRespondViewModel, atMost(1)).notifySupervisorScheduleResponse();
+    }
 
+    @Test
+    public void rejectScheduledScheduleTest() {
         when(mockScheduleViewRespondViewModel.getCurrentUserNewResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, timeNow));
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, timeNow));
         onView(withId(R.id.button_reject)).perform(click());
-        verify(mockScheduleViewRespondViewModel, atMost(2)).isOneMinuteAfterLastResponse();
+        verify(mockScheduleViewRespondViewModel, atMost(1)).isOneMinuteAfterLastResponse();
         verify(mockScheduleViewRespondViewModel, atMostOnce()).respondSchedule(testSchedule.getUid(), Response.REJECT);
-        verify(mockScheduleViewRespondViewModel, atMost(2)).notifySupervisorScheduleResponse();
-
+        verify(mockScheduleViewRespondViewModel, atMost(1)).notifySupervisorScheduleResponse();
     }
 
     @Test
