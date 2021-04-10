@@ -64,9 +64,6 @@ public class ScheduleViewRespondActivityTest {
     private ScheduleViewRespondViewModel mockScheduleViewRespondViewModel;
 
     @Mock
-    private AuthRepository mockAuthRepository;
-
-    @Mock
     private NotificationRepository mockNotificationRepository;
 
     @Mock
@@ -79,7 +76,9 @@ public class ScheduleViewRespondActivityTest {
     private final Timestamp timeNow = Timestamp.now();
     private final String CONCORDIA_ADDRESS = "1571 Rue Mackay, Montréal, QC H3G 2H6, Canada";
     private final static int ONE_HOUR_SECONDS = 3600;
-    private MutableLiveData<Schedule> testScheduleData = new MutableLiveData<>();
+    private MutableLiveData<Schedule> testScheduleData;
+    private User testCurrentUser;
+    private Map<String, UserScheduleResponse> testScheduleMembersMap;
 
     @Before
     public void setUp() {
@@ -93,7 +92,7 @@ public class ScheduleViewRespondActivityTest {
                 "testSupervisor@mail.com",
                 null,
                 null);
-        User testCurrentUser = new User(
+        testCurrentUser = new User(
                 "testCurrentUser001",
                 "test",
                 "currentUser",
@@ -102,7 +101,7 @@ public class ScheduleViewRespondActivityTest {
                 null,
                 null);
 
-        Map<String, UserScheduleResponse> testScheduleMembersMap = new HashMap<>();
+        testScheduleMembersMap = new HashMap<>();
         testScheduleMembersMap.put(testCurrentUser.getUid(),
                 new UserScheduleResponse(Response.NEUTRAL, null));
         testSchedule = new Schedule();
@@ -119,25 +118,24 @@ public class ScheduleViewRespondActivityTest {
         testIntent.putExtra("scheduleUid", testSchedule.getUid());
         testIntent.putExtra("groupName", "test group");
         testIntent.putExtra("supervisorName", testSupervisor.getFullName());
+        testScheduleData = new MutableLiveData<>();
         testScheduleData.postValue(testSchedule);
 
         when(testFirebaseCurrentUser.getUid()).thenReturn(testCurrentUser.getUid());
-        when(mockAuthRepository.getCurrentUser()).thenReturn(testFirebaseCurrentUser);
-        when(mockAuthRepository.getCurrentUser().getUid()).thenReturn(testCurrentUser.getUid());
         when(mockNotificationRepository.addDocument(any())).thenReturn(null);
         when(mockScheduleViewRespondViewModel.isCurrentUserSet()).thenReturn(true);
+        when(mockScheduleViewRespondViewModel.getCurrentUserUid()).thenReturn(testCurrentUser.getUid());
         when(mockScheduleViewRespondViewModel.getCurrentScheduleData(testSchedule.getUid())).thenReturn(testScheduleData);
         when(mockScheduleViewRespondViewModel.isCurrentUserInSchedule()).thenReturn(true);
         when(mockScheduleViewRespondViewModel.isOneMinuteAfterLastResponse()).thenReturn(true);
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(testSchedule.getUserScheduleResponseMap().get(testCurrentUser.getUid()));
         doNothing().when(mockScheduleViewRespondViewModel).notifySupervisorScheduleResponse();
         doAnswer(a -> {
-            testScheduleMembersMap.put(testCurrentUser.getUid(), mockScheduleViewRespondViewModel.getCurrentUserNewResponse());
-            testSchedule.setUserScheduleResponseMap(testScheduleMembersMap);
+            testSchedule.getUserScheduleResponseMap().put(
+                    testCurrentUser.getUid(), mockScheduleViewRespondViewModel.getCurrentUserNewResponse());
             mockScheduleViewRespondViewModel.notifySupervisorScheduleResponse();
 
             testScheduleData.postValue(testSchedule);
-            when(mockScheduleViewRespondViewModel.getCurrentScheduleData(testSchedule.getUid())).thenReturn(testScheduleData);
             return null;
         }).when(mockScheduleViewRespondViewModel).respondSchedule(any(), any());
         when(mockGeoLocationFormatter.formatLocation(any(Context.class), any(GeoPoint.class))).thenReturn(CONCORDIA_ADDRESS);
@@ -168,8 +166,6 @@ public class ScheduleViewRespondActivityTest {
         onView(withId(R.id.line_below_system_response)).check(matches(not(isDisplayed())));
         verify(mockScheduleViewRespondViewModel, times(1)).getUserScheduleResponse();
         onView(withId(R.id.button_accept)).check(matches(isDisplayed()));
-
-        SystemClock.sleep(5000);
         onView(withId(R.id.button_reject)).check(matches(isDisplayed()));
     }
 
@@ -196,5 +192,17 @@ public class ScheduleViewRespondActivityTest {
         onView(withId(R.id.linear_layout_system_response)).check(matches(isDisplayed()));
         onView(withId(R.id.button_accept)).check(matches(isDisplayed()));
         onView(withId(R.id.button_reject)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void completedScheduleNoResponseTest() {
+        // completed
+        testSchedule.setStartTime(new Timestamp(timeNow.getSeconds() - 3 * ONE_HOUR_SECONDS, 0));
+        testSchedule.setEndTime(new Timestamp(timeNow.getSeconds() - 2 * ONE_HOUR_SECONDS, 0));
+        testScheduleData.postValue(testSchedule);
+
+        onView(withId(R.id.linear_layout_system_response)).check(matches(isDisplayed()));
+        onView(withId(R.id.linear_layout_member_schedule_response)).check(matches(not(isDisplayed())));
+        onView(allOf(withId(R.id.text_view_schedule_member_attendance), withText("NO RESPONSE"))).check(matches(isDisplayed()));
     }
 }
