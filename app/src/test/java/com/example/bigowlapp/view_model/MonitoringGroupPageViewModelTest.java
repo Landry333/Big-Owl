@@ -98,7 +98,6 @@ public class MonitoringGroupPageViewModelTest {
         String lastName = "Doe";
 
         User user = new User();
-        ;
         user.setUid(uid);
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);

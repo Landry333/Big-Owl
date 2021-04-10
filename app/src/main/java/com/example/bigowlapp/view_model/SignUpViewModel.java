@@ -9,7 +9,6 @@ import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Notification;
 import com.example.bigowlapp.model.SmsInvitationRequest;
 import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.utils.NotificationListenerManager;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -112,10 +111,5 @@ public class SignUpViewModel extends BaseViewModel {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setInvitationListener(NotificationListenerManager invitationListener) {
         this.invitationListener = invitationListener;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public void setRepositoryFacade(RepositoryFacade repositoryFacade) {
-        this.repositoryFacade = repositoryFacade;
     }
 }
