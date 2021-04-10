@@ -11,19 +11,19 @@ import java.util.List;
 
 public class NotificationActivityViewModel extends BaseViewModel {
 
-    LiveDataWithStatus<List<Notification>> userNotificationsData;
+    LiveDataWithStatus<List<Notification>> userNotificationListData;
 
     public LiveData<List<Notification>> getUserNotifications() {
-        if (userNotificationsData == null) {
-            userNotificationsData = new LiveDataWithStatus<>();
+        if (userNotificationListData == null) {
+            userNotificationListData = new LiveDataWithStatus<>();
             loadUserNotifications();
         }
 
-        return userNotificationsData;
+        return userNotificationListData;
     }
 
-    public LiveDataWithStatus<User> getUserData(String userUid) {
-        return repositoryFacade.getUserRepository().getDocumentByUid(userUid, User.class);
+    public LiveDataWithStatus<User> getSenderUserData(String senderUid) {
+        return repositoryFacade.getUserRepository().getDocumentByUid(senderUid, User.class);
     }
 
     public void deleteNotification(String notificationUid) {
@@ -48,7 +48,7 @@ public class NotificationActivityViewModel extends BaseViewModel {
     }
 
     private void loadUserNotifications() {
-        userNotificationsData = repositoryFacade.getCurrentUserNotificationRepository()
+        userNotificationListData = repositoryFacade.getCurrentUserNotificationRepository()
                 .getNotificationsByAscendingOrder(Notification.class);
     }
 }

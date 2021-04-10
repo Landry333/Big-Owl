@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -90,7 +91,7 @@ public class NotificationListFragment extends Fragment implements NotificationAd
         if (selectedNotification.getType() == Notification.Type.SCHEDULE_NOTIFICATION) {
             ReceiveScheduleNotification selectedReceiveScheduleNotification = (ReceiveScheduleNotification) selectedNotification;
 
-            notificationActivityViewModel.getUserData(selectedReceiveScheduleNotification.getSenderUid()).observe(this, supervisor -> {
+            notificationActivityViewModel.getSenderUserData(selectedReceiveScheduleNotification.getSenderUid()).observe(this, supervisor -> {
                 if (supervisor == null) {
                     return;
                 }
@@ -102,5 +103,10 @@ public class NotificationListFragment extends Fragment implements NotificationAd
                 startActivity(intent);
             });
         }
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setNotificationActivityViewModel(NotificationActivityViewModel notificationActivityViewModel) {
+        this.notificationActivityViewModel = notificationActivityViewModel;
     }
 }

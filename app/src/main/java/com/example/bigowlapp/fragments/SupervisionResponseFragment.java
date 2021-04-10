@@ -43,8 +43,8 @@ public class SupervisionResponseFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_supervision_response, container, false);
 
-        acceptBtn = view.findViewById(R.id.button_accept);
-        rejectBtn = view.findViewById(R.id.button_reject);
+        acceptBtn = view.findViewById(R.id.button_accept_supervision_req);
+        rejectBtn = view.findViewById(R.id.button_reject_supervision_req);
         groupName = view.findViewById(R.id.text_view_group_name);
         groupSupervisor = view.findViewById(R.id.text_view_group_supervisor_name);
 
@@ -67,7 +67,7 @@ public class SupervisionResponseFragment extends Fragment {
             return;
         }
 
-        notificationActivityViewModel.getUserData(supervisionRequest.getSenderUid()).observe(getActivity(), supervisor ->
+        notificationActivityViewModel.getSenderUserData(supervisionRequest.getSenderUid()).observe(getActivity(), supervisor ->
                 notificationActivityViewModel.getGroupData(supervisor.getUid()).observe(getActivity(), group -> {
                     groupSupervisor.setText(supervisor.getFullName());
                     groupName.setText(group.getName());

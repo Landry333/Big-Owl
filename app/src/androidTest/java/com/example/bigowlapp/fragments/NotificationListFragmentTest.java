@@ -1,9 +1,10 @@
 package com.example.bigowlapp.fragments;
 
-import android.os.SystemClock;
+import android.view.View;
 
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.Lifecycle;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
@@ -16,9 +17,12 @@ import com.example.bigowlapp.model.ReceiveScheduleNotification;
 import com.example.bigowlapp.model.ScheduleRequest;
 import com.example.bigowlapp.model.SmsInvitationRequest;
 import com.example.bigowlapp.model.SupervisionRequest;
+import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.view_model.NotificationActivityViewModel;
 import com.google.firebase.Timestamp;
 
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +31,13 @@ import org.mockito.Mock;
 import java.util.ArrayList;
 import java.util.List;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -35,7 +46,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class NotificationListFragmentTest {
 
     private FragmentScenario<NotificationListFragment> fragmentScenario;
-    private NotificationListFragment notificationListFragment;
 
     @Mock
     private NotificationActivityViewModel mockViewModel;
@@ -57,22 +67,38 @@ public class NotificationListFragmentTest {
         userNotificationListData = new LiveDataWithStatus<>(fakeUserNotificationList);
         when(mockViewModel.getUserNotifications()).thenReturn(userNotificationListData);
 
+        User fakeUser = new User("abc123", "test user", "abc", "+123", "test@mail.com", null, null);
+        when(mockViewModel.getSenderUserData(anyString())).thenReturn(new LiveDataWithStatus<>(fakeUser));
+
         // initialize the fragment with a mocked viewModel
         fragmentScenario = FragmentScenario.launchInContainer(NotificationListFragment.class, null, R.style.AppTheme);
         fragmentScenario.moveToState(Lifecycle.State.CREATED);
         fragmentScenario.onFragment(notificationListFragment -> {
             notificationListFragment.setNotificationActivityViewModel(mockViewModel);
-            this.notificationListFragment = notificationListFragment;
         });
         fragmentScenario.moveToState(Lifecycle.State.RESUMED);
     }
 
     @Test
     public void notificationsListIsViewable() {
-        SystemClock.sleep(3 * 1000);
-        fakeUserNotificationList.get(0).setMessage("This is a realy super duper ultra megar expiaalodouscis messgae for the user to read");
-        userNotificationListData.postValue(fakeUserNotificationList);
-        SystemClock.sleep(10 * 1000);
+        onView(withText(Notification.Type.SUPERVISION_REQUEST.title)).check(matches(isDisplayed()));
+        onView(withText("This is a notif of type: " + Notification.Type.SUPERVISION_REQUEST)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.recyclerview_notifications))
+                .check(matches(withListSize(fakeUserNotificationList.size())));
+    }
+
+    @Test
+    public void clickingSupervisionRequestGoesToSupervisionResponseFragment() {
+        onView(withText(Notification.Type.SUPERVISION_REQUEST.title)).perform(click());
+        onView(withId(R.id.button_accept_supervision_req)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void clickingScheduleNotifGoesToScheduleViewRespondActivity() {
+        // TODO: complete
+        onView(withText(Notification.Type.SCHEDULE_NOTIFICATION.title)).perform(click());
+        onView(withId(R.id.title_group_name)).check(matches(isDisplayed()));
     }
 
     private List<Notification> getNotificationList() {
@@ -84,15 +110,9 @@ public class NotificationListFragmentTest {
         notificationList.add(new ScheduleRequest());
         notificationList.add(new AuthByPhoneNumberFailure());
         notificationList.add(new SmsInvitationRequest());
-        notificationList.add(new ReceiveScheduleNotification());
-
-        notificationList.add(new Notification());
-        notificationList.add(new NullNotification());
-        notificationList.add(new SupervisionRequest());
-        notificationList.add(new ScheduleRequest());
-        notificationList.add(new AuthByPhoneNumberFailure());
-        notificationList.add(new SmsInvitationRequest());
-        notificationList.add(new ReceiveScheduleNotification());
+        ReceiveScheduleNotification receiveScheduleNotification = new ReceiveScheduleNotification();
+        receiveScheduleNotification.setSenderUid("abc123");
+        notificationList.add(receiveScheduleNotification);
 
         for (Notification notification : notificationList) {
             notification.setCreationTime(Timestamp.now());
@@ -100,6 +120,20 @@ public class NotificationListFragmentTest {
         }
 
         return notificationList;
+    }
+
+    public static TypeSafeMatcher<View> withListSize(final int size) {
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public boolean matchesSafely(final View view) {
+                return ((RecyclerView) view).getAdapter().getItemCount() == size;
+            }
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("RecyclerView should have " + size + " items");
+            }
+        };
     }
 
 }

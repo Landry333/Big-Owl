@@ -9,7 +9,7 @@ public class Notification extends Model {
 
     public enum Type {
         NONE(Notification.class, ""),
-        INVALID(NullNotification.class, "Invalid"),
+        INVALID(NullNotification.class, "INVALID"),
         SUPERVISION_REQUEST(SupervisionRequest.class, "Supervise request"),
         SCHEDULE_REQUEST(ScheduleRequest.class, "Schedule request"),
         AUTH_BY_PHONE_NUMBER_FAILURE(AuthByPhoneNumberFailure.class, "Phone number failed"),
