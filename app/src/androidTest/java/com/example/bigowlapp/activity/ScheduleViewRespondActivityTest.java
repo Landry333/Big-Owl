@@ -179,7 +179,7 @@ public class ScheduleViewRespondActivityTest {
         verify(mockScheduleViewRespondViewModel, times(1)).respondSchedule(testSchedule.getUid(), Response.ACCEPT);
         verify(mockScheduleViewRespondViewModel, times(1)).notifySupervisorScheduleResponse();
 
-        onView(withId(R.id.linear_layout_system_response)).check(matches(isDisplayed()));
+        onView(withId(R.id.linear_layout_member_schedule_response)).check(matches(isDisplayed()));
         onView(withId(R.id.button_accept)).check(matches(not(isDisplayed())));
         onView(withId(R.id.button_reject)).check(matches(isDisplayed()));
 
@@ -189,7 +189,7 @@ public class ScheduleViewRespondActivityTest {
         onView(withId(R.id.button_reject)).perform(click());
         verify(mockScheduleViewRespondViewModel, times(2)).notifySupervisorScheduleResponse();
 
-        onView(withId(R.id.linear_layout_system_response)).check(matches(isDisplayed()));
+        onView(withId(R.id.linear_layout_member_schedule_response)).check(matches(isDisplayed()));
         onView(withId(R.id.button_accept)).check(matches(isDisplayed()));
         onView(withId(R.id.button_reject)).check(matches(not(isDisplayed())));
     }
@@ -200,6 +200,8 @@ public class ScheduleViewRespondActivityTest {
         testSchedule.setStartTime(new Timestamp(timeNow.getSeconds() - 3 * ONE_HOUR_SECONDS, 0));
         testSchedule.setEndTime(new Timestamp(timeNow.getSeconds() - 2 * ONE_HOUR_SECONDS, 0));
         testScheduleData.postValue(testSchedule);
+
+        SystemClock.sleep(5000);
 
         onView(withId(R.id.linear_layout_system_response)).check(matches(isDisplayed()));
         onView(withId(R.id.linear_layout_member_schedule_response)).check(matches(not(isDisplayed())));

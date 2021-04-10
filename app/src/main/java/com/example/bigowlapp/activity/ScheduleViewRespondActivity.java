@@ -91,6 +91,7 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
             }
             if (schedule.scheduleCurrentState() != Schedule.Status.SCHEDULED) {
                 findViewById(R.id.linear_layout_system_response).setVisibility(View.VISIBLE);
+                findViewById(R.id.layout_member_attendance_result).setVisibility(View.VISIBLE);
                 Map<String, Object> map = schedule.scheduleMemberResponseAttendanceMap(scheduleViewRespondViewModel.getCurrentUserUid());
                 ((TextView) findViewById(R.id.text_view_schedule_member_attendance))
                         .setText((String) map.get("responseText"));
