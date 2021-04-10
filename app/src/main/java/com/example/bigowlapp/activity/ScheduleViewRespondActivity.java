@@ -50,6 +50,8 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
         if (scheduleViewRespondViewModel == null) {
             scheduleViewRespondViewModel = new ViewModelProvider(this).get(ScheduleViewRespondViewModel.class);
         }
+        if (geoLocationFormatter == null)
+            geoLocationFormatter = new GeoLocationFormatter();
 
         subscribeToData();
     }
@@ -69,9 +71,6 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
             ((TextView) findViewById(R.id.text_view_group_supervisor_name)).setText(supervisorName);
             ((TextView) findViewById(R.id.text_view_schedule_start_time)).setText(formatTime(schedule.getStartTime().toDate()));
             ((TextView) findViewById(R.id.text_view_schedule_end_time)).setText(formatTime(schedule.getEndTime().toDate()));
-
-            if (geoLocationFormatter == null)
-                geoLocationFormatter = new GeoLocationFormatter();
 
             ((TextView) findViewById(R.id.text_view_schedule_location)).setText(geoLocationFormatter.formatLocation(this, schedule.getLocation()));
 
@@ -102,16 +101,14 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
                 findViewById(R.id.layout_member_attendance_result).setVisibility(View.GONE);
                 setResponseButtonsVisibility(userScheduleResponse.getResponse());
             }
-        });
 
-        Button btnAccept = findViewById(R.id.button_accept);
-        btnAccept.setOnClickListener(v -> {
-            requestLocationPermissions();
-            userClickRespondButton(Response.ACCEPT);
-        });
+            findViewById(R.id.button_accept).setOnClickListener(v -> {
+                requestLocationPermissions();
+                userClickRespondButton(Response.ACCEPT);
+            });
 
-        Button btnReject = findViewById(R.id.button_reject);
-        btnReject.setOnClickListener(v -> userClickRespondButton(Response.REJECT));
+            findViewById(R.id.button_reject).setOnClickListener(v -> userClickRespondButton(Response.REJECT));
+        });
     }
 
     private String formatTime(Date time) {
