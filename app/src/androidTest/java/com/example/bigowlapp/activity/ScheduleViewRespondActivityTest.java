@@ -32,14 +32,17 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -174,14 +177,14 @@ public class ScheduleViewRespondActivityTest {
         // accept schedule
         when(mockScheduleViewRespondViewModel.getCurrentUserNewResponse()).thenReturn(new UserScheduleResponse(Response.ACCEPT, timeNow));
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.ACCEPT, timeNow));
-        onView(withId(R.id.button_accept)).perform(click());
+        onData(allOf(withId(R.id.button_accept), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());
         verify(mockScheduleViewRespondViewModel, times(1)).isOneMinuteAfterLastResponse();
         verify(mockScheduleViewRespondViewModel, times(1)).respondSchedule(testSchedule.getUid(), Response.ACCEPT);
         verify(mockScheduleViewRespondViewModel, times(1)).notifySupervisorScheduleResponse();
 
         when(mockScheduleViewRespondViewModel.getCurrentUserNewResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, timeNow));
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, timeNow));
-        onView(withId(R.id.button_reject)).perform(click());
+        onData(allOf(withId(R.id.button_reject), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());
         verify(mockScheduleViewRespondViewModel, times(2)).notifySupervisorScheduleResponse();
     }
 
@@ -191,6 +194,6 @@ public class ScheduleViewRespondActivityTest {
         testSchedule.setEndTime(new Timestamp(timeNow.getSeconds() - 2 * ONE_HOUR_SECONDS, 0));
         testScheduleData.postValue(testSchedule);
 
-        onView(withId(R.id.text_view_schedule_member_attendance)).check(matches(withText("NO RESPONSE")));
+        onData(allOf(withId(R.id.text_view_schedule_member_attendance), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(withText("NO RESPONSE")));
     }
 }
