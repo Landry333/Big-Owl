@@ -93,14 +93,14 @@ public class SignUpViewModelTest {
         Group group = createDefaultGroup();
 
         when(repositoryFacadeMock.getUserRepository()).thenReturn(userRepositoryMock);
-        when(repositoryFacadeMock.getCurrentUserUid()).thenReturn(uid);
+//        when(repositoryFacadeMock.getCurrentUserUid()).thenReturn(uid);
         when(userRepositoryMock.isPhoneNumberInDatabase(phoneNumber))
                 .thenReturn(Tasks.forResult(null));
-        when(repositoryFacadeMock.getAuthRepository()).thenReturn(authRepositoryMock);
-        when(authRepositoryMock.signUpUser(email, password)).thenReturn(Tasks.forResult(null));
-        when(userRepositoryMock.addDocument(uid, user)).thenReturn(null);
-        when(repositoryFacadeMock.getGroupRepository()).thenReturn(groupRepositoryMock);
-        when(groupRepositoryMock.addDocument(group)).thenReturn(null);
+//        when(repositoryFacadeMock.getAuthRepository()).thenReturn(authRepositoryMock);
+//        when(authRepositoryMock.signUpUser(email, password)).thenReturn(Tasks.forResult(null));
+//        when(userRepositoryMock.addDocument(uid, user)).thenReturn(null);
+//        when(repositoryFacadeMock.getGroupRepository()).thenReturn(groupRepositoryMock);
+//        when(groupRepositoryMock.addDocument(group)).thenReturn(null);
 
 
         signUpViewModel.createUser(email, password, phoneNumber, firstName, lastName);
@@ -174,7 +174,7 @@ public class SignUpViewModelTest {
         newNotification.setMessage("User with phone number: " + phoneNumber + " is registered.");
 
         when(repositoryFacadeMock.getNotificationRepository(senderUid)).thenReturn(notificationRepositoryMock);
-        when(notificationRepositoryMock.addDocument(newNotification)).thenReturn(new LiveDataWithStatus<>(newNotification));
+//        when(notificationRepositoryMock.addDocument(newNotification)).thenReturn(new LiveDataWithStatus<>(newNotification));
 
         signUpViewModel.createNotificationObject(senderUid, phoneNumber);
 
