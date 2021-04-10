@@ -1,10 +1,14 @@
 package com.example.bigowlapp.repository;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.model.UserScheduleResponse;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -16,6 +20,11 @@ public class ScheduleRepository extends Repository<Schedule> {
 
     public ScheduleRepository() {
         super(ScheduleRepository.COLLECTION_NAME);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public ScheduleRepository(FirebaseFirestore db, CollectionReference collectionReference) {
+        super(db, collectionReference);
     }
 
     public Task<Void> updateScheduleMemberResponse(String scheduleId, String userUid, UserScheduleResponse currentUserScheduleResponse) {

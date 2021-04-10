@@ -28,6 +28,11 @@ public abstract class Repository<T extends Model> {
         collectionReference = mFirebaseFirestore.collection(collectionName);
     }
 
+    protected Repository(FirebaseFirestore mFirebaseFirestore, CollectionReference collectionReference) {
+        this.mFirebaseFirestore = mFirebaseFirestore;
+        this.collectionReference = collectionReference;
+    }
+
     public ListenerRegistration listenToCollection(EventListener<QuerySnapshot> listener) {
         return collectionReference.addSnapshotListener(listener);
     }
@@ -188,7 +193,7 @@ public abstract class Repository<T extends Model> {
         return listOfT;
     }
 
-    protected  <X extends T> void resolveTaskWithListResult(Task<QuerySnapshot> task, LiveDataWithStatus<List<X>> listOfTData, Class<X> tClass) {
+    protected <X extends T> void resolveTaskWithListResult(Task<QuerySnapshot> task, LiveDataWithStatus<List<X>> listOfTData, Class<X> tClass) {
         if (task.isSuccessful()) {
             QuerySnapshot tDocs = task.getResult();
             if (tDocs != null && !tDocs.isEmpty()) {
