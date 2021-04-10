@@ -51,6 +51,11 @@ public class NotificationListFragment extends Fragment implements NotificationAd
     public void onStart() {
         super.onStart();
         repositoryFacade = RepositoryFacade.getInstance();
+
+        if (repositoryFacade.getAuthRepository().getCurrentUser() == null) {
+            return;
+        }
+
         notificationListData = repositoryFacade.getCurrentUserNotificationRepository()
                 .getNotificationsByAscendingOrder(Notification.class);
 
