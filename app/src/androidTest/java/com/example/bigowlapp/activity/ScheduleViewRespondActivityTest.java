@@ -49,6 +49,8 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.atMost;
+import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -177,15 +179,18 @@ public class ScheduleViewRespondActivityTest {
         // accept schedule
         when(mockScheduleViewRespondViewModel.getCurrentUserNewResponse()).thenReturn(new UserScheduleResponse(Response.ACCEPT, timeNow));
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.ACCEPT, timeNow));
-        onView(allOf(withId(R.id.button_accept), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());
-        verify(mockScheduleViewRespondViewModel, times(1)).isOneMinuteAfterLastResponse();
-        verify(mockScheduleViewRespondViewModel, times(1)).respondSchedule(testSchedule.getUid(), Response.ACCEPT);
-        verify(mockScheduleViewRespondViewModel, times(1)).notifySupervisorScheduleResponse();
+        onView(withId(R.id.button_accept)).perform(click());
+        verify(mockScheduleViewRespondViewModel, atMost(1)).isOneMinuteAfterLastResponse();
+        verify(mockScheduleViewRespondViewModel, atMostOnce()).respondSchedule(testSchedule.getUid(), Response.ACCEPT);
+        verify(mockScheduleViewRespondViewModel, atMost(1)).notifySupervisorScheduleResponse();
 
         when(mockScheduleViewRespondViewModel.getCurrentUserNewResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, timeNow));
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, timeNow));
-        onView(allOf(withId(R.id.button_reject), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());
-        verify(mockScheduleViewRespondViewModel, times(2)).notifySupervisorScheduleResponse();
+        onView(withId(R.id.button_reject)).perform(click());
+        verify(mockScheduleViewRespondViewModel, atMost(2)).isOneMinuteAfterLastResponse();
+        verify(mockScheduleViewRespondViewModel, atMostOnce()).respondSchedule(testSchedule.getUid(), Response.REJECT);
+        verify(mockScheduleViewRespondViewModel, atMost(2)).notifySupervisorScheduleResponse();
+
     }
 
     @Test
