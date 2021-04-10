@@ -174,27 +174,19 @@ public class ScheduleViewRespondActivityTest {
         // accept schedule
         when(mockScheduleViewRespondViewModel.getCurrentUserNewResponse()).thenReturn(new UserScheduleResponse(Response.ACCEPT, timeNow));
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.ACCEPT, timeNow));
-        onView(withId(R.id.button_accept)).perform(click());
+        onView(withId(R.id.button_accept)).perform(click()).check(matches(isDisplayed()));;
         verify(mockScheduleViewRespondViewModel, times(1)).isOneMinuteAfterLastResponse();
         verify(mockScheduleViewRespondViewModel, times(1)).respondSchedule(testSchedule.getUid(), Response.ACCEPT);
         verify(mockScheduleViewRespondViewModel, times(1)).notifySupervisorScheduleResponse();
 
-        onView(withId(R.id.button_accept)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.button_reject)).check(matches(isDisplayed()));
-
-        // reject schedule
         when(mockScheduleViewRespondViewModel.getCurrentUserNewResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, timeNow));
         when(mockScheduleViewRespondViewModel.getUserScheduleResponse()).thenReturn(new UserScheduleResponse(Response.REJECT, timeNow));
-        onView(withId(R.id.button_reject)).perform(click());
+        onView(withId(R.id.button_reject)).perform(click()).check(matches(isDisplayed()));;
         verify(mockScheduleViewRespondViewModel, times(2)).notifySupervisorScheduleResponse();
-
-        onView(withId(R.id.button_accept)).check(matches(isDisplayed()));
-        onView(withId(R.id.button_reject)).check(matches(not(isDisplayed())));
     }
 
     @Test
     public void completedScheduleNoResponseTest() {
-        // completed
         testSchedule.setStartTime(new Timestamp(timeNow.getSeconds() - 3 * ONE_HOUR_SECONDS, 0));
         testSchedule.setEndTime(new Timestamp(timeNow.getSeconds() - 2 * ONE_HOUR_SECONDS, 0));
         testScheduleData.postValue(testSchedule);
