@@ -1,10 +1,12 @@
 package com.example.bigowlapp.view_model;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.User;
+import com.example.bigowlapp.repository.RepositoryFacade;
 
 import java.util.List;
 import java.util.Objects;
@@ -55,5 +57,10 @@ public class MonitoringGroupPageViewModel extends BaseViewModel {
                 .updateDocument(groupWithRemovedUser.getUid(), groupWithRemovedUser);
         repositoryFacade.getUserRepository()
                 .updateDocument(userToBeRemoved.getUid(), userToBeRemoved);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setRepositoryFacade(RepositoryFacade repositoryFacade) {
+        this.repositoryFacade = repositoryFacade;
     }
 }
