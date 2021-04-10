@@ -28,9 +28,9 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -73,78 +73,89 @@ public class SignUpViewModelTest {
     @Captor
     private ArgumentCaptor<Notification> captorNotification;
 
+    @Captor
+    private ArgumentCaptor<User> captorUser;
+
+    @Captor
+    private ArgumentCaptor<Group> captorGroup;
+
+    private String uid;
+    private String email;
+    private String password;
+    private String phoneNumber;
+    private String firstName;
+    private String lastName;
+
     @Before
     public void setUp() {
         signUpViewModel = new SignUpViewModel();
         signUpViewModel.setInvitationListener(notificationManagerMock);
         signUpViewModel.setRepositoryFacade(repositoryFacadeMock);
+
+        uid = "uid";
+        email = "abc@email.com";
+        password = "123456";
+        phoneNumber = "+1-555-521-5554";
+        firstName = "Joe";
+        lastName = "Doe";
     }
 
     @Test
     public void createUser() {
-        String uid = "uid";
-        String email = "abc@email.com";
-        String password = "123456";
-        String phoneNumber = "+1-555-521-5554";
-        String firstName = "Joe";
-        String lastName = "Doe";
-
-        User user = createDefaultUser();
-        Group group = createDefaultGroup();
-
         when(repositoryFacadeMock.getUserRepository()).thenReturn(userRepositoryMock);
-//        when(repositoryFacadeMock.getCurrentUserUid()).thenReturn(uid);
         when(userRepositoryMock.isPhoneNumberInDatabase(phoneNumber))
                 .thenReturn(Tasks.forResult(null));
-//        when(repositoryFacadeMock.getAuthRepository()).thenReturn(authRepositoryMock);
-//        when(authRepositoryMock.signUpUser(email, password)).thenReturn(Tasks.forResult(null));
-//        when(userRepositoryMock.addDocument(uid, user)).thenReturn(null);
-//        when(repositoryFacadeMock.getGroupRepository()).thenReturn(groupRepositoryMock);
-//        when(groupRepositoryMock.addDocument(group)).thenReturn(null);
-
-
         signUpViewModel.createUser(email, password, phoneNumber, firstName, lastName);
+        verify(repositoryFacadeMock).getUserRepository();
+        verify(userRepositoryMock).isPhoneNumberInDatabase(phoneNumber);
     }
 
-    private Group createDefaultGroup() {
-        String uid = "uid";
-        String firstName = "Joe";
-        String lastName = "Doe";
-        Group group = new Group();
-        group.setSupervisorId(uid);
-        group.setName(firstName + " " + lastName + "'s group");
-        return group;
+    @Test
+    public void signUpInAuthRepo() {
+        when(repositoryFacadeMock.getAuthRepository()).thenReturn(authRepositoryMock);
+        when(authRepositoryMock.signUpUser(email, password)).thenReturn(Tasks.forResult(null));
+        signUpViewModel.signUpUserInAuthRepo(email, password);
+        verify(repositoryFacadeMock).getAuthRepository();
+        verify(authRepositoryMock).signUpUser(email, password);
     }
 
-    private User createDefaultUser() {
-        String uid = "uid";
-        String email = "abc@email.com";
-        String phoneNumber = "+1-555-521-5554";
-        String firstName = "Joe";
-        String lastName = "Doe";
+    @Test
+    public void createUserEntry() {
+        when(repositoryFacadeMock.getUserRepository()).thenReturn(userRepositoryMock);
+        when(repositoryFacadeMock.getCurrentUserUid()).thenReturn(uid);
+        signUpViewModel.createUserEntry(email, phoneNumber, firstName, lastName);
+        verify(userRepositoryMock).addDocument(anyString(), captorUser.capture());
 
-        User user = new User();;
-        user.setUid(uid);
-        user.setEmail(email);
-        user.setPhoneNumber(phoneNumber);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setMemberGroupIdList(new ArrayList<>());
-        user.setProfileImage("");
-        return user;
+        User userCaptureValue = captorUser.getValue();
+
+        Assert.assertEquals(uid, userCaptureValue.getUid());
+        Assert.assertEquals(email, userCaptureValue.getEmail());
+        Assert.assertEquals(phoneNumber, userCaptureValue.getPhoneNumber());
+        Assert.assertEquals(firstName, userCaptureValue.getFirstName());
+        Assert.assertEquals(lastName, userCaptureValue.getLastName());
+    }
+
+    @Test
+    public void createGroupEntry() {
+        when(repositoryFacadeMock.getGroupRepository()).thenReturn(groupRepositoryMock);
+        when(repositoryFacadeMock.getCurrentUserUid()).thenReturn(uid);
+        signUpViewModel.createGroupEntry(firstName, lastName);
+        verify(groupRepositoryMock).addDocument(captorGroup.capture());
+
+        Group group = captorGroup.getValue();
+
+        Assert.assertEquals(firstName + " " + lastName + "'s group", group.getName());
+        Assert.assertEquals(uid, group.getSupervisorId());
     }
 
     @Test
     public void getFullName() {
-        String firstName = "John";
-        String lastName = "Doe";
         String fullName = signUpViewModel.getFullName(firstName, lastName);
         Assert.assertEquals(firstName + " " + lastName, fullName);
     }
 
     @Test
     public void verifySmsInvitationsCollectionEmptyList() {
-        String phoneNumber = "+1-555-521-5554";
         when(repositoryFacadeMock.getSmsInvitationRepository()).thenReturn(smsInvitationRepositoryMock);
         when(smsInvitationRepositoryMock
                 .getListOfDocumentByAttribute("phoneNumberSent", phoneNumber, SmsInvitationRequest.class))
@@ -168,13 +179,11 @@ public class SignUpViewModelTest {
     @Test
     public void createNotificationObject() {
         String senderUid = "senderUid";
-        String phoneNumber = "+1-555-521-5554";
         Notification newNotification = new Notification(Notification.Type.SMS_INVITATION_REQUEST);
         newNotification.setReceiverUid(senderUid);
         newNotification.setMessage("User with phone number: " + phoneNumber + " is registered.");
 
         when(repositoryFacadeMock.getNotificationRepository(senderUid)).thenReturn(notificationRepositoryMock);
-//        when(notificationRepositoryMock.addDocument(newNotification)).thenReturn(new LiveDataWithStatus<>(newNotification));
 
         signUpViewModel.createNotificationObject(senderUid, phoneNumber);
 

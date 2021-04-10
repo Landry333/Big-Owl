@@ -46,11 +46,13 @@ public class SignUpViewModel extends BaseViewModel {
         return taskPrevious.onSuccessTask(task -> createGroupEntry(firstName, lastName));
     }
 
-    private Task<AuthResult> signUpUserInAuthRepo(String email, String password) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public Task<AuthResult> signUpUserInAuthRepo(String email, String password) {
         return repositoryFacade.getAuthRepository().signUpUser(email, password);
     }
 
-    private Task<Void> createUserEntry(String email, String phoneNumber,
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public Task<Void> createUserEntry(String email, String phoneNumber,
                                        String firstName, String lastName) {
         User user = new User();
         String uid = getCurrentUserUid();
@@ -65,7 +67,8 @@ public class SignUpViewModel extends BaseViewModel {
         return Tasks.forResult(null);
     }
 
-    private Task<Void> createGroupEntry(String firstName, String lastName) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public Task<Void> createGroupEntry(String firstName, String lastName) {
         Group group = new Group();
         group.setSupervisorId(getCurrentUserUid());
         group.setName(getFullName(firstName, lastName) + "'s group");
@@ -80,7 +83,7 @@ public class SignUpViewModel extends BaseViewModel {
     public void verifySmsInvitationsCollection(String phoneNumber) {
         LiveDataWithStatus<List<SmsInvitationRequest>> phoneNumberSent = repositoryFacade.getSmsInvitationRepository().getListOfDocumentByAttribute("phoneNumberSent", phoneNumber, SmsInvitationRequest.class);
         phoneNumberSent.observeForever(smsInvitationList -> {
-            if (smsInvitationList.isEmpty()) {
+            if (smsInvitationList == null || smsInvitationList.isEmpty()) {
                 return;
             }
 
