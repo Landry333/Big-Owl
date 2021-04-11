@@ -134,4 +134,5 @@
     <string name="not_allowed_error">NOT ALLOWED</string>
     <string name="failed_auth">Failed authentication</string>
     <string name="auth_result_error">Error</string>
+    <string name="location">Location</string>
 </resources>

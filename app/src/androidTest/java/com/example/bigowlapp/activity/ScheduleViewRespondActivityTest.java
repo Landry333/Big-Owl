@@ -3,6 +3,7 @@ package com.example.bigowlapp.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Response;
@@ -34,15 +35,19 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 
+import static android.os.SystemClock.sleep;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.atMostOnce;
@@ -56,19 +61,15 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class ScheduleViewRespondActivityTest {
-
     @Rule
     public final GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Mock
     private ScheduleViewRespondViewModel mockScheduleViewRespondViewModel;
-
     @Mock
     private NotificationRepository mockNotificationRepository;
-
     @Mock
     private FirebaseUser testFirebaseCurrentUser;
-
     @Mock
     private GeoLocationFormatter mockGeoLocationFormatter;
 
@@ -79,6 +80,7 @@ public class ScheduleViewRespondActivityTest {
     private MutableLiveData<Schedule> testScheduleData;
     private User testCurrentUser;
     private Map<String, UserScheduleResponse> testScheduleMembersMap;
+    private ScheduleViewRespondActivity currentActivity;
 
     @Before
     public void setUp() {
@@ -100,7 +102,6 @@ public class ScheduleViewRespondActivityTest {
                 "testCurrentUser@mail.com",
                 null,
                 null);
-
         testScheduleMembersMap = new HashMap<>();
         testScheduleMembersMap.put(testCurrentUser.getUid(),
                 new UserScheduleResponse(Response.NEUTRAL, null));
@@ -141,13 +142,20 @@ public class ScheduleViewRespondActivityTest {
         when(mockGeoLocationFormatter.formatLocation(any(Context.class), any(GeoPoint.class))).thenReturn(CONCORDIA_ADDRESS);
 
         ActivityScenario<ScheduleViewRespondActivity> activityScenario = ActivityScenario.launch(testIntent);
-
         activityScenario.moveToState(Lifecycle.State.CREATED);
         activityScenario.onActivity(activity -> {
             activity.setScheduleViewRespondViewModel(mockScheduleViewRespondViewModel);
             activity.setGeoLocationFormatter(mockGeoLocationFormatter);
+            currentActivity = activity;
         });
         activityScenario.moveToState(Lifecycle.State.RESUMED);
+    }
+
+    @Test
+    public void emptyScheduleTest() {
+        when(mockScheduleViewRespondViewModel.isCurrentUserInSchedule()).thenReturn(false);
+        verify(mockScheduleViewRespondViewModel, atMost(1)).isCurrentUserInSchedule();
+        verify(mockScheduleViewRespondViewModel, atMost(1)).getUserScheduleResponse();
     }
 
     @Test
@@ -195,7 +203,6 @@ public class ScheduleViewRespondActivityTest {
         testSchedule.setStartTime(new Timestamp(timeNow.getSeconds() - 3 * ONE_HOUR_SECONDS, 0));
         testSchedule.setEndTime(new Timestamp(timeNow.getSeconds() - 2 * ONE_HOUR_SECONDS, 0));
         testScheduleData.postValue(testSchedule);
-
         onView(allOf(withId(R.id.text_view_schedule_member_attendance), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(withText("NO RESPONSE")));
     }
 }
