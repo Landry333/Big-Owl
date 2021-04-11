@@ -41,13 +41,10 @@ import java.util.Map;
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -197,10 +194,6 @@ public class ScheduleReportActivityTest {
                         new Timestamp(timestampNow.getSeconds() - 7200, 0),
                         new Attendance(false)));
         testScheduleData.postValue(testSchedule);
-
-        onView(withText("Schedule is ongoing and attendance results are subject to change"))
-                .inRoot(withDecorView(not(is(currentActivity.getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
 
         listViewMatcher.checkAttendanceMatchOnView();
     }
