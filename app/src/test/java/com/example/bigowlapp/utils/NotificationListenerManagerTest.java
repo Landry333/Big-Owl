@@ -11,8 +11,10 @@ import com.example.bigowlapp.repository.NotificationRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -52,7 +56,8 @@ public class NotificationListenerManagerTest {
     private QuerySnapshot snapshots;
     @Mock
     private DocumentChange documentChange;
-
+    @Mock
+    private ListenerRegistration listenerRegistration;
 
     private NotificationListenerManager notificationListenerManager;
 
@@ -68,6 +73,30 @@ public class NotificationListenerManagerTest {
         doNothing().when(notificationListenerManager).sendNotification(any());
     }
 
+    @After
+    public void tearDown() {
+        NotificationListenerManager.setListenerRegistration(null);
+    }
+
+    @Test
+    public void stopListening() {
+        assertNull(NotificationListenerManager.getListenerRegistration());
+        NotificationListenerManager.stopListening();
+        verify(listenerRegistration, never()).remove();
+
+        NotificationListenerManager.setListenerRegistration(listenerRegistration);
+        assertNotNull(NotificationListenerManager.getListenerRegistration());
+        NotificationListenerManager.stopListening();
+        verify(listenerRegistration, times(1)).remove();
+        assertNull(NotificationListenerManager.getListenerRegistration());
+    }
+
+    @Test
+    public void listen() {
+        NotificationListenerManager.setListenerRegistration(listenerRegistration);
+        notificationListenerManager.listen();
+        verify(repositoryFacade, never()).getCurrentUserNotificationRepository();
+    }
 
     @Test
     public void resolveDocumentChanges() {

@@ -21,10 +21,20 @@ import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.NotificationRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class NotificationListenerManager {
     private static final String CHANNEL_ID = "General BigOwl Notification";
+
+    private static ListenerRegistration listenerRegistration;
+
+    public static void stopListening() {
+        if (listenerRegistration != null) {
+            listenerRegistration.remove();
+            listenerRegistration = null;
+        }
+    }
 
     private SmsSender smsSender;
     private RepositoryFacade repositoryFacade;
@@ -43,13 +53,18 @@ public class NotificationListenerManager {
     }
 
     public void listen() {
-        repositoryFacade.getCurrentUserNotificationRepository().listenToCollection((snapshots, error) -> {
-            if (error != null) {
-                Toast.makeText(context, "BIG OWL notification listener failed: ", Toast.LENGTH_LONG).show();
-                return;
-            }
-            resolveDocumentChanges(snapshots);
-        });
+        if (listenerRegistration != null) {
+            return;
+        }
+
+        listenerRegistration = repositoryFacade.getCurrentUserNotificationRepository()
+                .listenToCollection((snapshots, error) -> {
+                    if (error != null) {
+                        Toast.makeText(context, "BIG OWL notification listener failed: ", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    resolveDocumentChanges(snapshots);
+                });
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -152,5 +167,15 @@ public class NotificationListenerManager {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setNotificationManager(NotificationManager notificationManager) {
         this.notificationManager = notificationManager;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public static ListenerRegistration getListenerRegistration() {
+        return listenerRegistration;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public static void setListenerRegistration(ListenerRegistration listenerRegistration) {
+        NotificationListenerManager.listenerRegistration = listenerRegistration;
     }
 }
