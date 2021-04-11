@@ -1,5 +1,7 @@
 package com.example.bigowlapp.repository;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.example.bigowlapp.database.Firestore;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Model;
@@ -193,7 +195,8 @@ public abstract class Repository<T extends Model> {
         return listOfT;
     }
 
-    protected <X extends T> void resolveTaskWithListResult(Task<QuerySnapshot> task, LiveDataWithStatus<List<X>> listOfTData, Class<X> tClass) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    public <X extends T> void resolveTaskWithListResult(Task<QuerySnapshot> task, LiveDataWithStatus<List<X>> listOfTData, Class<X> tClass) {
         if (task.isSuccessful()) {
             QuerySnapshot tDocs = task.getResult();
             if (tDocs != null && !tDocs.isEmpty()) {

@@ -4,10 +4,14 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Schedule;
+import com.example.bigowlapp.repository.exception.DocumentNotFoundException;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,10 +20,17 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -31,6 +42,8 @@ public class RepositoryTest {
     private CollectionReference collectionReferenceMock;
     @Mock
     private DocumentReference docRefMock;
+    @Mock
+    private QuerySnapshot queryMock;
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
@@ -40,36 +53,86 @@ public class RepositoryTest {
     @Before
     public void setUp() throws Exception {
         when(collectionReferenceMock.add(any())).thenReturn(Tasks.forResult(docRefMock));
-
         repository = new ScheduleRepository(dbMock, collectionReferenceMock);
     }
 
     @Test
-    public void listenToCollection() {
+    public void resolveTaskWithListResult() {
+        List<Schedule> dataList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            dataList.add(Schedule.getPrototypeSchedule());
+        }
+
+        LiveDataWithStatus<List<Schedule>> dataListLiveData = new LiveDataWithStatus<>();
+
+        // null case
+        repository.resolveTaskWithListResult(Tasks.forResult(null), dataListLiveData, Schedule.class);
+        assertEquals(LiveDataWithStatus.Status.ERROR, dataListLiveData.getStatus());
+        assertTrue(dataListLiveData.hasError());
+        assertTrue(dataListLiveData.isComplete());
+        assertNull(dataListLiveData.getValue());
+        assertTrue(dataListLiveData.getError() instanceof DocumentNotFoundException);
+
+        // empty case
+        when(queryMock.isEmpty()).thenReturn(true);
+        repository.resolveTaskWithListResult(Tasks.forResult(queryMock), dataListLiveData, Schedule.class);
+        assertEquals(LiveDataWithStatus.Status.ERROR, dataListLiveData.getStatus());
+        assertTrue(dataListLiveData.hasError());
+        assertTrue(dataListLiveData.isComplete());
+        assertNull(dataListLiveData.getValue());
+        assertTrue(dataListLiveData.getError() instanceof DocumentNotFoundException);
+
+        // fail case
+        repository.resolveTaskWithListResult(Tasks.forException(new Exception()), dataListLiveData, Schedule.class);
+        assertEquals(LiveDataWithStatus.Status.ERROR, dataListLiveData.getStatus());
+        assertTrue(dataListLiveData.hasError());
+        assertTrue(dataListLiveData.isComplete());
+        assertNull(dataListLiveData.getValue());
+        assertTrue(dataListLiveData.getError() instanceof Exception);
+
+        // success case
+        List<QueryDocumentSnapshot> queryMockList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            QueryDocumentSnapshot mockQueryDoc = mock(QueryDocumentSnapshot.class);
+            when(mockQueryDoc.toObject(Schedule.class)).thenReturn(dataList.get(i));
+            queryMockList.add(mockQueryDoc);
+        }
+
+        when(queryMock.isEmpty()).thenReturn(false);
+        when(queryMock.iterator()).thenReturn(queryMockList.iterator());
+
+        repository.resolveTaskWithListResult(Tasks.forResult(queryMock), dataListLiveData, Schedule.class);
+        assertEquals(LiveDataWithStatus.Status.SUCCESS, dataListLiveData.getStatus());
+        assertFalse(dataListLiveData.hasError());
+        assertTrue(dataListLiveData.isComplete());
+        assertArrayEquals(dataList.toArray(), dataListLiveData.getValue().toArray());
     }
+
+    @Test
+    public void listenToCollection() {
+        EventListener<QuerySnapshot> listenerToAdd = (value, error) -> {
+        };
+        repository.listenToCollection(listenerToAdd);
+        verify(collectionReferenceMock).addSnapshotListener(listenerToAdd);
+    }
+
 
     @Test
     public void addDocument() {
         Schedule data = Schedule.getPrototypeSchedule();
         assertNull(data.getUid());
 
-        when(docRefMock.getId()).thenReturn("addedIdToData");
-
         // success result
         LiveDataWithStatus<Schedule> resultDataSuccess = repository.addDocument(data);
-        resultDataSuccess.observeForever(schedule -> {
-            assertEquals(LiveDataWithStatus.Status.SUCCESS, resultDataSuccess.getStatus());
-            assertNotNull(resultDataSuccess.getValue().getUid());
-            assertEquals("addedIdToData", resultDataSuccess.getValue().getUid());
-        });
+        assertEquals(LiveDataWithStatus.Status.NONE, resultDataSuccess.getStatus());
+        assertFalse(resultDataSuccess.isComplete());
+        assertNull(resultDataSuccess.getValue());
 
         // failure result
         when(collectionReferenceMock.add(any())).thenReturn(Tasks.forException(new Exception()));
         LiveDataWithStatus<Schedule> resultDataFail = repository.addDocument(data);
-        resultDataFail.observeForever(schedule -> {
-            assertEquals(LiveDataWithStatus.Status.ERROR, resultDataFail.getStatus());
-            assertNull(resultDataFail.getValue());
-        });
+        assertEquals(LiveDataWithStatus.Status.NONE, resultDataSuccess.getStatus());
+        assertFalse(resultDataSuccess.isComplete());
     }
 
     @Test
@@ -102,14 +165,6 @@ public class RepositoryTest {
 
     @Test
     public void getDocumentsByListOfUid() {
-    }
-
-    @Test
-    public void extractListOfDataToModel() {
-    }
-
-    @Test
-    public void resolveTaskWithListResult() {
     }
 
     @Test
