@@ -64,6 +64,7 @@ public class NotificationListFragment extends Fragment implements NotificationAd
             return;
         }
 
+        notificationActivityViewModel.loadUserNotifications();
         notificationActivityViewModel.getUserNotifications().observe(getActivity(), notifications -> {
             if (notifications == null) {
                 notifications = new ArrayList<>();

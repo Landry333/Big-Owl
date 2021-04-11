@@ -47,7 +47,7 @@ public class NotificationActivityViewModel extends BaseViewModel {
                 .getDocumentByAttribute(Group.Field.SUPERVISOR_ID, supervisorUid, Group.class);
     }
 
-    private void loadUserNotifications() {
+    public void loadUserNotifications() {
         userNotificationListData = repositoryFacade.getCurrentUserNotificationRepository()
                 .getNotificationsByAscendingOrder(Notification.class);
     }
