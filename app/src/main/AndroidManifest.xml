@@ -11,7 +11,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -70,15 +69,10 @@
             android:name=".service.SupervisorSchedulesAlarmReceiver"
             android:enabled="true" />
         <receiver
-            android:name=".service.LocationBroadcastReceiver"
-            android:enabled="true" />
-        <receiver
             android:name=".utils.PeriodicLocationCheckAlarmManager$PeriodicLocationCheckAlarmReceiver"
             android:enabled="true" />
         <receiver
             android:name=".service.LocationTrackingExpiredAlarmReceiver"
             android:enabled="true" />
-
     </application>
-
 </manifest>

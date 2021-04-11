@@ -53,7 +53,8 @@ android {
                 "GradleDependency",
                 "HardwareIds",
                 "IconColors",
-                "IconLocation"
+                "IconLocation",
+                "ObsoleteLintCustomCheck"
     }
 }
 
