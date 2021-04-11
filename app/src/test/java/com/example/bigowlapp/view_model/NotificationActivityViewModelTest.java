@@ -1,5 +1,7 @@
 package com.example.bigowlapp.view_model;
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Notification;
@@ -10,6 +12,7 @@ import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.UserRepository;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -17,11 +20,16 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NotificationActivityViewModelTest {
+
+    @Rule
+    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     @Mock
     private RepositoryFacade repositoryFacadeMock;
@@ -65,7 +73,7 @@ public class NotificationActivityViewModelTest {
         when(repositoryFacadeMock.getGroupRepository()).thenReturn(groupRepositoryMock);
         when(repositoryFacadeMock.getCurrentUserNotificationRepository()).thenReturn(notificationRepositoryMock);
         when(repositoryFacadeMock.getCurrentUserUid()).thenReturn(uid);
-        when(userRepositoryMock.getDocumentByUid(uid, User.class)).thenReturn(userData);
+        when(userRepositoryMock.getDocumentByUid(anyString(), any())).thenReturn(userData);
     }
 
     @Test
@@ -82,7 +90,6 @@ public class NotificationActivityViewModelTest {
 
     @Test
     public void joinGroup() {
-
         notificationActivityViewModel.joinGroup(group, notificationUid);
         verify(groupRepositoryMock).updateDocument(group.getUid(), group);
         verify(userRepositoryMock).updateDocument(user.getUid(), user);
