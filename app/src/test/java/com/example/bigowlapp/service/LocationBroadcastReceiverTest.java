@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.times;
@@ -139,6 +140,10 @@ public class LocationBroadcastReceiverTest {
         Attendance attendanceResult = getUserUid();
         assertEquals(Attendance.LocatedStatus.NOT_DETECTED, attendanceResult.getScheduleLocated());
         assertEquals("fakeEvent", schedule.getEvent());
+        assertFalse(attendanceResult.isAuthenticated());
+        assertEquals("appInstance", attendanceResult.getAppInstanceId());
+        assertFalse(attendanceResult.isAttemptedAuthByAppUid());
+        assertFalse(attendanceResult.isAttemptedAuthByUserMobileNumber());
         verify(mockScheduleRepository).updateDocument(schedule.getUid(), schedule);
     }
 
@@ -160,6 +165,10 @@ public class LocationBroadcastReceiverTest {
     private Schedule createScheduleWithAnAttendance(Attendance.LocatedStatus initialStatus) {
         Attendance attendance = new Attendance();
         attendance.setScheduleLocated(initialStatus);
+        attendance.setAuthenticated(false);
+        attendance.setAppInstanceId("appInstance");
+        attendance.setAttemptedAuthByAppUid(false);
+        attendance.setAttemptedAuthByUserMobileNumber(false);
 
         UserScheduleResponse response = new UserScheduleResponse();
         response.setAttendance(attendance);

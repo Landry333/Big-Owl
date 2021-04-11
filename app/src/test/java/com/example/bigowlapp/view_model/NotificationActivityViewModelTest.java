@@ -100,7 +100,7 @@ public class NotificationActivityViewModelTest {
         verify(notificationRepositoryMock).getNotificationsByAscendingOrder(Notification.class);
         Assert.assertEquals(authGroupId, authResult.getGroupUid());
         Assert.assertEquals(authScheduleId, authResult.getScheduleId());
-        Assert.assertEquals(authSenderPhoneNumber, authSenderPhoneNumber);
+        Assert.assertEquals(authSenderPhoneNumber, authResult.getSenderPhoneNum());
         Assert.assertEquals(authSenderId, authResult.getSenderUid());
     }
 
