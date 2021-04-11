@@ -94,9 +94,9 @@ public class SignUpViewModel extends BaseViewModel {
 
     public void smsInvitationNotificationListener(Context context) {
         if (invitationListener == null) {
-            invitationListener = new NotificationListenerManager();
+            invitationListener = new NotificationListenerManager(context);
         }
-        invitationListener.listen(context);
+        invitationListener.listen();
     }
 
     public void createNotificationObject(String senderUid, String phoneNumber) {

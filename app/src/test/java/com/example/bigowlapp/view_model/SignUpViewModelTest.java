@@ -171,9 +171,9 @@ public class SignUpViewModelTest {
 
     @Test
     public void smsInvitationNotificationListener() {
-        doNothing().when(notificationManagerMock).listen(context);
+        doNothing().when(notificationManagerMock).listen();
         signUpViewModel.smsInvitationNotificationListener(context);
-        verify(notificationManagerMock).listen(context);
+        verify(notificationManagerMock).listen();
     }
 
     @Test
