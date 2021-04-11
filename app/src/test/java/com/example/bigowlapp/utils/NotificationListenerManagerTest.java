@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -146,7 +147,7 @@ public class NotificationListenerManagerTest {
 
     @Test
     public void handleNotificationRequest() {
-        Notification notification = new Notification();
+        Notification notification = new Notification(null);
         assertEquals("", notification.getTitle());
 
         SupervisionRequest notif = new SupervisionRequest();
@@ -155,6 +156,7 @@ public class NotificationListenerManagerTest {
         notif.setMessage("my message");
         notif.setUsed(true);
         notif.setTimeResponse(Timestamp.now());
+        notif.setTimeRead(Timestamp.now());
         notif.setCreationTime(notif.getTimeResponse());
         notif.setGroupUid("groupId");
         notif.setSenderUid("senderId");
@@ -168,6 +170,7 @@ public class NotificationListenerManagerTest {
         verify(notificationRepository).updateDocument(notif.getUid(), notif);
         assertEquals("groupId", notif.getGroupUid());
         assertEquals("senderId", notif.getSenderUid());
+        assertNotNull(notif.getTimeRead());
     }
 
     private Timestamp veryOldTime() {

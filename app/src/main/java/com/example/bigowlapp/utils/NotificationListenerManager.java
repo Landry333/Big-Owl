@@ -145,11 +145,6 @@ public class NotificationListenerManager {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setNotificationManager(NotificationManager notificationManager) {
         this.notificationManager = notificationManager;
     }
