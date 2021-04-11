@@ -9,6 +9,3 @@ public class SmsSender {
         smsManager.sendTextMessage(smsNumber, null, smsMessage, null, null);
     }
 }
-
-
-
