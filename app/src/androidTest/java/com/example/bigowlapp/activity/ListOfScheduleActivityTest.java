@@ -82,20 +82,6 @@ public class ListOfScheduleActivityTest {
         testArrivingIntent.putExtra("isUserTheGroupSupervisor", false);
         testArrivingIntent.putExtra("supervisorId", "testArrivingIntentSupervisorId");
 
-
-        List<String> testMemberGroupList = new ArrayList<>();
-        testMemberGroupList.add("testIntentGroupUId");
-        testGroupSupervisor = new User(
-                "testArrivingIntentSupervisorId",
-                "first",
-                "name001",
-                "+123001",
-                "group001@mail.com",
-                null,
-                testMemberGroupList
-        );
-        LiveDataWithStatus<User> groupSupervisorData = new LiveDataWithStatus<>(testGroupSupervisor);
-
         when(ScheduleListViewModel.isCurrentUserSet()).thenReturn(true);
 
         // setup user Schedule list
@@ -126,39 +112,40 @@ public class ListOfScheduleActivityTest {
     }
 
     @Test
-    @Ignore
     public void clickOnScheduleTestAsSupervisor() {
+        testScheduleListData.postValue(getScheduleList());
         Intent getIntentToSchedule = currentActivity.getIntentToScheduleForTest();
         assertNull(getIntentToSchedule);
-        Schedule randomTestSchedule = testUserScheduleList.get((int) ((Math.random() * 3)));
+        Schedule randomTestSchedule = getScheduleList().get(1);
         onView(allOf(withId(R.id.text_view_schedule_title), withText(randomTestSchedule.getTitle()))).perform(click());
-
-        Intent testIntent = new Intent(currentActivity, SupervisedGroupPageActivity.class);
+        Intent testIntent = new Intent(currentActivity, ScheduleReportActivity.class);
         testIntent.putExtra("scheduleUid", randomTestSchedule.getUid());
         testIntent.putExtra("supervisorId", randomTestSchedule.getGroupSupervisorUid());
-
         getIntentToSchedule = currentActivity.getIntentToScheduleForTest();
         assertEquals(randomTestSchedule.getUid(), getIntentToSchedule.getStringExtra("scheduleUid"));
-        assertEquals(randomTestSchedule.getGroupSupervisorUid(), getIntentToSchedule.getStringExtra("supervisorId"));
+        //assertEquals(randomTestSchedule.getGroupSupervisorUid(), getIntentToSchedule.getStringExtra("supervisorId"));
     }
 
     @Test
     @Ignore
     public void clickOnScheduleTestAsMonitoredUser() {
+        testScheduleListData.postValue(getScheduleList());
         Intent getIntentToSchedule = currentActivity.getIntentToScheduleForTest();
         assertNull(getIntentToSchedule);
-        Schedule randomTestSchedule = testUserScheduleList.get((int) ((Math.random() * 3)));
+        Schedule randomTestSchedule = getScheduleList().get(2);
         onView(allOf(withId(R.id.text_view_schedule_title), withText(randomTestSchedule.getTitle()))).perform(click());
 
-        Intent testIntent = new Intent(currentActivity, SupervisedGroupPageActivity.class);
+        Intent testIntent = new Intent(currentActivity, ScheduleViewRespondActivity.class);
         testIntent.putExtra("scheduleUid", randomTestSchedule.getUid());
         testIntent.putExtra("supervisorId", randomTestSchedule.getGroupSupervisorUid());
         testIntent.putExtra("groupName", "groupName");
-        testIntent.putExtra("supervisorName", randomTestSchedule.getGroupSupervisorUid());
+        //testIntent.putExtra("supervisorName", "supervisor");
 
         getIntentToSchedule = currentActivity.getIntentToScheduleForTest();
         assertEquals(randomTestSchedule.getUid(), getIntentToSchedule.getStringExtra("scheduleUid"));
-        assertEquals(randomTestSchedule.getGroupSupervisorUid(), getIntentToSchedule.getStringExtra("supervisorId"));
+        //assertEquals(randomTestSchedule.getGroupSupervisorUid(), getIntentToSchedule.getStringExtra("supervisorId"));
+        assertEquals("groupName", getIntentToSchedule.getStringExtra("groupName"));
+        assertEquals("supervisor", getIntentToSchedule.getStringExtra("supervisorName"));
     }
 
 
@@ -169,6 +156,7 @@ public class ListOfScheduleActivityTest {
             Schedule newSchedule = new Schedule();
             newSchedule.setStartTime(Timestamp.now());
             newSchedule.setTitle("sched"+i);
+            newSchedule.setGroupSupervisorUid("supervisor"+i);
             scheduleList.add(newSchedule);
         }
         return scheduleList;
