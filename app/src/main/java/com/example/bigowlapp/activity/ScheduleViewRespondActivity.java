@@ -7,15 +7,21 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bigowlapp.R;
+import com.example.bigowlapp.model.Response;
+import com.example.bigowlapp.model.Schedule;
+import com.example.bigowlapp.model.UserScheduleResponse;
+import com.example.bigowlapp.utils.GeoLocationFormatter;
+import com.example.bigowlapp.utils.PermissionsHelper;
+import com.example.bigowlapp.view_model.ScheduleViewRespondViewModel;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Map;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.example.bigowlapp.R;
-import com.example.bigowlapp.model.Response;
-import com.example.bigowlapp.model.UserScheduleResponse;
-import com.example.bigowlapp.utils.PermissionsHelper;
-import com.example.bigowlapp.view_model.ScheduleViewRespondViewModel;
 
 public class ScheduleViewRespondActivity extends BigOwlActivity {
 
@@ -24,7 +30,7 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
     private String supervisorName;
     private ScheduleViewRespondViewModel scheduleViewRespondViewModel;
     private PermissionsHelper permissionsHelper;
-    private TextView confirmationTv;
+    private GeoLocationFormatter geoLocationFormatter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +39,6 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
         scheduleUid = intent.getStringExtra("scheduleUid");
         groupName = intent.getStringExtra("groupName");
         supervisorName = intent.getStringExtra("supervisorName");
-        confirmationTv = findViewById(R.id.text_view_schedule_response_confirmation);
-        confirmationTv.setVisibility(View.GONE);
 
         this.permissionsHelper = new PermissionsHelper(this);
     }
@@ -46,6 +50,8 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
         if (scheduleViewRespondViewModel == null) {
             scheduleViewRespondViewModel = new ViewModelProvider(this).get(ScheduleViewRespondViewModel.class);
         }
+        if (geoLocationFormatter == null)
+            geoLocationFormatter = new GeoLocationFormatter();
 
         subscribeToData();
     }
@@ -61,30 +67,52 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
             }
 
             ((TextView) findViewById(R.id.text_view_group_uid)).setText(groupName);
+            ((TextView) findViewById(R.id.text_view_schedule_title)).setText(schedule.getTitle());
             ((TextView) findViewById(R.id.text_view_group_supervisor_name)).setText(supervisorName);
-            ((TextView) findViewById(R.id.text_view_schedule_start_time)).setText(schedule.getStartTime().toDate().toString());
-            ((TextView) findViewById(R.id.text_view_schedule_end_time)).setText(schedule.getEndTime().toDate().toString());
+            ((TextView) findViewById(R.id.text_view_schedule_start_time)).setText(formatTime(schedule.getStartTime().toDate()));
+            ((TextView) findViewById(R.id.text_view_schedule_end_time)).setText(formatTime(schedule.getEndTime().toDate()));
+
+            ((TextView) findViewById(R.id.text_view_schedule_location)).setText(geoLocationFormatter.formatLocation(this, schedule.getLocation()));
 
             UserScheduleResponse userScheduleResponse = scheduleViewRespondViewModel.getUserScheduleResponse();
-            if (userScheduleResponse != null && userScheduleResponse.getResponse() != Response.NEUTRAL) {
+            if (userScheduleResponse.getResponse() != Response.NEUTRAL) {
+                findViewById(R.id.linear_layout_system_response).setVisibility(View.VISIBLE);
+                findViewById(R.id.linear_layout_member_schedule_response).setVisibility(View.VISIBLE);
+                findViewById(R.id.line_below_system_response).setVisibility(View.VISIBLE);
                 ((TextView) findViewById(R.id.text_view_schedule_user_response_text))
                         .setText(userScheduleResponse.getResponse() == Response.ACCEPT ? "Accepted" : "Rejected");
                 ((TextView) findViewById(R.id.text_view_schedule_user_response_time))
                         .setText(userScheduleResponse.getResponseTime().toDate().toString());
-                (findViewById(R.id.linear_layout_response)).setVisibility(View.VISIBLE);
-                findViewById(R.id.line_below_response).setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.linear_layout_system_response).setVisibility(View.GONE);
+                findViewById(R.id.linear_layout_member_schedule_response).setVisibility(View.GONE);
+                findViewById(R.id.line_below_system_response).setVisibility(View.GONE);
+            }
+            if (schedule.scheduleCurrentState() != Schedule.Status.SCHEDULED) {
+                findViewById(R.id.linear_layout_system_response).setVisibility(View.VISIBLE);
+                findViewById(R.id.layout_member_attendance_result).setVisibility(View.VISIBLE);
+                Map<String, Object> map = schedule.scheduleMemberResponseAttendanceMap(scheduleViewRespondViewModel.getCurrentUserUid());
+                ((TextView) findViewById(R.id.text_view_schedule_member_attendance))
+                        .setText((String) map.get("responseText"));
+                ((TextView) findViewById(R.id.text_view_schedule_member_attendance))
+                        .setTextColor((int) map.get("responseColor"));
+                setResponseButtonsVisibility(null);
+            } else {
+                findViewById(R.id.layout_member_attendance_result).setVisibility(View.GONE);
                 setResponseButtonsVisibility(userScheduleResponse.getResponse());
             }
-        });
 
-        Button btnAccept = findViewById(R.id.button_accept);
-        btnAccept.setOnClickListener(v -> {
-            requestLocationPermissions();
-            userClickRespondButton(Response.ACCEPT);
-        });
+            findViewById(R.id.button_accept).setOnClickListener(v -> {
+                requestLocationPermissions();
+                userClickRespondButton(Response.ACCEPT);
+            });
 
-        Button btnReject = findViewById(R.id.button_reject);
-        btnReject.setOnClickListener(v -> userClickRespondButton(Response.REJECT));
+            findViewById(R.id.button_reject).setOnClickListener(v -> userClickRespondButton(Response.REJECT));
+        });
+    }
+
+    private String formatTime(Date time) {
+        return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM).format(time);
     }
 
     public void requestLocationPermissions() {
@@ -99,8 +127,6 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
     private void userClickRespondButton(Response response) {
         if (scheduleViewRespondViewModel.isOneMinuteAfterLastResponse()) {
             scheduleViewRespondViewModel.respondSchedule(scheduleUid, response);
-            confirmationTv.setVisibility(View.VISIBLE);
-            Toast.makeText(this, "response submitted", Toast.LENGTH_SHORT).show();
         } else
             Toast.makeText(this,
                     "User can only respond to a schedule 1 minute after last response",
@@ -134,5 +160,10 @@ public class ScheduleViewRespondActivity extends BigOwlActivity {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setScheduleViewRespondViewModel(ScheduleViewRespondViewModel scheduleViewRespondViewModel) {
         this.scheduleViewRespondViewModel = scheduleViewRespondViewModel;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setGeoLocationFormatter(GeoLocationFormatter geoLocationFormatter) {
+        this.geoLocationFormatter = geoLocationFormatter;
     }
 }
