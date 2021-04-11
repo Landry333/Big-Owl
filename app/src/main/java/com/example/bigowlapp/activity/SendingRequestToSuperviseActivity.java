@@ -32,16 +32,6 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
     private TextView resultNoteTv;
     private TextView secondResultNoteTv;
 
-    private static final String supBtnSend = "Send request";
-    private static final String supBtnCancel = "Cancel request";
-    private static final String canNotSend = "Can not send ";
-    private static final String sendNewRequest = "Send new request";
-    private static final String canCancel = "You request is pending. You can cancel it";
-    private static final String noRequest = "You presently have NO request to supervise this user ";
-    private static final String noSelfRequest = "This contact matches you as a contact. You can't send a request to yourself";
-    private static final String superviseAlready = "You already have an accepted request to supervise this user";
-    private static final String requestRejected = "Your last request was rejected by this user. You can send a new request";
-
     private SendingRequestToSuperviseViewModel sRTSViewModel;
 
     @Override
@@ -75,9 +65,9 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
         noteTv.setText(noteText);
 
         if (currentUserID.equals(otherUserID)) {
-            resultNoteTv.setText(noSelfRequest);
+            resultNoteTv.setText(getString(R.string.no_self_request));
             supRequestBtn.setClickable(false);
-            supRequestBtn.setText(canNotSend);
+            supRequestBtn.setText(getString(R.string.cant_send));
         } else {
             supRequestBtn.setClickable(true);
             try {
@@ -120,9 +110,9 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
         // A false value allows for search for an existing request within repository until one is found
         aRequestAlready = false;
         // Default setText
-        supRequestBtn.setText(supBtnSend);
+        supRequestBtn.setText(getString(R.string.send_request));
         supRequestBtn.setClickable(true);
-        resultNoteTv.setText(noRequest);
+        resultNoteTv.setText(getString(R.string.no_request));
         secondResultNoteTv.setVisibility(View.GONE);
         resultNoteTv.setVisibility(View.VISIBLE);
 
@@ -137,25 +127,25 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
                     break;
                 } else if (senderRequest.getReceiverUid().equals(otherUser.getUid())) {
                     if (senderRequest.getResponse().equals(SupervisionRequest.Response.ACCEPT)) {
-                        resultNoteTv.setText(superviseAlready);
+                        resultNoteTv.setText(getString(R.string.supervising_already));
                         secondResultNoteTv.setVisibility(View.GONE);
                         resultNoteTv.setVisibility(View.VISIBLE);
-                        supRequestBtn.setText(canNotSend);
+                        supRequestBtn.setText(getString(R.string.cant_send));
                         supRequestBtn.setClickable(false);
                         aRequestAlready = true;
                     } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.NEUTRAL)) {
-                        supRequestBtn.setText(supBtnCancel);
+                        supRequestBtn.setText(getString(R.string.cancel_request));
                         supRequestBtn.setClickable(true);
-                        secondResultNoteTv.setText(canCancel);
+                        secondResultNoteTv.setText(getString(R.string.can_cancel));
                         secondResultNoteTv.setVisibility(View.VISIBLE);
                         resultNoteTv.setVisibility(View.GONE);
                         aRequestAlready = true;
                         shouldCancelRequest = true;
                         requestUID = senderRequest.getUid();
                     } else if (senderRequest.getResponse().equals(SupervisionRequest.Response.REJECT)) {
-                        supRequestBtn.setText(sendNewRequest);
+                        supRequestBtn.setText(getString(R.string.send_new_request));
                         supRequestBtn.setClickable(true);
-                        resultNoteTv.setText(requestRejected);
+                        resultNoteTv.setText(getString(R.string.request_rejected));
                         resultNoteTv.setVisibility(View.VISIBLE);
                         secondResultNoteTv.setVisibility(View.GONE);
                         aRequestAlready = true;

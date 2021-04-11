@@ -135,4 +135,13 @@
     <string name="failed_auth">Failed authentication</string>
     <string name="auth_result_error">Error</string>
     <string name="location">Location</string>
+    <string name="send_request">Send request</string>
+    <string name="cancel_request">Cancel request</string>
+    <string name="cant_send">Can not send</string>
+    <string name="send_new_request">Send new request</string>
+    <string name="can_cancel">Your request is pending. You can cancel it</string>
+    <string name="no_request">You presently have NO request to supervise this user</string>
+    <string name="no_self_request">This contact matches you as a contact. You can\'t send a request to yourself</string>
+    <string name="supervising_already">You already have an accepted request to supervise this user</string>
+    <string name="request_rejected">Your last request was rejected by this user. You can send a new request</string>
 </resources>
