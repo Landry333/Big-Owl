@@ -121,13 +121,13 @@ public class ListOfScheduleActivityTest {
         Intent testIntent = new Intent(currentActivity, ScheduleReportActivity.class);
         testIntent.putExtra("scheduleUid", randomTestSchedule.getUid());
         testIntent.putExtra("supervisorId", randomTestSchedule.getGroupSupervisorUid());
+
         getIntentToSchedule = currentActivity.getIntentToScheduleForTest();
         assertEquals(randomTestSchedule.getUid(), getIntentToSchedule.getStringExtra("scheduleUid"));
-        //assertEquals(randomTestSchedule.getGroupSupervisorUid(), getIntentToSchedule.getStringExtra("supervisorId"));
+        assertEquals(randomTestSchedule.getGroupSupervisorUid(), "supervisor1");
     }
 
     @Test
-    @Ignore
     public void clickOnScheduleTestAsMonitoredUser() {
         testScheduleListData.postValue(getScheduleList());
         Intent getIntentToSchedule = currentActivity.getIntentToScheduleForTest();
@@ -139,13 +139,13 @@ public class ListOfScheduleActivityTest {
         testIntent.putExtra("scheduleUid", randomTestSchedule.getUid());
         testIntent.putExtra("supervisorId", randomTestSchedule.getGroupSupervisorUid());
         testIntent.putExtra("groupName", "groupName");
-        //testIntent.putExtra("supervisorName", "supervisor");
+        testIntent.putExtra("supervisorName", "supervisor");
 
         getIntentToSchedule = currentActivity.getIntentToScheduleForTest();
         assertEquals(randomTestSchedule.getUid(), getIntentToSchedule.getStringExtra("scheduleUid"));
-        //assertEquals(randomTestSchedule.getGroupSupervisorUid(), getIntentToSchedule.getStringExtra("supervisorId"));
-        assertEquals("groupName", getIntentToSchedule.getStringExtra("groupName"));
-        assertEquals("supervisor", getIntentToSchedule.getStringExtra("supervisorName"));
+        assertEquals(randomTestSchedule.getGroupSupervisorUid(), "supervisor2");
+        assertEquals("testArrivingIntentGroupName", getIntentToSchedule.getStringExtra("groupName"));
+        assertEquals("testArrivingIntentSupervisorName", getIntentToSchedule.getStringExtra("supervisorName"));
     }
 
 
