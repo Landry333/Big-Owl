@@ -10,7 +10,8 @@ buildscript {
         // If this version doens't work, go to gradle/wrapper/gradle-wrapper.properties and change distributionUrl gradle version to 6.1.1
         classpath 'com.android.tools.build:gradle:4.0.2'
         classpath 'com.google.gms:google-services:4.3.4'
-        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.5-SNAPSHOT'
+        //classpath 'com.dicedmelon.gradle:jacoco-android:0.1.5-SNAPSHOT'
+        classpath 'org.jacoco:org.jacoco.core:0.8.5'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
