@@ -3,7 +3,6 @@ package com.example.bigowlapp.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Response;
@@ -35,19 +34,15 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 
-import static android.os.SystemClock.sleep;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.atMostOnce;
@@ -75,12 +70,8 @@ public class ScheduleViewRespondActivityTest {
 
     private Schedule testSchedule;
     private final Timestamp timeNow = Timestamp.now();
-    private final String CONCORDIA_ADDRESS = "1571 Rue Mackay, Montréal, QC H3G 2H6, Canada";
     private final static int ONE_HOUR_SECONDS = 3600;
     private MutableLiveData<Schedule> testScheduleData;
-    private User testCurrentUser;
-    private Map<String, UserScheduleResponse> testScheduleMembersMap;
-    private ScheduleViewRespondActivity currentActivity;
 
     @Before
     public void setUp() {
@@ -94,7 +85,7 @@ public class ScheduleViewRespondActivityTest {
                 "testSupervisor@mail.com",
                 null,
                 null);
-        testCurrentUser = new User(
+        User testCurrentUser = new User(
                 "testCurrentUser001",
                 "test",
                 "currentUser",
@@ -102,7 +93,7 @@ public class ScheduleViewRespondActivityTest {
                 "testCurrentUser@mail.com",
                 null,
                 null);
-        testScheduleMembersMap = new HashMap<>();
+        Map<String, UserScheduleResponse> testScheduleMembersMap = new HashMap<>();
         testScheduleMembersMap.put(testCurrentUser.getUid(),
                 new UserScheduleResponse(Response.NEUTRAL, null));
         testSchedule = new Schedule();
@@ -139,6 +130,7 @@ public class ScheduleViewRespondActivityTest {
             testScheduleData.postValue(testSchedule);
             return null;
         }).when(mockScheduleViewRespondViewModel).respondSchedule(any(), any());
+        String CONCORDIA_ADDRESS = "1571 Rue Mackay, Montréal, QC H3G 2H6, Canada";
         when(mockGeoLocationFormatter.formatLocation(any(Context.class), any(GeoPoint.class))).thenReturn(CONCORDIA_ADDRESS);
 
         ActivityScenario<ScheduleViewRespondActivity> activityScenario = ActivityScenario.launch(testIntent);
@@ -146,7 +138,6 @@ public class ScheduleViewRespondActivityTest {
         activityScenario.onActivity(activity -> {
             activity.setScheduleViewRespondViewModel(mockScheduleViewRespondViewModel);
             activity.setGeoLocationFormatter(mockGeoLocationFormatter);
-            currentActivity = activity;
         });
         activityScenario.moveToState(Lifecycle.State.RESUMED);
     }
