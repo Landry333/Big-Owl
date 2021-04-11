@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
 import com.example.bigowlapp.R;
+import com.example.bigowlapp.utils.NotificationListenerManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 public abstract class BigOwlActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
@@ -74,6 +75,7 @@ public abstract class BigOwlActivity extends AppCompatActivity implements PopupM
             startActivity(getIntent());
         } else if (item.getItemId() == R.id.overflow_logout) {
             FirebaseAuth.getInstance().signOut();
+            NotificationListenerManager.stopListening();
             Intent intent = new Intent(this, LoginPageActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);

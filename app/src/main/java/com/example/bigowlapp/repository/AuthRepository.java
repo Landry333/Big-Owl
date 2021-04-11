@@ -1,5 +1,6 @@
 package com.example.bigowlapp.repository;
 
+import com.example.bigowlapp.utils.NotificationListenerManager;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +28,7 @@ public class AuthRepository {
 
     public void signOutUser() {
         mfirebaseAuth.signOut();
+        NotificationListenerManager.stopListening();
     }
 
     public FirebaseUser getCurrentUser() {
