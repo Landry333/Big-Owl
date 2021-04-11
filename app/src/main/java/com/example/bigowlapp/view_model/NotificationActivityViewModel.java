@@ -26,11 +26,6 @@ public class NotificationActivityViewModel extends BaseViewModel {
         return repositoryFacade.getUserRepository().getDocumentByUid(senderUid, User.class);
     }
 
-    public void deleteNotification(String notificationUid) {
-        repositoryFacade.getCurrentUserNotificationRepository()
-                .removeDocument(notificationUid);
-    }
-
     public void joinGroup(Group group, String notificationUid) {
         repositoryFacade.getUserRepository().getDocumentByUid(getCurrentUserUid(), User.class).observeForever(currentUser -> {
             group.getMemberIdList().add(currentUser.getUid());
@@ -40,6 +35,11 @@ public class NotificationActivityViewModel extends BaseViewModel {
             repositoryFacade.getUserRepository().updateDocument(currentUser.getUid(), currentUser);
             deleteNotification(notificationUid);
         });
+    }
+
+    public void deleteNotification(String notificationUid) {
+        repositoryFacade.getCurrentUserNotificationRepository()
+                .removeDocument(notificationUid);
     }
 
     public LiveDataWithStatus<Group> getGroupData(String supervisorUid) {
