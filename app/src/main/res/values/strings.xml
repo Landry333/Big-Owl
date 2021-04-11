@@ -49,7 +49,6 @@
     <string name="accept">Accept</string>
     <string name="reject">Reject</string>
     <string name="group_supervisor">Group Supervisor</string>
-    <string name="start_time">Start Time</string>
     <string name="end_time">End Time</string>
     <string name="you_last">You last</string>
     <string name="this_schedule_on">this schedule on</string>
@@ -83,6 +82,7 @@
     <string name="notification_page">Notifications</string>
     <string name="notification_content">Content</string>
     <string name="notification_name">Name</string>
+    <string name="your_attendance_result">Your attendance result:</string>
     <string name="propose_fingerprint_auth">
         Add fingerprint authentication to secure your account?\n\n
         NOTE: This will also make your account ONLY accessible by a device having sim
@@ -101,10 +101,6 @@
     <string name="not_allowed">
         You are not allowed to access this account\n\n
         Sim card_1 number on this phone should be the same as in your account
-    </string>
-    <string name="confirmation_of_schedule_response">
-        You response has been submitted. You can change it with button below.
-        But first wait at least 1 minute
     </string>
     <string name="use_your_contacts_list">use your contacts list</string>
     <string name="edit_profile">Edit profile</string>
@@ -128,10 +124,15 @@
     <string name="my_scheduled">my scheduled</string>
     <string name="add_user">add user</string>
     <string name="choose_a_contact_to_supervise_or_to_invite_for_registration">Choose a contact to supervise or to invite for registration</string>
+    <string name="group">Group</string>
+    <string name="supervisor">Supervisor</string>
+    <string name="starts">Starts</string>
+    <string name="ends">Ends</string>
     <string name="search">Search…</string>
     <string name="description_bigowl_logo">BigOwl Logo</string>
     <string name="biometric_not_supported">Biometric Not Supported on this phone</string>
     <string name="not_allowed_error">NOT ALLOWED</string>
     <string name="failed_auth">Failed authentication</string>
     <string name="auth_result_error">Error</string>
+    <string name="location">Location</string>
 </resources>
