@@ -31,6 +31,7 @@ import java.util.List;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -78,6 +79,24 @@ public class RepositoryTest {
         data = Schedule.getPrototypeSchedule();
         uid = "uid";
 
+    }
+
+    @Test
+    public void resolveTaskForUpdateResult() {
+        LiveDataWithStatus<Schedule> dataOneLiveData = new LiveDataWithStatus<>();
+
+        repository.resolveTaskForUpdateResult(Tasks.forResult("val"), dataOneLiveData, new Schedule());
+        assertEquals(LiveDataWithStatus.Status.SUCCESS, dataOneLiveData.getStatus());
+        assertFalse(dataOneLiveData.hasError());
+        assertTrue(dataOneLiveData.isComplete());
+        assertNotNull(dataOneLiveData.getValue());
+
+        repository.resolveTaskForUpdateResult(Tasks.forException(new Exception()), dataOneLiveData, new Schedule());
+        assertEquals(LiveDataWithStatus.Status.ERROR, dataOneLiveData.getStatus());
+        assertTrue(dataOneLiveData.hasError());
+        assertTrue(dataOneLiveData.isComplete());
+        assertNull(dataOneLiveData.getValue());
+        assertTrue(dataOneLiveData.getError() instanceof Exception);
     }
 
     @Test

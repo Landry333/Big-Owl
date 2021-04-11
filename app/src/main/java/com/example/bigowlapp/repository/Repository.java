@@ -48,12 +48,10 @@ public abstract class Repository<T extends Model> {
         collectionReference
                 .add(documentData)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
+                    if(task.isSuccessful()) {
                         documentData.setUid(task.getResult().getId());
-                        tData.setSuccess(documentData);
-                    } else {
-                        tData.setError(task.getException());
                     }
+                    resolveTaskForUpdateResult(task, tData, documentData);
                 });
         return tData;
     }
@@ -62,13 +60,7 @@ public abstract class Repository<T extends Model> {
         LiveDataWithStatus<X> tData = new LiveDataWithStatus<>();
         collectionReference.document(docUid)
                 .set(documentData)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        tData.setSuccess(documentData);
-                    } else {
-                        tData.setError(task.getException());
-                    }
-                });
+                .addOnCompleteListener(task -> resolveTaskForUpdateResult(task, tData, documentData));
         return tData;
     }
 
@@ -80,13 +72,7 @@ public abstract class Repository<T extends Model> {
         LiveDataWithStatus<T> tData = new LiveDataWithStatus<>();
         collectionReference.document(docUid)
                 .delete()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        tData.setSuccess(null);
-                    } else {
-                        tData.setError(task.getException());
-                    }
-                });
+                .addOnCompleteListener(task -> resolveTaskForUpdateResult(task, tData, null));
         return tData;
     }
 
@@ -98,13 +84,7 @@ public abstract class Repository<T extends Model> {
         LiveDataWithStatus<X> tData = new LiveDataWithStatus<>();
         collectionReference.document(docUid)
                 .set(documentData, SetOptions.merge())
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        tData.setSuccess(documentData);
-                    } else {
-                        tData.setError(task.getException());
-                    }
-                });
+                .addOnCompleteListener(task -> resolveTaskForUpdateResult(task, tData, documentData));
         return tData;
     }
 
@@ -195,7 +175,15 @@ public abstract class Repository<T extends Model> {
         return listOfT;
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public <X extends T> void resolveTaskForUpdateResult(Task<?> task, LiveDataWithStatus<X> tData, X documentData) {
+        if (task.isSuccessful()) {
+            tData.setSuccess(documentData);
+        } else {
+            tData.setError(task.getException());
+        }
+    }
+
     public <X extends T> void resolveTaskWithListResult(Task<QuerySnapshot> task, LiveDataWithStatus<List<X>> listOfTData, Class<X> tClass) {
         if (task.isSuccessful()) {
             QuerySnapshot tDocs = task.getResult();
