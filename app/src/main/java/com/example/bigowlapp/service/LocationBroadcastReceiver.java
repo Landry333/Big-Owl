@@ -13,7 +13,6 @@ import com.example.bigowlapp.utils.AuthenticatorByPhoneNumber;
 import com.example.bigowlapp.utils.LocationTrackingExpiredAlarmManager;
 import com.example.bigowlapp.utils.PeriodicLocationCheckAlarmManager;
 import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingEvent;
 import com.google.android.gms.location.LocationServices;
@@ -49,7 +48,6 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         }
 
         if (geofencingEvent.hasError()) {
-            String errorMessage = GeofenceStatusCodes.getStatusCodeString(geofencingEvent.getErrorCode());
             return;
         }
 
@@ -62,18 +60,18 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                 .collect(Collectors.toList());
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION, context);
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.CORRECT_LOCATION);
             // User was successfully detected in desired location, so no more tracking needed
-            this.removeLocationTracking(context, geofenceIdList);
+            this.removeLocationTracking(geofenceIdList);
 
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION, context);
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.WRONG_LOCATION);
         } else {
-            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED, context);
+            this.updateUserLocatedStatus(geofenceIdList, Attendance.LocatedStatus.NOT_DETECTED);
         }
     }
 
-    private Task<Void> removeLocationTracking(Context context, List<String> geofencesToRemoveIdList) {
+    private Task<Void> removeLocationTracking(List<String> geofencesToRemoveIdList) {
         // no need for periodic location checking anymore
         locationCheckAlarmManager.cancelPeriodicLocationCheck();
         // no need to check tracking expiration anymore
@@ -82,7 +80,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         return geofencingClient.removeGeofences(geofencesToRemoveIdList);
     }
 
-    private void updateUserLocatedStatus(List<String> scheduleUidList, Attendance.LocatedStatus locatedStatusToAdd, Context context) {
+    private void updateUserLocatedStatus(List<String> scheduleUidList, Attendance.LocatedStatus locatedStatusToAdd) {
         repositoryFacade.getScheduleRepository()
                 .getDocumentsByListOfUid(scheduleUidList, Schedule.class)
                 .observeForever(schedules -> {

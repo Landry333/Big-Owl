@@ -15,7 +15,6 @@ import com.example.bigowlapp.utils.AuthenticatorByPhoneNumber;
 import com.example.bigowlapp.utils.LocationTrackingExpiredAlarmManager;
 import com.example.bigowlapp.utils.PeriodicLocationCheckAlarmManager;
 import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingEvent;
 
@@ -35,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -94,10 +93,8 @@ public class LocationBroadcastReceiverTest {
     @Test
     public void onReceiveGetsGeofencingError() {
         when(mockGeofencingEvent.hasError()).thenReturn(true);
-        when(mockGeofencingEvent.getErrorCode()).thenReturn(GeofenceStatusCodes.GEOFENCE_INSUFFICIENT_LOCATION_PERMISSION);
-
         locationBroadcastReceiver.onReceive(mockContext, mockGefenceIntent);
-        verify(mockGeofencingEvent, times(1)).getErrorCode();
+        verify(mockGeofencingEvent, never()).getGeofenceTransition();
     }
 
     @Test

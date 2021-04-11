@@ -27,7 +27,6 @@ public class SupervisionResponseFragment extends Fragment {
 
     public SupervisionResponseFragment() {
         // Fragments require a public empty Constructor
-        // TODO: Verify this is the case
     }
 
     public SupervisionResponseFragment(SupervisionRequest sr) {

@@ -38,7 +38,6 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
     private User contextMenuSelectedUser;
     private Button btnSetSchedule;
     private Button btnViewSchedule;
-    private AlertDialog alertDialog;
     private MonitoringGroupPageViewModel mGroupPageViewModel;
 
     @Override
@@ -168,13 +167,13 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
     }
 
     protected void createAlertDialog(String title, String message) {
-        this.alertDialog = new AlertDialog.Builder(MonitoringGroupPageActivity.this)
+        new AlertDialog.Builder(MonitoringGroupPageActivity.this)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton("Ok", (dialogInterface, which) -> MonitoringGroupPageActivity.super.onBackPressed())
                 .setCancelable(false)
-                .create();
-        this.alertDialog.show();
+                .create()
+                .show();
     }
 
     protected void resetUsersListViewAdapter() {
@@ -189,11 +188,6 @@ public class MonitoringGroupPageActivity extends BigOwlActivity {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public MonitoringGroupPageViewModel getmGroupPageViewModel() {
         return this.mGroupPageViewModel;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public AlertDialog getAlertDialog() {
-        return this.alertDialog;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

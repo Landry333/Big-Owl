@@ -56,14 +56,13 @@ public class NotificationListFragment extends Fragment implements NotificationAd
             notificationActivityViewModel = new ViewModelProvider(this).get(NotificationActivityViewModel.class);
         }
 
+        if (!notificationActivityViewModel.isCurrentUserSet()) {
+            return;
+        }
         subscribeToData();
     }
 
     private void subscribeToData() {
-        if (!notificationActivityViewModel.isCurrentUserSet()) {
-            return;
-        }
-
         notificationActivityViewModel.loadUserNotifications();
         notificationActivityViewModel.getUserNotifications().observe(getActivity(), notifications -> {
             if (notifications == null) {

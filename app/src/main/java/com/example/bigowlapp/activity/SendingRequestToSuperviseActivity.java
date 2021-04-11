@@ -22,7 +22,6 @@ import java.util.List;
 public class SendingRequestToSuperviseActivity extends BigOwlActivity {
     private String otherUserID;
     private String currentUserID;
-    private String noteText;
     private User otherUser;
     private boolean aRequestAlready;
     private boolean shouldCancelRequest = false;
@@ -72,7 +71,7 @@ public class SendingRequestToSuperviseActivity extends BigOwlActivity {
         otherUserID = otherUser.getUid();
         currentUserID = sRTSViewModel.getCurrentUserUid();
 
-        noteText = "Contact: " + contactDetails + " is already registered to the application.";
+        String noteText = "Contact: " + contactDetails + " is already registered to the application.";
         noteTv.setText(noteText);
 
         if (currentUserID.equals(otherUserID)) {
