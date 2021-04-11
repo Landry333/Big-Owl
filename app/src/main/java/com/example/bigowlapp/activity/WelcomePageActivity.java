@@ -2,11 +2,9 @@ package com.example.bigowlapp.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,12 +20,14 @@ import static com.example.bigowlapp.utils.Constants.SPLASH_DURATION;
 
 public class WelcomePageActivity extends AppCompatActivity {
 
+    private PermissionsHelper permissionsHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        PermissionsHelper permissionsHelper = new PermissionsHelper(this);
+        permissionsHelper = new PermissionsHelper(this);
 
         List<String> permissionsToRequest = new ArrayList<>(Arrays.asList(
                 Manifest.permission.SEND_SMS,
@@ -61,18 +61,11 @@ public class WelcomePageActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        boolean granted = true;
-        for (int grantResult : grantResults) {
-            if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                granted = false;
-                break;
-            }
-        }
+        String denyMessage = "You must accept all permissions to use the app.";
+        boolean granted = permissionsHelper.handlePermissionResult(requestCode, grantResults, denyMessage);
 
-        if (grantResults.length > 0 && granted) {
+        if (granted) {
             loadLoginPageWithDelay();
-        } else {
-            Toast.makeText(this, "You must accept all permissions to use the app.", Toast.LENGTH_SHORT).show();
         }
     }
 }

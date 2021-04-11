@@ -43,7 +43,7 @@
 
 
     <Button
-        android:id="@+id/SupRequest"
+        android:id="@+id/sup_request"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"

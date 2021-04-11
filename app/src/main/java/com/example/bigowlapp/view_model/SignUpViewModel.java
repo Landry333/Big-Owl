@@ -2,6 +2,8 @@ package com.example.bigowlapp.view_model;
 
 import android.content.Context;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Notification;
@@ -13,12 +15,12 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class SignUpViewModel extends BaseViewModel {
+
+    private NotificationListenerManager invitationListener;
 
     public SignUpViewModel() {
         // used implicitly when ViewModel constructed using ViewModelProvider
@@ -27,46 +29,29 @@ public class SignUpViewModel extends BaseViewModel {
     public Task<Void> createUser(String email, String password, String phoneNumber, String firstName, String lastName) {
 
         // Check for phone number if it's in database and unique
-        Task<Void> taskIsPhoneNumberInDatabase =
-                repositoryFacade.getUserRepository().isPhoneNumberInDatabase(phoneNumber);
+        Task<Void> taskIsPhoneNumberInDatabase = repositoryFacade.getUserRepository().isPhoneNumberInDatabase(phoneNumber);
 
         // add user email and password to authentication database
-        Task<AuthResult> taskAuthSignUpResult = taskIsPhoneNumberInDatabase.continueWithTask(task -> {
-            if (task.isSuccessful()) {
-                return signUpUserInAuthRepo(email, password);
-            } else {
-                throw task.getException();
-            }
-        });
+        Task<AuthResult> taskAuthSignUpResult = taskIsPhoneNumberInDatabase.onSuccessTask(task -> signUpUserInAuthRepo(email, password));
 
         // add basic user information to user document in firestore database
-        Task<Void> taskAddUser = taskAuthSignUpResult.continueWithTask(task -> {
-            if (task.isSuccessful()) {
-                return createUserEntry(email, phoneNumber, firstName, lastName);
-            } else {
-                throw task.getException();
-            }
-        });
+        Task<Void> taskAddUser = taskAuthSignUpResult.onSuccessTask(task -> createUserEntry(email, phoneNumber, firstName, lastName));
 
         // add a default group when the user registers to a system where the user is the supervisor
         return taskFinishByCreatingGroup(taskAddUser, firstName, lastName);
     }
 
     private Task<Void> taskFinishByCreatingGroup(Task<Void> taskPrevious, String firstName, String lastName) {
-        return taskPrevious.continueWithTask(task -> {
-            if (task.isSuccessful()) {
-                return createGroupEntry(firstName, lastName);
-            } else {
-                throw task.getException();
-            }
-        });
+        return taskPrevious.onSuccessTask(task -> createGroupEntry(firstName, lastName));
     }
 
-    private Task<AuthResult> signUpUserInAuthRepo(String email, String password) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public Task<AuthResult> signUpUserInAuthRepo(String email, String password) {
         return repositoryFacade.getAuthRepository().signUpUser(email, password);
     }
 
-    private Task<Void> createUserEntry(String email, String phoneNumber,
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public Task<Void> createUserEntry(String email, String phoneNumber,
                                        String firstName, String lastName) {
         User user = new User();
         String uid = getCurrentUserUid();
@@ -81,10 +66,11 @@ public class SignUpViewModel extends BaseViewModel {
         return Tasks.forResult(null);
     }
 
-    private Task<Void> createGroupEntry(String firstName, String lastName) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public Task<Void> createGroupEntry(String firstName, String lastName) {
         Group group = new Group();
         group.setSupervisorId(getCurrentUserUid());
-        group.setName(getFullName(firstName, lastName) + "'s group " + "#" + randomNumberStringGenerator());
+        group.setName(getFullName(firstName, lastName) + "'s group");
         repositoryFacade.getGroupRepository().addDocument(group);
         return Tasks.forResult(null);
     }
@@ -93,18 +79,10 @@ public class SignUpViewModel extends BaseViewModel {
         return firstName + " " + lastName;
     }
 
-    public String randomNumberStringGenerator() {
-        SecureRandom random = new SecureRandom();
-        final int max = 9999;
-        final int min = 0;
-        int randomNumber = (int) ((random.nextDouble() * (max - min + 1)) + min);
-        return String.format(Locale.getDefault(), "%04d", randomNumber);
-    }
-
-    public void verifySmsInvitationsCollection(String phoneNumber){
+    public void verifySmsInvitationsCollection(String phoneNumber) {
         LiveDataWithStatus<List<SmsInvitationRequest>> phoneNumberSent = repositoryFacade.getSmsInvitationRepository().getListOfDocumentByAttribute("phoneNumberSent", phoneNumber, SmsInvitationRequest.class);
         phoneNumberSent.observeForever(smsInvitationList -> {
-            if(smsInvitationList.isEmpty()){
+            if (smsInvitationList == null || smsInvitationList.isEmpty()) {
                 return;
             }
 
@@ -114,19 +92,24 @@ public class SignUpViewModel extends BaseViewModel {
         });
     }
 
-    public void smsInvitationNotificationListener(Context context){
-        NotificationListenerManager invitationListener = new NotificationListenerManager();
-        invitationListener.listen(context);
+    public void smsInvitationNotificationListener(Context context) {
+        if (invitationListener == null) {
+            invitationListener = new NotificationListenerManager(context);
+        }
+        invitationListener.listen();
     }
 
-    public void createNotificationObject(String senderUid, String phoneNumber){
-
+    public void createNotificationObject(String senderUid, String phoneNumber) {
         Notification newNotification = new Notification(Notification.Type.SMS_INVITATION_REQUEST);
         newNotification.setReceiverUid(senderUid);
         newNotification.setMessage("User with phone number: " + phoneNumber + " is registered.");
         newNotification.setCreationTime(Timestamp.now());
 
         repositoryFacade.getNotificationRepository(senderUid).addDocument(newNotification);
+    }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setInvitationListener(NotificationListenerManager invitationListener) {
+        this.invitationListener = invitationListener;
     }
 }

@@ -118,25 +118,37 @@ public class PermissionsHelper {
      *
      * @param grantResults the permission result from 'Activity.onRequestPermissionsResult'
      */
-    public void handlePermissionResult(int requestCode, int[] grantResults) {
-        if (requestCode == REQUEST_ALSO_REQUEST_BACKGROUND_LOCATION && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            handleBackgroundLocationPermissionResult(grantResults);
-        } else {
-            handleDefaultPermissionResult(grantResults);
+    public boolean handlePermissionResult(int requestCode, int[] grantResults) {
+
+        boolean granted = true;
+        for (int grantResult : grantResults) {
+            if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                granted = false;
+                break;
+            }
         }
+
+        if (requestCode == REQUEST_ALSO_REQUEST_BACKGROUND_LOCATION && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            handleBackgroundLocationPermissionResult(granted);
+        }
+
+        return granted;
     }
 
-    private void handleDefaultPermissionResult(int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(activity, "Permission(s) GRANTED", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(activity, "Permission(s) DENIED", Toast.LENGTH_SHORT).show();
+    public boolean handlePermissionResult(int requestCode, int[] grantResults, String denyMessage) {
+
+        boolean granted = this.handlePermissionResult(requestCode, grantResults);
+
+        if (!granted) {
+            Toast.makeText(activity, denyMessage, Toast.LENGTH_SHORT).show();
         }
+
+        return granted;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    private void handleBackgroundLocationPermissionResult(int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+    private void handleBackgroundLocationPermissionResult(boolean isGranted) {
+        if (isGranted) {
             requestBackgroundLocationPermissions();
         } else {
             Toast.makeText(activity, "Permission(s) DENIED", Toast.LENGTH_SHORT).show();

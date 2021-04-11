@@ -54,7 +54,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button_accept"
+            android:id="@+id/button_accept_supervision_req"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -65,7 +65,7 @@
             tools:ignore="ButtonStyle" />
 
         <Button
-            android:id="@+id/button_reject"
+            android:id="@+id/button_reject_supervision_req"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"

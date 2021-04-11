@@ -8,13 +8,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.Group;
-import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.SupervisionRequest;
-import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.RepositoryFacade;
+import com.example.bigowlapp.view_model.NotificationActivityViewModel;
 
 public class SupervisionResponseFragment extends Fragment {
 
@@ -22,11 +21,12 @@ public class SupervisionResponseFragment extends Fragment {
     private Button rejectBtn;
     private TextView groupName;
     private TextView groupSupervisor;
-    private RepositoryFacade repositoryFacade;
+
     private SupervisionRequest supervisionRequest;
+    private NotificationActivityViewModel notificationActivityViewModel;
 
     public SupervisionResponseFragment() {
-
+        // Fragments require a public empty Constructor
     }
 
     public SupervisionResponseFragment(SupervisionRequest sr) {
@@ -42,8 +42,8 @@ public class SupervisionResponseFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_supervision_response, container, false);
 
-        acceptBtn = view.findViewById(R.id.button_accept);
-        rejectBtn = view.findViewById(R.id.button_reject);
+        acceptBtn = view.findViewById(R.id.button_accept_supervision_req);
+        rejectBtn = view.findViewById(R.id.button_reject_supervision_req);
         groupName = view.findViewById(R.id.text_view_group_name);
         groupSupervisor = view.findViewById(R.id.text_view_group_supervisor_name);
 
@@ -53,52 +53,39 @@ public class SupervisionResponseFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        if (notificationActivityViewModel == null) {
+            notificationActivityViewModel = new ViewModelProvider(this).get(NotificationActivityViewModel.class);
+        }
+
         subscribeToData();
     }
 
     private void subscribeToData() {
-        repositoryFacade = RepositoryFacade.getInstance();
+        if (!notificationActivityViewModel.isCurrentUserSet()) {
+            return;
+        }
 
-        LiveDataWithStatus<User> userLiveData = repositoryFacade.getUserRepository()
-                .getDocumentByUid(supervisionRequest.getSenderUid(), User.class);
-
-        userLiveData.observe(getActivity(), supervisor -> {
-            groupSupervisor.setText(supervisor.getFullName());
-            LiveDataWithStatus<Group> groupLiveData = repositoryFacade.getGroupRepository()
-                    .getDocumentByAttribute(Group.Field.SUPERVISOR_ID, supervisor.getUid(), Group.class);
-
-            groupLiveData.observe(getActivity(), group -> {
-                groupName.setText(group.getName());
-
-                setupAcceptBtn(group);
-                setupRejectBtn();
-            });
-        });
-    }
-
-    private void removeNotification() {
-        repositoryFacade.getCurrentUserNotificationRepository()
-                .removeDocument(supervisionRequest.getUid());
-
-        getActivity().onBackPressed();
-    }
-
-    private void setupRejectBtn() {
-        rejectBtn.setOnClickListener(view -> removeNotification());
+        notificationActivityViewModel.getSenderUserData(supervisionRequest.getSenderUid()).observe(getActivity(), supervisor ->
+                notificationActivityViewModel.getGroupData(supervisor.getUid()).observe(getActivity(), group -> {
+                    groupSupervisor.setText(supervisor.getFullName());
+                    groupName.setText(group.getName());
+                    setupAcceptBtn(group);
+                    setupRejectBtn();
+                }));
     }
 
     private void setupAcceptBtn(Group group) {
         acceptBtn.setOnClickListener(view -> {
-            group.getMemberIdList().add(supervisionRequest.getReceiverUid());
+            notificationActivityViewModel.joinGroup(group, supervisionRequest.getUid());
+            getActivity().onBackPressed();
+        });
+    }
 
-            repositoryFacade.getUserRepository().getDocumentByUid(supervisionRequest.getReceiverUid(), User.class).observe(getActivity(), receiver -> {
-                receiver.getMemberGroupIdList().add(group.getUid());
-
-                repositoryFacade.getGroupRepository().updateDocument(group.getUid(), group);
-                repositoryFacade.getUserRepository().updateDocument(receiver.getUid(), receiver);
-
-                removeNotification();
-            });
+    private void setupRejectBtn() {
+        rejectBtn.setOnClickListener(view -> {
+            notificationActivityViewModel.deleteNotification(supervisionRequest.getUid());
+            getActivity().onBackPressed();
         });
     }
 }

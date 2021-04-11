@@ -53,17 +53,6 @@ public class SupervisionRequest extends Notification {
         NEUTRAL
     }
 
-    @Override
-    public String toString() {
-        return "SupervisionRequest{" +
-                "senderUId='" + senderUid + '\'' +
-                ", receiverUId='" + receiverUid + '\'' +
-                ", groupUId='" + groupUid + '\'' +
-                ", response=" + response +
-                ", timeResponse=" + timeResponse +
-                '}';
-    }
-
     public static class Field extends Notification.Field {
         public static final String SENDER_UID = "senderUid";
         public static final String GROUP_UID = "groupUid";

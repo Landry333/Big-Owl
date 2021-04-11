@@ -14,15 +14,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
 import com.example.bigowlapp.R;
-import com.example.bigowlapp.model.User;
-import com.example.bigowlapp.repository.UserRepository;
 import com.example.bigowlapp.utils.PhoneNumberFormatter;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.bigowlapp.view_model.SearchContactsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +30,8 @@ import java.util.List;
 public class SearchContactsToSupervise extends BigOwlActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int MAX_RESULTS = 50;
 
-    private static final int INDEX_CONTACT_NAME = 0;
-    private static final int INDEX_CONTACT_NUMBER = 1;
+    public static final int INDEX_CONTACT_NAME = 0;
+    public static final int INDEX_CONTACT_NUMBER = 1;
 
     private static final String[] DATA_COLUMNS_TO_LOAD = {
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
@@ -41,12 +41,12 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     private EditText searchUsers;
     private ListView listContactsView;
 
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private LoaderManager loaderManager;
-
     private String searchString = "";
     private List<String> list;
 
+    private LoaderManager loaderManager;
+    private PhoneNumberFormatter phoneNumberFormatter;
+    private SearchContactsViewModel searchContactsViewModel;
 
     @Override
     public int getContentView() {
@@ -60,16 +60,27 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
         searchUsers = findViewById(R.id.search_users);
 
         loaderManager = LoaderManager.getInstance(this);
+        phoneNumberFormatter = new PhoneNumberFormatter(this);
 
         initialize();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (searchContactsViewModel == null) {
+            searchContactsViewModel = new ViewModelProvider(this)
+                    .get(SearchContactsViewModel.class);
+        }
     }
 
     protected void initialize() {
         list = new ArrayList<>();
         updateList();
 
-        setupContactListClick();
         setupSearchListener();
+        setupContactListClick();
 
         loaderManager.initLoader(0, null, this);
     }
@@ -95,42 +106,28 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     }
 
     private void setupContactListClick() {
-        //Check if users already has the app
-        // argument position gives the index of item which is clicked
+        // Check if users already has the app
         listContactsView.setOnItemClickListener((arg0, v, position, arg3) -> {
             String contactDetails = (String) listContactsView.getItemAtPosition(position);
-            String contactNumber;
-            if (contactDetails.split("\\n").length < 2) {
-                contactNumber = contactDetails
-                        .split("\\n")[0]
-                        .replaceAll("[^+0-9]", "");
-            } else {
-                contactNumber = contactDetails
-                        .split("\\n")[1]
-                        .replaceAll("[^+0-9]", "");
-            }
+            String contactNumber = searchContactsViewModel.getNumberFromContactDataList(contactDetails);
 
-            db.collection(UserRepository.COLLECTION_NAME)
-                    .whereEqualTo(User.Field.PHONE_NUMBER, contactNumber)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            if (!task.getResult().isEmpty()) {
-                                Toast.makeText(SearchContactsToSupervise.this, "This user has the app already. Please choose another user", Toast.LENGTH_SHORT).show();
-                                User user = task.getResult().toObjects(User.class).get(0);
-                                Intent intent = new Intent(SearchContactsToSupervise.this, SendingRequestToSuperviseActivity.class);
-                                intent.putExtra("user", user);
-                                intent.putExtra("contactDetails", contactDetails);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(SearchContactsToSupervise.this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(SearchContactsToSupervise.this, SendSmsInvitationActivity.class);
-                                intent.putExtra("contactDetails", contactDetails);
-                                intent.putExtra("contactNumber", contactNumber);
-                                startActivity(intent);
-                            }
-                        }
-                    });
+            searchContactsViewModel.getUserToAdd(contactNumber).observe(this, user -> {
+                Intent intent;
+                if (user == null) {
+                    Toast.makeText(this, "User doesn't have the app", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(this, SendSmsInvitationActivity.class);
+                    intent.putExtra("contactDetails", contactDetails);
+                    intent.putExtra("contactNumber", contactNumber);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "This user has the app already. Please choose another user", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(this, SendingRequestToSuperviseActivity.class);
+                    intent.putExtra("user", user);
+                    intent.putExtra("contactDetails", contactDetails);
+                }
+                startActivity(intent);
+            });
+
         });
     }
 
@@ -166,21 +163,7 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor phoneResultsCursor) {
         this.setProgressBarInvisible();
-
-        list = new ArrayList<>();
-
-        while (phoneResultsCursor.moveToNext()) {
-            String name = phoneResultsCursor.getString(INDEX_CONTACT_NAME);
-            String number = phoneResultsCursor.getString(INDEX_CONTACT_NUMBER);
-
-            try {
-                String formattedNumber = new PhoneNumberFormatter(this).formatNumber(number);
-                list.add(name + "\n" + formattedNumber);
-            } catch (Exception ignored) {
-                // Invalid numbers are skipped
-            }
-        }
-
+        list = searchContactsViewModel.populateContactsList(phoneNumberFormatter, phoneResultsCursor);
         updateList();
         phoneResultsCursor.close();
         loaderManager.destroyLoader(0);
@@ -198,5 +181,10 @@ public class SearchContactsToSupervise extends BigOwlActivity implements LoaderM
 
         listContactsView.setAdapter(contactsAdapter);
         contactsAdapter.notifyDataSetChanged();
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setSearchContactsViewModel(SearchContactsViewModel searchContactsViewModel) {
+        this.searchContactsViewModel = searchContactsViewModel;
     }
 }

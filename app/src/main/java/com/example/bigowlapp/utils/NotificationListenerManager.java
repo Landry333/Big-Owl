@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.widget.Toast;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -20,90 +21,130 @@ import com.example.bigowlapp.model.Schedule;
 import com.example.bigowlapp.repository.NotificationRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class NotificationListenerManager {
+    private static final String CHANNEL_ID = "General BigOwl Notification";
 
-    private final RepositoryFacade repositoryFacade;
+    private SmsSender smsSender;
+    private RepositoryFacade repositoryFacade;
+    private Context context;
+    private NotificationManager notificationManager;
+    private NotificationManagerCompat notificationManagerCompat;
+    private NotificationCompat.Builder notificationBuilder;
 
-    public NotificationListenerManager() {
+    public NotificationListenerManager(Context context) {
+        this.context = context;
         this.repositoryFacade = RepositoryFacade.getInstance();
+        this.smsSender = new SmsSender();
+        this.notificationManager = context.getSystemService(NotificationManager.class);
+        this.notificationManagerCompat = NotificationManagerCompat.from(context);
+        this.notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID);
     }
 
-    public void listen(Context context) {
-        repositoryFacade.getCurrentUserNotificationRepository()
-                .listenToCollection((snapshots, error) -> {
-                    if (error != null) {
-                        Toast.makeText(context, "BIG OWL notification listener failed: ", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    assert snapshots != null;
-                    for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                        Notification notification = NotificationRepository.getNotificationFromDocument(dc.getDocument(), Notification.class);
-                        if (!notification.isValid() || !dc.getType().equals(DocumentChange.Type.ADDED)) {
-                            continue;
-                        }
-
-                        if (notification.getType() == Notification.Type.AUTH_BY_PHONE_NUMBER_FAILURE) {
-                            handleAuthByPhoneNumberFailure((AuthByPhoneNumberFailure) notification);
-                        } else {
-                            handleNotificationRequest(notification, context);
-                        }
-                    }
-                });
+    public void listen() {
+        repositoryFacade.getCurrentUserNotificationRepository().listenToCollection((snapshots, error) -> {
+            if (error != null) {
+                Toast.makeText(context, "BIG OWL notification listener failed: ", Toast.LENGTH_LONG).show();
+                return;
+            }
+            resolveDocumentChanges(snapshots);
+        });
     }
 
-    private void handleAuthByPhoneNumberFailure(AuthByPhoneNumberFailure notification) {
-        if (!notification.isUsed()
-                && notification.timeSinceCreationMillis() < Schedule.MAX_TRACKING_TIME_MILLIS) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public void resolveDocumentChanges(QuerySnapshot snapshots) {
+        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+            Notification notification = getNotificationFromDocument(dc);
+            if (!notification.isValid() || !dc.getType().equals(DocumentChange.Type.ADDED)) {
+                continue;
+            }
 
-            String senderPhoneNum = notification.getSenderPhoneNum();
-            String scheduleId = notification.getScheduleId();
-            new SmsSender().sendSMS(senderPhoneNum, scheduleId);
-
-            notification.setUsed(true);
-            repositoryFacade.getCurrentUserNotificationRepository()
-                    .updateDocument(notification.getUid(), notification);
+            if (notification.getType() == Notification.Type.AUTH_BY_PHONE_NUMBER_FAILURE) {
+                handleAuthByPhoneNumberFailure((AuthByPhoneNumberFailure) notification);
+            } else {
+                handleNotificationRequest(notification, context);
+            }
         }
     }
 
-    private void handleNotificationRequest(Notification notification, Context context) {
-        if (notification.isUsed()) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public Notification getNotificationFromDocument(DocumentChange dc) {
+        return NotificationRepository.getNotificationFromDocument(dc.getDocument(), Notification.class);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public void handleAuthByPhoneNumberFailure(AuthByPhoneNumberFailure notification) {
+        if (notification.isUsed() || notification.timeSinceCreationMillis() >= Schedule.MAX_TRACKING_TIME_MILLIS) {
             return;
         }
-        String channel = notification.getTitle();
-        createNotificationChannel(context, channel);
 
-        notificationBuilder(context, channel, notification);
+        String senderPhoneNum = notification.getSenderPhoneNum();
+        String scheduleId = notification.getScheduleId();
+        smsSender.sendSMS(senderPhoneNum, scheduleId);
 
         notification.setUsed(true);
         repositoryFacade.getCurrentUserNotificationRepository()
                 .updateDocument(notification.getUid(), notification);
     }
 
-    private void createNotificationChannel(Context context, String channelId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Notification";
-            String description = "General notification";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(channelId, name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public void handleNotificationRequest(Notification notification, Context context) {
+        if (notification.isUsed()) {
+            return;
         }
+
+        createNotificationChannel();
+        notificationBuilder(context, notification);
+
+        notification.setUsed(true);
+        repositoryFacade.getCurrentUserNotificationRepository()
+                .updateDocument(notification.getUid(), notification);
     }
 
-    private void notificationBuilder(Context context, String channel, Notification notification) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channel)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(channel)
-                .setStyle(new NotificationCompat.InboxStyle()
-                        .addLine(notification.getMessage()));
-        PendingIntent contentIntent = PendingIntent.getActivities(context, 0, new Intent[]{new Intent(context, NotificationActivity.class)}, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setAutoCancel(true);
-        builder.setContentIntent(contentIntent);
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return;
+        }
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        notificationManager.notify(1, builder.build());
+        CharSequence name = "Notification";
+        String description = "General notification";
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+        notificationManager.createNotificationChannel(channel);
+    }
+
+    private void notificationBuilder(Context context, Notification notification) {
+        PendingIntent contentIntent = PendingIntent.getActivities(context, 0, new Intent[]{new Intent(context, NotificationActivity.class)}, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notificationBuilder
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(notification.getTitle())
+                .setStyle(new NotificationCompat.InboxStyle().addLine(notification.getMessage()))
+                .setAutoCancel(true)
+                .setContentIntent(contentIntent);
+
+        this.sendNotification(notificationBuilder);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public void sendNotification(NotificationCompat.Builder notificationBuilder) {
+        notificationManagerCompat.notify(1, notificationBuilder.build());
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setRepositoryFacade(RepositoryFacade repositoryFacade) {
+        this.repositoryFacade = repositoryFacade;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setSmsSender(SmsSender smsSender) {
+        this.smsSender = smsSender;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setNotificationManager(NotificationManager notificationManager) {
+        this.notificationManager = notificationManager;
     }
 }
