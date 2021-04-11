@@ -1,7 +1,9 @@
 package com.example.bigowlapp.view_model;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.LiveData;
 
+import com.example.bigowlapp.model.AuthByPhoneNumberFailure;
 import com.example.bigowlapp.model.Group;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Notification;
@@ -11,6 +13,7 @@ import com.example.bigowlapp.repository.NotificationRepository;
 import com.example.bigowlapp.repository.RepositoryFacade;
 import com.example.bigowlapp.repository.UserRepository;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,6 +22,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -54,6 +59,11 @@ public class NotificationActivityViewModelTest {
     private User user;
     private LiveDataWithStatus<User> userData;
 
+    private String authGroupId = "authGroupId";
+    private String authScheduleId = "authScheduleId";
+    private String authSenderPhoneNumber = "authSenderPhone";
+    private String authSenderId = "authSenderId";
+
     @Before
     public void setUp() {
         notificationActivityViewModel = new NotificationActivityViewModel();
@@ -78,8 +88,20 @@ public class NotificationActivityViewModelTest {
 
     @Test
     public void getUserNotifications() {
-        notificationActivityViewModel.getUserNotifications();
+        LiveDataWithStatus<List<Notification>> authFailure
+                = new LiveDataWithStatus<>(Collections.singletonList(createDefaultAuthNotification()));
+        when(notificationRepositoryMock.getNotificationsByAscendingOrder(Notification.class)).thenReturn(authFailure);
+
+        LiveData<List<Notification>> notificationData = notificationActivityViewModel.getUserNotifications();
+
+        List<Notification> listOfNotification = notificationData.getValue();
+        AuthByPhoneNumberFailure authResult = (AuthByPhoneNumberFailure) listOfNotification.get(0);
+
         verify(notificationRepositoryMock).getNotificationsByAscendingOrder(Notification.class);
+        Assert.assertEquals(authGroupId, authResult.getGroupUid());
+        Assert.assertEquals(authScheduleId, authResult.getScheduleId());
+        Assert.assertEquals(authSenderPhoneNumber, authSenderPhoneNumber);
+        Assert.assertEquals(authSenderId, authResult.getSenderUid());
     }
 
     @Test
@@ -101,6 +123,15 @@ public class NotificationActivityViewModelTest {
         notificationActivityViewModel.getGroupData(supervisorUid);
         verify(groupRepositoryMock)
                 .getDocumentByAttribute(Group.Field.SUPERVISOR_ID, supervisorUid, Group.class);
+    }
+
+    private AuthByPhoneNumberFailure createDefaultAuthNotification() {
+        AuthByPhoneNumberFailure authByPhoneNumberFailure = new AuthByPhoneNumberFailure();
+        authByPhoneNumberFailure.setGroupUid(authGroupId);
+        authByPhoneNumberFailure.setScheduleId(authScheduleId);
+        authByPhoneNumberFailure.setSenderPhoneNum(authSenderPhoneNumber);
+        authByPhoneNumberFailure.setSenderUid(authSenderId);
+        return authByPhoneNumberFailure;
     }
 
     private Group createDefaultGroup() {
