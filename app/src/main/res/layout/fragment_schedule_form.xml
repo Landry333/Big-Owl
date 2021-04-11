@@ -200,7 +200,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:labelFor="@id/edit_start_time"
-                    android:text="@string/start_time" />
+                    android:text="@string/starts" />
             </LinearLayout>
 
             <LinearLayout
