@@ -3,7 +3,6 @@ package com.example.bigowlapp.activity;
 import android.os.SystemClock;
 import android.widget.ListAdapter;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -40,7 +39,6 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -101,10 +99,6 @@ public class MonitoringGroupPageActivityTest {
     @Test
     public void noMonitoringGroupTest() {
         testGroupData.postValue(null);
-        SystemClock.sleep(1000);
-
-        AlertDialog dialog = currentActivity.getAlertDialog();
-        assertNotNull(dialog);
         onView(withText("No monitoring group found")).check(matches(isDisplayed()));
     }
 
@@ -112,10 +106,6 @@ public class MonitoringGroupPageActivityTest {
     public void noSupervisedMemberInGroupTest() {
         testMonitoringGroup = new Group("abc123", "It's a group for testing", "0", null);
         testGroupData.postValue(testMonitoringGroup);
-        SystemClock.sleep(1000);
-
-        AlertDialog dialog = currentActivity.getAlertDialog();
-        assertNotNull(dialog);
         onView(withText("No supervised member(s) found")).check(matches(isDisplayed()));
     }
 

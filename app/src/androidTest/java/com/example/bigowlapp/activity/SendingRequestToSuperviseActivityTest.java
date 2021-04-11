@@ -131,7 +131,7 @@ public class SendingRequestToSuperviseActivityTest {
         // Button shouldn't be clickable
         onView(withId(R.id.sup_request)).check(matches(isDisplayed()));
         onView(withId(R.id.sup_request)).check(matches(not(isClickable())));
-        onView(withId(R.id.sup_request)).check(matches(withText("Can not send ")));
+        onView(withId(R.id.sup_request)).check(matches(withText("Can not send")));
     }
 
     @Test
@@ -183,7 +183,7 @@ public class SendingRequestToSuperviseActivityTest {
         // Button shouldn't be clickable
         onView(withId(R.id.sup_request)).check(matches(isDisplayed()));
         onView(withId(R.id.sup_request)).check(matches(not(isClickable())));
-        onView(withId(R.id.sup_request)).check(matches(withText("Can not send ")));
+        onView(withId(R.id.sup_request)).check(matches(withText("Can not send")));
     }
 
 

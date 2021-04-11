@@ -22,7 +22,8 @@ import com.google.i18n.phonenumbers.NumberParseException;
 
 public class SendSmsInvitationActivity extends BigOwlActivity {
 
-    private EditText number, message;
+    private EditText number;
+    private EditText message;
     private Button send;
     private Button cancel;
     private String smsNumber;

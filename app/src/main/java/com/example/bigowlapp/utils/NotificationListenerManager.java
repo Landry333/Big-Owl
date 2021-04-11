@@ -69,7 +69,6 @@ public class NotificationListenerManager {
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public void resolveDocumentChanges(QuerySnapshot snapshots) {
-        assert snapshots != null;
         for (DocumentChange dc : snapshots.getDocumentChanges()) {
             Notification notification = getNotificationFromDocument(dc);
             if (!notification.isValid() || !dc.getType().equals(DocumentChange.Type.ADDED)) {

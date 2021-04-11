@@ -12,7 +12,6 @@ import androidx.test.filters.LargeTest;
 import com.example.bigowlapp.R;
 import com.example.bigowlapp.model.LiveDataWithStatus;
 import com.example.bigowlapp.model.Schedule;
-import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.view_model.ScheduleListViewModel;
 import com.google.firebase.Timestamp;
 
@@ -77,11 +76,22 @@ public class ListOfScheduleActivityTest {
     }
 
     @Test
-    public void noScheduleTest() {
+    public void noScheduleTestNotSupervisor() {
         startActivityScenario(testArrivingIntent);
         testScheduleListData.postValue(null);
         onView(withText("No schedule found!")).check(matches(isDisplayed()));
+        onView(withText("You currently have no future schedules")).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void noScheduleTestAsSupervisor() {
+        testArrivingIntent.putExtra("isUserTheGroupSupervisor", true);
+        startActivityScenario(testArrivingIntent);
+        testScheduleListData.postValue(null);
+        onView(withText("No schedule found!")).check(matches(isDisplayed()));
+        onView(withText("You have never set a schedule")).check(matches(isDisplayed()));
+    }
+
 
     @Test
     public void viewScheduleTest() {
@@ -105,7 +115,7 @@ public class ListOfScheduleActivityTest {
 
         getIntentToSchedule = currentActivity.getIntentToScheduleForTest();
         assertEquals(randomTestSchedule.getUid(), getIntentToSchedule.getStringExtra("scheduleUid"));
-        assertEquals(randomTestSchedule.getGroupSupervisorUid(), "supervisor1");
+        assertEquals("supervisor1", randomTestSchedule.getGroupSupervisorUid());
     }
 
     @Test
@@ -125,7 +135,7 @@ public class ListOfScheduleActivityTest {
 
         getIntentToSchedule = currentActivity.getIntentToScheduleForTest();
         assertEquals(randomTestSchedule.getUid(), getIntentToSchedule.getStringExtra("scheduleUid"));
-        assertEquals(randomTestSchedule.getGroupSupervisorUid(), "supervisor2");
+        assertEquals("supervisor2", randomTestSchedule.getGroupSupervisorUid());
         assertEquals("testArrivingIntentGroupName", getIntentToSchedule.getStringExtra("groupName"));
         assertEquals("testArrivingIntentSupervisorName", getIntentToSchedule.getStringExtra("supervisorName"));
     }
