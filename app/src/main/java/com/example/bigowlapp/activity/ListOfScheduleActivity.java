@@ -29,6 +29,8 @@ public class ListOfScheduleActivity extends BigOwlActivity {
     private String groupName;
     private String supervisorName;
     private String supervisorId;
+    private AlertDialog alertDialog;
+    private Intent intentToSchedule;
     private boolean isUserTheGroupSupervisor;
 
     @Override
@@ -56,25 +58,29 @@ public class ListOfScheduleActivity extends BigOwlActivity {
     }
 
     private void subscribeToData() {
+        if (!scheduleListViewModel.isCurrentUserSet()){
+            return;
+        }
+
         scheduleListViewModel.getScheduleList(isUserTheGroupSupervisor, groupID).observe(this, schedules -> {
             if (schedules != null) {
                 scheduleListView = findViewById(R.id.schedule_list);
                 scheduleListView.setAdapter(new ScheduleAdapter(getBaseContext(), new ArrayList<>(schedules)));
 
                 scheduleListView.setOnItemClickListener((arg0, v, position, arg3) -> {
-                    Intent intent;
+
                     if (isUserTheGroupSupervisor) {
-                        intent = new Intent(getBaseContext(), ScheduleReportActivity.class);
-                        intent.putExtra("scheduleUid", schedules.get(position).getUid());
-                        intent.putExtra("supervisorId", supervisorId);
+                        intentToSchedule = new Intent(getBaseContext(), ScheduleReportActivity.class);
+                        intentToSchedule.putExtra("scheduleUid", schedules.get(position).getUid());
+                        intentToSchedule.putExtra("supervisorId", supervisorId);
                     } else {
-                        intent = new Intent(getBaseContext(), ScheduleViewRespondActivity.class);
-                        intent.putExtra("scheduleUid", schedules.get(position).getUid());
-                        intent.putExtra("groupID", groupID);
-                        intent.putExtra("groupName", groupName);
-                        intent.putExtra("supervisorName", supervisorName);
+                        intentToSchedule = new Intent(getBaseContext(), ScheduleViewRespondActivity.class);
+                        intentToSchedule.putExtra("scheduleUid", schedules.get(position).getUid());
+                        intentToSchedule.putExtra("groupID", groupID);
+                        intentToSchedule.putExtra("groupName", groupName);
+                        intentToSchedule.putExtra("supervisorName", supervisorName);
                     }
-                    startActivity(intent);
+                    startActivity(intentToSchedule);
                 });
             } else {
                 this.noScheduleAlert().show();
@@ -104,8 +110,8 @@ public class ListOfScheduleActivity extends BigOwlActivity {
         }
     }
 
-    private AlertDialog noScheduleAlert() {
-        AlertDialog alertDialog = new AlertDialog.Builder(ListOfScheduleActivity.this)
+    public AlertDialog noScheduleAlert() {
+                alertDialog = new AlertDialog.Builder(ListOfScheduleActivity.this)
                 .setTitle("No schedule found!")
                 .setMessage("You currently have no future schedules")
                 .setPositiveButton("Ok", (dialogInterface, which) -> ListOfScheduleActivity.super.onBackPressed())
@@ -118,7 +124,13 @@ public class ListOfScheduleActivity extends BigOwlActivity {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public void setSupervisedGroupListViewModel(ScheduleListViewModel scheduleListViewModel) {
+    public void setScheduleListViewModel(ScheduleListViewModel scheduleListViewModel) {
         this.scheduleListViewModel = scheduleListViewModel;
     }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public Intent getIntentToScheduleForTest() {
+        return this.intentToSchedule;
+    }
+
 }
