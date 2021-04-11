@@ -14,7 +14,6 @@ import com.example.bigowlapp.model.User;
 import com.example.bigowlapp.view_model.SupervisedGroupPageViewModel;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -28,7 +27,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -84,13 +82,8 @@ public class SupervisedGroupPageActivityTest {
     }
 
     @Test
-    @Ignore("sometime fails on android CI")
-    public void clickOnScheduleButtonTest() {
+    public void clickOnScheduleButtonFoesToListOfScheduleTest() {
         onView(withId(R.id.btn_schedule_list)).check(matches(isDisplayed())).perform(click());
-
-        Intent targetIntentToScheduleList = currentActivity.getIntentToScheduleList();
-        assertEquals(testArrivingIntent.getStringExtra("groupID"), targetIntentToScheduleList.getStringExtra("groupID"));
-        assertEquals(testArrivingIntent.getStringExtra("groupName"), targetIntentToScheduleList.getStringExtra("groupName"));
-        assertEquals(testArrivingIntent.getStringExtra("testArrivingIntentSupervisorId"), targetIntentToScheduleList.getStringExtra("testArrivingIntentSupervisorId"));
+        onView(withId(R.id.list_schedule_page_title)).check(matches(isDisplayed()));
     }
 }

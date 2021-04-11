@@ -64,11 +64,6 @@ public class SupervisedGroupPageActivity extends BigOwlActivity {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public Intent getIntentToScheduleList() {
-        return intentToScheduleList;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setSupervisedGroupListViewModel(SupervisedGroupPageViewModel supervisedGroupPageViewModel) {
         this.supervisedGroupPageViewModel = supervisedGroupPageViewModel;
     }

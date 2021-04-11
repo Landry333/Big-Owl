@@ -29,7 +29,6 @@ public class ListOfScheduleActivity extends BigOwlActivity {
     private String groupName;
     private String supervisorName;
     private String supervisorId;
-    private AlertDialog alertDialog;
     private Intent intentToSchedule;
     private boolean isUserTheGroupSupervisor;
 
@@ -111,16 +110,12 @@ public class ListOfScheduleActivity extends BigOwlActivity {
     }
 
     public AlertDialog noScheduleAlert() {
-                alertDialog = new AlertDialog.Builder(ListOfScheduleActivity.this)
-                .setTitle("No schedule found!")
-                .setMessage("You currently have no future schedules")
-                .setPositiveButton("Ok", (dialogInterface, which) -> ListOfScheduleActivity.super.onBackPressed())
-                .setCancelable(false)
-                .create();
-        if (isUserTheGroupSupervisor) alertDialog.setMessage("You have never set a schedule");
-        else alertDialog.setMessage("You currently have no future schedules");
-
-        return alertDialog;
+        return new AlertDialog.Builder(this)
+        .setTitle("No schedule found!")
+        .setMessage(isUserTheGroupSupervisor ? "You have never set a schedule" : "You currently have no future schedules")
+        .setPositiveButton("Ok", (dialogInterface, which) -> ListOfScheduleActivity.super.onBackPressed())
+        .setCancelable(false)
+        .create();
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
