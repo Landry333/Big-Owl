@@ -78,8 +78,8 @@ public class FingerprintAuthenticationActivityTest {
         testUserData.postValue(testUser);
         onView(withId(R.id.btn_go_to_home_page)).check(matches(isDisplayed()));
         onView(withId(R.id.btn_go_to_home_page)).check(matches(withText("Go to home page")));
-        //onView(withId(R.id.fingerprint_auth_registration_text)).check(matches(withText("Sorry, this additional security service is not available on\n        this number or with your phone and telephony provider\n\n\n        SERVICE IS NOT ALLOWED\n\n\n        First make sure sim card_1 number on this phone is the same as in your account")));
         onView(withId(R.id.fingerprint_auth_registration_text)).check(matches(isDisplayed()));
+        onView(withId(R.id.fingerprint_auth_registration_text)).check(matches(withText("Sorry, this additional security service is not available on\n        this number or with your phone and telephony provider\n\n\n        SERVICE IS NOT ALLOWED\n\n\n        First make sure sim card_1 number on this phone is the same as in your account")));
         onView(withId(R.id.btn_go_to_home_page)).perform(click());
     }
 
@@ -87,6 +87,13 @@ public class FingerprintAuthenticationActivityTest {
     public void notAllowedFingerprintAuthenticationTest() {
         when(phoneNumberFormatter.getFormattedSMSNumber()).thenReturn("456");
         testUser.setFingerprintAuthRegistration("yes");
+        testUserData.postValue(testUser);
+        onView(withId(R.id.fingerprint_auth_registration_text)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void errorNotAllowedFingerprintAuthenticationTest() {
+        testUser.setFingerprintAuthRegistration("abc");
         testUserData.postValue(testUser);
         onView(withId(R.id.fingerprint_auth_registration_text)).check(matches(isDisplayed()));
     }
