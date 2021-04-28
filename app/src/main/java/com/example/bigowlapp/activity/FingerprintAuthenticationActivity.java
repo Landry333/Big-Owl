@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
@@ -33,6 +34,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
     private Button btnFingerprintAuthAdd;
     private Button btnFingerprintAuthMaybeLater;
     private HomePageViewModel homePageViewModel;
+    private PhoneNumberFormatter phoneNumberFormatter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +115,6 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), currentUserData.getError().getMessage(), Toast.LENGTH_LONG).show();
                 return;
             }
-            PhoneNumberFormatter phoneNumberFormatter = new PhoneNumberFormatter(this);
             String formattedDevicePhoneNum = phoneNumberFormatter.getFormattedSMSNumber();
             verifyUserAccessToService(user, formattedDevicePhoneNum);
 
@@ -126,6 +127,9 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
         super.onStart();
         if (homePageViewModel == null) {
             homePageViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
+        }
+        if (phoneNumberFormatter == null) {
+            phoneNumberFormatter = new PhoneNumberFormatter(this);
         }
         subscribeToData();
     }
@@ -186,5 +190,15 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
         } else {
             fingerprintAuthRegistrationText.setText(R.string.not_allowed_error);
         }
+    }
+
+    @VisibleForTesting
+    public void setHomePageViewModel(HomePageViewModel homePageViewModel) {
+        this.homePageViewModel = homePageViewModel;
+    }
+
+    @VisibleForTesting
+    public void setPhoneNumberFormatter(PhoneNumberFormatter phoneNumberFormatter){
+        this.phoneNumberFormatter = phoneNumberFormatter;
     }
 }
