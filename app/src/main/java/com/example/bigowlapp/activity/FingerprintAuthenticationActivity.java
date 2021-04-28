@@ -129,7 +129,7 @@ public class FingerprintAuthenticationActivity extends AppCompatActivity {
             homePageViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
         }
         if (phoneNumberFormatter == null) {
-            phoneNumberFormatter = new PhoneNumberFormatter(this);;
+            phoneNumberFormatter = new PhoneNumberFormatter(this);
         }
         subscribeToData();
     }
